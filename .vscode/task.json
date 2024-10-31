@@ -1,0 +1,47 @@
+
+// tasks.json 파일은 프로젝트를 빌드 하는 작업을 정의
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			// 작업 유형을 지정 : 이 경우 catkin_make 유형의 작업임을 나타냄
+			"type": "catkin_make",
+
+			// 작업 실행 시 사용 할 인수를 지정
+			"args": [
+				"--directory",															// 빌드 할 디렉토리를 지정
+				"${workspaceFolder}",												// 위의 빌드 할 드렉토리 경로
+				"-DCMAKE_BUILD_TYPE=Debug"									// 디버깅을 빌드 옵션을 Debug로 설정 (최적화 옵션 끄기)
+				//"-DCMAKE_BUILD_TYPE=RelWithDebInfo"				// debug info 포함한 최적화 옵션
+			],
+
+			// 빌드 오류와 경고를 감지하고 표시하기 위해 사용할 문제 매처를 지정
+			"problemMatcher": [
+				//"$catkin-gcc"
+				"$gcc"
+			],
+
+			// 작업을 그룹화 하여 빌드 또는 테스트 작업으로 설정
+			"group": {
+				"kind": "build",															// 이 작업이 build 작업임을 나타냄
+				"isDefault": true															// 기본 빌드 작업으로 설정
+																											// 다른 빌드 작업이 없는 경우 이 작업이 실행됨
+			},
+			"label": "catkin_make: build"										// 작업의 라벨을 지정
+																											// VSCode에서 작업을 선택 할 때 표시되는 이름
+		},
+
+    {
+      "label": "Run droid_node",
+      "type": "shell",
+      "command": "${workspaceFolder}/devel/lib/trash_bot/droid_node",
+			"options": {
+				"cwd": "${workspaceFolder}/devel/lib/droid_node"
+			},
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    }
+	]
+}

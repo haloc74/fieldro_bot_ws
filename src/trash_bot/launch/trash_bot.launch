@@ -1,0 +1,7 @@
+<launch>
+
+  // droid 노드 실행
+  <node name="trash_bot" pkg="trash_bot" type="trash_bot" output="screen"/>
+    <param name="command_use" value="true"/>
+
+</launch>

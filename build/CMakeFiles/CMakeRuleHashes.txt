@@ -1,0 +1,4 @@
+# Hashes of file build rules.
+4ed0d12a3efee22e3ee9f207878f53cc /home/twinny/fieldro_bot_ws/devel/share/roseus/ros/trash_bot/manifest.l
+f80e99a89931b1a1834550e960beda7f CMakeFiles/clean_test_results
+57661e42f3963afaea5f3459711d74ed trash_bot/CMakeFiles/trash_bot_generate_messages_eus

@@ -1,0 +1,38 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "${default}",
+        "limitSymbolsToIncludedHeaders": false
+      },
+      "includePath": [
+        "/home/twinny/IP060A01_ws/devel/include/**",
+        "/opt/ros/melodic/include/**",
+        "/home/twinny/IP060A01_ws/src/twinny_M_IP_060_A01_B01_hardware_driver/can_sending/include/**",
+        "/home/twinny/IP060A01_ws/src/twinny_M_IP_060_A01_B01_hardware_driver/twinny_ocam/include/**",
+        "/home/twinny/IP060A01_ws/src/twinny_M_IP_060_A01_B01_hardware_driver/twinny_realsense_camara/realsense2_camera/include/**",
+        "/home/twinny/IP060A01_ws/src/twinny_M_IP_060_A01_B01_hardware_driver/twinny_sick_scan/include/**",
+        "/home/twinny/IP060A01_ws/src/twinny_M_IP_060_A01_B01_hardware_driver/twinny_socket_CAN/socketcan/socketcan_bridge/include/**",
+        "/home/twinny/IP060A01_ws/src/twinny_M_IP_060_A01_B01_hardware_driver/twinny_socket_CAN/socketcan/socketcan_interface/include/**",
+        "/home/twinny/fieldro_bot_ws/src/trash_bot/include/**",
+        "/home/twinny/IP060A01_ws/src/twinny_M_IP_060_A01_B01_hardware_driver/twinny_hardware_driver/twinny_hardware_driver/include/**",
+        "/home/twinny/IP060A01_ws/src/twinny_M_IP_060_A01_B01_hardware_driver/twinny_IMU_driver/include/**",
+        "/home/twinny/IP060A01_ws/src/twinny_M_IP_060_A01_B01_hardware_driver/twinny_outdoor_mobile_driver/include/**",
+        "/home/twinny/IP060A01_ws/src/twinny_M_IP_060_A01_B01_hardware_driver/twinny_pgv_sensor_pkg/twinny_pgv_sensor/include/**",
+        "/home/twinny/IP060A01_ws/src/twinny_M_IP_060_A01_B01_hardware_driver/twinny_ublox_f9p/ublox_gps/include/**",
+        "/home/twinny/IP060A01_ws/src/twinny_M_IP_060_A01_B01_hardware_driver/twinny_ublox_f9p/ublox_msgs/include/**",
+        "/home/twinny/IP060A01_ws/src/twinny_M_IP_060_A01_B01_hardware_driver/twinny_ublox_f9p/ublox_serialization/include/**",
+        "/home/twinny/IP060A01_ws/src/twinny_M_IP_060_A01_B01_hardware_driver/velodyne/velodyne_driver/include/**",
+        "/home/twinny/IP060A01_ws/src/twinny_M_IP_060_A01_B01_hardware_driver/velodyne/velodyne_laserscan/include/**",
+        "/home/twinny/IP060A01_ws/src/twinny_M_IP_060_A01_B01_hardware_driver/velodyne/velodyne_pointcloud/include/**",
+        "/usr/include/**"
+      ],
+      "name": "ROS",
+      "intelliSenseMode": "gcc-x64",
+      "compilerPath": "/usr/bin/gcc",
+      "cStandard": "gnu11",
+      "cppStandard": "c++14"
+    }
+  ],
+  "version": 4
+}
