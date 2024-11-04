@@ -1,0 +1,7 @@
+
+. config 정리
+
+ID :  - JD 24.11.04
+1. droid node 추가
+2. io_unit node 추가
+3. default base 완성

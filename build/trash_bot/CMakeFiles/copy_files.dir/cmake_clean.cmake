@@ -1,3 +1,6 @@
+file(REMOVE_RECURSE
+  "CMakeFiles/copy_files"
+)
 
 # Per-language clean rules from dependency scanning.
 foreach(lang )

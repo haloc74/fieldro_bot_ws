@@ -53,6 +53,10 @@ CMAKE_BINARY_DIR = /home/twinny/fieldro_bot_ws/build
 # Include the progress variables for this target.
 include trash_bot/CMakeFiles/copy_files.dir/progress.make
 
+trash_bot/CMakeFiles/copy_files: /home/twinny/fieldro_bot_ws/src/trash_bot/config/config.yaml
+
+
+copy_files: trash_bot/CMakeFiles/copy_files
 copy_files: trash_bot/CMakeFiles/copy_files.dir/build.make
 	cd /home/twinny/fieldro_bot_ws/build/trash_bot && /usr/bin/cmake -E copy_directory /home/twinny/fieldro_bot_ws/src/trash_bot/config /home/twinny/fieldro_bot_ws/devel/lib/trash_bot/config
 .PHONY : copy_files

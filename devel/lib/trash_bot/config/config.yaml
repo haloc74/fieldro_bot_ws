@@ -1,0 +1,31 @@
+## IO Signal Object (WAGO) 연결을 위한 옵션
+io_signal:
+  hz          : 50                    ## thread 동작 속도
+  comm_type   : "ModbusTCP"           ## 통신 방식 (ModbusTCP, RTU(232, 485))
+  ip          : "192.168.11.202"      ## wago ip 주소
+  port        : 502                   ## wago port 
+  retry_count : 3                     ## wago 연결 시도 횟수
+  retry_turm  : 2                     ## wago 연결 시도 간격
+  debug       : 0                     ## debug 옵션 (0: off, 그외 : on)
+
+
+## 구동 wheel motor 옵션
+wheel_motor:
+  port          : /dev/ttyUSB_BLDC
+  baud          : 115200
+  timeout_margin: 10
+  max_packet_len: 32
+  timeout       : 15
+  ## timeout = max_packet_len * 10 bits * 1000 / baud + timeout_margin
+  ## 10 bits = 1 start bit + 8 data bits + 1 stop bit
+
+io_logger:
+  debug               : 1             ## debug 옵션 (0: off, 그외 : on)
+  hz                  : 50            ## thread 동작 속도
+  suffix              : _io           ## 로그 파일 이름 뒤에 붙는 suffix
+  dir_name            : log           ## 로그 파일 저장 디렉토리
+  max_log_per_write   : 50            ## 한번에 기록 할 최대 로그 갯수
+  auto_write_interval : 500           ## millisecond 로그 파일을 자동으로 기록하는 주기
+
+
+

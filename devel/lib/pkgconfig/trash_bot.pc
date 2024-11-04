@@ -3,6 +3,6 @@ prefix=/home/twinny/fieldro_bot_ws/devel
 Name: trash_bot
 Description: Description of trash_bot
 Version: 0.0.0
-Cflags: 
-Libs: -L${prefix}/lib 
+Cflags: -I/home/twinny/fieldro_bot_ws/devel/include
+Libs: -L${prefix}/lib -lfieldro_lib
 Requires: message_runtime geometry_msgs nav_msgs roscpp rospy sensor_msgs serial std_msgs tf twinny_msgs

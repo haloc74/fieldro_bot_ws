@@ -10,5 +10,8 @@
     "/opt/ros/melodic/lib/python2.7/dist-packages",
     "/opt/intel/openvino_2022/python/python3.6",
     "/opt/intel/openvino_2022/python/python3"
-  ]
+  ],
+  "files.associations": {
+    "new": "cpp"
+  }
 }

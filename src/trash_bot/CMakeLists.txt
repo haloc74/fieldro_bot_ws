@@ -43,13 +43,13 @@ message(STATUS "2. message, service, action add and generate")
 message(STATUS "")
 
   ## 2.1 msg 폴더로 부터 messages 생성
-  # add_message_files(
-  #   FILES
-  #   Pose.msg
-  #   UnitActionComplete.msg
-  #   UnitControl.msg
-  #   IOSignal.msg
-  # )
+  add_message_files(
+    FILES
+    Pose.msg
+    UnitActionComplete.msg
+    UnitControl.msg
+    IOSignal.msg
+  )
 
   ## 2.2 srv 폴더로 부터 service 생성
   # add_service_files(
@@ -81,7 +81,7 @@ message(STATUS "")
 catkin_package(
   ## INCLUDE_DIRS include    # package root/include 폴더 : 삭제 가능
   ## DEPENDS system_lib      # system lib 의존성이 없으므로 삭제 가능
-  #LIBRARIES fieldro_lib    # fieldro_lib 라이브러리를 다른 ros package에서 사용할 수 있도록 설정
+  LIBRARIES fieldro_lib    # fieldro_lib 라이브러리를 다른 ros package에서 사용할 수 있도록 설정
   CATKIN_DEPENDS           # 현재 package를 빌드하기 위해 필요한 다른 catkin package
       message_runtime
       geometry_msgs 
@@ -131,29 +131,29 @@ message(STATUS "")
 message(STATUS "5. fieldro_lib Lib generate")
 message(STATUS "")
 
-  # ## 5-1. lib_cpp 하위의 모든 cpp 파일을 찾아서 LIB_SRC_FILES에 저장
-  # file(GLOB_RECURSE LIB_SRC_FILES 
-  #   "${CMAKE_CURRENT_SOURCE_DIR}/src/lib_cpp/log/*.cpp"  
-  #   "${CMAKE_CURRENT_SOURCE_DIR}/src/lib_cpp/comms/*.cpp"
-  #   "${CMAKE_CURRENT_SOURCE_DIR}/src/lib_cpp/motor/*.cpp"
-  #   "${CMAKE_CURRENT_SOURCE_DIR}/src/lib_cpp/helper/*.cpp"
-  # )
+  ## 5-1. lib_cpp 하위의 모든 cpp 파일을 찾아서 LIB_SRC_FILES에 저장
+  file(GLOB_RECURSE LIB_SRC_FILES 
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/lib_cpp/log/*.cpp"  
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/lib_cpp/communication/*.cpp"
+#    "${CMAKE_CURRENT_SOURCE_DIR}/src/lib_cpp/motor/*.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/lib_cpp/helper/*.cpp"
+  )
 
-  # ## 5-2. LIB_SRC_FILES의 모든 파일을 컴파일하고 링크하여 실행 파일 생성 하도록 설정
-  # add_library(fieldro_lib SHARED ${LIB_SRC_FILES})
+  ## 5-2. LIB_SRC_FILES의 모든 파일을 컴파일하고 링크하여 실행 파일 생성 하도록 설정
+  add_library(fieldro_lib SHARED ${LIB_SRC_FILES})
 
-  # ## 5-3. 빌드 순서를 정의 (의존성)
-  # target_link_libraries(fieldro_lib
-  #   ${catkin_LIBRARIES}
-  #   ${MODBUS_LIBRARIES}
-  #   ${YAML_CPP_LIBRARIES}
-  # )
+  ## 5-3. 빌드 순서를 정의 (의존성)
+  target_link_libraries(fieldro_lib
+    ${catkin_LIBRARIES}
+    ${MODBUS_LIBRARIES}
+    ${YAML_CPP_LIBRARIES}
+  )
 
-  # ## 5-4. 빌드시 필요한 include 경로 설정
-  # target_include_directories(fieldro_lib PUBLIC
-  #   ${CMAKE_CURRENT_SOURCE_DIR}/include
-  #   ${CMAKE_CURRENT_SOURCE_DIR}/lib_header
-  # )
+  ## 5-4. 빌드시 필요한 include 경로 설정
+  target_include_directories(fieldro_lib PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/lib_header
+  )
 
 ##-----------------------------------------------------------------------------
 ##            각 노드별로 설정이 되어야 하는 부분 시작
@@ -162,20 +162,18 @@ message(STATUS "")
 message(STATUS "6. set executable")
 message(STATUS "")
 
-  ## 6-1. node_carry_bot 실행파일 생성 설정
+  ## 6-1. droid 실행파일 생성 설정
   message(STATUS "   6-1. droid_node executable generate")
 
-    ## 6-1-1. src/droid 하위의 모든 cpp 파일을 찾아서 SRC_CARRY_FILES 저장
-    file(GLOB_RECURSE SRC_CARRY_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/droid/*.cpp")
+    ## 6-1-1. src/droid 하위의 모든 cpp 파일을 찾아서 SRC_DROID_FILES 저장
+    file(GLOB_RECURSE SRC_DROID_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/droid/*.cpp")
 
-    ## 6-1-2. SRC_CARRY_FILES의 모든 파일을 컴파일하고 링크하여 실행 파일 생성 하도록 설정
+    ## 6-1-2. SRC_DROID_FILES 모든 파일을 컴파일하고 링크하여 실행 파일 생성 하도록 설정
     add_executable(
       ${PROJECT_NAME}
-      ${SRC_CARRY_FILES}
+      ${SRC_DROID_FILES}
       "${CMAKE_CURRENT_SOURCE_DIR}/src/_node/droid_node.cpp"
     )
-
-    message(STATUS "   6-1-3-0")
 
     ## 6-1-3. 빌드 순서를 정의 (의존성)
     ## 뒤쪽에 있는 package가 먼저 build 된다.
@@ -192,41 +190,41 @@ message(STATUS "")
       ${PROJECT_NAME}                     # 빌드 대상
       ${catkin_LIBRARIES}                 # catkin 빌드 시스템에서 정의한 라이브러리
       ${YAML_CPP_LIBRARIES}               # yaml-cpp 라이브러리
-      #fieldro_lib                         # 
+      fieldro_lib                         # 
     )
     message(STATUS "   6-1-4-1")
 
-  # ## 6-2. node_io_signal 실행파일 생성 설정
-  # message(STATUS "   6-2. node_io_signal executable generate")
+  ## 6-2. io_unit_node 실행파일 생성 설정
+  message(STATUS "   6-2. io_unit_node executable generate")
 
-  #   ## 6-2-0 project name 설정
-  #   set(PROJECT_IO_NAME "io_signal")
+    ## 6-2-0 project name 설정
+    set(PROJECT_IO_NAME "io_unit")
 
-  #   ## 6-2-1. source_dir/omnibot_io 하위의 모든 cpp 파일을 찾아서 SRC_IO_FILES에 저장
-  #   file(GLOB_RECURSE SRC_IO_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/io_signal/*.cpp")
+    ## 6-2-1. source_dir/omnibot_io 하위의 모든 cpp 파일을 찾아서 SRC_IO_FILES에 저장
+    file(GLOB_RECURSE SRC_IO_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/io_unit/*.cpp")
 
-  #   ## 6-2-2. SRC_IO_FILES의 모든 파일과 node_io_signal.cpp을 컴파일하고 링크하여 실행 파일 생성
-  #   add_executable(
-  #     ${PROJECT_IO_NAME}
-  #     ${SRC_IO_FILES}
-  #     "${CMAKE_CURRENT_SOURCE_DIR}/src/_node/node_io_signal.cpp"
-  #   )
+    ## 6-2-2. SRC_IO_FILES의 모든 파일과 node_io_signal.cpp을 컴파일하고 링크하여 실행 파일 생성
+    add_executable(
+      ${PROJECT_IO_NAME}
+      ${SRC_IO_FILES}
+      "${CMAKE_CURRENT_SOURCE_DIR}/src/_node/io_node.cpp"
+    )
 
-    # ## 6-2-3. 빌드 순서를 정의 (의존성)
-    # add_dependencies(
-    #   ${PROJECT_IO_NAME}                   # 빌드 대상
-    #   ${${PROJECT_NAME}_EXPORTED_TARGETS}  # package 내부의 다른 빌드 대상
-    #   ${catkin_EXPORTED_TARGETS}           # catkin 빌드 시스템에서 정의한 빌드 대상
-    # )
+    ## 6-2-3. 빌드 순서를 정의 (의존성)
+    add_dependencies(
+      ${PROJECT_IO_NAME}                   # 빌드 대상
+      ${${PROJECT_NAME}_EXPORTED_TARGETS}  # package 내부의 다른 빌드 대상
+      ${catkin_EXPORTED_TARGETS}           # catkin 빌드 시스템에서 정의한 빌드 대상
+    )
 
-    # ## 6-2-4. 빌드시 필요한 Lib 링크 설정
-    # target_link_libraries(
-    #   ${PROJECT_IO_NAME}                   # 빌드 대상
-    #   ${catkin_LIBRARIES}                  # catkin 빌드 시스템에서 정의한 라이브러리
-    #   ${YAML_CPP_LIBRARIES}                # yaml-cpp 라이브러리
-    #   ${MODBUS_LIBRARIES}                  # libmodbus 라이브러리
-    #   fieldro_lib                       # modbus_wrapper 라이브러리
-    # )
+    ## 6-2-4. 빌드시 필요한 Lib 링크 설정
+    target_link_libraries(
+      ${PROJECT_IO_NAME}                   # 빌드 대상
+      ${catkin_LIBRARIES}                  # catkin 빌드 시스템에서 정의한 라이브러리
+      ${YAML_CPP_LIBRARIES}                # yaml-cpp 라이브러리
+      ${MODBUS_LIBRARIES}                  # libmodbus 라이브러리
+      fieldro_lib                       # modbus_wrapper 라이브러리
+    )
 
 
   # ## 6-3. node_loader 실행파일 생성 설정

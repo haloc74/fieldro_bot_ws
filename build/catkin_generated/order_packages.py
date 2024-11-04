@@ -2,4 +2,4 @@
 source_root_dir = '/home/twinny/fieldro_bot_ws/src'
 whitelisted_packages = ''.split(';') if '' != '' else []
 blacklisted_packages = ''.split(';') if '' != '' else []
-underlay_workspaces = '/home/twinny/fieldro_bot_ws/devel;/home/twinny/IP060A01_ws/devel;/opt/ros/melodic'.split(';') if '/home/twinny/fieldro_bot_ws/devel;/home/twinny/IP060A01_ws/devel;/opt/ros/melodic' != '' else []
+underlay_workspaces = '/home/twinny/IP060A01_ws/devel;/opt/ros/melodic'.split(';') if '/home/twinny/IP060A01_ws/devel;/opt/ros/melodic' != '' else []
