@@ -1,7 +1,37 @@
 
-. config 정리
+?. digital_in_define.h, digital_out_define.h io_unit director로 이동 
+
+
+
+. code refactoring
+. main controller <---> sub unit 구조 만들기
+. io_node에 heartbeat를 발송하는 publisher 만들기
+  publisher는 UnitState.msg를 발송한다. 
+  dorid_node에서는 이것을 가지고 unit의 상태의 판단과 heartbeat관리를 한다.
+. droid_node에 LinkChecker object 추가하기
+
+. 모든 unit에 heartbeat 추가하기
+. droid에 heartbeat 판독 
+. 모든 unit은 PrevInit 상태에서 droid의 init 명령으로 초기화 과정을 수행
+. 모든 unit은 PrevInit 상태에서 init 명령을 수신후 초기화 동작 및 동작 완료후 Initialized 메세지 전송
+. io heartbeat 메세지 수신이 3초이상 update되지 않으면 truble log
+. io heartbeat 메세지 수신이 3초이상 update되지 않으면 모든 unit 동작 정지
+
+
 
 ID :  - JD 24.11.04
+1. io_unit config 정리
+2. droid config 정리
+3. publish node 명 정리
+4. subscribe node 명 정리
+5. UnitState에 UnConnect, InitReady 상태 추가
+6. io heartbeat 0.5초에 한번씩 또는 update 시전에 publish 하도록 변경
+7. unit class에 상태보고 publish 만들기.
+8. LinkChecker class 추가 (각 unit에 대한 연결 상태 관리를 위한 class)
+
+
+
+ID : a51f5ac - JD 24.11.04
 1. droid node 추가
 2. io_unit node 추가
 3. default base 완성

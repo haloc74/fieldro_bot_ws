@@ -15,10 +15,10 @@ int main(int argc, char **argv)
   fieldro_bot::set_current_dir_to_executable_path();
 
   // log 객체 초기화
-  LOG->initialize("config/carrybot.yaml", "logger");
+  LOG->initialize("config/droid.yaml", "logger");
   LOG->add_log(fieldro_bot::Unit::System, fieldro_bot::LogLevel::Info, 0, "   ");
   LOG->add_log(fieldro_bot::Unit::System, fieldro_bot::LogLevel::Info, 0, "   ");
-  LOG->add_log(fieldro_bot::Unit::System, fieldro_bot::LogLevel::Info, 0, "CarryBot Start");
+  LOG->add_log(fieldro_bot::Unit::System, fieldro_bot::LogLevel::Info, 0, "Trash Bot Start");
 
   // carrybot 객체 생성
   fieldro_bot::Droid* droid = new fieldro_bot::Droid();

@@ -16,10 +16,10 @@ int main(int argc, char **argv)
   fieldro_bot::set_current_dir_to_executable_path();
 
   // logger 초기화
-  LOG->initialize("config/config.yaml", "io_logger");
+  LOG->initialize("config/io.yaml", "logger");
   LOG->add_log(fieldro_bot::Unit::System, fieldro_bot::LogLevel::Info, 0, " ");
   LOG->add_log(fieldro_bot::Unit::System, fieldro_bot::LogLevel::Info, 0, " ");
-  LOG->add_log(fieldro_bot::Unit::System, fieldro_bot::LogLevel::Info, 0, "IO Signal Node Start");
+  LOG->add_log(fieldro_bot::Unit::System, fieldro_bot::LogLevel::Info, 0, "IO Signal Start");
 
   // wago 객체 생성
   fieldro_bot::Wago* wago = new fieldro_bot::Wago();

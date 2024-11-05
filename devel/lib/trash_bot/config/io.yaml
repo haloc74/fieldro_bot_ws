@@ -1,5 +1,5 @@
 main:
-  hz: 25 
+  hz: 100 
 
 logger:
   debug               : 1             ## debug 옵션 (0: off, 그외 : on)

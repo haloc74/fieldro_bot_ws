@@ -7,7 +7,9 @@ namespace fieldro_bot
 {
   enum class UnitState
   {
-    Init = 0x00,
+    UnConnect = 0x00,   // 연결 안됨
+    InitReady,          // 초기화 준비
+    Init,               // 초기화 중
     Ready,
     Busy,
     Error,
@@ -16,12 +18,14 @@ namespace fieldro_bot
 
   enum class Unit
   {
-    None = 0x00,        // 없음 
-    System,             // main 시스템  
-    Signal,             // wago
-    Loader,             // 로더
-    HandlerFork,        // 핸들러 포크
+    None = 0x00,        // 없음                 Fix
+    System,             // main(droid) 시스템   Fix  
 
+    Signal,             // wago
+    // Loader,             // 로더
+    // Gripper,            // 핸들러 포크
+
+    
     All,                // 모든 unit          
     End = All,
   };
@@ -42,8 +46,8 @@ namespace fieldro_bot
       case Unit::None:            return "None";
       case Unit::System:          return "System";
       case Unit::Signal:          return "Signal";
-      case Unit::Loader:          return "Loader";
-      case Unit::HandlerFork:     return "HandlerFork";
+      // case Unit::Loader:          return "Loader";
+      // case Unit::HandlerFork:     return "HandlerFork";
       case Unit::All:             return "All";
       default:                    return "None";
     }

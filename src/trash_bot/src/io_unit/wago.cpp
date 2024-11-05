@@ -34,10 +34,10 @@ namespace fieldro_bot
     create_io_map();
 
     // modbus wrapper 생성
-    _modbus = new ModbusWrapper(ModbusType::TCP, "config/config.yaml", "io_signal", nullptr);
+    _modbus = new ModbusWrapper(ModbusType::TCP, "config/io.yaml", "comm", nullptr);
 
     // main thread
-    _thread_info = new ThreadActionInfo("config/config.yaml", "io_signal");
+    _thread_info = new ThreadActionInfo("config/io.yaml", "main");
     _thread_info->_active = true;
     _thread_info->_thread = std::thread(std::bind(&Wago::update, this));
   }
@@ -134,30 +134,34 @@ namespace fieldro_bot
   /**
   * @brief      io signal을 발송하는 함수
   * @param[in]  signal : 비트연산 된 전체 IO 신호
-  * @note       update가 있거나 마지막 전송 이후 1초가 경과 했다면 발송한다.
+  * @note       update가 있거나 마지막 전송 이후 0.5초가 경과 했다면 발송한다.
   */
   void Wago::publish_io_signal(const int64_t signal_bit, bool update_flag)
   {
-    if(!update_flag && ros::Time::now() - _last_update_time < ros::Duration(1.0))
+    // update가 없고 마지막 전송 이후 0.5초가 경과하지 않았다면 발송하지 않는다.
+    if(!update_flag && ros::Time::now() - _last_update_time < ros::Duration(0.5))
     {
       return;
     }
 
-    // 상시 발송까지 로그를 남기면 너무 커져서 update_flag가 true일 때만 남기도록 한다.
+    // 변경사항이 있을 때만 로그를 남긴다.
     if(update_flag)
     {
       LOG->add_log(fieldro_bot::Unit::Signal, 
                     fieldro_bot::LogLevel::Info, 
                     0, std::string("Update IO Signal : ")+std::to_string(signal_bit));
     }
- 
+
+    // io signal 발송
     trash_bot::IOSignal io_signal_msg;
     io_signal_msg.time_stamp  = ros::Time::now();
     io_signal_msg.signal_bit  = signal_bit;
-
     _publish_io_signal.publish(io_signal_msg);
 
+    // 마지막 발송 시간 업데이트
     _last_update_time = ros::Time::now();
+
+    return;
   }
 
   /**

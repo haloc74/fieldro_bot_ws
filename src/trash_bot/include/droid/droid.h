@@ -33,6 +33,11 @@
 
 namespace fieldro_bot
 { 
+  enum class DroidAction
+  {
+    None = 0x00,
+    
+  }
   class Droid
   { 
   public:
@@ -55,6 +60,7 @@ namespace fieldro_bot
     ros::Subscriber     _subscribe_switch_report;     // 스위치 상태를 받기 위한 subscriber
     ros::Subscriber     _subscribe_velocity_control;  // 속도 제어를 받기 위한 subscriber  
     ros::Subscriber     _subscribe_io_signal;         // 신호를 받기 위한 subscriber
+    ros::Subscriber     _subscribe_pulse;             // pulse를 받기 위한 subscriber
     ros::Subscriber     _subscribe_action_complete;   // 각 Unit의 동작 완료 상태를 받기 위한 subscriber
 
  
@@ -76,6 +82,14 @@ namespace fieldro_bot
     int8_t _sensor[(int)DISignal::END];                             // 센서 상태 정보
     int64_t _signal_bit;
     bool update_sensor_data(DISignal sensor, int64_t signal_bit);   // sensor data 업데이트
+    ros::Time _last_io_update_time;                                 // 마지막 센서 정보 업데이트 시간
+    bool io_link_check();                                           // io link check
+
+    fieldro_bot::UnitState _state[fieldro_bot::Unit::End];           // unit 상태 정보
+    fieldro_bot::UnitState& _action;
+
+    void update_unit_state(fieldro_bot::Unit unit, fieldro_bot::UnitState state);
+    void update_io_pulse();
 
     // user command control
     std::map<int32_t, int32_t, std::string> _command_map;

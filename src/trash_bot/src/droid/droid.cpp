@@ -11,7 +11,7 @@
  
 namespace fieldro_bot
 {
-  Droid::Droid() : _lock()
+  Droid::Droid() : _lock(), _action(_state[static_cast<int>(Unit::System)])
   {
     _node_handle = new ros::NodeHandle();       // node handler 생성
 
@@ -46,6 +46,26 @@ namespace fieldro_bot
     _thread_info  = new ThreadActionInfo("config/droid.yaml", "main");
     _thread_info->_active = true;
     _thread_info->_thread = std::thread(std::bind(&Droid::update, this));  
+
+    // 변수 초기화
+    _last_io_update_time = ros::TIME_MAX;
+    
+    // 각 unit 상태 초기화
+    for(int i=0; i<(int)Unit::End; i++)
+    {
+      _state[i] = UnitState::UnConnect;
+    }
+
+    // Test : 현재 IO만 연결이 되어 있으므로 나머지는 Ready 상태로 설정하자...
+    update_unit_state(fieldro_bot::Unit::None,    fieldro_bot::UnitState::Ready);
+    update_unit_state(fieldro_bot::Unit::System,  fieldro_bot::UnitState::InitReady);
+  }
+
+  void Droid::update_unit_state(fieldro_bot::Unit unit, fieldro_bot::UnitState state)
+  {
+    _state[unit_to_int(unit)] = state;
+
+    return;
   }
 
   Droid::~Droid()
@@ -127,9 +147,16 @@ namespace fieldro_bot
 
   void Droid::subscribe_io_signal(const trash_bot::IOSignal &io_signal_msg)
   {
+    _last_io_update_time = ros::Time::now();
+
+    // io unit 초기화 완료로 설정 
+    // update_unit_state(fieldro_bot::Unit::Signal, fieldro_bot::UnitState::Ready);
+    update_io_pulse();
+
     if(_signal_bit == io_signal_msg.signal_bit)    return;
 
     _signal_bit = io_signal_msg.signal_bit;
+
     log_msg(LogInfo, 0, "Sensor Update : " + std::to_string(io_signal_msg.signal_bit));                  
 
     // for(int i=0; i<(int)DISignal::End; ++i)
@@ -140,6 +167,42 @@ namespace fieldro_bot
     //   }
     // }
     return;
+  }
+
+  void Droid::update_io_pulse()
+  {
+    if(_state[unit_to_int(fieldro_bot::Unit::Signal)] == fieldro_bot::UnitState::UnConnect)
+    {
+      update_unit_state(fieldro_bot::Unit::Signal, fieldro_bot::UnitState::InitReady);
+    }
+    return;
+  }
+
+  /**
+  * @brief      io link check
+  * @return     io unit의 link 상태여부 
+  * @note       io_unit node로 부터 3초 이상 메세지 전송이 없을 경우 link error로 판단
+  * @attention  update시간이 ros::TIME_MAX일 경우는 link error가 아닌 것으로 판단
+  */
+  bool Droid::io_link_check()
+  {
+    if(_last_io_update_time == ros::TIME_MAX)    return true;
+
+    if(ros::Time::now() - _last_io_update_time > ros::Duration(2.0))
+    {
+      log_msg(LogError, 0, "IO Link Error");
+
+      // io unit error 설정
+      update_unit_state(fieldro_bot::Unit::Signal, fieldro_bot::UnitState::Error);
+
+      // todo : link error에 대한 처리
+      // 1. 모든 unit에게 비상 정지 신호 보내기 
+      // 2. 
+
+      return false;
+    }
+
+    return true;
   } 
 
   void Droid::log_msg(LogLevel level, int32_t error_code, std::string log)

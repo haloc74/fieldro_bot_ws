@@ -4,4 +4,8 @@
   <node name="trash_bot" pkg="trash_bot" type="trash_bot" output="screen"/>
     <param name="command_use" value="true"/>
 
+  // io_signal 노드 실행
+  <node name="io_signal" pkg="trash_bot" type="io_signal" output="screen" />
+    <param name="command_use" value="true"/>
+
 </launch>
