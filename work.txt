@@ -5,21 +5,32 @@
 
 . code refactoring
 . main controller <---> sub unit 구조 만들기
-. io_node에 heartbeat를 발송하는 publisher 만들기
-  publisher는 UnitState.msg를 발송한다. 
-  dorid_node에서는 이것을 가지고 unit의 상태의 판단과 heartbeat관리를 한다.
-. droid_node에 LinkChecker object 추가하기
+
 
 . 모든 unit에 heartbeat 추가하기
 . droid에 heartbeat 판독 
 . 모든 unit은 PrevInit 상태에서 droid의 init 명령으로 초기화 과정을 수행
 . 모든 unit은 PrevInit 상태에서 init 명령을 수신후 초기화 동작 및 동작 완료후 Initialized 메세지 전송
-. io heartbeat 메세지 수신이 3초이상 update되지 않으면 truble log
-. io heartbeat 메세지 수신이 3초이상 update되지 않으면 모든 unit 동작 정지
+. io heartbeat 메세지 수신이 2초이상 update되지 않으면 truble log
+. io heartbeat 메세지 수신이 2초이상 update되지 않으면 모든 unit 동작 정지
 
 
+. io_node에 heartbeat를 발송하는 publisher 만들기
+  publisher는 UnitState.msg를 발송한다. 
+  dorid_node에서는 이것을 가지고 unit의 상태의 판단과 heartbeat관리를 한다.
 
-ID :  - JD 24.11.04
+. droid_node에 LinkChecker object 추가하기
+
+. modbus wrapper reconnect 횟수 option 적용 안되는 부분 수정
+
+ID :  - JD 24.11.07
+1. modbus wrapper 통신 끊김 현상 수정
+  socket buffer 64k로 변경
+  io thread hz 50으로 변경
+  (iptime router 이상, LET router 사용시 문제 없음)
+
+
+ID : 88ad4a4 - JD 24.11.04
 1. io_unit config 정리
 2. droid config 정리
 3. publish node 명 정리

@@ -4,6 +4,7 @@ file(REMOVE_RECURSE
   "/home/twinny/fieldro_bot_ws/devel/share/common-lisp/ros/trash_bot/msg/UnitControl.lisp"
   "/home/twinny/fieldro_bot_ws/devel/share/common-lisp/ros/trash_bot/msg/IOSignal.lisp"
   "/home/twinny/fieldro_bot_ws/devel/share/common-lisp/ros/trash_bot/msg/UnitActionComplete.lisp"
+  "/home/twinny/fieldro_bot_ws/devel/share/common-lisp/ros/trash_bot/msg/UnitStateMsg.lisp"
 )
 
 # Per-language clean rules from dependency scanning.

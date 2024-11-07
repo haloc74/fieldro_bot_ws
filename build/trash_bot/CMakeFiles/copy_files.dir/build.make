@@ -54,6 +54,8 @@ CMAKE_BINARY_DIR = /home/twinny/fieldro_bot_ws/build
 include trash_bot/CMakeFiles/copy_files.dir/progress.make
 
 trash_bot/CMakeFiles/copy_files: /home/twinny/fieldro_bot_ws/src/trash_bot/config/config.yaml
+trash_bot/CMakeFiles/copy_files: /home/twinny/fieldro_bot_ws/src/trash_bot/config/droid.yaml
+trash_bot/CMakeFiles/copy_files: /home/twinny/fieldro_bot_ws/src/trash_bot/config/io.yaml
 
 
 copy_files: trash_bot/CMakeFiles/copy_files

@@ -6,6 +6,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 set(CMAKE_DEPENDS_CHECK_CXX
   "/home/twinny/fieldro_bot_ws/src/trash_bot/src/_node/droid_node.cpp" "/home/twinny/fieldro_bot_ws/build/trash_bot/CMakeFiles/trash_bot.dir/src/_node/droid_node.cpp.o"
   "/home/twinny/fieldro_bot_ws/src/trash_bot/src/droid/droid.cpp" "/home/twinny/fieldro_bot_ws/build/trash_bot/CMakeFiles/trash_bot.dir/src/droid/droid.cpp.o"
+  "/home/twinny/fieldro_bot_ws/src/trash_bot/src/droid/droid_unit_control.cpp" "/home/twinny/fieldro_bot_ws/build/trash_bot/CMakeFiles/trash_bot.dir/src/droid/droid_unit_control.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

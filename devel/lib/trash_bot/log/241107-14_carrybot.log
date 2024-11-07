@@ -1,0 +1,40 @@
+[49:29-569][Info][0] :  
+[49:29-569][Info][0] :  
+[49:29-569][Info][0] : IO Signal Start
+[49:29-569][Info][0] :    
+[49:29-569][Info][0] :    
+[49:29-569][Info][0] : Trash Bot Start
+[49:29-569][Info][0] : context success
+[49:29-569][Info][0] : connect success
+[49:29-569][Info][0] : try_connect_modbus_tcp success !!! 
+
+[49:29-569][Info][0] : I/O DI_RACK_00 : un_detected : 0
+[49:29-569][Info][0] : I/O DI_RACK_01 : un_detected : 0
+[49:29-569][Info][0] : I/O DI_RACK_02 : detected : 1
+[49:29-569][Info][0] : I/O DI_RACK_03 : un_detected : 0
+[49:29-569][Info][0] : I/O DI_RACK_04 : un_detected : 0
+[49:29-569][Info][0] : I/O DI_RACK_05 : un_detected : 0
+[49:29-569][Info][0] : I/O DI_RACK_06 : un_detected : 0
+[49:29-569][Info][0] : I/O DI_RACK_07 : detected : 1
+[49:29-569][Info][0] : I/O DI_RACK_08 : detected : 1
+[49:29-569][Info][0] : I/O DI_RACK_09 : detected : 1
+[49:29-569][Info][0] : I/O DI_LoaderFall : un_detected : 0
+[49:29-569][Info][0] : I/O DI_LoaderRaise : un_detected : 0
+[49:29-569][Info][0] : I/O DI_HANDLER_FORK_MAX_LIMIT : detected : 1
+[49:29-569][Info][0] : I/O DI_HANDLER_FORK_MIN_LIMIT : detected : 1
+[49:29-569][Info][0] : I/O DI_HANDLER_LIFT_MAX_LIMIT : detected : 1
+[49:29-569][Info][0] : I/O DI_HANDLER_LIFT_MIN_LIMIT : detected : 1
+[49:29-569][Info][0] : I/O DI_MAGNET_UNIT_ORIGIN : detected : 1
+[49:29-569][Info][0] : I/O DI_MAGNET_UNIT_FRONT : detected : 1
+[49:29-569][Info][0] : I/O DI_MAGNET_UNIT_REAR : detected : 1
+[49:29-569][Info][0] : I/O DI_AMARTURE_CONTACT_DETECTION : detected : 1
+[49:29-569][Info][0] : I/O DI_TRAY_CONTACT_DETECTION : un_detected : 0
+[49:29-569][Info][0] : I/O DI_HANDLER_TILT_MIN_LIMIT : un_detected : 0
+[49:29-569][Info][0] : I/O DI_HANDLER_TILT_MAX_LIMIT : un_detected : 0
+[49:29-569][Info][0] : I/O DI_RACK_FORK_BACKWARD_LIMIT : detected : 1
+[49:29-569][Info][0] : I/O DI_RACK_FORK_FORWARD_LIMIT : detected : 1
+[49:29-569][Info][0] : Update IO Signal : 52422408
+[49:30-570][Info][0] : Sensor Update : 52422408
+[49:30-570][Info][0] : All Unit Linked - Next Step Process
+[49:30-570][Info][0] : action_complete : Init
+[49:30-570][Info][0] : All Unit Initialize Complete - Next Step Process

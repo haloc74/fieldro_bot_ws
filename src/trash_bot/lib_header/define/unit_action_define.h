@@ -34,6 +34,8 @@ namespace fieldro_bot
   enum class UnitAction
   {
     None   = 0x0000,   // 없음
+    WaitForLink,       // Link 대기
+    
     
     Init    = 0x0001,   Initializing,  Initialized,      // 초기화    (System)
 

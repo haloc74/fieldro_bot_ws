@@ -64,7 +64,7 @@ namespace fieldro_bot
   {
     int unit_index = unit_to_int(Unit::None);
 
-    for(int i=0; i<unit_to_int(Unit::End); i++)
+    for(int i=0; i<unit_to_int(Unit::End)+1; i++)
     {
       if(unit == unit_to_string(int_to_unit(i)))
       {

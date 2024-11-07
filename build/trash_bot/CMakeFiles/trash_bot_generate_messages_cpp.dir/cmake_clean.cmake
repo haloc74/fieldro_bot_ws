@@ -4,6 +4,7 @@ file(REMOVE_RECURSE
   "/home/twinny/fieldro_bot_ws/devel/include/trash_bot/UnitControl.h"
   "/home/twinny/fieldro_bot_ws/devel/include/trash_bot/IOSignal.h"
   "/home/twinny/fieldro_bot_ws/devel/include/trash_bot/UnitActionComplete.h"
+  "/home/twinny/fieldro_bot_ws/devel/include/trash_bot/UnitStateMsg.h"
 )
 
 # Per-language clean rules from dependency scanning.

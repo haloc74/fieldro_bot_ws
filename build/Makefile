@@ -1156,6 +1156,19 @@ _trash_bot_generate_messages_check_deps_Pose/fast:
 .PHONY : _trash_bot_generate_messages_check_deps_Pose/fast
 
 #=============================================================================
+# Target rules for targets named _trash_bot_generate_messages_check_deps_UnitStateMsg
+
+# Build rule for target.
+_trash_bot_generate_messages_check_deps_UnitStateMsg: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 _trash_bot_generate_messages_check_deps_UnitStateMsg
+.PHONY : _trash_bot_generate_messages_check_deps_UnitStateMsg
+
+# fast build rule for target.
+_trash_bot_generate_messages_check_deps_UnitStateMsg/fast:
+	$(MAKE) -f trash_bot/CMakeFiles/_trash_bot_generate_messages_check_deps_UnitStateMsg.dir/build.make trash_bot/CMakeFiles/_trash_bot_generate_messages_check_deps_UnitStateMsg.dir/build
+.PHONY : _trash_bot_generate_messages_check_deps_UnitStateMsg/fast
+
+#=============================================================================
 # Target rules for targets named trash_bot_generate_messages_eus
 
 # Build rule for target.
@@ -1335,6 +1348,7 @@ help:
 	@echo "... _trash_bot_generate_messages_check_deps_IOSignal"
 	@echo "... trash_bot_generate_messages_py"
 	@echo "... _trash_bot_generate_messages_check_deps_Pose"
+	@echo "... _trash_bot_generate_messages_check_deps_UnitStateMsg"
 	@echo "... trash_bot_generate_messages_eus"
 	@echo "... trash_bot_geneus"
 	@echo "... trash_bot_generate_messages"

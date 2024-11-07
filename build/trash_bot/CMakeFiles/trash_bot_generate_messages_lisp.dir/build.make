@@ -57,6 +57,7 @@ trash_bot/CMakeFiles/trash_bot_generate_messages_lisp: /home/twinny/fieldro_bot_
 trash_bot/CMakeFiles/trash_bot_generate_messages_lisp: /home/twinny/fieldro_bot_ws/devel/share/common-lisp/ros/trash_bot/msg/UnitControl.lisp
 trash_bot/CMakeFiles/trash_bot_generate_messages_lisp: /home/twinny/fieldro_bot_ws/devel/share/common-lisp/ros/trash_bot/msg/IOSignal.lisp
 trash_bot/CMakeFiles/trash_bot_generate_messages_lisp: /home/twinny/fieldro_bot_ws/devel/share/common-lisp/ros/trash_bot/msg/UnitActionComplete.lisp
+trash_bot/CMakeFiles/trash_bot_generate_messages_lisp: /home/twinny/fieldro_bot_ws/devel/share/common-lisp/ros/trash_bot/msg/UnitStateMsg.lisp
 
 
 /home/twinny/fieldro_bot_ws/devel/share/common-lisp/ros/trash_bot/msg/Pose.lisp: /opt/ros/melodic/lib/genlisp/gen_lisp.py
@@ -79,11 +80,17 @@ trash_bot/CMakeFiles/trash_bot_generate_messages_lisp: /home/twinny/fieldro_bot_
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/twinny/fieldro_bot_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Generating Lisp code from trash_bot/UnitActionComplete.msg"
 	cd /home/twinny/fieldro_bot_ws/build/trash_bot && ../catkin_generated/env_cached.sh /usr/bin/python2 /opt/ros/melodic/share/genlisp/cmake/../../../lib/genlisp/gen_lisp.py /home/twinny/fieldro_bot_ws/src/trash_bot/msg/UnitActionComplete.msg -Itrash_bot:/home/twinny/fieldro_bot_ws/src/trash_bot/msg -Igeometry_msgs:/opt/ros/melodic/share/geometry_msgs/cmake/../msg -Isensor_msgs:/opt/ros/melodic/share/sensor_msgs/cmake/../msg -Istd_msgs:/opt/ros/melodic/share/std_msgs/cmake/../msg -Itwinny_msgs:/home/twinny/IP060A01_ws/src/twinny_msgs/msg -p trash_bot -o /home/twinny/fieldro_bot_ws/devel/share/common-lisp/ros/trash_bot/msg
 
+/home/twinny/fieldro_bot_ws/devel/share/common-lisp/ros/trash_bot/msg/UnitStateMsg.lisp: /opt/ros/melodic/lib/genlisp/gen_lisp.py
+/home/twinny/fieldro_bot_ws/devel/share/common-lisp/ros/trash_bot/msg/UnitStateMsg.lisp: /home/twinny/fieldro_bot_ws/src/trash_bot/msg/UnitStateMsg.msg
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/twinny/fieldro_bot_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Generating Lisp code from trash_bot/UnitStateMsg.msg"
+	cd /home/twinny/fieldro_bot_ws/build/trash_bot && ../catkin_generated/env_cached.sh /usr/bin/python2 /opt/ros/melodic/share/genlisp/cmake/../../../lib/genlisp/gen_lisp.py /home/twinny/fieldro_bot_ws/src/trash_bot/msg/UnitStateMsg.msg -Itrash_bot:/home/twinny/fieldro_bot_ws/src/trash_bot/msg -Igeometry_msgs:/opt/ros/melodic/share/geometry_msgs/cmake/../msg -Isensor_msgs:/opt/ros/melodic/share/sensor_msgs/cmake/../msg -Istd_msgs:/opt/ros/melodic/share/std_msgs/cmake/../msg -Itwinny_msgs:/home/twinny/IP060A01_ws/src/twinny_msgs/msg -p trash_bot -o /home/twinny/fieldro_bot_ws/devel/share/common-lisp/ros/trash_bot/msg
+
 trash_bot_generate_messages_lisp: trash_bot/CMakeFiles/trash_bot_generate_messages_lisp
 trash_bot_generate_messages_lisp: /home/twinny/fieldro_bot_ws/devel/share/common-lisp/ros/trash_bot/msg/Pose.lisp
 trash_bot_generate_messages_lisp: /home/twinny/fieldro_bot_ws/devel/share/common-lisp/ros/trash_bot/msg/UnitControl.lisp
 trash_bot_generate_messages_lisp: /home/twinny/fieldro_bot_ws/devel/share/common-lisp/ros/trash_bot/msg/IOSignal.lisp
 trash_bot_generate_messages_lisp: /home/twinny/fieldro_bot_ws/devel/share/common-lisp/ros/trash_bot/msg/UnitActionComplete.lisp
+trash_bot_generate_messages_lisp: /home/twinny/fieldro_bot_ws/devel/share/common-lisp/ros/trash_bot/msg/UnitStateMsg.lisp
 trash_bot_generate_messages_lisp: trash_bot/CMakeFiles/trash_bot_generate_messages_lisp.dir/build.make
 
 .PHONY : trash_bot_generate_messages_lisp

@@ -92,6 +92,16 @@ install/fast: preinstall/fast
 	/usr/bin/cmake -P cmake_install.cmake
 .PHONY : install/fast
 
+# Special rule for the target list_install_components
+list_install_components:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"Unspecified\""
+.PHONY : list_install_components
+
+# Special rule for the target list_install_components
+list_install_components/fast: list_install_components
+
+.PHONY : list_install_components/fast
+
 # Special rule for the target rebuild_cache
 rebuild_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
@@ -124,16 +134,6 @@ test:
 test/fast: test
 
 .PHONY : test/fast
-
-# Special rule for the target list_install_components
-list_install_components:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"Unspecified\""
-.PHONY : list_install_components
-
-# Special rule for the target list_install_components
-list_install_components/fast: list_install_components
-
-.PHONY : list_install_components/fast
 
 # The main all target
 all: cmake_check_build_system
@@ -1173,6 +1173,21 @@ _trash_bot_generate_messages_check_deps_Pose/fast:
 .PHONY : _trash_bot_generate_messages_check_deps_Pose/fast
 
 # Convenience name for target.
+trash_bot/CMakeFiles/_trash_bot_generate_messages_check_deps_UnitStateMsg.dir/rule:
+	cd /home/twinny/fieldro_bot_ws/build && $(MAKE) -f CMakeFiles/Makefile2 trash_bot/CMakeFiles/_trash_bot_generate_messages_check_deps_UnitStateMsg.dir/rule
+.PHONY : trash_bot/CMakeFiles/_trash_bot_generate_messages_check_deps_UnitStateMsg.dir/rule
+
+# Convenience name for target.
+_trash_bot_generate_messages_check_deps_UnitStateMsg: trash_bot/CMakeFiles/_trash_bot_generate_messages_check_deps_UnitStateMsg.dir/rule
+
+.PHONY : _trash_bot_generate_messages_check_deps_UnitStateMsg
+
+# fast build rule for target.
+_trash_bot_generate_messages_check_deps_UnitStateMsg/fast:
+	cd /home/twinny/fieldro_bot_ws/build && $(MAKE) -f trash_bot/CMakeFiles/_trash_bot_generate_messages_check_deps_UnitStateMsg.dir/build.make trash_bot/CMakeFiles/_trash_bot_generate_messages_check_deps_UnitStateMsg.dir/build
+.PHONY : _trash_bot_generate_messages_check_deps_UnitStateMsg/fast
+
+# Convenience name for target.
 trash_bot/CMakeFiles/trash_bot_generate_messages_eus.dir/rule:
 	cd /home/twinny/fieldro_bot_ws/build && $(MAKE) -f CMakeFiles/Makefile2 trash_bot/CMakeFiles/trash_bot_generate_messages_eus.dir/rule
 .PHONY : trash_bot/CMakeFiles/trash_bot_generate_messages_eus.dir/rule
@@ -1358,6 +1373,33 @@ src/droid/droid.cpp.s:
 	cd /home/twinny/fieldro_bot_ws/build && $(MAKE) -f trash_bot/CMakeFiles/trash_bot.dir/build.make trash_bot/CMakeFiles/trash_bot.dir/src/droid/droid.cpp.s
 .PHONY : src/droid/droid.cpp.s
 
+src/droid/droid_unit_control.o: src/droid/droid_unit_control.cpp.o
+
+.PHONY : src/droid/droid_unit_control.o
+
+# target to build an object file
+src/droid/droid_unit_control.cpp.o:
+	cd /home/twinny/fieldro_bot_ws/build && $(MAKE) -f trash_bot/CMakeFiles/trash_bot.dir/build.make trash_bot/CMakeFiles/trash_bot.dir/src/droid/droid_unit_control.cpp.o
+.PHONY : src/droid/droid_unit_control.cpp.o
+
+src/droid/droid_unit_control.i: src/droid/droid_unit_control.cpp.i
+
+.PHONY : src/droid/droid_unit_control.i
+
+# target to preprocess a source file
+src/droid/droid_unit_control.cpp.i:
+	cd /home/twinny/fieldro_bot_ws/build && $(MAKE) -f trash_bot/CMakeFiles/trash_bot.dir/build.make trash_bot/CMakeFiles/trash_bot.dir/src/droid/droid_unit_control.cpp.i
+.PHONY : src/droid/droid_unit_control.cpp.i
+
+src/droid/droid_unit_control.s: src/droid/droid_unit_control.cpp.s
+
+.PHONY : src/droid/droid_unit_control.s
+
+# target to generate assembly for a file
+src/droid/droid_unit_control.cpp.s:
+	cd /home/twinny/fieldro_bot_ws/build && $(MAKE) -f trash_bot/CMakeFiles/trash_bot.dir/build.make trash_bot/CMakeFiles/trash_bot.dir/src/droid/droid_unit_control.cpp.s
+.PHONY : src/droid/droid_unit_control.cpp.s
+
 src/io_unit/wago.o: src/io_unit/wago.cpp.o
 
 .PHONY : src/io_unit/wago.o
@@ -1411,6 +1453,33 @@ src/io_unit/wago_io_map.s: src/io_unit/wago_io_map.cpp.s
 src/io_unit/wago_io_map.cpp.s:
 	cd /home/twinny/fieldro_bot_ws/build && $(MAKE) -f trash_bot/CMakeFiles/io_unit.dir/build.make trash_bot/CMakeFiles/io_unit.dir/src/io_unit/wago_io_map.cpp.s
 .PHONY : src/io_unit/wago_io_map.cpp.s
+
+src/io_unit/wago_message.o: src/io_unit/wago_message.cpp.o
+
+.PHONY : src/io_unit/wago_message.o
+
+# target to build an object file
+src/io_unit/wago_message.cpp.o:
+	cd /home/twinny/fieldro_bot_ws/build && $(MAKE) -f trash_bot/CMakeFiles/io_unit.dir/build.make trash_bot/CMakeFiles/io_unit.dir/src/io_unit/wago_message.cpp.o
+.PHONY : src/io_unit/wago_message.cpp.o
+
+src/io_unit/wago_message.i: src/io_unit/wago_message.cpp.i
+
+.PHONY : src/io_unit/wago_message.i
+
+# target to preprocess a source file
+src/io_unit/wago_message.cpp.i:
+	cd /home/twinny/fieldro_bot_ws/build && $(MAKE) -f trash_bot/CMakeFiles/io_unit.dir/build.make trash_bot/CMakeFiles/io_unit.dir/src/io_unit/wago_message.cpp.i
+.PHONY : src/io_unit/wago_message.cpp.i
+
+src/io_unit/wago_message.s: src/io_unit/wago_message.cpp.s
+
+.PHONY : src/io_unit/wago_message.s
+
+# target to generate assembly for a file
+src/io_unit/wago_message.cpp.s:
+	cd /home/twinny/fieldro_bot_ws/build && $(MAKE) -f trash_bot/CMakeFiles/io_unit.dir/build.make trash_bot/CMakeFiles/io_unit.dir/src/io_unit/wago_message.cpp.s
+.PHONY : src/io_unit/wago_message.cpp.s
 
 src/lib_cpp/communication/modbus_wrapper.o: src/lib_cpp/communication/modbus_wrapper.cpp.o
 
@@ -1519,6 +1588,33 @@ src/lib_cpp/helper/helper.s: src/lib_cpp/helper/helper.cpp.s
 src/lib_cpp/helper/helper.cpp.s:
 	cd /home/twinny/fieldro_bot_ws/build && $(MAKE) -f trash_bot/CMakeFiles/fieldro_lib.dir/build.make trash_bot/CMakeFiles/fieldro_lib.dir/src/lib_cpp/helper/helper.cpp.s
 .PHONY : src/lib_cpp/helper/helper.cpp.s
+
+src/lib_cpp/helper/link_checker.o: src/lib_cpp/helper/link_checker.cpp.o
+
+.PHONY : src/lib_cpp/helper/link_checker.o
+
+# target to build an object file
+src/lib_cpp/helper/link_checker.cpp.o:
+	cd /home/twinny/fieldro_bot_ws/build && $(MAKE) -f trash_bot/CMakeFiles/fieldro_lib.dir/build.make trash_bot/CMakeFiles/fieldro_lib.dir/src/lib_cpp/helper/link_checker.cpp.o
+.PHONY : src/lib_cpp/helper/link_checker.cpp.o
+
+src/lib_cpp/helper/link_checker.i: src/lib_cpp/helper/link_checker.cpp.i
+
+.PHONY : src/lib_cpp/helper/link_checker.i
+
+# target to preprocess a source file
+src/lib_cpp/helper/link_checker.cpp.i:
+	cd /home/twinny/fieldro_bot_ws/build && $(MAKE) -f trash_bot/CMakeFiles/fieldro_lib.dir/build.make trash_bot/CMakeFiles/fieldro_lib.dir/src/lib_cpp/helper/link_checker.cpp.i
+.PHONY : src/lib_cpp/helper/link_checker.cpp.i
+
+src/lib_cpp/helper/link_checker.s: src/lib_cpp/helper/link_checker.cpp.s
+
+.PHONY : src/lib_cpp/helper/link_checker.s
+
+# target to generate assembly for a file
+src/lib_cpp/helper/link_checker.cpp.s:
+	cd /home/twinny/fieldro_bot_ws/build && $(MAKE) -f trash_bot/CMakeFiles/fieldro_lib.dir/build.make trash_bot/CMakeFiles/fieldro_lib.dir/src/lib_cpp/helper/link_checker.cpp.s
+.PHONY : src/lib_cpp/helper/link_checker.cpp.s
 
 src/lib_cpp/helper/thread_action_info.o: src/lib_cpp/helper/thread_action_info.cpp.o
 
@@ -1637,6 +1733,7 @@ help:
 	@echo "... install/strip"
 	@echo "... install/local"
 	@echo "... install"
+	@echo "... list_install_components"
 	@echo "... sensor_msgs_generate_messages_py"
 	@echo "... tf_generate_messages_py"
 	@echo "... sensor_msgs_generate_messages_nodejs"
@@ -1707,6 +1804,7 @@ help:
 	@echo "... _trash_bot_generate_messages_check_deps_IOSignal"
 	@echo "... trash_bot_generate_messages_py"
 	@echo "... _trash_bot_generate_messages_check_deps_Pose"
+	@echo "... _trash_bot_generate_messages_check_deps_UnitStateMsg"
 	@echo "... trash_bot_generate_messages_eus"
 	@echo "... trash_bot_geneus"
 	@echo "... trash_bot_generate_messages"
@@ -1714,7 +1812,6 @@ help:
 	@echo "... trash_bot_genpy"
 	@echo "... io_unit"
 	@echo "... copy_files"
-	@echo "... list_install_components"
 	@echo "... src/_node/droid_node.o"
 	@echo "... src/_node/droid_node.i"
 	@echo "... src/_node/droid_node.s"
@@ -1724,12 +1821,18 @@ help:
 	@echo "... src/droid/droid.o"
 	@echo "... src/droid/droid.i"
 	@echo "... src/droid/droid.s"
+	@echo "... src/droid/droid_unit_control.o"
+	@echo "... src/droid/droid_unit_control.i"
+	@echo "... src/droid/droid_unit_control.s"
 	@echo "... src/io_unit/wago.o"
 	@echo "... src/io_unit/wago.i"
 	@echo "... src/io_unit/wago.s"
 	@echo "... src/io_unit/wago_io_map.o"
 	@echo "... src/io_unit/wago_io_map.i"
 	@echo "... src/io_unit/wago_io_map.s"
+	@echo "... src/io_unit/wago_message.o"
+	@echo "... src/io_unit/wago_message.i"
+	@echo "... src/io_unit/wago_message.s"
 	@echo "... src/lib_cpp/communication/modbus_wrapper.o"
 	@echo "... src/lib_cpp/communication/modbus_wrapper.i"
 	@echo "... src/lib_cpp/communication/modbus_wrapper.s"
@@ -1742,6 +1845,9 @@ help:
 	@echo "... src/lib_cpp/helper/helper.o"
 	@echo "... src/lib_cpp/helper/helper.i"
 	@echo "... src/lib_cpp/helper/helper.s"
+	@echo "... src/lib_cpp/helper/link_checker.o"
+	@echo "... src/lib_cpp/helper/link_checker.i"
+	@echo "... src/lib_cpp/helper/link_checker.s"
 	@echo "... src/lib_cpp/helper/thread_action_info.o"
 	@echo "... src/lib_cpp/helper/thread_action_info.i"
 	@echo "... src/lib_cpp/helper/thread_action_info.s"

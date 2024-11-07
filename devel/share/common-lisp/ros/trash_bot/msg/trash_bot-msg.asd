@@ -12,4 +12,6 @@
     (:file "_package_UnitActionComplete" :depends-on ("_package"))
     (:file "UnitControl" :depends-on ("_package_UnitControl"))
     (:file "_package_UnitControl" :depends-on ("_package"))
+    (:file "UnitStateMsg" :depends-on ("_package_UnitStateMsg"))
+    (:file "_package_UnitStateMsg" :depends-on ("_package"))
   ))

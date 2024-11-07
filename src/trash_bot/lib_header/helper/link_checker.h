@@ -2,7 +2,7 @@
 #pragma once
 
 #include <ros/ros.h>
-#include "unit_define.h"
+#include "define/unit_define.h"
 
 /**
 * @brief      link check class
@@ -25,6 +25,6 @@ namespace fieldro_bot
     bool    update();                                               // main thread 함수
     void    update_data(int32_t index);                             // unit link 상태 업데이트
     bool    is_all_unit_linked();                                   // 모든 unit link 상태 체크
-    int32_t get_state()                                             // unit link 상태 반환
+    int32_t get_state();                                             // unit link 상태 반환
   };
 }

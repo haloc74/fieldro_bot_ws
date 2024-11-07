@@ -13,6 +13,7 @@ namespace fieldro_bot
 {
   Droid::Droid() : _lock(), _action(_state[static_cast<int>(Unit::System)])
   {
+    _action = fieldro_bot::UnitState::InitReady;
     _node_handle = new ros::NodeHandle();       // node handler 생성
 
     for(int i=0; i<(int)DISignal::END; i++)  
@@ -32,12 +33,16 @@ namespace fieldro_bot
     _subscribe_action_complete = 
     _node_handle->subscribe("trash_bot/action_complete", 100, &Droid::subscribe_action_complete, this);
 
+    _subscribe_unit_state = _node_handle->subscribe("trash_bot/UnitState", 100, &Droid::subscribe_unit_state, this);
+
     _publish_unit_control = 
     _node_handle->advertise<trash_bot::UnitControl>("trash_bot/unit_control", 100);
 
     _control_sequence.clear();
     _pending_sequence.clear();
     _command_map.clear();
+
+    _link_checker = new LinkChecker();  // link checker 객체 생성
 
     _spinner = new ros::AsyncSpinner(5);        // spinner 생성
     _spinner->start();
@@ -55,18 +60,18 @@ namespace fieldro_bot
     {
       _state[i] = UnitState::UnConnect;
     }
+    _action = fieldro_bot::UnitState::InitReady;
 
-    // Test : 현재 IO만 연결이 되어 있으므로 나머지는 Ready 상태로 설정하자...
-    update_unit_state(fieldro_bot::Unit::None,    fieldro_bot::UnitState::Ready);
-    update_unit_state(fieldro_bot::Unit::System,  fieldro_bot::UnitState::InitReady);
+    // // Test : 현재 IO만 연결이 되어 있으므로 나머지는 Ready 상태로 설정하자...
+    // update_unit_state(fieldro_bot::Unit::None,    fieldro_bot::UnitState::Ready);
+    // update_unit_state(fieldro_bot::Unit::System,  fieldro_bot::UnitState::InitReady);
   }
 
-  void Droid::update_unit_state(fieldro_bot::Unit unit, fieldro_bot::UnitState state)
-  {
-    _state[unit_to_int(unit)] = state;
-
-    return;
-  }
+  // void Droid::update_unit_state(fieldro_bot::Unit unit, fieldro_bot::UnitState state)
+  // {
+  //   _state[unit_to_int(unit)] = state;
+  //   return;
+  // }
 
   Droid::~Droid()
   {
@@ -94,6 +99,7 @@ namespace fieldro_bot
     ros::shutdown();
     ros::waitForShutdown();
     safe_delete(_node_handle);
+    safe_delete(_link_checker);
   }
 
   void Droid::system_finish()
@@ -106,10 +112,11 @@ namespace fieldro_bot
   {
     while(_thread_info->_active)
     {
-      //std::lock_guard<std::mutex> lock(_lock);
-
       // topic message 발송
       message_publish();
+
+      // link check
+
 
       // thread Hz 싱크 및 독점 방지를 위한 sleep
       std::this_thread::sleep_for(std::chrono::milliseconds(_thread_info->_sleep));
@@ -151,7 +158,7 @@ namespace fieldro_bot
 
     // io unit 초기화 완료로 설정 
     // update_unit_state(fieldro_bot::Unit::Signal, fieldro_bot::UnitState::Ready);
-    update_io_pulse();
+    //update_io_pulse();
 
     if(_signal_bit == io_signal_msg.signal_bit)    return;
 
@@ -169,41 +176,60 @@ namespace fieldro_bot
     return;
   }
 
-  void Droid::update_io_pulse()
+  void Droid::subscribe_unit_state(const trash_bot::UnitStateMsg &msg)
   {
-    if(_state[unit_to_int(fieldro_bot::Unit::Signal)] == fieldro_bot::UnitState::UnConnect)
+    _link_checker->update_data(msg.unit_id);
+
+    // 현재 상태가 WaitForLink 상태이고 모든 link가 연결이 되어 있을 경우
+    if(_action == fieldro_bot::UnitState::InitReady && _link_checker->is_all_unit_linked())
     {
-      update_unit_state(fieldro_bot::Unit::Signal, fieldro_bot::UnitState::InitReady);
+      log_msg(LogInfo, 0, "All Unit Linked - Next Step Process");
+
+      _action = fieldro_bot::UnitState::Init;
+
+      // todo 
+      // io_node에 초기화 요청 sequence 추가
+      add_sequence(unit_to_int(fieldro_bot::Unit::Signal), unit_action_to_int(fieldro_bot::UnitAction::Init));
     }
+
     return;
   }
 
-  /**
-  * @brief      io link check
-  * @return     io unit의 link 상태여부 
-  * @note       io_unit node로 부터 3초 이상 메세지 전송이 없을 경우 link error로 판단
-  * @attention  update시간이 ros::TIME_MAX일 경우는 link error가 아닌 것으로 판단
-  */
-  bool Droid::io_link_check()
-  {
-    if(_last_io_update_time == ros::TIME_MAX)    return true;
+  // void Droid::update_io_pulse()
+  // {
+  //   if(_state[unit_to_int(fieldro_bot::Unit::Signal)] == fieldro_bot::UnitState::UnConnect)
+  //   {
+  //     update_unit_state(fieldro_bot::Unit::Signal, fieldro_bot::UnitState::InitReady);
+  //   }
+  //   return;
+  // }
 
-    if(ros::Time::now() - _last_io_update_time > ros::Duration(2.0))
-    {
-      log_msg(LogError, 0, "IO Link Error");
+  // /**
+  // * @brief      io link check
+  // * @return     io unit의 link 상태여부 
+  // * @note       io_unit node로 부터 3초 이상 메세지 전송이 없을 경우 link error로 판단
+  // * @attention  update시간이 ros::TIME_MAX일 경우는 link error가 아닌 것으로 판단
+  // */
+  // bool Droid::io_link_check()
+  // {
+  //   if(_last_io_update_time == ros::TIME_MAX)    return true;
 
-      // io unit error 설정
-      update_unit_state(fieldro_bot::Unit::Signal, fieldro_bot::UnitState::Error);
+  //   if(ros::Time::now() - _last_io_update_time > ros::Duration(2.0))
+  //   {
+  //     log_msg(LogError, 0, "IO Link Error");
 
-      // todo : link error에 대한 처리
-      // 1. 모든 unit에게 비상 정지 신호 보내기 
-      // 2. 
+  //     // io unit error 설정
+  //     update_unit_state(fieldro_bot::Unit::Signal, fieldro_bot::UnitState::Error);
 
-      return false;
-    }
+  //     // todo : link error에 대한 처리
+  //     // 1. 모든 unit에게 비상 정지 신호 보내기 
+  //     // 2. 
 
-    return true;
-  } 
+  //     return false;
+  //   }
+
+  //   return true;
+  // } 
 
   void Droid::log_msg(LogLevel level, int32_t error_code, std::string log)
   {
@@ -211,71 +237,7 @@ namespace fieldro_bot
     return;
   }
 
-  /**
-  /* @brief  		각 Unit의 동작 완료 상태를 받기 위한 callback 함수
-  /* @param  		const omnibot_carry::UnitActionComplete : 동작 완료 message	
-  /* @note      pending_sequence에 저장된 message는 action_complete message를 받아서 삭제된다. 
-  /*            1. action_complete_msg의 action_object와 pending_sequence의 target_object가 일치할 경우
-  /*            2. action_complete_msg의 action과 pending_sequence의 action이 일치할 경우
-  /*            두 조건이 모두 만족할 경우 pending_sequence에서 삭제한다.
-  */
-  void Droid::subscribe_action_complete(const trash_bot::UnitActionComplete &action_complete_msg)
-  {
-    std::lock_guard<std::mutex> lock(_lock);
-    
-    if(_pending_sequence.empty())    
-    {
-        log_msg(LogInfo, 0, "action_complete (extend) :" 
-                + unit_to_string(int_to_unit(action_complete_msg.action_object)) 
-                + " - "
-                + unit_action_to_string(int_to_unit_action(action_complete_msg.complete_action)));      
-      return;
-    }
 
-    for(auto it=_pending_sequence.begin(); it!=_pending_sequence.end(); it++)
-    {
-      if((*it)->target_object != action_complete_msg.action_object)   continue;
-      if((*it)->action != action_complete_msg.complete_action)        continue;
-
-      // todo : result에 따른 처리
-      if(action_complete_msg.error_code != error_to_int(Error::None))
-      {
-        log_msg(LogError, action_complete_msg.error_code, "action_fail : "+ unit_action_to_string(int_to_unit_action((*it)->action)));
-      }
-      else
-      {
-        log_msg(LogInfo, 0, "action_complete : "+unit_action_to_string(int_to_unit_action((*it)->action)));
-      }
-
-      _pending_sequence.erase(it);
-
-      break;
-    }
-
-
-    return;
-  }
-
-  /**
-  * @brief      unit control message를 발송하는 함수
-  * @param[in]  unit : 명령어가 전달 되어야 하는 unit index 
-  * @param[in]  action : 명령어 index
-  * @return     
-  * @note       
-  * @see        global/define/unit_define.h Unit 참조
-  * @see        global/define/unit_action_define.h UnitAction 참조
-  */
-  void Droid::publish_unit_control(uint32_t unit, uint32_t action, std::string command)
-  {
-    trash_bot::UnitControl unit_control_msg;
-    unit_control_msg.time_stamp     = ros::Time::now();
-    unit_control_msg.target_object  = unit;
-    unit_control_msg.action         = action;
-    unit_control_msg.command        = command;
-    _publish_unit_control.publish(unit_control_msg);
-
-    return;
-  }
 
   /**
   * @brief      message 발송 여건을 확인하고 message 발송
@@ -283,7 +245,7 @@ namespace fieldro_bot
   */
   void Droid::message_publish()
   {
-    if(!_pending_sequence.empty())    return;   // 응답 대기중인 요청이 없을 경우에만 신규 요청 발송
+    if(!_pending_sequence.empty())    return;  // 응답 대기중인 요청이 없을 경우에만 신규 요청 발송
     if(_control_sequence.empty())    return;   // control_sequence에 요소가 있을 경우 발송
 
     // 실제 메세지 발송      

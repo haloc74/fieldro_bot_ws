@@ -4,6 +4,7 @@ file(REMOVE_RECURSE
   "/home/twinny/fieldro_bot_ws/devel/share/gennodejs/ros/trash_bot/msg/UnitControl.js"
   "/home/twinny/fieldro_bot_ws/devel/share/gennodejs/ros/trash_bot/msg/IOSignal.js"
   "/home/twinny/fieldro_bot_ws/devel/share/gennodejs/ros/trash_bot/msg/UnitActionComplete.js"
+  "/home/twinny/fieldro_bot_ws/devel/share/gennodejs/ros/trash_bot/msg/UnitStateMsg.js"
 )
 
 # Per-language clean rules from dependency scanning.

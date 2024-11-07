@@ -32,11 +32,11 @@
 		},
 
     {
-      "label": "Run droid_node",
+      "label": "Run trash_bot",
       "type": "shell",
-      "command": "${workspaceFolder}/devel/lib/trash_bot/droid_node",
+      "command": "${workspaceFolder}/devel/lib/trash_bot/trash_bot",
 			"options": {
-				"cwd": "${workspaceFolder}/devel/lib/droid_node"
+				"cwd": "${workspaceFolder}/devel/lib/trash_bot"
 			},
       "presentation": {
         "reveal": "always",

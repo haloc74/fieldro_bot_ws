@@ -12,7 +12,7 @@ if(NOT DEFINED CMAKE_INSTALL_CONFIG_NAME)
     string(REGEX REPLACE "^[^A-Za-z0-9_]+" ""
            CMAKE_INSTALL_CONFIG_NAME "${BUILD_TYPE}")
   else()
-    set(CMAKE_INSTALL_CONFIG_NAME "")
+    set(CMAKE_INSTALL_CONFIG_NAME "RelWithDebInfo")
   endif()
   message(STATUS "Install configuration: \"${CMAKE_INSTALL_CONFIG_NAME}\"")
 endif()
@@ -43,6 +43,7 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
     "/home/twinny/fieldro_bot_ws/src/trash_bot/msg/UnitActionComplete.msg"
     "/home/twinny/fieldro_bot_ws/src/trash_bot/msg/UnitControl.msg"
     "/home/twinny/fieldro_bot_ws/src/trash_bot/msg/IOSignal.msg"
+    "/home/twinny/fieldro_bot_ws/src/trash_bot/msg/UnitStateMsg.msg"
     )
 endif()
 

@@ -49,6 +49,7 @@ message(STATUS "")
     UnitActionComplete.msg
     UnitControl.msg
     IOSignal.msg
+    UnitStateMsg.msg
   )
 
   ## 2.2 srv 폴더로 부터 service 생성

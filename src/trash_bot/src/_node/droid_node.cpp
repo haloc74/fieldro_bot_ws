@@ -9,7 +9,7 @@ fieldro_bot::Log* fieldro_bot::Log::_instance = nullptr;
 int main(int argc, char **argv)                 
 {
   // process node name 초기화
-  ros::init(argc, argv, "droid_node");  
+  ros::init(argc, argv, "trash_bot_node");  
 
   // 실행 파일 경로로 현재 디렉토리 설정
   fieldro_bot::set_current_dir_to_executable_path();

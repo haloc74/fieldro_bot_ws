@@ -81,9 +81,33 @@ trash_bot/CMakeFiles/trash_bot.dir/src/droid/droid.cpp.o.provides: trash_bot/CMa
 trash_bot/CMakeFiles/trash_bot.dir/src/droid/droid.cpp.o.provides.build: trash_bot/CMakeFiles/trash_bot.dir/src/droid/droid.cpp.o
 
 
+trash_bot/CMakeFiles/trash_bot.dir/src/droid/droid_unit_control.cpp.o: trash_bot/CMakeFiles/trash_bot.dir/flags.make
+trash_bot/CMakeFiles/trash_bot.dir/src/droid/droid_unit_control.cpp.o: /home/twinny/fieldro_bot_ws/src/trash_bot/src/droid/droid_unit_control.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/twinny/fieldro_bot_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object trash_bot/CMakeFiles/trash_bot.dir/src/droid/droid_unit_control.cpp.o"
+	cd /home/twinny/fieldro_bot_ws/build/trash_bot && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/trash_bot.dir/src/droid/droid_unit_control.cpp.o -c /home/twinny/fieldro_bot_ws/src/trash_bot/src/droid/droid_unit_control.cpp
+
+trash_bot/CMakeFiles/trash_bot.dir/src/droid/droid_unit_control.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/trash_bot.dir/src/droid/droid_unit_control.cpp.i"
+	cd /home/twinny/fieldro_bot_ws/build/trash_bot && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/twinny/fieldro_bot_ws/src/trash_bot/src/droid/droid_unit_control.cpp > CMakeFiles/trash_bot.dir/src/droid/droid_unit_control.cpp.i
+
+trash_bot/CMakeFiles/trash_bot.dir/src/droid/droid_unit_control.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/trash_bot.dir/src/droid/droid_unit_control.cpp.s"
+	cd /home/twinny/fieldro_bot_ws/build/trash_bot && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/twinny/fieldro_bot_ws/src/trash_bot/src/droid/droid_unit_control.cpp -o CMakeFiles/trash_bot.dir/src/droid/droid_unit_control.cpp.s
+
+trash_bot/CMakeFiles/trash_bot.dir/src/droid/droid_unit_control.cpp.o.requires:
+
+.PHONY : trash_bot/CMakeFiles/trash_bot.dir/src/droid/droid_unit_control.cpp.o.requires
+
+trash_bot/CMakeFiles/trash_bot.dir/src/droid/droid_unit_control.cpp.o.provides: trash_bot/CMakeFiles/trash_bot.dir/src/droid/droid_unit_control.cpp.o.requires
+	$(MAKE) -f trash_bot/CMakeFiles/trash_bot.dir/build.make trash_bot/CMakeFiles/trash_bot.dir/src/droid/droid_unit_control.cpp.o.provides.build
+.PHONY : trash_bot/CMakeFiles/trash_bot.dir/src/droid/droid_unit_control.cpp.o.provides
+
+trash_bot/CMakeFiles/trash_bot.dir/src/droid/droid_unit_control.cpp.o.provides.build: trash_bot/CMakeFiles/trash_bot.dir/src/droid/droid_unit_control.cpp.o
+
+
 trash_bot/CMakeFiles/trash_bot.dir/src/_node/droid_node.cpp.o: trash_bot/CMakeFiles/trash_bot.dir/flags.make
 trash_bot/CMakeFiles/trash_bot.dir/src/_node/droid_node.cpp.o: /home/twinny/fieldro_bot_ws/src/trash_bot/src/_node/droid_node.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/twinny/fieldro_bot_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object trash_bot/CMakeFiles/trash_bot.dir/src/_node/droid_node.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/twinny/fieldro_bot_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object trash_bot/CMakeFiles/trash_bot.dir/src/_node/droid_node.cpp.o"
 	cd /home/twinny/fieldro_bot_ws/build/trash_bot && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/trash_bot.dir/src/_node/droid_node.cpp.o -c /home/twinny/fieldro_bot_ws/src/trash_bot/src/_node/droid_node.cpp
 
 trash_bot/CMakeFiles/trash_bot.dir/src/_node/droid_node.cpp.i: cmake_force
@@ -108,12 +132,14 @@ trash_bot/CMakeFiles/trash_bot.dir/src/_node/droid_node.cpp.o.provides.build: tr
 # Object files for target trash_bot
 trash_bot_OBJECTS = \
 "CMakeFiles/trash_bot.dir/src/droid/droid.cpp.o" \
+"CMakeFiles/trash_bot.dir/src/droid/droid_unit_control.cpp.o" \
 "CMakeFiles/trash_bot.dir/src/_node/droid_node.cpp.o"
 
 # External object files for target trash_bot
 trash_bot_EXTERNAL_OBJECTS =
 
 /home/twinny/fieldro_bot_ws/devel/lib/trash_bot/trash_bot: trash_bot/CMakeFiles/trash_bot.dir/src/droid/droid.cpp.o
+/home/twinny/fieldro_bot_ws/devel/lib/trash_bot/trash_bot: trash_bot/CMakeFiles/trash_bot.dir/src/droid/droid_unit_control.cpp.o
 /home/twinny/fieldro_bot_ws/devel/lib/trash_bot/trash_bot: trash_bot/CMakeFiles/trash_bot.dir/src/_node/droid_node.cpp.o
 /home/twinny/fieldro_bot_ws/devel/lib/trash_bot/trash_bot: trash_bot/CMakeFiles/trash_bot.dir/build.make
 /home/twinny/fieldro_bot_ws/devel/lib/trash_bot/trash_bot: /opt/ros/melodic/lib/libserial.so
@@ -167,7 +193,7 @@ trash_bot_EXTERNAL_OBJECTS =
 /home/twinny/fieldro_bot_ws/devel/lib/trash_bot/trash_bot: /usr/lib/x86_64-linux-gnu/libconsole_bridge.so.0.4
 /home/twinny/fieldro_bot_ws/devel/lib/trash_bot/trash_bot: /usr/lib/x86_64-linux-gnu/libyaml-cpp.so.0.5.2
 /home/twinny/fieldro_bot_ws/devel/lib/trash_bot/trash_bot: trash_bot/CMakeFiles/trash_bot.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/twinny/fieldro_bot_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking CXX executable /home/twinny/fieldro_bot_ws/devel/lib/trash_bot/trash_bot"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/twinny/fieldro_bot_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking CXX executable /home/twinny/fieldro_bot_ws/devel/lib/trash_bot/trash_bot"
 	cd /home/twinny/fieldro_bot_ws/build/trash_bot && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/trash_bot.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -176,6 +202,7 @@ trash_bot/CMakeFiles/trash_bot.dir/build: /home/twinny/fieldro_bot_ws/devel/lib/
 .PHONY : trash_bot/CMakeFiles/trash_bot.dir/build
 
 trash_bot/CMakeFiles/trash_bot.dir/requires: trash_bot/CMakeFiles/trash_bot.dir/src/droid/droid.cpp.o.requires
+trash_bot/CMakeFiles/trash_bot.dir/requires: trash_bot/CMakeFiles/trash_bot.dir/src/droid/droid_unit_control.cpp.o.requires
 trash_bot/CMakeFiles/trash_bot.dir/requires: trash_bot/CMakeFiles/trash_bot.dir/src/_node/droid_node.cpp.o.requires
 
 .PHONY : trash_bot/CMakeFiles/trash_bot.dir/requires

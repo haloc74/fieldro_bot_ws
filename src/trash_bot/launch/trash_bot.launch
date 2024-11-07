@@ -1,11 +1,15 @@
 <launch>
 
+  // pkg   : 실행 파일이 있는 패키지 명
+  // tyhpe : 실행시킬 파일명
+  // name  : 실행된 process가 ros에서 어떠한 이름의 node로 표시될지 결정
+
   // droid 노드 실행
   <node name="trash_bot" pkg="trash_bot" type="trash_bot" output="screen"/>
     <param name="command_use" value="true"/>
 
   // io_signal 노드 실행
-  <node name="io_signal" pkg="trash_bot" type="io_signal" output="screen" />
+  <node name="io_unit" pkg="trash_bot" type="io_unit" output="screen" />
     <param name="command_use" value="true"/>
 
 </launch>

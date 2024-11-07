@@ -7,6 +7,7 @@ set(CMAKE_DEPENDS_CHECK_CXX
   "/home/twinny/fieldro_bot_ws/src/trash_bot/src/_node/io_node.cpp" "/home/twinny/fieldro_bot_ws/build/trash_bot/CMakeFiles/io_unit.dir/src/_node/io_node.cpp.o"
   "/home/twinny/fieldro_bot_ws/src/trash_bot/src/io_unit/wago.cpp" "/home/twinny/fieldro_bot_ws/build/trash_bot/CMakeFiles/io_unit.dir/src/io_unit/wago.cpp.o"
   "/home/twinny/fieldro_bot_ws/src/trash_bot/src/io_unit/wago_io_map.cpp" "/home/twinny/fieldro_bot_ws/build/trash_bot/CMakeFiles/io_unit.dir/src/io_unit/wago_io_map.cpp.o"
+  "/home/twinny/fieldro_bot_ws/src/trash_bot/src/io_unit/wago_message.cpp" "/home/twinny/fieldro_bot_ws/build/trash_bot/CMakeFiles/io_unit.dir/src/io_unit/wago_message.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

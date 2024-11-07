@@ -1,6 +1,6 @@
 # generated from genmsg/cmake/pkg-genmsg.context.in
 
-messages_str = "/home/twinny/fieldro_bot_ws/src/trash_bot/msg/Pose.msg;/home/twinny/fieldro_bot_ws/src/trash_bot/msg/UnitActionComplete.msg;/home/twinny/fieldro_bot_ws/src/trash_bot/msg/UnitControl.msg;/home/twinny/fieldro_bot_ws/src/trash_bot/msg/IOSignal.msg"
+messages_str = "/home/twinny/fieldro_bot_ws/src/trash_bot/msg/Pose.msg;/home/twinny/fieldro_bot_ws/src/trash_bot/msg/UnitActionComplete.msg;/home/twinny/fieldro_bot_ws/src/trash_bot/msg/UnitControl.msg;/home/twinny/fieldro_bot_ws/src/trash_bot/msg/IOSignal.msg;/home/twinny/fieldro_bot_ws/src/trash_bot/msg/UnitStateMsg.msg"
 services_str = ""
 pkg_name = "trash_bot"
 dependencies_str = "geometry_msgs;sensor_msgs;std_msgs;twinny_msgs"

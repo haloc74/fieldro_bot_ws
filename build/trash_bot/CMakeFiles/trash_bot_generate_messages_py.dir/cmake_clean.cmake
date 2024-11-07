@@ -4,6 +4,7 @@ file(REMOVE_RECURSE
   "/home/twinny/fieldro_bot_ws/devel/lib/python2.7/dist-packages/trash_bot/msg/_UnitControl.py"
   "/home/twinny/fieldro_bot_ws/devel/lib/python2.7/dist-packages/trash_bot/msg/_IOSignal.py"
   "/home/twinny/fieldro_bot_ws/devel/lib/python2.7/dist-packages/trash_bot/msg/_UnitActionComplete.py"
+  "/home/twinny/fieldro_bot_ws/devel/lib/python2.7/dist-packages/trash_bot/msg/_UnitStateMsg.py"
   "/home/twinny/fieldro_bot_ws/devel/lib/python2.7/dist-packages/trash_bot/msg/__init__.py"
 )
 

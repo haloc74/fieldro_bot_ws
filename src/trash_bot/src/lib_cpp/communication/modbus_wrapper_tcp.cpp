@@ -1,6 +1,10 @@
 #include "communication/modbus_wrapper.h"
 #include <fstream>
 #include "yaml-cpp/yaml.h"
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <netinet/tcp.h>
+#include <arpa/inet.h>
 
 namespace fieldro_bot
 {
@@ -145,6 +149,22 @@ namespace fieldro_bot
     }
     else
     {
+      modbus_set_response_timeout(_modbus, 0, 500000);
+      modbus_set_slave(_modbus, 0);  // slave ID 설정
+      //modbus_set_debug(_modbus, ON); // 디버그 모드 활성화
+
+      int socket = modbus_get_socket(_modbus);
+      if(socket != -1)
+      {
+        int buffer_size = 65536;  // 64KB
+        setsockopt(socket, SOL_SOCKET, SO_RCVBUF, &buffer_size, sizeof(buffer_size));
+        setsockopt(socket, SOL_SOCKET, SO_SNDBUF, &buffer_size, sizeof(buffer_size));
+        
+        // TCP_NODELAY 설정
+        int flag = 1;
+        setsockopt(socket, IPPROTO_TCP, TCP_NODELAY, &flag, sizeof(flag));
+      }
+
       LOG->add_log(fieldro_bot::Unit::Signal, fieldro_bot::LogLevel::Info, 0, "connect success");
       _status = CommStatus::Connect;
     }
@@ -166,6 +186,8 @@ namespace fieldro_bot
 
     _modbus = nullptr;
     _status = CommStatus::Disconnect;
+
+    _retry_count  = 3;
   }
 
   /**
@@ -175,6 +197,8 @@ namespace fieldro_bot
   */
   CommStatus ModbusWrapper::connect_check_modbus_tcp()
   {
+    std::lock_guard<std::mutex> lock(_lock);
+
     if(is_connect() == CommStatus::Connect) return _status;
     if(!is_reconnect_possible())              return _status;   
 
@@ -193,10 +217,10 @@ namespace fieldro_bot
     }
     else
     {
-      LOG->add_log(fieldro_bot::Unit::Signal, fieldro_bot::LogLevel::Info, 0, "try_connect_modbus_tcp success !!!");
+      LOG->add_log(fieldro_bot::Unit::Signal, fieldro_bot::LogLevel::Info, 0, "try_connect_modbus_tcp success !!! \n");
       
       // 연결이 되었으므로 retry count 초기화
-      _retry_count  = 0;
+      _retry_count  = 3;
       _status       = CommStatus::Connect;
     }
   }

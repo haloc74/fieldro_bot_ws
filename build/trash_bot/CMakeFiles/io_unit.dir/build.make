@@ -105,9 +105,33 @@ trash_bot/CMakeFiles/io_unit.dir/src/io_unit/wago_io_map.cpp.o.provides: trash_b
 trash_bot/CMakeFiles/io_unit.dir/src/io_unit/wago_io_map.cpp.o.provides.build: trash_bot/CMakeFiles/io_unit.dir/src/io_unit/wago_io_map.cpp.o
 
 
+trash_bot/CMakeFiles/io_unit.dir/src/io_unit/wago_message.cpp.o: trash_bot/CMakeFiles/io_unit.dir/flags.make
+trash_bot/CMakeFiles/io_unit.dir/src/io_unit/wago_message.cpp.o: /home/twinny/fieldro_bot_ws/src/trash_bot/src/io_unit/wago_message.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/twinny/fieldro_bot_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object trash_bot/CMakeFiles/io_unit.dir/src/io_unit/wago_message.cpp.o"
+	cd /home/twinny/fieldro_bot_ws/build/trash_bot && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/io_unit.dir/src/io_unit/wago_message.cpp.o -c /home/twinny/fieldro_bot_ws/src/trash_bot/src/io_unit/wago_message.cpp
+
+trash_bot/CMakeFiles/io_unit.dir/src/io_unit/wago_message.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/io_unit.dir/src/io_unit/wago_message.cpp.i"
+	cd /home/twinny/fieldro_bot_ws/build/trash_bot && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/twinny/fieldro_bot_ws/src/trash_bot/src/io_unit/wago_message.cpp > CMakeFiles/io_unit.dir/src/io_unit/wago_message.cpp.i
+
+trash_bot/CMakeFiles/io_unit.dir/src/io_unit/wago_message.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/io_unit.dir/src/io_unit/wago_message.cpp.s"
+	cd /home/twinny/fieldro_bot_ws/build/trash_bot && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/twinny/fieldro_bot_ws/src/trash_bot/src/io_unit/wago_message.cpp -o CMakeFiles/io_unit.dir/src/io_unit/wago_message.cpp.s
+
+trash_bot/CMakeFiles/io_unit.dir/src/io_unit/wago_message.cpp.o.requires:
+
+.PHONY : trash_bot/CMakeFiles/io_unit.dir/src/io_unit/wago_message.cpp.o.requires
+
+trash_bot/CMakeFiles/io_unit.dir/src/io_unit/wago_message.cpp.o.provides: trash_bot/CMakeFiles/io_unit.dir/src/io_unit/wago_message.cpp.o.requires
+	$(MAKE) -f trash_bot/CMakeFiles/io_unit.dir/build.make trash_bot/CMakeFiles/io_unit.dir/src/io_unit/wago_message.cpp.o.provides.build
+.PHONY : trash_bot/CMakeFiles/io_unit.dir/src/io_unit/wago_message.cpp.o.provides
+
+trash_bot/CMakeFiles/io_unit.dir/src/io_unit/wago_message.cpp.o.provides.build: trash_bot/CMakeFiles/io_unit.dir/src/io_unit/wago_message.cpp.o
+
+
 trash_bot/CMakeFiles/io_unit.dir/src/_node/io_node.cpp.o: trash_bot/CMakeFiles/io_unit.dir/flags.make
 trash_bot/CMakeFiles/io_unit.dir/src/_node/io_node.cpp.o: /home/twinny/fieldro_bot_ws/src/trash_bot/src/_node/io_node.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/twinny/fieldro_bot_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object trash_bot/CMakeFiles/io_unit.dir/src/_node/io_node.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/twinny/fieldro_bot_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object trash_bot/CMakeFiles/io_unit.dir/src/_node/io_node.cpp.o"
 	cd /home/twinny/fieldro_bot_ws/build/trash_bot && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/io_unit.dir/src/_node/io_node.cpp.o -c /home/twinny/fieldro_bot_ws/src/trash_bot/src/_node/io_node.cpp
 
 trash_bot/CMakeFiles/io_unit.dir/src/_node/io_node.cpp.i: cmake_force
@@ -133,6 +157,7 @@ trash_bot/CMakeFiles/io_unit.dir/src/_node/io_node.cpp.o.provides.build: trash_b
 io_unit_OBJECTS = \
 "CMakeFiles/io_unit.dir/src/io_unit/wago.cpp.o" \
 "CMakeFiles/io_unit.dir/src/io_unit/wago_io_map.cpp.o" \
+"CMakeFiles/io_unit.dir/src/io_unit/wago_message.cpp.o" \
 "CMakeFiles/io_unit.dir/src/_node/io_node.cpp.o"
 
 # External object files for target io_unit
@@ -140,6 +165,7 @@ io_unit_EXTERNAL_OBJECTS =
 
 /home/twinny/fieldro_bot_ws/devel/lib/trash_bot/io_unit: trash_bot/CMakeFiles/io_unit.dir/src/io_unit/wago.cpp.o
 /home/twinny/fieldro_bot_ws/devel/lib/trash_bot/io_unit: trash_bot/CMakeFiles/io_unit.dir/src/io_unit/wago_io_map.cpp.o
+/home/twinny/fieldro_bot_ws/devel/lib/trash_bot/io_unit: trash_bot/CMakeFiles/io_unit.dir/src/io_unit/wago_message.cpp.o
 /home/twinny/fieldro_bot_ws/devel/lib/trash_bot/io_unit: trash_bot/CMakeFiles/io_unit.dir/src/_node/io_node.cpp.o
 /home/twinny/fieldro_bot_ws/devel/lib/trash_bot/io_unit: trash_bot/CMakeFiles/io_unit.dir/build.make
 /home/twinny/fieldro_bot_ws/devel/lib/trash_bot/io_unit: /opt/ros/melodic/lib/libserial.so
@@ -193,7 +219,7 @@ io_unit_EXTERNAL_OBJECTS =
 /home/twinny/fieldro_bot_ws/devel/lib/trash_bot/io_unit: /usr/lib/x86_64-linux-gnu/libconsole_bridge.so.0.4
 /home/twinny/fieldro_bot_ws/devel/lib/trash_bot/io_unit: /usr/lib/x86_64-linux-gnu/libyaml-cpp.so.0.5.2
 /home/twinny/fieldro_bot_ws/devel/lib/trash_bot/io_unit: trash_bot/CMakeFiles/io_unit.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/twinny/fieldro_bot_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking CXX executable /home/twinny/fieldro_bot_ws/devel/lib/trash_bot/io_unit"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/twinny/fieldro_bot_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking CXX executable /home/twinny/fieldro_bot_ws/devel/lib/trash_bot/io_unit"
 	cd /home/twinny/fieldro_bot_ws/build/trash_bot && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/io_unit.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -203,6 +229,7 @@ trash_bot/CMakeFiles/io_unit.dir/build: /home/twinny/fieldro_bot_ws/devel/lib/tr
 
 trash_bot/CMakeFiles/io_unit.dir/requires: trash_bot/CMakeFiles/io_unit.dir/src/io_unit/wago.cpp.o.requires
 trash_bot/CMakeFiles/io_unit.dir/requires: trash_bot/CMakeFiles/io_unit.dir/src/io_unit/wago_io_map.cpp.o.requires
+trash_bot/CMakeFiles/io_unit.dir/requires: trash_bot/CMakeFiles/io_unit.dir/src/io_unit/wago_message.cpp.o.requires
 trash_bot/CMakeFiles/io_unit.dir/requires: trash_bot/CMakeFiles/io_unit.dir/src/_node/io_node.cpp.o.requires
 
 .PHONY : trash_bot/CMakeFiles/io_unit.dir/requires

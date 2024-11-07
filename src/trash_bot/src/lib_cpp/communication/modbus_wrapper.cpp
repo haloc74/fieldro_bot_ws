@@ -1,5 +1,9 @@
 
 #include "communication/modbus_wrapper.h"
+#include "ros/ros.h"
+#include <sys/socket.h>  // SOL_SOCKET 정의를 위한 헤더
+#include <netinet/in.h>  // 네트워크 관련 정의
+#include <netinet/tcp.h> // TCP 관련 정의
 
 
 namespace fieldro_bot
@@ -118,24 +122,131 @@ namespace fieldro_bot
   fieldro_bot::Error ModbusWrapper::read_data_bits(int32_t address, int32_t read_len, uint8_t* dest)
   {
     std::lock_guard<std::mutex> lock(_lock);
+    ros::Time current_time = ros::Time::now();
+
+    if(!_modbus)
+    {
+      LOG->add_log(fieldro_bot::Unit::Signal, fieldro_bot::LogLevel::Error, 0, "modbus_connect fail !!!");
+      disconnect_modbus_tcp();
+      return fieldro_bot::Error::UnConnect;
+    }
+
+    int32_t socket = modbus_get_socket(_modbus);
+    if(socket == -1)
+    {
+      LOG->add_log(fieldro_bot::Unit::Signal, fieldro_bot::LogLevel::Error, 0, "modbus_connect fail !!!");
+      disconnect_modbus_tcp();
+      return fieldro_bot::Error::UnConnect;
+    }
 
     // modbus 연결 되어있지 않으면 return
     if(is_connect() != CommStatus::Connect)
+    {
+      LOG->add_log(fieldro_bot::Unit::Signal, fieldro_bot::LogLevel::Error, 0, "modbus_connect fail !!!");
+      disconnect_modbus_tcp();
       return fieldro_bot::Error::UnConnect;
+    }
+
+    int32_t error = 0;
+    socklen_t addrlen = sizeof(error);
+    if(getsockopt(socket, SOL_SOCKET, SO_ERROR, &error, &addrlen) != 0)
+    {
+      LOG->add_log(fieldro_bot::Unit::Signal, fieldro_bot::LogLevel::Error, 0, "getsockopt fail !!!");
+      disconnect_modbus_tcp();
+      return fieldro_bot::Error::UnConnect;
+    }
+      
 
     // 실제 wago data 읽기
-    size_t read_bits = modbus_read_bits(_modbus, 0, read_len, dest);
+    // read_bits = modbus_read_bits(_modbus, 0, read_len, dest);
+    std::this_thread::sleep_for(std::chrono::milliseconds(2));
+    int32_t result = modbus_read_bits(_modbus, address, read_len, dest);
 
-    // 읽어들인 Data 길이 확인
-    if(read_bits != read_len)
+    if(result == -1)
     {
-      LOG->add_log(fieldro_bot::Unit::Signal, fieldro_bot::LogLevel::Error, 0, "modbus_read_bits fail !!!");
+      std::string error_msg = modbus_strerror(errno);
+      ros::Duration duration = ros::Time::now() - current_time;
+        
+      LOG->add_log(fieldro_bot::Unit::Signal, fieldro_bot::LogLevel::Error, 0, 
+                  "modbus_read_bits fail: " + error_msg + " (took " + 
+                  std::to_string(duration.toSec()) + "s)");
+        
       disconnect_modbus_tcp();
       return fieldro_bot::Error::ReadFail;
     }
 
+    if(result != read_len)
+    {
+      LOG->add_log(fieldro_bot::Unit::Signal, fieldro_bot::LogLevel::Error, 0, 
+                    "Incomplete read: got " + std::to_string(result) + 
+                    " bits, expected " + std::to_string(read_len));
+        
+        disconnect_modbus_tcp();
+        return fieldro_bot::Error::ReadFail;
+    }
+
+    // // 읽어들인 Data 길이 확인
+    // if(read_bits != read_len)
+    // {
+    //   LOG->add_log(fieldro_bot::Unit::Signal, fieldro_bot::LogLevel::Error, 0, "modbus_read_bits fail !!!");
+
+    //   disconnect_modbus_tcp();
+
+    //   // error 내용 및 경과시간 log 기록
+    //   std::string str = modbus_strerror(errno);
+    //   ros::Duration duration = ros::Time::now() - current_time;
+    //   LOG->add_log(fieldro_bot::Unit::Signal, fieldro_bot::LogLevel::Error, 0, "Error : "+ str + "   " + std::to_string(duration.toSec()));
+      
+    //   return fieldro_bot::Error::ReadFail;
+    // }
+
     return fieldro_bot::Error::None;
   }
+
+  // fieldro_bot::Error ModbusWrapper::read_data_bits(int32_t address, int32_t read_len, uint8_t* dest)
+  // {
+  //   std::lock_guard<std::mutex> lock(_lock);
+
+  //   ros::Time current_time = ros::Time::now();
+
+  //   // modbus 연결 되어있지 않으면 return
+  //   if(is_connect() != CommStatus::Connect || modbus_get_socket(_modbus) == -1)
+  //   {
+  //     LOG->add_log(fieldro_bot::Unit::Signal, fieldro_bot::LogLevel::Error, 0, "modbus_connect fail !!!");
+  //     disconnect_modbus_tcp();
+  //     return fieldro_bot::Error::UnConnect;
+  //   }
+
+  //   int32_t error = 0;
+  //   socklen_t addrlen = sizeof(error);
+  //   if(getsockopt(modbus_get_socket(_modbus), SOL_SOCKET, SO_ERROR, &error, &addrlen) != 0)
+  //   {
+  //     LOG->add_log(fieldro_bot::Unit::Signal, fieldro_bot::LogLevel::Error, 0, "getsockopt fail !!!");
+  //     disconnect_modbus_tcp();
+  //     return fieldro_bot::Error::UnConnect;
+  //   }
+      
+
+  //   // 실제 wago data 읽기
+  //   size_t read_bits = modbus_read_bits(_modbus, 0, read_len, dest);
+
+  //   // 읽어들인 Data 길이 확인
+  //   if(read_bits != read_len)
+  //   {
+  //     LOG->add_log(fieldro_bot::Unit::Signal, fieldro_bot::LogLevel::Error, 0, "modbus_read_bits fail !!!");
+
+  //     disconnect_modbus_tcp();
+
+  //     // error 내용 및 경과시간 log 기록
+  //     std::string str = modbus_strerror(errno);
+  //     ros::Duration duration = ros::Time::now() - current_time;
+  //     LOG->add_log(fieldro_bot::Unit::Signal, fieldro_bot::LogLevel::Error, 0, "Error : "+ str + "   " + std::to_string(duration.toSec()));
+      
+  //     return fieldro_bot::Error::ReadFail;
+  //   }
+
+  //   return fieldro_bot::Error::None;
+  // }
 
   /**
   * @brief      modbus data 쓰기

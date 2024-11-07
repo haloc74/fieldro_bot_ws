@@ -1,6 +1,6 @@
 # generated from genmsg/cmake/pkg-genmsg.cmake.em
 
-message(STATUS "trash_bot: 4 messages, 0 services")
+message(STATUS "trash_bot: 5 messages, 0 services")
 
 set(MSG_I_FLAGS "-Itrash_bot:/home/twinny/fieldro_bot_ws/src/trash_bot/msg;-Igeometry_msgs:/opt/ros/melodic/share/geometry_msgs/cmake/../msg;-Isensor_msgs:/opt/ros/melodic/share/sensor_msgs/cmake/../msg;-Istd_msgs:/opt/ros/melodic/share/std_msgs/cmake/../msg;-Itwinny_msgs:/home/twinny/IP060A01_ws/src/twinny_msgs/msg")
 
@@ -37,6 +37,11 @@ add_custom_target(_trash_bot_generate_messages_check_deps_${_filename}
   COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "trash_bot" "/home/twinny/fieldro_bot_ws/src/trash_bot/msg/UnitActionComplete.msg" ""
 )
 
+get_filename_component(_filename "/home/twinny/fieldro_bot_ws/src/trash_bot/msg/UnitStateMsg.msg" NAME_WE)
+add_custom_target(_trash_bot_generate_messages_check_deps_${_filename}
+  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "trash_bot" "/home/twinny/fieldro_bot_ws/src/trash_bot/msg/UnitStateMsg.msg" ""
+)
+
 #
 #  langs = gencpp;geneus;genlisp;gennodejs;genpy
 #
@@ -67,6 +72,12 @@ _generate_msg_cpp(trash_bot
   ""
   ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/trash_bot
 )
+_generate_msg_cpp(trash_bot
+  "/home/twinny/fieldro_bot_ws/src/trash_bot/msg/UnitStateMsg.msg"
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/trash_bot
+)
 
 ### Generating Services
 
@@ -89,6 +100,8 @@ add_dependencies(trash_bot_generate_messages_cpp _trash_bot_generate_messages_ch
 get_filename_component(_filename "/home/twinny/fieldro_bot_ws/src/trash_bot/msg/IOSignal.msg" NAME_WE)
 add_dependencies(trash_bot_generate_messages_cpp _trash_bot_generate_messages_check_deps_${_filename})
 get_filename_component(_filename "/home/twinny/fieldro_bot_ws/src/trash_bot/msg/UnitActionComplete.msg" NAME_WE)
+add_dependencies(trash_bot_generate_messages_cpp _trash_bot_generate_messages_check_deps_${_filename})
+get_filename_component(_filename "/home/twinny/fieldro_bot_ws/src/trash_bot/msg/UnitStateMsg.msg" NAME_WE)
 add_dependencies(trash_bot_generate_messages_cpp _trash_bot_generate_messages_check_deps_${_filename})
 
 # target for backward compatibility
@@ -124,6 +137,12 @@ _generate_msg_eus(trash_bot
   ""
   ${CATKIN_DEVEL_PREFIX}/${geneus_INSTALL_DIR}/trash_bot
 )
+_generate_msg_eus(trash_bot
+  "/home/twinny/fieldro_bot_ws/src/trash_bot/msg/UnitStateMsg.msg"
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${geneus_INSTALL_DIR}/trash_bot
+)
 
 ### Generating Services
 
@@ -146,6 +165,8 @@ add_dependencies(trash_bot_generate_messages_eus _trash_bot_generate_messages_ch
 get_filename_component(_filename "/home/twinny/fieldro_bot_ws/src/trash_bot/msg/IOSignal.msg" NAME_WE)
 add_dependencies(trash_bot_generate_messages_eus _trash_bot_generate_messages_check_deps_${_filename})
 get_filename_component(_filename "/home/twinny/fieldro_bot_ws/src/trash_bot/msg/UnitActionComplete.msg" NAME_WE)
+add_dependencies(trash_bot_generate_messages_eus _trash_bot_generate_messages_check_deps_${_filename})
+get_filename_component(_filename "/home/twinny/fieldro_bot_ws/src/trash_bot/msg/UnitStateMsg.msg" NAME_WE)
 add_dependencies(trash_bot_generate_messages_eus _trash_bot_generate_messages_check_deps_${_filename})
 
 # target for backward compatibility
@@ -181,6 +202,12 @@ _generate_msg_lisp(trash_bot
   ""
   ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/trash_bot
 )
+_generate_msg_lisp(trash_bot
+  "/home/twinny/fieldro_bot_ws/src/trash_bot/msg/UnitStateMsg.msg"
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/trash_bot
+)
 
 ### Generating Services
 
@@ -203,6 +230,8 @@ add_dependencies(trash_bot_generate_messages_lisp _trash_bot_generate_messages_c
 get_filename_component(_filename "/home/twinny/fieldro_bot_ws/src/trash_bot/msg/IOSignal.msg" NAME_WE)
 add_dependencies(trash_bot_generate_messages_lisp _trash_bot_generate_messages_check_deps_${_filename})
 get_filename_component(_filename "/home/twinny/fieldro_bot_ws/src/trash_bot/msg/UnitActionComplete.msg" NAME_WE)
+add_dependencies(trash_bot_generate_messages_lisp _trash_bot_generate_messages_check_deps_${_filename})
+get_filename_component(_filename "/home/twinny/fieldro_bot_ws/src/trash_bot/msg/UnitStateMsg.msg" NAME_WE)
 add_dependencies(trash_bot_generate_messages_lisp _trash_bot_generate_messages_check_deps_${_filename})
 
 # target for backward compatibility
@@ -238,6 +267,12 @@ _generate_msg_nodejs(trash_bot
   ""
   ${CATKIN_DEVEL_PREFIX}/${gennodejs_INSTALL_DIR}/trash_bot
 )
+_generate_msg_nodejs(trash_bot
+  "/home/twinny/fieldro_bot_ws/src/trash_bot/msg/UnitStateMsg.msg"
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${gennodejs_INSTALL_DIR}/trash_bot
+)
 
 ### Generating Services
 
@@ -260,6 +295,8 @@ add_dependencies(trash_bot_generate_messages_nodejs _trash_bot_generate_messages
 get_filename_component(_filename "/home/twinny/fieldro_bot_ws/src/trash_bot/msg/IOSignal.msg" NAME_WE)
 add_dependencies(trash_bot_generate_messages_nodejs _trash_bot_generate_messages_check_deps_${_filename})
 get_filename_component(_filename "/home/twinny/fieldro_bot_ws/src/trash_bot/msg/UnitActionComplete.msg" NAME_WE)
+add_dependencies(trash_bot_generate_messages_nodejs _trash_bot_generate_messages_check_deps_${_filename})
+get_filename_component(_filename "/home/twinny/fieldro_bot_ws/src/trash_bot/msg/UnitStateMsg.msg" NAME_WE)
 add_dependencies(trash_bot_generate_messages_nodejs _trash_bot_generate_messages_check_deps_${_filename})
 
 # target for backward compatibility
@@ -295,6 +332,12 @@ _generate_msg_py(trash_bot
   ""
   ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/trash_bot
 )
+_generate_msg_py(trash_bot
+  "/home/twinny/fieldro_bot_ws/src/trash_bot/msg/UnitStateMsg.msg"
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/trash_bot
+)
 
 ### Generating Services
 
@@ -317,6 +360,8 @@ add_dependencies(trash_bot_generate_messages_py _trash_bot_generate_messages_che
 get_filename_component(_filename "/home/twinny/fieldro_bot_ws/src/trash_bot/msg/IOSignal.msg" NAME_WE)
 add_dependencies(trash_bot_generate_messages_py _trash_bot_generate_messages_check_deps_${_filename})
 get_filename_component(_filename "/home/twinny/fieldro_bot_ws/src/trash_bot/msg/UnitActionComplete.msg" NAME_WE)
+add_dependencies(trash_bot_generate_messages_py _trash_bot_generate_messages_check_deps_${_filename})
+get_filename_component(_filename "/home/twinny/fieldro_bot_ws/src/trash_bot/msg/UnitStateMsg.msg" NAME_WE)
 add_dependencies(trash_bot_generate_messages_py _trash_bot_generate_messages_check_deps_${_filename})
 
 # target for backward compatibility
