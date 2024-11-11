@@ -20,10 +20,16 @@
   dorid_node에서는 이것을 가지고 unit의 상태의 판단과 heartbeat관리를 한다.
 
 . droid_node에 LinkChecker object 추가하기
-
 . modbus wrapper reconnect 횟수 option 적용 안되는 부분 수정
 
-ID :  - JD 24.11.07
+
+ID :  - JD 24.11.11
+1. doxygen snippets 수정
+2. cppclass snippets 추가
+3. doxygen_class snippets 추가
+
+
+ID : 98a9e80 - JD 24.11.07
 1. modbus wrapper 통신 끊김 현상 수정
   socket buffer 64k로 변경
   io thread hz 50으로 변경

@@ -3,6 +3,7 @@
 #include <fstream>
 #include "yaml-cpp/yaml.h"
 
+
 namespace fieldro_bot
 {
   /**
