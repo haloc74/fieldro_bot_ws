@@ -141,14 +141,14 @@ namespace fieldro_bot
     if(!is_reconnect_possible())              return _status;
 
     _last_try_connect_time = std::time(nullptr);
-    _retry_count--;
+     _remaining_retry_count--;
 
     if(connect_modbus_485() == false)
     {
       LOG->add_log(fieldro_bot::Unit::Signal, fieldro_bot::LogLevel::Error, 0, "modbus_connect fail !!!");
       LOG->add_log(fieldro_bot::Unit::Signal, fieldro_bot::LogLevel::Error, 0, std::string("Error Number : ") + modbus_strerror(errno));
 
-      if(_retry_count <= 0)   _status = CommStatus::Error;
+      if( _remaining_retry_count <= 0)   _status = CommStatus::Error;
       else                    _status = CommStatus::Reconnect;
 
       if(state_notify != nullptr) state_notify(_status);
@@ -159,7 +159,7 @@ namespace fieldro_bot
       LOG->add_log(fieldro_bot::Unit::Signal, fieldro_bot::LogLevel::Info, 0, "try_connect_modbus_485 success !!!");
       
       // 연결이 되었으므로 retry count 초기화
-      _retry_count  = 0;
+       _remaining_retry_count = _retry_count;
       _status = CommStatus::Connect;
 
       if(state_notify != nullptr) state_notify(_status);
@@ -199,6 +199,7 @@ namespace fieldro_bot
       _retry_turm  = yaml[_session_name]["retry_turm"].as<int32_t>();
 
       debug       = yaml[_session_name]["debug"].as<int32_t>();
+      _remaining_retry_count = _retry_count;
     }
     catch(YAML::Exception& e)
     {

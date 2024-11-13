@@ -38,8 +38,8 @@ namespace fieldro_bot
       _port        = yaml[_session_name]["port"].as<int32_t>();
       _retry_count = yaml[_session_name]["retry_count"].as<int32_t>();
       _retry_turm  = yaml[_session_name]["retry_turm"].as<int32_t>();
-
       debug       = yaml[_session_name]["debug"].as<int32_t>();
+      _remaining_retry_count = _retry_count;
     }
     catch(YAML::Exception& e)
     {
@@ -69,48 +69,6 @@ namespace fieldro_bot
   }
 
   /**
-  * @brief      modbus tcp 연결 시도
-  * @return     연결 여부
-  * @note       
-  * @attention  연결 상태에서 이 Method가 호출 되면 안되며 호출하는 측에서 연결 </br>
-  *             상태를 확인 후 호출해야 한다.  
-  * @todo       log 기록을 session_name으로 구분을 해서 처리 해보도록 하자
-  */
-  // ModbusStatus ModbusWrapper::try_connect_modbus_tcp()
-  // {
-  //   // 재연결 할 수 없음 (turm or count 초과)
-  //   // 또는 재연결 시간이 아직 안됨
-  //   if(!is_reconnect_possible())  
-  //   {
-  //     return _status;   
-  //   }
-
-  //   _last_try_connect_time = std::time(nullptr);
-  //   _retry_count--;
-
-  //   if(connect_modbus_tcp() == false)
-  //   {
-  //     LOG->add_log(fieldro_bot::Unit::Signal, fieldro_bot::LogLevel::Error, 0, "modbus_connect fail !!!");
-  //     LOG->add_log(fieldro_bot::Unit::Signal, fieldro_bot::LogLevel::Error, 0, std::string("Error Number : ") + modbus_strerror(errno));
-
-  //     if(_retry_count <= 0)   _status = ModbusStatus::Error;
-  //     else                    _status = ModbusStatus::Reconnect;
-
-  //     return false;
-  //   }
-  //   else
-  //   {
-  //     LOG->add_log(fieldro_bot::Unit::Signal, fieldro_bot::LogLevel::Info, 0, "try_connect_modbus_tcp success !!!");
-      
-  //     // 연결이 되었으므로 retry count 초기화
-  //     _retry_count  = 0;
-  //     _status       = ModbusStatus::Connect;
-  //   }
-
-  //   return true;
-  // }
-
-  /**
   * @brief      실제 modbus object 연결
   * @return     연결 성공 여부
   * @todo       log 기록을 session_name으로 구분을 해서 처리 해보도록 하자
@@ -119,7 +77,6 @@ namespace fieldro_bot
   {
     // 1. modbus context 생성
     _modbus = modbus_new_tcp(_ip.c_str(), _port);
-
     if(_modbus == nullptr)
     {
       LOG->add_log(fieldro_bot::Unit::Signal, fieldro_bot::LogLevel::Error, 0, "modbus_new_tcp context fail !!!");
@@ -134,6 +91,18 @@ namespace fieldro_bot
     // 2. modbus slave 번호 설정
     // 직렬 통신의 경우 slave 번호를 설정해야 하지만
     // TCP 통신의 경우 slave 번호를 설정하지 않아도 된다.
+    if(-1 == modbus_set_slave(_modbus, 0))
+    {
+      LOG->add_log(fieldro_bot::Unit::Signal, fieldro_bot::LogLevel::Error, 0, "modbus_set_slave fail !!!");
+      LOG->add_log(fieldro_bot::Unit::Signal, fieldro_bot::LogLevel::Error, 0, std::string("Error Number : ") + modbus_strerror(errno));
+
+      disconnect_modbus_tcp();
+      return false;
+    }
+    else
+    {
+      LOG->add_log(fieldro_bot::Unit::Signal, fieldro_bot::LogLevel::Info, 0, "modbus_set_slave success !!!");
+    }
 
     // 3. modbus 연결
     if(modbus_connect(_modbus) == -1)
@@ -141,33 +110,40 @@ namespace fieldro_bot
       LOG->add_log(fieldro_bot::Unit::Signal, fieldro_bot::LogLevel::Error, 0, "modbus_connect fail !!!");
       LOG->add_log(fieldro_bot::Unit::Signal, fieldro_bot::LogLevel::Error, 0, std::string("Error Number : ") + modbus_strerror(errno));
 
-      modbus_free(_modbus);
-      _modbus       = nullptr;
-      _status = CommStatus::Disconnect;
+      disconnect_modbus_tcp();
 
       return false;
     }
     else
     {
       modbus_set_response_timeout(_modbus, 0, 500000);
-      modbus_set_slave(_modbus, 0);  // slave ID 설정
       //modbus_set_debug(_modbus, ON); // 디버그 모드 활성화
-
-      int socket = modbus_get_socket(_modbus);
-      if(socket != -1)
-      {
-        int buffer_size = 65536;  // 64KB
-        setsockopt(socket, SOL_SOCKET, SO_RCVBUF, &buffer_size, sizeof(buffer_size));
-        setsockopt(socket, SOL_SOCKET, SO_SNDBUF, &buffer_size, sizeof(buffer_size));
-        
-        // TCP_NODELAY 설정
-        int flag = 1;
-        setsockopt(socket, IPPROTO_TCP, TCP_NODELAY, &flag, sizeof(flag));
-      }
 
       LOG->add_log(fieldro_bot::Unit::Signal, fieldro_bot::LogLevel::Info, 0, "connect success");
       _status = CommStatus::Connect;
     }
+
+
+    // 4. socket option 설정
+    int socket = modbus_get_socket(_modbus);
+    if(-1 == socket)
+    {
+      LOG->add_log(fieldro_bot::Unit::Signal, fieldro_bot::LogLevel::Error, 0, "socket set fail !!!");
+      disconnect_modbus_tcp();
+      return false;
+    }
+    else
+    {
+      // socket buffer size 설정
+      int buffer_size = 65536;  // 64KB
+      setsockopt(socket, SOL_SOCKET, SO_RCVBUF, &buffer_size, sizeof(buffer_size));
+      setsockopt(socket, SOL_SOCKET, SO_SNDBUF, &buffer_size, sizeof(buffer_size));
+      
+      // TCP_NODELAY 설정
+      int flag = 1;
+      setsockopt(socket, IPPROTO_TCP, TCP_NODELAY, &flag, sizeof(flag));
+    }
+
     return true;
   }
 
@@ -187,7 +163,7 @@ namespace fieldro_bot
     _modbus = nullptr;
     _status = CommStatus::Disconnect;
 
-    _retry_count  = 3;
+     _remaining_retry_count = _retry_count;
   }
 
   /**
@@ -200,18 +176,18 @@ namespace fieldro_bot
     std::lock_guard<std::mutex> lock(_lock);
 
     if(is_connect() == CommStatus::Connect) return _status;
-    if(!is_reconnect_possible())              return _status;   
+    if(!is_reconnect_possible())            return _status;   
 
     _last_try_connect_time = std::time(nullptr);
-    _retry_count--;
+     _remaining_retry_count--;
 
     if(connect_modbus_tcp() == false)
     {
       LOG->add_log(fieldro_bot::Unit::Signal, fieldro_bot::LogLevel::Error, 0, "modbus_connect fail !!!");
       LOG->add_log(fieldro_bot::Unit::Signal, fieldro_bot::LogLevel::Error, 0, std::string("Error Number : ") + modbus_strerror(errno));
 
-      if(_retry_count <= 0)   _status = CommStatus::Error;
-      else                    _status = CommStatus::Reconnect;
+      if( _remaining_retry_count <= 0)  _status = CommStatus::Error;
+      else                              _status = CommStatus::Reconnect;
 
       return _status;
     }
@@ -220,7 +196,7 @@ namespace fieldro_bot
       LOG->add_log(fieldro_bot::Unit::Signal, fieldro_bot::LogLevel::Info, 0, "try_connect_modbus_tcp success !!! \n");
       
       // 연결이 되었으므로 retry count 초기화
-      _retry_count  = 3;
+       _remaining_retry_count = _retry_count;
       _status       = CommStatus::Connect;
     }
   }

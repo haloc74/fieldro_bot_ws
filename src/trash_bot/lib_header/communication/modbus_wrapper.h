@@ -66,7 +66,8 @@ namespace fieldro_bot
     ModbusType  _type;
 
     CommStatus _status;
-    std::time_t _last_try_connect_time;
+    std::time_t _last_try_connect_time;     
+    int32_t     _remaining_retry_count;     // 잔여 재시도 횟수
     int32_t     _retry_count;
     int32_t     _retry_turm;
 
