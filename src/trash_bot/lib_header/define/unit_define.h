@@ -21,6 +21,7 @@ namespace fieldro_bot
   {
     None = 0x00,        // 없음                 Fix
     System,             // main(droid) 시스템   Fix  
+    Observer,           // Observer 시스템      Fix
 
     Signal,             // wago
     // Loader,             // 로더
@@ -46,6 +47,7 @@ namespace fieldro_bot
     {
       case Unit::None:            return "None";
       case Unit::System:          return "System";
+      case Unit::Observer:        return "Observer";
       case Unit::Signal:          return "Signal";
       // case Unit::Loader:          return "Loader";
       // case Unit::HandlerFork:     return "HandlerFork";

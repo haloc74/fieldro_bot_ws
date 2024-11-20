@@ -173,19 +173,16 @@ namespace fieldro_bot
   // todo : unit 상태를 받아서 처리를 해야 함
   void Droid::subscribe_unit_state(const trash_bot::UnitStateMsg &msg)
   {
-    // //_link_checker->update_data(msg.unit_id);
+    // 현재 상태가 WaitForLink 상태이고 모든 link가 연결이 되어 있을 경우
+    if(_action == fieldro_bot::UnitState::InitReady && msg.alive == 0x00)
+    {
+      log_msg(LogInfo, 0, "All Unit Linked - Next Step Process");
+      _action = fieldro_bot::UnitState::Init;
 
-    // // 현재 상태가 WaitForLink 상태이고 모든 link가 연결이 되어 있을 경우
-    // if(_action == fieldro_bot::UnitState::InitReady && _link_checker->is_all_unit_linked())
-    // {
-    //   log_msg(LogInfo, 0, "All Unit Linked - Next Step Process");
-
-    //   _action = fieldro_bot::UnitState::Init;
-
-    //   // todo 
-    //   // io_node에 초기화 요청 sequence 추가
-    //   add_sequence(unit_to_int(fieldro_bot::Unit::Signal), unit_action_to_int(fieldro_bot::UnitAction::Init));
-    // }
+      // todo 
+      // io_node에 초기화 요청 sequence 추가
+      add_sequence(unit_to_int(fieldro_bot::Unit::Signal), unit_action_to_int(fieldro_bot::UnitAction::Init));
+    }
 
     return;
   }

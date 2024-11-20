@@ -27,6 +27,7 @@ namespace fieldro_bot
     Wago();
     ~Wago();
     ros::NodeHandle* get_node_handle() { return _node_handle; }
+    bool is_shutdown() { return _shut_down; }
 
   private:
     void update();
@@ -40,6 +41,7 @@ namespace fieldro_bot
     ros::Time           _last_alive_time;             // 마지막 alive 발송 시간
     std::mutex          _lock;                        // thread lock
     int32_t             _state;                       // 현재 state
+    bool                _shut_down;                   // 종료 flag
 
     // alive message 발송을 위하 publisher
     ros::Publisher  _publish_alive;

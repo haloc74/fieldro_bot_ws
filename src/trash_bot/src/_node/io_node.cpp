@@ -31,7 +31,9 @@ int main(int argc, char **argv)
 
   while(ros::ok())
   {
-    if(!command_use)    continue;
+    if(wago->is_shutdown())    break;
+
+    if(!command_use)   continue;
 
     // 표준 입력에 data가 있는지 체크 
     if(!fieldro_bot::check_std_in(10000))    continue;

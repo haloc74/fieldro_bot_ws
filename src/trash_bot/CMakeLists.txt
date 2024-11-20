@@ -139,7 +139,7 @@ message(STATUS "")
     "${CMAKE_CURRENT_SOURCE_DIR}/src/lib_cpp/communication/*.cpp"
 #    "${CMAKE_CURRENT_SOURCE_DIR}/src/lib_cpp/motor/*.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/lib_cpp/helper/*.cpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/src/lib_cpp/unit_observer/*.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/lib_cpp/observer_unit/*.cpp"
   )
 
   ## 5-2. LIB_SRC_FILES의 모든 파일을 컴파일하고 링크하여 실행 파일 생성 하도록 설정

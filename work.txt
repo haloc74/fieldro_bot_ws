@@ -22,8 +22,19 @@
 . Droid 초기화 Sequence 처리
   void Droid::subscribe_unit_state(const trash_bot::UnitStateMsg &msg)
 
+. UnitObserver Class Refactoring
 
-ID :  - JD 24.11.
+//=========================================================
+//=========================================================
+
+ID :  - JD 24.11.20
+1. UnitObserver Class도 Thread를 이용한 Message 처리로 변경
+  -- Timer를 이용한 update callback 부분 삭제
+  -- ThreadAction 추가
+  -- subscribe_unit_control() 함수 추가
+2. UnitObserver Class : All Finish Command 처리 추가
+
+ID : 853f700 - JD 24.11.20
 1. unit_observer node 추가에 따른 launch 파일 수정
 2. 현재 각 node별로 소멸자에서 
   ros::shutdown();
@@ -33,9 +44,7 @@ ID :  - JD 24.11.
   - UnitObserver node가 관리하는 방법으로 변경
   - LinkChecker Class 삭제
 
-//=========================================================
-//=========================================================
-
+  
 ID : 65b128c - JD 24.11.20
 1. UnitObserver Class refactoring
   - state 보고가 아닌 alive 보고의 개념으로 변경

@@ -4,12 +4,13 @@
   // tyhpe : 실행시킬 파일명
   // name  : 실행된 process가 ros에서 어떠한 이름의 node로 표시될지 결정
 
-  // unit_observer 노드 실행
-  <node name="unit_observer" pkg="trash_bot" type="unit_observer" output="screen" />
-
   // droid 노드 실행
   <node name="trash_bot" pkg="trash_bot" type="trash_bot" output="screen"/>
     <param name="command_use" value="true"/>
+
+  // unit_observer 노드 실행
+  <node name="observer_unit" pkg="trash_bot" type="observer_unit" output="screen" />
+    <param name="command_use" value="true"/>    
 
   // io_signal 노드 실행
   <node name="io_unit" pkg="trash_bot" type="io_unit" output="screen" />

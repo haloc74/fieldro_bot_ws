@@ -6,9 +6,11 @@
 
 #include "trash_bot/UnitStateMsg.h"
 #include "trash_bot/UnitAliveMsg.h"
+#include "trash_bot/UnitControl.h"
 
+#include "helper/thread_action_info.h"
 #include "define/unit_define.h"
-#include "unit_observer/unit_alive_info.h"
+#include "observer_unit/unit_alive_info.h"
 
 
 namespace fieldro_bot
@@ -27,13 +29,25 @@ namespace fieldro_bot
   public:
     UnitObserver();		    // 생성자
     ~UnitObserver();		  // 소멸자
-    void update(const ros::TimerEvent& event);			  // 업데이트
+    void update();			  // 업데이트
+    ros::NodeHandle* get_node_handle() { return _node_handle; }
+    bool is_shutdown() { return _shut_down; }
   
   private:
     ros::NodeHandle*  _node_handle;	      // ROS 시스템과 통신을 위한 노드 핸들
+    ros::AsyncSpinner*  _spinner;                     // ROS 시스템과 통신을 위한 스피너
+    ThreadActionInfo*   _thread_info;                 // thread action 객체
+
+    // control 지령을 받기 위한 subscriber
+    ros::Subscriber     _subscribe_unit_control;      
+    void subscribe_unit_control(const trash_bot::UnitControl& unit_control_msg);
+
+    bool  _shut_down;
     ros::Timer        _update_timer;	    // 업데이트 타이머
     ros::Time         _last_update_time;	// 마지막 업데이트 시간
     double            _update_interval;	  // heartbeat 임계값
+
+    void system_finish();
 
     int32_t _unit_alive;
     std::vector<UnitAliveInfo*> _unit_alive_info;	// unit 상태 정보를 저장하는 vector

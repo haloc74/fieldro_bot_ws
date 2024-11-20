@@ -1,5 +1,5 @@
 
-#include "unit_observer/unit_alive_info.h"
+#include "observer_unit/unit_alive_info.h"
 
 namespace fieldro_bot
 {
@@ -12,7 +12,19 @@ namespace fieldro_bot
   {
     _unit_index       = unit_index;
     _state            = -1;
-    _last_update_time = ros::Time::now();
+
+    try
+    {
+      if(!ros::Time::isValid())
+      {
+        ros::Time::init();
+      }
+      _last_update_time = ros::Time::now();
+    }
+    catch(const std::exception& e)
+    {
+      std::cerr << e.what() << '\n';
+    }    
   }
 
   /**

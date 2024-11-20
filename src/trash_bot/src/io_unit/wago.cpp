@@ -33,6 +33,8 @@ namespace fieldro_bot
     option.latch = true;
     _publish_io_signal = _node_handle->advertise(option);
 
+    _shut_down = false;
+
     // spinner 생성 및 구동
     _spinner = new ros::AsyncSpinner(1);
     _spinner->start();
@@ -77,9 +79,7 @@ namespace fieldro_bot
 
   void Wago::system_finish()
   {
-    // ros 해제
-    ros::shutdown();
-    ros::waitForShutdown();
+    _shut_down = true;
   } 
 
   /**
