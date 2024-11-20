@@ -13,7 +13,6 @@
 #include "helper/thread_action_info.h"
 #include "define/digital_in_define.h"
 #include "log/log_message.h"
-#include "helper/link_checker.h"
 
 #include <trash_bot/UnitActionComplete.h>
 #include <trash_bot/IOSignal.h>
@@ -52,8 +51,6 @@ namespace fieldro_bot
     void update();                                    // thread action                                 
 
   protected:
-    //DroidAction         _state;                    // droid 상태
-    LinkChecker*        _link_checker;                // link checker 객체
     std::mutex          _lock;
     ThreadActionInfo*   _thread_info;                 // thread action 객체
     ros::NodeHandle*    _node_handle;                 // ROS 시스템과 통신을 위한 노드 핸들
@@ -89,8 +86,6 @@ namespace fieldro_bot
 
     fieldro_bot::UnitState _state[unit_to_int(fieldro_bot::Unit::End)];           // unit 상태 정보
     fieldro_bot::UnitState& _action;
-
-    void unit_link_check();
 
     // user command control
     std::map<int32_t, int32_t, std::string> _command_map;

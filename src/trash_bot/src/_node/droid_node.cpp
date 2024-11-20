@@ -62,9 +62,6 @@ int main(int argc, char **argv)
   safe_delete(droid);
 
   delete LOG;
-
-  return 0;
-
-
+  
   return 0;
 }

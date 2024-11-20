@@ -42,8 +42,6 @@ namespace fieldro_bot
     _pending_sequence.clear();
     _command_map.clear();
 
-    _link_checker = new LinkChecker();  // link checker 객체 생성
-
     _spinner = new ros::AsyncSpinner(5);        // spinner 생성
     _spinner->start();
 
@@ -99,7 +97,6 @@ namespace fieldro_bot
     ros::shutdown();
     ros::waitForShutdown();
     safe_delete(_node_handle);
-    safe_delete(_link_checker);
   }
 
   void Droid::system_finish()
@@ -114,10 +111,6 @@ namespace fieldro_bot
     {
       // topic message 발송
       message_publish();
-
-      // link check
-      unit_link_check();
-
 
       // thread Hz 싱크 및 독점 방지를 위한 sleep
       std::this_thread::sleep_for(std::chrono::milliseconds(_thread_info->_sleep));
@@ -177,21 +170,22 @@ namespace fieldro_bot
     return;
   }
 
+  // todo : unit 상태를 받아서 처리를 해야 함
   void Droid::subscribe_unit_state(const trash_bot::UnitStateMsg &msg)
   {
-    //_link_checker->update_data(msg.unit_id);
+    // //_link_checker->update_data(msg.unit_id);
 
-    // 현재 상태가 WaitForLink 상태이고 모든 link가 연결이 되어 있을 경우
-    if(_action == fieldro_bot::UnitState::InitReady && _link_checker->is_all_unit_linked())
-    {
-      log_msg(LogInfo, 0, "All Unit Linked - Next Step Process");
+    // // 현재 상태가 WaitForLink 상태이고 모든 link가 연결이 되어 있을 경우
+    // if(_action == fieldro_bot::UnitState::InitReady && _link_checker->is_all_unit_linked())
+    // {
+    //   log_msg(LogInfo, 0, "All Unit Linked - Next Step Process");
 
-      _action = fieldro_bot::UnitState::Init;
+    //   _action = fieldro_bot::UnitState::Init;
 
-      // todo 
-      // io_node에 초기화 요청 sequence 추가
-      add_sequence(unit_to_int(fieldro_bot::Unit::Signal), unit_action_to_int(fieldro_bot::UnitAction::Init));
-    }
+    //   // todo 
+    //   // io_node에 초기화 요청 sequence 추가
+    //   add_sequence(unit_to_int(fieldro_bot::Unit::Signal), unit_action_to_int(fieldro_bot::UnitAction::Init));
+    // }
 
     return;
   }

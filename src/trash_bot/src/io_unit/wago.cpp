@@ -70,9 +70,8 @@ namespace fieldro_bot
     _spinner->stop();
     safe_delete(_spinner);
 
-    // ros 해제
-    ros::shutdown();
-    ros::waitForShutdown();
+    // node 해제
+    _node_handle->shutdown();
     safe_delete(_node_handle);
   }
 
