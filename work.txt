@@ -1,33 +1,33 @@
 
 ?. digital_in_define.h, digital_out_define.h io_unit director로 이동 
-
-
-
 . code refactoring
 . main controller <---> sub unit 구조 만들기
-
-
 . 모든 unit에 heartbeat 추가하기
 . droid에 heartbeat 판독 
 . 모든 unit은 PrevInit 상태에서 droid의 init 명령으로 초기화 과정을 수행
 . 모든 unit은 PrevInit 상태에서 init 명령을 수신후 초기화 동작 및 동작 완료후 Initialized 메세지 전송
 . io heartbeat 메세지 수신이 2초이상 update되지 않으면 truble log
 . io heartbeat 메세지 수신이 2초이상 update되지 않으면 모든 unit 동작 정지
-
-
 . io_node에 heartbeat를 발송하는 publisher 만들기
   publisher는 UnitState.msg를 발송한다. 
   dorid_node에서는 이것을 가지고 unit의 상태의 판단과 heartbeat관리를 한다.
-
 . Droid 초기화 Sequence 처리
   void Droid::subscribe_unit_state(const trash_bot::UnitStateMsg &msg)
 
-. UnitObserver Class Refactoring
 
-//=========================================================
-//=========================================================
+
 
 ID :  - JD 24.11.20
+1. UnitObserver Class Refactoring
+2. All Finish 로 종료 되지 않던 버그 수정
+3. UnitObserver publish interval option으로 동작하도록 변경
+4. unit_observer_message.cpp 추가하여 SUB, PUB 항목 이전
+
+
+//=========================================================
+//=========================================================
+
+ID : b866552 - JD 24.11.20
 1. UnitObserver Class도 Thread를 이용한 Message 처리로 변경
   -- Timer를 이용한 update callback 부분 삭제
   -- ThreadAction 추가

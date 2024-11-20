@@ -7,8 +7,11 @@ namespace fieldro_bot
 {
   UnitObserver::UnitObserver()
   {
-    _shut_down = false;
-    _node_handle = new ros::NodeHandle();       // node handler 생성
+    _node_handle       = new ros::NodeHandle();        // node handler 생성
+    _shut_down         = false;                       // node 종료 flag
+    _last_publish_time = ros::Time::now();            // 마지막 업데이트 시간
+    _publish_interval  = 20;                          // publish 주기 (20 ms)
+    load_option();                                    // 옵션 로드
 
     // unit_alive_info 초기화 
     _unit_alive_info = std::vector<UnitAliveInfo*>();
@@ -27,25 +30,19 @@ namespace fieldro_bot
     // unit state publishing
     _publish_units_state = _node_handle->advertise<trash_bot::UnitStateMsg>("trash_bot/UnitStateMsg", 100);
 
-    // update timer 생성 (50 Hz로 update 함수 호출)
-//    _update_interval = 1.0/50.0;
-//    _update_timer = _node_handle->createTimer(ros::Duration(_update_interval), &UnitObserver::update, this);
-
-    _last_update_time = ros::Time::now();
-
     // spinner 생성 및 구동
-    _spinner = new ros::AsyncSpinner(1);
+    _spinner = new ros::AsyncSpinner(2);
     _spinner->start();
 
     // main thread
     _thread_info = new ThreadActionInfo("config/observer.yaml", "main");
     _thread_info->_active = true;
     _thread_info->_thread = std::thread(std::bind(&UnitObserver::update, this));    
-
   }
 
   UnitObserver::~UnitObserver()
   {
+    // main thread 해제
     _thread_info->_active = false;
     safe_delete(_thread_info);
 
@@ -64,13 +61,6 @@ namespace fieldro_bot
     _node_handle->shutdown();
     safe_delete(_node_handle);
   }
-
-  void UnitObserver::system_finish()
-  {
-    _shut_down = true;
-    LOG->add_log(fieldro_bot::Unit::System, fieldro_bot::LogLevel::Info, 0, "Observer Finish Set");
-  } 
-
 
   /**
   * @brief      units의 상태를 업데이트 하는 함수
@@ -117,108 +107,45 @@ namespace fieldro_bot
   }
 
   /**
-  * @brief      unit 상태를 수신하는 callback 함수
-  * @param[in]  const trash_bot::UnitStateMsg &msg : unit 상태 메시지
-  * @note       unit의 상태가 이전과 달라졌다면 즉시 update 한다.
+  * @brief  업데이트 주기를 확인하는 함수
+  * @note   옵션으로 설정된 시간이 경과했는지 확인    
   */
-  void UnitObserver::subscribe_unit_alive(const trash_bot::UnitAliveMsg &msg)
+  bool UnitObserver::is_publish_interval()
   {
-    int32_t index = msg.index;
-    int32_t state = msg.state;
-
-    if (index < 0 || index >= _unit_alive_info.size())
-    {
-      ROS_ERROR("Invalid unit index : %d", index);
-      return;
-    }
-
-    // unit의 상태가 이전과는 뭔가 달라짐
-    if(_unit_alive_info[index]->update(state))
-    {
-      // unit 상태 변경에 따른 즉각적인 publishing
-      publish_unit_state(false);
-    }
-    return;
-  }
-
-  /**
-  * @brief      unit의 상태를 publishing 하는 함수
-  * @param[in]  bool time_check_flag : update interval을 체크할지 여부
-  * @note       
-  */
-  void UnitObserver::publish_unit_state(bool time_check_flag)
-  {
-    if(time_check_flag && !is_update_interval())
-    {
-      return;
-    }
-
-    trash_bot::UnitStateMsg msg;
-
-    msg.alive = _unit_alive;
-    msg.states.clear();
-    
-    for(auto &unit_state_info : _unit_alive_info)
-    {
-      msg.states.push_back(unit_state_info->get_state());
-    }
-    _publish_units_state.publish(msg);
-    _last_update_time = ros::Time::now();
-
-    return;
-  }
-
-  /**
-  * @brief      업데이트 주기를 확인하는 함수
-  * @note       
-  */
-  bool UnitObserver::is_update_interval()
-  {
-    if((ros::Time::now() - _last_update_time).toSec() < _update_interval)
+    if((ros::Time::now() - _last_publish_time).toMSec() < _publish_interval)
     {
       return false;
     }
     return true;
   }
-
-/**
-  * @brief      unit control message를 수신하는 callback 함수
-  * @param[in]  unit_control_msg : main control node에서 전달되는 unit control message
-  * @return     void
-  * @attention  target이 signal이 아닌 메세지는 무시한다.
+  
+  /**
+  * @brief      옵션 로드 함수
   * @note       
   */
-  void UnitObserver::subscribe_unit_control(const trash_bot::UnitControl& unit_control_msg)
+  void UnitObserver::load_option()
   {
-    // target이 signal이 아닌 메세지는 무시한다. 
-    fieldro_bot::Unit unit = int_to_unit(unit_control_msg.target_object);
+    try
+    {
+      // file open
+      std::ifstream yaml_file("config/observer.yaml");
+      YAML::Node yaml = YAML::Load(yaml_file);
+      yaml_file.close();
 
-    if(unit != fieldro_bot::Unit::Observer && 
-       unit != fieldro_bot::Unit::All)      return;
-
-    // 요청된 action에 따른 처리
-    fieldro_bot::UnitAction action = int_to_unit_action(unit_control_msg.action);
-
-    switch(action)
-    {       
-    case fieldro_bot::UnitAction::None:
-      LOG->add_log(fieldro_bot::Unit::Signal, fieldro_bot::LogLevel::Error, 0, "Unit Action None");
-      break;
-
-    case fieldro_bot::UnitAction::Init:
-//      _state =  static_cast<int>(fieldro_bot::UnitState::Ready);
-//      publish_unit_action_complete(unit_action_to_int(action), error_to_int(fieldro_bot::Error::None));
-      break;
-
-    case fieldro_bot::UnitAction::Finish:  
-      system_finish();
-      break;
-
-    case fieldro_bot::UnitAction::End:        
-      break;
-
-    default:                                  
-      break;
+      // 여러개의 object처리 할 필요가 있어 session_name으로 구분한다.
+      _publish_interval = yaml["main"]["publish_interval"].as<int32_t>();
     }
+    catch(YAML::Exception& e)
+    {
+      std::cout << "YAML Exception : " << e.what() << std::endl;
+    }
+    catch(std::exception& e)
+    {
+      std::cout << "Exception : " << e.what() << std::endl;
+    }
+    catch(...)
+    {
+      std::cout << "Unknown Exception" << std::endl;
+    }  
   }  
 }

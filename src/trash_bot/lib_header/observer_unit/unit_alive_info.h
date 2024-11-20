@@ -21,7 +21,7 @@ namespace fieldro_bot
       int32_t     _state;                   // 현재 unit 상태
       ros::Time   _last_update_time;        // 마지막 update 시간
       
-      const double  THRESHOLD = 0.5;        // heartbeat 임계값
+      const double  ALIVE_THRESHOLD = 0.5;        // heartbeat 임계값
 
   public:
       UnitAliveInfo(int32_t unit_index);    // 생성자

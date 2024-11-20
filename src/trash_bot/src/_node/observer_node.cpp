@@ -6,7 +6,7 @@
 #include "observer_unit/unit_observer.h"
 
 fieldro_bot::Log* fieldro_bot::Log::_instance = nullptr;
-
+ 
 int main(int argc, char **argv)                 
 {
   // process node name 초기화
@@ -26,14 +26,13 @@ int main(int argc, char **argv)
 
   // command 사용여부 설정
   bool command_use = false;
-  observer->get_node_handle()->getParam("command_use", command_use);
+//  observer->get_node_handle()->getParam("command_use", command_use);
 
   char cmd_input[256];
 
   while(ros::ok())
   {
-    if(observer->is_shutdown())             
-      break;
+    if(observer->is_shutdown())             break;
     if(!command_use)                        continue;
     if(!fieldro_bot::check_std_in(10000))   continue;   // 표준 입력에 data가 있는지 체크 
 

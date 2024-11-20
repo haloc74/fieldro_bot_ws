@@ -37,7 +37,7 @@ namespace fieldro_bot
   {
     if(_unit_index == 0)  return true;
 
-    return (ros::Time::now() - _last_update_time).toSec() > THRESHOLD;
+    return (ros::Time::now() - _last_update_time).toSec() > ALIVE_THRESHOLD;
   }
 
   /**

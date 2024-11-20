@@ -12,7 +12,8 @@ namespace fieldro_bot
 {
   Wago::Wago()
   {
-    _node_handle = new ros::NodeHandle();     // node handler 생성
+    _node_handle  = new ros::NodeHandle();     // node handler 생성
+    _shut_down    = false;
 
     // alive message 발송을 위한 publisher 생성 및 link
     _publish_alive = _node_handle->advertise<trash_bot::UnitAliveMsg>("trash_bot/UnitAliveMsg", 100);
@@ -33,7 +34,7 @@ namespace fieldro_bot
     option.latch = true;
     _publish_io_signal = _node_handle->advertise(option);
 
-    _shut_down = false;
+    
 
     // spinner 생성 및 구동
     _spinner = new ros::AsyncSpinner(1);

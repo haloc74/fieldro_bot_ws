@@ -12,7 +12,7 @@
 #include "define/unit_define.h"
 #include "observer_unit/unit_alive_info.h"
 
-
+ 
 namespace fieldro_bot
 {
   /**
@@ -29,37 +29,43 @@ namespace fieldro_bot
   public:
     UnitObserver();		    // 생성자
     ~UnitObserver();		  // 소멸자
-    void update();			  // 업데이트
-    ros::NodeHandle* get_node_handle() { return _node_handle; }
-    bool is_shutdown() { return _shut_down; }
-  
-  private:
-    ros::NodeHandle*  _node_handle;	      // ROS 시스템과 통신을 위한 노드 핸들
-    ros::AsyncSpinner*  _spinner;                     // ROS 시스템과 통신을 위한 스피너
-    ThreadActionInfo*   _thread_info;                 // thread action 객체
+ 
+    ros::NodeHandle* get_node_handle()  { return _node_handle; }
+    bool is_shutdown()                  { return _shut_down; }
 
-    // control 지령을 받기 위한 subscriber
+  private:
+    void update();			                    // main thread 업데이트
+
+  private:
+    ros::NodeHandle*    _node_handle;	      // ROS 시스템과 통신을 위한 노드 핸들
+    ros::AsyncSpinner*  _spinner;           // ROS 시스템과 통신을 위한 스피너
+    ThreadActionInfo*   _thread_info;       // thread action 객체
+    bool                _shut_down;         // node 종료 flag
+
+    // SUBSCRIBER : control 지령
     ros::Subscriber     _subscribe_unit_control;      
     void subscribe_unit_control(const trash_bot::UnitControl& unit_control_msg);
 
-    bool  _shut_down;
-    ros::Timer        _update_timer;	    // 업데이트 타이머
-    ros::Time         _last_update_time;	// 마지막 업데이트 시간
-    double            _update_interval;	  // heartbeat 임계값
+    // SUBSCRIBER : unit들의 alive 상태 
+    ros::Subscriber _subscribe_unit_alive;	                        
+    void subscribe_unit_alive(const trash_bot::UnitAliveMsg &msg);	
 
-    void system_finish();
+    // PUBLISHER - unit의 state
+    ros::Publisher _publish_units_state;	                        
+    void publish_unit_state(bool time_check_flag);    
+   
+    ros::Time         _last_publish_time;	        // 마지막 Pub 시간
+    int32_t           _publish_interval;	        // Pub 주기
 
-    int32_t _unit_alive;
+    int32_t                     _unit_alive;      // 전체 unit의 alive 상태 변수
     std::vector<UnitAliveInfo*> _unit_alive_info;	// unit 상태 정보를 저장하는 vector
       
-    ros::Subscriber _subscribe_unit_alive;	                        // unit 상태를 수신하는 subscriber
-    void subscribe_unit_alive(const trash_bot::UnitAliveMsg &msg);	// unit 상태를 수신하는 callback 함수
-
-    ros::Publisher _publish_units_state;	                        // unit의 state를 publishing 하는 publisher
-    void publish_unit_state(bool time_check_flag);	              // unit의 state를 publishing 하는 함수
-
+    // 일반 함수
     bool update_units_alive_value();	// unit들의 상태를 확인하는 함수
-    bool is_update_interval();	      // 업데이트 주기를 확인하는 함수
+    bool is_publish_interval();	      // 업데이트 주기를 확인하는 함수
+    void load_option();               // 옵션 로드 함수
+
+    void system_finish()    { _shut_down = true;  }   // 시스템 종료 함수
   };
 
 
