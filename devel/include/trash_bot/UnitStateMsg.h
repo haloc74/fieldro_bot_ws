@@ -24,22 +24,22 @@ struct UnitStateMsg_
   typedef UnitStateMsg_<ContainerAllocator> Type;
 
   UnitStateMsg_()
-    : unit_id(0)
-    , state(0)  {
+    : alive(0)
+    , states()  {
     }
   UnitStateMsg_(const ContainerAllocator& _alloc)
-    : unit_id(0)
-    , state(0)  {
+    : alive(0)
+    , states(_alloc)  {
   (void)_alloc;
     }
 
 
 
-   typedef int32_t _unit_id_type;
-  _unit_id_type unit_id;
+   typedef int32_t _alive_type;
+  _alive_type alive;
 
-   typedef int32_t _state_type;
-  _state_type state;
+   typedef std::vector<int32_t, typename std::allocator_traits<ContainerAllocator>::template rebind_alloc<int32_t>> _states_type;
+  _states_type states;
 
 
 
@@ -70,8 +70,8 @@ return s;
 template<typename ContainerAllocator1, typename ContainerAllocator2>
 bool operator==(const ::trash_bot::UnitStateMsg_<ContainerAllocator1> & lhs, const ::trash_bot::UnitStateMsg_<ContainerAllocator2> & rhs)
 {
-  return lhs.unit_id == rhs.unit_id &&
-    lhs.state == rhs.state;
+  return lhs.alive == rhs.alive &&
+    lhs.states == rhs.states;
 }
 
 template<typename ContainerAllocator1, typename ContainerAllocator2>
@@ -94,12 +94,12 @@ namespace message_traits
 
 template <class ContainerAllocator>
 struct IsFixedSize< ::trash_bot::UnitStateMsg_<ContainerAllocator> >
-  : TrueType
+  : FalseType
   { };
 
 template <class ContainerAllocator>
 struct IsFixedSize< ::trash_bot::UnitStateMsg_<ContainerAllocator> const>
-  : TrueType
+  : FalseType
   { };
 
 template <class ContainerAllocator>
@@ -128,12 +128,12 @@ struct MD5Sum< ::trash_bot::UnitStateMsg_<ContainerAllocator> >
 {
   static const char* value()
   {
-    return "7cd06622fe3c1b94199887fecbe639f5";
+    return "090390084faae6402e136d50389ae081";
   }
 
   static const char* value(const ::trash_bot::UnitStateMsg_<ContainerAllocator>&) { return value(); }
-  static const uint64_t static_value1 = 0x7cd06622fe3c1b94ULL;
-  static const uint64_t static_value2 = 0x199887fecbe639f5ULL;
+  static const uint64_t static_value1 = 0x090390084faae640ULL;
+  static const uint64_t static_value2 = 0x2e136d50389ae081ULL;
 };
 
 template<class ContainerAllocator>
@@ -152,10 +152,14 @@ struct Definition< ::trash_bot::UnitStateMsg_<ContainerAllocator> >
 {
   static const char* value()
   {
-    return "\n"
-"# 각 Unit이 현재의 상태를 보고 하는 Message\n"
-"int32 unit_id           # Unit ID\n"
-"int32 state             # 현재 상태 (UnitState index, unit_define.h)\n"
+    return "# UnitStateMsg.msg\n"
+"\n"
+"# bit flag를 통해 각 unit index와 1:1 매칭된다.\n"
+"# 0:alive , 1:dead or timeout\n"
+"int32 alive\n"
+"\n"
+"# Array for unit states\n"
+"int32[] states\n"
 ;
   }
 
@@ -174,8 +178,8 @@ namespace serialization
   {
     template<typename Stream, typename T> inline static void allInOne(Stream& stream, T m)
     {
-      stream.next(m.unit_id);
-      stream.next(m.state);
+      stream.next(m.alive);
+      stream.next(m.states);
     }
 
     ROS_DECLARE_ALLINONE_SERIALIZER
@@ -194,10 +198,14 @@ struct Printer< ::trash_bot::UnitStateMsg_<ContainerAllocator> >
 {
   template<typename Stream> static void stream(Stream& s, const std::string& indent, const ::trash_bot::UnitStateMsg_<ContainerAllocator>& v)
   {
-    s << indent << "unit_id: ";
-    Printer<int32_t>::stream(s, indent + "  ", v.unit_id);
-    s << indent << "state: ";
-    Printer<int32_t>::stream(s, indent + "  ", v.state);
+    s << indent << "alive: ";
+    Printer<int32_t>::stream(s, indent + "  ", v.alive);
+    s << indent << "states[]" << std::endl;
+    for (size_t i = 0; i < v.states.size(); ++i)
+    {
+      s << indent << "  states[" << i << "]: ";
+      Printer<int32_t>::stream(s, indent + "  ", v.states[i]);
+    }
   }
 };
 

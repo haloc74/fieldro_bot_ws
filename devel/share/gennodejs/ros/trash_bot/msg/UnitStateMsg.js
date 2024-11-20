@@ -18,31 +18,31 @@ class UnitStateMsg {
   constructor(initObj={}) {
     if (initObj === null) {
       // initObj === null is a special case for deserialization where we don't initialize fields
-      this.unit_id = null;
-      this.state = null;
+      this.alive = null;
+      this.states = null;
     }
     else {
-      if (initObj.hasOwnProperty('unit_id')) {
-        this.unit_id = initObj.unit_id
+      if (initObj.hasOwnProperty('alive')) {
+        this.alive = initObj.alive
       }
       else {
-        this.unit_id = 0;
+        this.alive = 0;
       }
-      if (initObj.hasOwnProperty('state')) {
-        this.state = initObj.state
+      if (initObj.hasOwnProperty('states')) {
+        this.states = initObj.states
       }
       else {
-        this.state = 0;
+        this.states = [];
       }
     }
   }
 
   static serialize(obj, buffer, bufferOffset) {
     // Serializes a message object of type UnitStateMsg
-    // Serialize message field [unit_id]
-    bufferOffset = _serializer.int32(obj.unit_id, buffer, bufferOffset);
-    // Serialize message field [state]
-    bufferOffset = _serializer.int32(obj.state, buffer, bufferOffset);
+    // Serialize message field [alive]
+    bufferOffset = _serializer.int32(obj.alive, buffer, bufferOffset);
+    // Serialize message field [states]
+    bufferOffset = _arraySerializer.int32(obj.states, buffer, bufferOffset, null);
     return bufferOffset;
   }
 
@@ -50,15 +50,17 @@ class UnitStateMsg {
     //deserializes a message object of type UnitStateMsg
     let len;
     let data = new UnitStateMsg(null);
-    // Deserialize message field [unit_id]
-    data.unit_id = _deserializer.int32(buffer, bufferOffset);
-    // Deserialize message field [state]
-    data.state = _deserializer.int32(buffer, bufferOffset);
+    // Deserialize message field [alive]
+    data.alive = _deserializer.int32(buffer, bufferOffset);
+    // Deserialize message field [states]
+    data.states = _arrayDeserializer.int32(buffer, bufferOffset, null)
     return data;
   }
 
   static getMessageSize(object) {
-    return 8;
+    let length = 0;
+    length += 4 * object.states.length;
+    return length + 8;
   }
 
   static datatype() {
@@ -68,16 +70,20 @@ class UnitStateMsg {
 
   static md5sum() {
     //Returns md5sum for a message object
-    return '7cd06622fe3c1b94199887fecbe639f5';
+    return '090390084faae6402e136d50389ae081';
   }
 
   static messageDefinition() {
     // Returns full string definition for message
     return `
+    # UnitStateMsg.msg
     
-    # 각 Unit이 현재의 상태를 보고 하는 Message
-    int32 unit_id           # Unit ID
-    int32 state             # 현재 상태 (UnitState index, unit_define.h)
+    # bit flag를 통해 각 unit index와 1:1 매칭된다.
+    # 0:alive , 1:dead or timeout
+    int32 alive
+    
+    # Array for unit states
+    int32[] states
     `;
   }
 
@@ -87,18 +93,18 @@ class UnitStateMsg {
       msg = {};
     }
     const resolved = new UnitStateMsg(null);
-    if (msg.unit_id !== undefined) {
-      resolved.unit_id = msg.unit_id;
+    if (msg.alive !== undefined) {
+      resolved.alive = msg.alive;
     }
     else {
-      resolved.unit_id = 0
+      resolved.alive = 0
     }
 
-    if (msg.state !== undefined) {
-      resolved.state = msg.state;
+    if (msg.states !== undefined) {
+      resolved.states = msg.states;
     }
     else {
-      resolved.state = 0
+      resolved.states = []
     }
 
     return resolved;

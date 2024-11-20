@@ -4,8 +4,9 @@
 #include "define/unit_action_define.h"
 #include "helper/helper.h"
 #include <trash_bot/IOSignal.h>
-#include <trash_bot/UnitStateMsg.h>
+#include <trash_bot/UnitAliveMsg.h>
 #include <trash_bot/UnitActionComplete.h>
+
 
 namespace fieldro_bot
 {
@@ -13,8 +14,8 @@ namespace fieldro_bot
   {
     _node_handle = new ros::NodeHandle();     // node handler 생성
 
-    // state message 발송을 위한 publisher 생성 및 link
-    _publish_state = _node_handle->advertise<trash_bot::UnitStateMsg>("trash_bot/UnitState", 100);
+    // alive message 발송을 위한 publisher 생성 및 link
+    _publish_alive = _node_handle->advertise<trash_bot::UnitAliveMsg>("trash_bot/UnitAliveMsg", 100);
 
     // unit control message 수신을 위한 subscriber 생성 및 link
     _subscribe_unit_control = _node_handle->subscribe("trash_bot/unit_control", 100, &Wago::subscribe_unit_control, this);
@@ -98,7 +99,7 @@ namespace fieldro_bot
       }
 
       read_di_signal();     // digital input signal read
-      publish_state();      // 상태보고 (heartbeat)
+      publish_alive();      // 상태보고 (heartbeat)
 
       // thread Hz 싱크 및 독점 방지를 위한 sleep
       std::this_thread::sleep_for(std::chrono::milliseconds(_thread_info->_sleep));

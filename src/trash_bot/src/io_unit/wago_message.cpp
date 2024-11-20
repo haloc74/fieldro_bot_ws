@@ -3,7 +3,7 @@
 #include "define/unit_action_define.h"
 #include "helper/helper.h"
 #include <trash_bot/IOSignal.h>
-#include <trash_bot/UnitStateMsg.h>
+#include <trash_bot/UnitAliveMsg.h>
 #include <trash_bot/UnitActionComplete.h>
 
 namespace fieldro_bot
@@ -69,23 +69,22 @@ namespace fieldro_bot
   }
 
   /**
-  * @brief      state message를 발송하는 함수
-  * @param[in]  state : 발송할 state
+  * @brief      alive message를 발송하는 함수
   * @return     void
   * @note       현재 상태를 0.5초 간격으로 발송한다.
   */
-  void Wago::publish_state()
+  void Wago::publish_alive()
   {
     if(ros::Time::now() - _last_state_time < ros::Duration(0.5))
     {
       return;
     }
 
-    // state message 발송 
-    trash_bot::UnitStateMsg state_msg;
-    state_msg.unit_id   = unit_to_int(fieldro_bot::Unit::Signal);
-    state_msg.state     = _state;
-    _publish_state.publish(state_msg);
+    // unit alive message 발송
+    trash_bot::UnitAliveMsg alive_msg;
+    alive_msg.index = unit_to_int(fieldro_bot::Unit::Signal);
+    alive_msg.state = _state;
+    _publish_alive.publish(alive_msg);
 
     // 마지막 발송 시간 업데이트
     _last_state_time = ros::Time::now();

@@ -273,6 +273,54 @@ trash_bot/CMakeFiles/fieldro_lib.dir/src/lib_cpp/helper/thread_action_info.cpp.o
 trash_bot/CMakeFiles/fieldro_lib.dir/src/lib_cpp/helper/thread_action_info.cpp.o.provides.build: trash_bot/CMakeFiles/fieldro_lib.dir/src/lib_cpp/helper/thread_action_info.cpp.o
 
 
+trash_bot/CMakeFiles/fieldro_lib.dir/src/lib_cpp/unit_observer/unit_alive_info.cpp.o: trash_bot/CMakeFiles/fieldro_lib.dir/flags.make
+trash_bot/CMakeFiles/fieldro_lib.dir/src/lib_cpp/unit_observer/unit_alive_info.cpp.o: /home/twinny/fieldro_bot_ws/src/trash_bot/src/lib_cpp/unit_observer/unit_alive_info.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/twinny/fieldro_bot_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object trash_bot/CMakeFiles/fieldro_lib.dir/src/lib_cpp/unit_observer/unit_alive_info.cpp.o"
+	cd /home/twinny/fieldro_bot_ws/build/trash_bot && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/fieldro_lib.dir/src/lib_cpp/unit_observer/unit_alive_info.cpp.o -c /home/twinny/fieldro_bot_ws/src/trash_bot/src/lib_cpp/unit_observer/unit_alive_info.cpp
+
+trash_bot/CMakeFiles/fieldro_lib.dir/src/lib_cpp/unit_observer/unit_alive_info.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/fieldro_lib.dir/src/lib_cpp/unit_observer/unit_alive_info.cpp.i"
+	cd /home/twinny/fieldro_bot_ws/build/trash_bot && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/twinny/fieldro_bot_ws/src/trash_bot/src/lib_cpp/unit_observer/unit_alive_info.cpp > CMakeFiles/fieldro_lib.dir/src/lib_cpp/unit_observer/unit_alive_info.cpp.i
+
+trash_bot/CMakeFiles/fieldro_lib.dir/src/lib_cpp/unit_observer/unit_alive_info.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/fieldro_lib.dir/src/lib_cpp/unit_observer/unit_alive_info.cpp.s"
+	cd /home/twinny/fieldro_bot_ws/build/trash_bot && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/twinny/fieldro_bot_ws/src/trash_bot/src/lib_cpp/unit_observer/unit_alive_info.cpp -o CMakeFiles/fieldro_lib.dir/src/lib_cpp/unit_observer/unit_alive_info.cpp.s
+
+trash_bot/CMakeFiles/fieldro_lib.dir/src/lib_cpp/unit_observer/unit_alive_info.cpp.o.requires:
+
+.PHONY : trash_bot/CMakeFiles/fieldro_lib.dir/src/lib_cpp/unit_observer/unit_alive_info.cpp.o.requires
+
+trash_bot/CMakeFiles/fieldro_lib.dir/src/lib_cpp/unit_observer/unit_alive_info.cpp.o.provides: trash_bot/CMakeFiles/fieldro_lib.dir/src/lib_cpp/unit_observer/unit_alive_info.cpp.o.requires
+	$(MAKE) -f trash_bot/CMakeFiles/fieldro_lib.dir/build.make trash_bot/CMakeFiles/fieldro_lib.dir/src/lib_cpp/unit_observer/unit_alive_info.cpp.o.provides.build
+.PHONY : trash_bot/CMakeFiles/fieldro_lib.dir/src/lib_cpp/unit_observer/unit_alive_info.cpp.o.provides
+
+trash_bot/CMakeFiles/fieldro_lib.dir/src/lib_cpp/unit_observer/unit_alive_info.cpp.o.provides.build: trash_bot/CMakeFiles/fieldro_lib.dir/src/lib_cpp/unit_observer/unit_alive_info.cpp.o
+
+
+trash_bot/CMakeFiles/fieldro_lib.dir/src/lib_cpp/unit_observer/unit_observer.cpp.o: trash_bot/CMakeFiles/fieldro_lib.dir/flags.make
+trash_bot/CMakeFiles/fieldro_lib.dir/src/lib_cpp/unit_observer/unit_observer.cpp.o: /home/twinny/fieldro_bot_ws/src/trash_bot/src/lib_cpp/unit_observer/unit_observer.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/twinny/fieldro_bot_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object trash_bot/CMakeFiles/fieldro_lib.dir/src/lib_cpp/unit_observer/unit_observer.cpp.o"
+	cd /home/twinny/fieldro_bot_ws/build/trash_bot && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/fieldro_lib.dir/src/lib_cpp/unit_observer/unit_observer.cpp.o -c /home/twinny/fieldro_bot_ws/src/trash_bot/src/lib_cpp/unit_observer/unit_observer.cpp
+
+trash_bot/CMakeFiles/fieldro_lib.dir/src/lib_cpp/unit_observer/unit_observer.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/fieldro_lib.dir/src/lib_cpp/unit_observer/unit_observer.cpp.i"
+	cd /home/twinny/fieldro_bot_ws/build/trash_bot && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/twinny/fieldro_bot_ws/src/trash_bot/src/lib_cpp/unit_observer/unit_observer.cpp > CMakeFiles/fieldro_lib.dir/src/lib_cpp/unit_observer/unit_observer.cpp.i
+
+trash_bot/CMakeFiles/fieldro_lib.dir/src/lib_cpp/unit_observer/unit_observer.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/fieldro_lib.dir/src/lib_cpp/unit_observer/unit_observer.cpp.s"
+	cd /home/twinny/fieldro_bot_ws/build/trash_bot && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/twinny/fieldro_bot_ws/src/trash_bot/src/lib_cpp/unit_observer/unit_observer.cpp -o CMakeFiles/fieldro_lib.dir/src/lib_cpp/unit_observer/unit_observer.cpp.s
+
+trash_bot/CMakeFiles/fieldro_lib.dir/src/lib_cpp/unit_observer/unit_observer.cpp.o.requires:
+
+.PHONY : trash_bot/CMakeFiles/fieldro_lib.dir/src/lib_cpp/unit_observer/unit_observer.cpp.o.requires
+
+trash_bot/CMakeFiles/fieldro_lib.dir/src/lib_cpp/unit_observer/unit_observer.cpp.o.provides: trash_bot/CMakeFiles/fieldro_lib.dir/src/lib_cpp/unit_observer/unit_observer.cpp.o.requires
+	$(MAKE) -f trash_bot/CMakeFiles/fieldro_lib.dir/build.make trash_bot/CMakeFiles/fieldro_lib.dir/src/lib_cpp/unit_observer/unit_observer.cpp.o.provides.build
+.PHONY : trash_bot/CMakeFiles/fieldro_lib.dir/src/lib_cpp/unit_observer/unit_observer.cpp.o.provides
+
+trash_bot/CMakeFiles/fieldro_lib.dir/src/lib_cpp/unit_observer/unit_observer.cpp.o.provides.build: trash_bot/CMakeFiles/fieldro_lib.dir/src/lib_cpp/unit_observer/unit_observer.cpp.o
+
+
 # Object files for target fieldro_lib
 fieldro_lib_OBJECTS = \
 "CMakeFiles/fieldro_lib.dir/src/lib_cpp/log/log.cpp.o" \
@@ -283,7 +331,9 @@ fieldro_lib_OBJECTS = \
 "CMakeFiles/fieldro_lib.dir/src/lib_cpp/communication/modbus_wrapper_tcp.cpp.o" \
 "CMakeFiles/fieldro_lib.dir/src/lib_cpp/helper/helper.cpp.o" \
 "CMakeFiles/fieldro_lib.dir/src/lib_cpp/helper/link_checker.cpp.o" \
-"CMakeFiles/fieldro_lib.dir/src/lib_cpp/helper/thread_action_info.cpp.o"
+"CMakeFiles/fieldro_lib.dir/src/lib_cpp/helper/thread_action_info.cpp.o" \
+"CMakeFiles/fieldro_lib.dir/src/lib_cpp/unit_observer/unit_alive_info.cpp.o" \
+"CMakeFiles/fieldro_lib.dir/src/lib_cpp/unit_observer/unit_observer.cpp.o"
 
 # External object files for target fieldro_lib
 fieldro_lib_EXTERNAL_OBJECTS =
@@ -297,6 +347,8 @@ fieldro_lib_EXTERNAL_OBJECTS =
 /home/twinny/fieldro_bot_ws/devel/lib/libfieldro_lib.so: trash_bot/CMakeFiles/fieldro_lib.dir/src/lib_cpp/helper/helper.cpp.o
 /home/twinny/fieldro_bot_ws/devel/lib/libfieldro_lib.so: trash_bot/CMakeFiles/fieldro_lib.dir/src/lib_cpp/helper/link_checker.cpp.o
 /home/twinny/fieldro_bot_ws/devel/lib/libfieldro_lib.so: trash_bot/CMakeFiles/fieldro_lib.dir/src/lib_cpp/helper/thread_action_info.cpp.o
+/home/twinny/fieldro_bot_ws/devel/lib/libfieldro_lib.so: trash_bot/CMakeFiles/fieldro_lib.dir/src/lib_cpp/unit_observer/unit_alive_info.cpp.o
+/home/twinny/fieldro_bot_ws/devel/lib/libfieldro_lib.so: trash_bot/CMakeFiles/fieldro_lib.dir/src/lib_cpp/unit_observer/unit_observer.cpp.o
 /home/twinny/fieldro_bot_ws/devel/lib/libfieldro_lib.so: trash_bot/CMakeFiles/fieldro_lib.dir/build.make
 /home/twinny/fieldro_bot_ws/devel/lib/libfieldro_lib.so: /opt/ros/melodic/lib/libserial.so
 /home/twinny/fieldro_bot_ws/devel/lib/libfieldro_lib.so: /opt/ros/melodic/lib/libtf.so
@@ -324,7 +376,7 @@ fieldro_lib_EXTERNAL_OBJECTS =
 /home/twinny/fieldro_bot_ws/devel/lib/libfieldro_lib.so: /usr/lib/x86_64-linux-gnu/libconsole_bridge.so.0.4
 /home/twinny/fieldro_bot_ws/devel/lib/libfieldro_lib.so: /usr/lib/x86_64-linux-gnu/libyaml-cpp.so.0.5.2
 /home/twinny/fieldro_bot_ws/devel/lib/libfieldro_lib.so: trash_bot/CMakeFiles/fieldro_lib.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/twinny/fieldro_bot_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Linking CXX shared library /home/twinny/fieldro_bot_ws/devel/lib/libfieldro_lib.so"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/twinny/fieldro_bot_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Linking CXX shared library /home/twinny/fieldro_bot_ws/devel/lib/libfieldro_lib.so"
 	cd /home/twinny/fieldro_bot_ws/build/trash_bot && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/fieldro_lib.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -341,6 +393,8 @@ trash_bot/CMakeFiles/fieldro_lib.dir/requires: trash_bot/CMakeFiles/fieldro_lib.
 trash_bot/CMakeFiles/fieldro_lib.dir/requires: trash_bot/CMakeFiles/fieldro_lib.dir/src/lib_cpp/helper/helper.cpp.o.requires
 trash_bot/CMakeFiles/fieldro_lib.dir/requires: trash_bot/CMakeFiles/fieldro_lib.dir/src/lib_cpp/helper/link_checker.cpp.o.requires
 trash_bot/CMakeFiles/fieldro_lib.dir/requires: trash_bot/CMakeFiles/fieldro_lib.dir/src/lib_cpp/helper/thread_action_info.cpp.o.requires
+trash_bot/CMakeFiles/fieldro_lib.dir/requires: trash_bot/CMakeFiles/fieldro_lib.dir/src/lib_cpp/unit_observer/unit_alive_info.cpp.o.requires
+trash_bot/CMakeFiles/fieldro_lib.dir/requires: trash_bot/CMakeFiles/fieldro_lib.dir/src/lib_cpp/unit_observer/unit_observer.cpp.o.requires
 
 .PHONY : trash_bot/CMakeFiles/fieldro_lib.dir/requires
 

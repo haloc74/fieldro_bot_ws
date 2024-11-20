@@ -1,6 +1,6 @@
 (cl:in-package trash_bot-msg)
-(cl:export '(UNIT_ID-VAL
-          UNIT_ID
-          STATE-VAL
-          STATE
+(cl:export '(ALIVE-VAL
+          ALIVE
+          STATES-VAL
+          STATES
 ))

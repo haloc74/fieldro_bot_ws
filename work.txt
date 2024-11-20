@@ -20,12 +20,33 @@
   dorid_node에서는 이것을 가지고 unit의 상태의 판단과 heartbeat관리를 한다.
 
 . droid_node에 LinkChecker object 추가하기
+  - LinkChecker object 삭제 (UnitObserver node가 관리하는 방법으로 변경)
+
+. Wago class refactoring
+  - state 보고가 아닌 alive 보고의 개념으로 변경
+
+. UnitObserver Class refactoring
+  - state 보고가 아닌 alive 보고의 개념으로 변경
+  - 전체 unit의 상태를 publish 하는 개념 반영
+  - alive info check하기 위한 변수명
+
+. UnitObserver node 추가하기
 
 //===================
 //========== 작 업 중
 //===================
 
+ID :  - JD 24.11.20
+1. UnitObserver Class 추가.
+2. UnitAliveInfo Class 추가.
+3. UnitAliveMsg.msg 추가.
+4. UnitStateMsg.msg 추가.
+5. 1~4 작업에 따른 SourceCode 변경
+6. twinny_msgs package 추가.
+7. fieldro lib에 message 의존성 추가
 
+
+ID : e88c1e7 - JD 24.11.13
 1. modbus wrapper reconnect 횟수 option 적용 안되는 부분 수정
 2. modbus tcp connect logic 중 일부 체크 옵션 추가
 

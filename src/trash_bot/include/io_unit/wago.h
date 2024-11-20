@@ -41,9 +41,9 @@ namespace fieldro_bot
     std::mutex          _lock;                        // thread lock
     int32_t             _state;                       // 현재 state
 
-    // state message 발송을 위하 publisher
-    ros::Publisher      _publish_state;
-    void publish_state();
+    // alive message 발송을 위하 publisher
+    ros::Publisher      _publish_alive;
+    void publish_alive();
 
     // control 지령을 받기 위한 subscriber
     ros::Subscriber     _subscribe_unit_control;      

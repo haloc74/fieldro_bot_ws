@@ -39,14 +39,6 @@
 
 namespace fieldro_bot
 { 
-  //enum class DroidAction
-  //{
-    // None = 0x00,  
-    // WaitForLink,
-    // UnitInitialize,
-    // Ready,
-  //};
-
   class Droid
   { 
   public:
@@ -94,13 +86,11 @@ namespace fieldro_bot
     int64_t _signal_bit;
     bool update_sensor_data(DISignal sensor, int64_t signal_bit);   // sensor data 업데이트
     ros::Time _last_io_update_time;                                 // 마지막 센서 정보 업데이트 시간
-    //bool io_link_check();                                           // io link check
 
     fieldro_bot::UnitState _state[unit_to_int(fieldro_bot::Unit::End)];           // unit 상태 정보
     fieldro_bot::UnitState& _action;
 
-    //void update_unit_state(fieldro_bot::Unit unit, fieldro_bot::UnitState state);
-    //void update_io_pulse();
+    void unit_link_check();
 
     // user command control
     std::map<int32_t, int32_t, std::string> _command_map;

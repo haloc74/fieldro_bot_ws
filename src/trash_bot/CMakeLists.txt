@@ -46,10 +46,11 @@ message(STATUS "")
   add_message_files(
     FILES
     Pose.msg
-    UnitActionComplete.msg
-    UnitControl.msg
     IOSignal.msg
-    UnitStateMsg.msg
+    UnitActionComplete.msg
+    UnitAliveMsg.msg
+    UnitControl.msg
+    UnitStateMsg.msg 
   )
 
   ## 2.2 srv 폴더로 부터 service 생성
@@ -138,10 +139,17 @@ message(STATUS "")
     "${CMAKE_CURRENT_SOURCE_DIR}/src/lib_cpp/communication/*.cpp"
 #    "${CMAKE_CURRENT_SOURCE_DIR}/src/lib_cpp/motor/*.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/lib_cpp/helper/*.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/lib_cpp/unit_observer/*.cpp"
   )
 
   ## 5-2. LIB_SRC_FILES의 모든 파일을 컴파일하고 링크하여 실행 파일 생성 하도록 설정
   add_library(fieldro_lib SHARED ${LIB_SRC_FILES})
+
+  ## 5-2. fieldro_lib 빌드 시 메시지 생성 의존성 추가
+  add_dependencies(fieldro_lib
+    ${${PROJECT_NAME}_EXPORTED_TARGETS}  # 메시지 생성 타겟 의존성 추가
+    ${catkin_EXPORTED_TARGETS}
+  )  
 
   ## 5-3. 빌드 순서를 정의 (의존성)
   target_link_libraries(fieldro_lib
@@ -224,7 +232,7 @@ message(STATUS "")
       ${catkin_LIBRARIES}                  # catkin 빌드 시스템에서 정의한 라이브러리
       ${YAML_CPP_LIBRARIES}                # yaml-cpp 라이브러리
       ${MODBUS_LIBRARIES}                  # libmodbus 라이브러리
-      fieldro_lib                       # modbus_wrapper 라이브러리
+      fieldro_lib                          # fieldro   라이브러리
     )
 
 

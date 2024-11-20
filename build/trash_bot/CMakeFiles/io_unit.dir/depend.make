@@ -78,8 +78,8 @@ trash_bot/CMakeFiles/io_unit.dir/src/_node/io_node.cpp.o: /opt/ros/melodic/inclu
 
 trash_bot/CMakeFiles/io_unit.dir/src/io_unit/wago.cpp.o: /home/twinny/fieldro_bot_ws/devel/include/trash_bot/IOSignal.h
 trash_bot/CMakeFiles/io_unit.dir/src/io_unit/wago.cpp.o: /home/twinny/fieldro_bot_ws/devel/include/trash_bot/UnitActionComplete.h
+trash_bot/CMakeFiles/io_unit.dir/src/io_unit/wago.cpp.o: /home/twinny/fieldro_bot_ws/devel/include/trash_bot/UnitAliveMsg.h
 trash_bot/CMakeFiles/io_unit.dir/src/io_unit/wago.cpp.o: /home/twinny/fieldro_bot_ws/devel/include/trash_bot/UnitControl.h
-trash_bot/CMakeFiles/io_unit.dir/src/io_unit/wago.cpp.o: /home/twinny/fieldro_bot_ws/devel/include/trash_bot/UnitStateMsg.h
 trash_bot/CMakeFiles/io_unit.dir/src/io_unit/wago.cpp.o: /home/twinny/fieldro_bot_ws/src/trash_bot/include/io_unit/io_define.h
 trash_bot/CMakeFiles/io_unit.dir/src/io_unit/wago.cpp.o: /home/twinny/fieldro_bot_ws/src/trash_bot/include/io_unit/signal_info.h
 trash_bot/CMakeFiles/io_unit.dir/src/io_unit/wago.cpp.o: /home/twinny/fieldro_bot_ws/src/trash_bot/include/io_unit/wago.h
@@ -232,8 +232,8 @@ trash_bot/CMakeFiles/io_unit.dir/src/io_unit/wago_io_map.cpp.o: /opt/ros/melodic
 
 trash_bot/CMakeFiles/io_unit.dir/src/io_unit/wago_message.cpp.o: /home/twinny/fieldro_bot_ws/devel/include/trash_bot/IOSignal.h
 trash_bot/CMakeFiles/io_unit.dir/src/io_unit/wago_message.cpp.o: /home/twinny/fieldro_bot_ws/devel/include/trash_bot/UnitActionComplete.h
+trash_bot/CMakeFiles/io_unit.dir/src/io_unit/wago_message.cpp.o: /home/twinny/fieldro_bot_ws/devel/include/trash_bot/UnitAliveMsg.h
 trash_bot/CMakeFiles/io_unit.dir/src/io_unit/wago_message.cpp.o: /home/twinny/fieldro_bot_ws/devel/include/trash_bot/UnitControl.h
-trash_bot/CMakeFiles/io_unit.dir/src/io_unit/wago_message.cpp.o: /home/twinny/fieldro_bot_ws/devel/include/trash_bot/UnitStateMsg.h
 trash_bot/CMakeFiles/io_unit.dir/src/io_unit/wago_message.cpp.o: /home/twinny/fieldro_bot_ws/src/trash_bot/include/io_unit/io_define.h
 trash_bot/CMakeFiles/io_unit.dir/src/io_unit/wago_message.cpp.o: /home/twinny/fieldro_bot_ws/src/trash_bot/include/io_unit/signal_info.h
 trash_bot/CMakeFiles/io_unit.dir/src/io_unit/wago_message.cpp.o: /home/twinny/fieldro_bot_ws/src/trash_bot/include/io_unit/wago.h

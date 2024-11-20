@@ -5,7 +5,8 @@ namespace fieldro_bot
 { 
   LinkChecker::LinkChecker()
   {
-    _state = 0x00;
+    // 최상위 bit on 일경우 최초 Unit들의 link를 기다리는 상태이다.
+    _state = 0x80000000;
 
     // 모든 unit의 link 상태 bit을 1로 초기화
     // 모든 unit의 link 상태 체크 시간을 초기화
@@ -32,7 +33,7 @@ namespace fieldro_bot
   * @note       _last_time이 ros::TIME_MAX인 경우는 한번도 연결이 되지 않은 경우로 
   *             최초 실행시 각 node들이 heartbeat를 보내기를 대기하는 중인것으로 판단
   */
-  bool LinkChecker::update()
+  bool LinkChecker::check()
   {
     ros::Time time = ros::Time::now();
 
@@ -47,6 +48,7 @@ namespace fieldro_bot
         return false;
       }
     }
+
     return true;
   }
 
@@ -63,6 +65,12 @@ namespace fieldro_bot
 
     // index에 해당하는 unit 상태 bit을 0으로 만들기
     _state &= ~(1 << index);
+
+    // 최초 Unit Linked 기다리는 상태에서 모드 Unit이 링크 되면 플래그 제거
+    if(_state == 0x80000000)
+    {
+      _state &= ~(0x80000000);
+    }
   }
 
   /**

@@ -116,6 +116,7 @@ namespace fieldro_bot
       message_publish();
 
       // link check
+      unit_link_check();
 
 
       // thread Hz 싱크 및 독점 방지를 위한 sleep
@@ -178,7 +179,7 @@ namespace fieldro_bot
 
   void Droid::subscribe_unit_state(const trash_bot::UnitStateMsg &msg)
   {
-    _link_checker->update_data(msg.unit_id);
+    //_link_checker->update_data(msg.unit_id);
 
     // 현재 상태가 WaitForLink 상태이고 모든 link가 연결이 되어 있을 경우
     if(_action == fieldro_bot::UnitState::InitReady && _link_checker->is_all_unit_linked())

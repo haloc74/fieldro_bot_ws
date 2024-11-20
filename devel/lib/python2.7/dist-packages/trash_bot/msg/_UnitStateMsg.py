@@ -8,15 +8,19 @@ import struct
 
 
 class UnitStateMsg(genpy.Message):
-  _md5sum = "7cd06622fe3c1b94199887fecbe639f5"
+  _md5sum = "090390084faae6402e136d50389ae081"
   _type = "trash_bot/UnitStateMsg"
   _has_header = False  # flag to mark the presence of a Header object
-  _full_text = """
-# 각 Unit이 현재의 상태를 보고 하는 Message
-int32 unit_id           # Unit ID
-int32 state             # 현재 상태 (UnitState index, unit_define.h)"""
-  __slots__ = ['unit_id','state']
-  _slot_types = ['int32','int32']
+  _full_text = """# UnitStateMsg.msg
+
+# bit flag를 통해 각 unit index와 1:1 매칭된다.
+# 0:alive , 1:dead or timeout
+int32 alive
+
+# Array for unit states
+int32[] states"""
+  __slots__ = ['alive','states']
+  _slot_types = ['int32','int32[]']
 
   def __init__(self, *args, **kwds):
     """
@@ -26,7 +30,7 @@ int32 state             # 현재 상태 (UnitState index, unit_define.h)"""
     changes.  You cannot mix in-order arguments and keyword arguments.
 
     The available fields are:
-       unit_id,state
+       alive,states
 
     :param args: complete set of field values, in .msg order
     :param kwds: use keyword arguments corresponding to message field names
@@ -35,13 +39,13 @@ int32 state             # 현재 상태 (UnitState index, unit_define.h)"""
     if args or kwds:
       super(UnitStateMsg, self).__init__(*args, **kwds)
       # message fields cannot be None, assign default values for those that are
-      if self.unit_id is None:
-        self.unit_id = 0
-      if self.state is None:
-        self.state = 0
+      if self.alive is None:
+        self.alive = 0
+      if self.states is None:
+        self.states = []
     else:
-      self.unit_id = 0
-      self.state = 0
+      self.alive = 0
+      self.states = []
 
   def _get_types(self):
     """
@@ -55,8 +59,12 @@ int32 state             # 현재 상태 (UnitState index, unit_define.h)"""
     :param buff: buffer, ``StringIO``
     """
     try:
-      _x = self
-      buff.write(_get_struct_2i().pack(_x.unit_id, _x.state))
+      _x = self.alive
+      buff.write(_get_struct_i().pack(_x))
+      length = len(self.states)
+      buff.write(_struct_I.pack(length))
+      pattern = '<%si'%length
+      buff.write(struct.Struct(pattern).pack(*self.states))
     except struct.error as se: self._check_types(struct.error("%s: '%s' when writing '%s'" % (type(se), str(se), str(locals().get('_x', self)))))
     except TypeError as te: self._check_types(ValueError("%s: '%s' when writing '%s'" % (type(te), str(te), str(locals().get('_x', self)))))
 
@@ -69,10 +77,17 @@ int32 state             # 현재 상태 (UnitState index, unit_define.h)"""
       codecs.lookup_error("rosmsg").msg_type = self._type
     try:
       end = 0
-      _x = self
       start = end
-      end += 8
-      (_x.unit_id, _x.state,) = _get_struct_2i().unpack(str[start:end])
+      end += 4
+      (self.alive,) = _get_struct_i().unpack(str[start:end])
+      start = end
+      end += 4
+      (length,) = _struct_I.unpack(str[start:end])
+      pattern = '<%si'%length
+      start = end
+      s = struct.Struct(pattern)
+      end += s.size
+      self.states = s.unpack(str[start:end])
       return self
     except struct.error as e:
       raise genpy.DeserializationError(e)  # most likely buffer underfill
@@ -85,8 +100,12 @@ int32 state             # 현재 상태 (UnitState index, unit_define.h)"""
     :param numpy: numpy python module
     """
     try:
-      _x = self
-      buff.write(_get_struct_2i().pack(_x.unit_id, _x.state))
+      _x = self.alive
+      buff.write(_get_struct_i().pack(_x))
+      length = len(self.states)
+      buff.write(_struct_I.pack(length))
+      pattern = '<%si'%length
+      buff.write(self.states.tostring())
     except struct.error as se: self._check_types(struct.error("%s: '%s' when writing '%s'" % (type(se), str(se), str(locals().get('_x', self)))))
     except TypeError as te: self._check_types(ValueError("%s: '%s' when writing '%s'" % (type(te), str(te), str(locals().get('_x', self)))))
 
@@ -100,10 +119,17 @@ int32 state             # 현재 상태 (UnitState index, unit_define.h)"""
       codecs.lookup_error("rosmsg").msg_type = self._type
     try:
       end = 0
-      _x = self
       start = end
-      end += 8
-      (_x.unit_id, _x.state,) = _get_struct_2i().unpack(str[start:end])
+      end += 4
+      (self.alive,) = _get_struct_i().unpack(str[start:end])
+      start = end
+      end += 4
+      (length,) = _struct_I.unpack(str[start:end])
+      pattern = '<%si'%length
+      start = end
+      s = struct.Struct(pattern)
+      end += s.size
+      self.states = numpy.frombuffer(str[start:end], dtype=numpy.int32, count=length)
       return self
     except struct.error as e:
       raise genpy.DeserializationError(e)  # most likely buffer underfill
@@ -112,9 +138,9 @@ _struct_I = genpy.struct_I
 def _get_struct_I():
     global _struct_I
     return _struct_I
-_struct_2i = None
-def _get_struct_2i():
-    global _struct_2i
-    if _struct_2i is None:
-        _struct_2i = struct.Struct("<2i")
-    return _struct_2i
+_struct_i = None
+def _get_struct_i():
+    global _struct_i
+    if _struct_i is None:
+        _struct_i = struct.Struct("<i")
+    return _struct_i

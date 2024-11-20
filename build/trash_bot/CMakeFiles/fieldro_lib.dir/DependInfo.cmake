@@ -13,6 +13,8 @@ set(CMAKE_DEPENDS_CHECK_CXX
   "/home/twinny/fieldro_bot_ws/src/trash_bot/src/lib_cpp/log/log.cpp" "/home/twinny/fieldro_bot_ws/build/trash_bot/CMakeFiles/fieldro_lib.dir/src/lib_cpp/log/log.cpp.o"
   "/home/twinny/fieldro_bot_ws/src/trash_bot/src/lib_cpp/log/log_message.cpp" "/home/twinny/fieldro_bot_ws/build/trash_bot/CMakeFiles/fieldro_lib.dir/src/lib_cpp/log/log_message.cpp.o"
   "/home/twinny/fieldro_bot_ws/src/trash_bot/src/lib_cpp/log/log_message_queue.cpp" "/home/twinny/fieldro_bot_ws/build/trash_bot/CMakeFiles/fieldro_lib.dir/src/lib_cpp/log/log_message_queue.cpp.o"
+  "/home/twinny/fieldro_bot_ws/src/trash_bot/src/lib_cpp/unit_observer/unit_alive_info.cpp" "/home/twinny/fieldro_bot_ws/build/trash_bot/CMakeFiles/fieldro_lib.dir/src/lib_cpp/unit_observer/unit_alive_info.cpp.o"
+  "/home/twinny/fieldro_bot_ws/src/trash_bot/src/lib_cpp/unit_observer/unit_observer.cpp" "/home/twinny/fieldro_bot_ws/build/trash_bot/CMakeFiles/fieldro_lib.dir/src/lib_cpp/unit_observer/unit_observer.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 
@@ -30,7 +32,6 @@ set(CMAKE_CXX_TARGET_INCLUDE_PATH
   "/home/twinny/fieldro_bot_ws/src/trash_bot/include/droid"
   "/home/twinny/fieldro_bot_ws/src/trash_bot/include/io_unit"
   "/home/twinny/fieldro_bot_ws/src/trash_bot/lib_header"
-  "/home/twinny/IP060A01_ws/devel/include"
   "/opt/ros/melodic/include"
   "/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp"
   "/usr/local/include/modbus"

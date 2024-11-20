@@ -1,0 +1,13 @@
+Header header
+string type
+
+uint8 BUZZER_STATE_OFF=0
+uint8 BUZZER_STATE_1=1
+uint8 BUZZER_STATE_2=2
+uint8 BUZZER_STATE_1_2=3
+uint8 BUZZER_STATE_3=4
+uint8 BUZZER_STATE_1_3=5
+uint8 BUZZER_STATE_2_3=6
+uint8 BUZZER_STATE_ALL=7
+
+uint8 buzzer_state

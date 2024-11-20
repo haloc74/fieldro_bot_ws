@@ -7,7 +7,8 @@ namespace fieldro_bot
 {
   enum class UnitState
   {
-    UnConnect = 0x00,   // 연결 안됨
+    BeforeConnect = 0x00,
+    UnConnect,           // 연결 안됨
     InitReady,          // 초기화 준비
     Init,               // 초기화 중
     Ready,

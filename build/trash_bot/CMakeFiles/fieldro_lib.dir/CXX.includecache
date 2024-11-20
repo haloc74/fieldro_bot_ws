@@ -6,6 +6,38 @@
 
 #IncludeRegexTransform: 
 
+/home/twinny/fieldro_bot_ws/devel/include/trash_bot/UnitAliveMsg.h
+string
+-
+vector
+-
+memory
+-
+ros/types.h
+-
+ros/serialization.h
+-
+ros/builtin_message_traits.h
+-
+ros/message_operations.h
+-
+
+/home/twinny/fieldro_bot_ws/devel/include/trash_bot/UnitStateMsg.h
+string
+-
+vector
+-
+memory
+-
+ros/types.h
+-
+ros/serialization.h
+-
+ros/builtin_message_traits.h
+-
+ros/message_operations.h
+-
+
 /home/twinny/fieldro_bot_ws/src/trash_bot/lib_header/communication/modbus_wrapper.h
 modbus/modbus.h
 -
@@ -124,6 +156,24 @@ memory
 log/log_message.h
 /home/twinny/fieldro_bot_ws/src/trash_bot/lib_header/log/log/log_message.h
 
+/home/twinny/fieldro_bot_ws/src/trash_bot/lib_header/unit_observer/unit_alive_info.h
+ros/ros.h
+-
+
+/home/twinny/fieldro_bot_ws/src/trash_bot/lib_header/unit_observer/unit_observer.h
+ros/ros.h
+-
+vector
+-
+trash_bot/UnitStateMsg.h
+/home/twinny/fieldro_bot_ws/src/trash_bot/lib_header/unit_observer/trash_bot/UnitStateMsg.h
+trash_bot/UnitAliveMsg.h
+/home/twinny/fieldro_bot_ws/src/trash_bot/lib_header/unit_observer/trash_bot/UnitAliveMsg.h
+define/unit_define.h
+/home/twinny/fieldro_bot_ws/src/trash_bot/lib_header/unit_observer/define/unit_define.h
+unit_observer/unit_alive_info.h
+/home/twinny/fieldro_bot_ws/src/trash_bot/lib_header/unit_observer/unit_observer/unit_alive_info.h
+
 /home/twinny/fieldro_bot_ws/src/trash_bot/src/lib_cpp/communication/modbus_wrapper.cpp
 communication/modbus_wrapper.h
 /home/twinny/fieldro_bot_ws/src/trash_bot/src/lib_cpp/communication/communication/modbus_wrapper.h
@@ -209,6 +259,16 @@ mutex
 -
 thread
 -
+
+/home/twinny/fieldro_bot_ws/src/trash_bot/src/lib_cpp/unit_observer/unit_alive_info.cpp
+unit_observer/unit_alive_info.h
+/home/twinny/fieldro_bot_ws/src/trash_bot/src/lib_cpp/unit_observer/unit_observer/unit_alive_info.h
+
+/home/twinny/fieldro_bot_ws/src/trash_bot/src/lib_cpp/unit_observer/unit_observer.cpp
+unit_observer/unit_observer.h
+/home/twinny/fieldro_bot_ws/src/trash_bot/src/lib_cpp/unit_observer/unit_observer/unit_observer.h
+helper/helper.h
+/home/twinny/fieldro_bot_ws/src/trash_bot/src/lib_cpp/unit_observer/helper/helper.h
 
 /opt/ros/melodic/include/ros/advertise_options.h
 ros/forwards.h
@@ -418,6 +478,10 @@ boost/make_shared.hpp
 cstddef
 -
 memory
+-
+
+/opt/ros/melodic/include/ros/message_operations.h
+ostream
 -
 
 /opt/ros/melodic/include/ros/message_traits.h

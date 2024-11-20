@@ -53,49 +53,57 @@ CMAKE_BINARY_DIR = /home/twinny/fieldro_bot_ws/build
 # Include the progress variables for this target.
 include trash_bot/CMakeFiles/trash_bot_generate_messages_cpp.dir/progress.make
 
+trash_bot/CMakeFiles/trash_bot_generate_messages_cpp: /home/twinny/fieldro_bot_ws/devel/include/trash_bot/UnitAliveMsg.h
 trash_bot/CMakeFiles/trash_bot_generate_messages_cpp: /home/twinny/fieldro_bot_ws/devel/include/trash_bot/Pose.h
+trash_bot/CMakeFiles/trash_bot_generate_messages_cpp: /home/twinny/fieldro_bot_ws/devel/include/trash_bot/UnitStateMsg.h
 trash_bot/CMakeFiles/trash_bot_generate_messages_cpp: /home/twinny/fieldro_bot_ws/devel/include/trash_bot/UnitControl.h
 trash_bot/CMakeFiles/trash_bot_generate_messages_cpp: /home/twinny/fieldro_bot_ws/devel/include/trash_bot/IOSignal.h
 trash_bot/CMakeFiles/trash_bot_generate_messages_cpp: /home/twinny/fieldro_bot_ws/devel/include/trash_bot/UnitActionComplete.h
-trash_bot/CMakeFiles/trash_bot_generate_messages_cpp: /home/twinny/fieldro_bot_ws/devel/include/trash_bot/UnitStateMsg.h
 
+
+/home/twinny/fieldro_bot_ws/devel/include/trash_bot/UnitAliveMsg.h: /opt/ros/melodic/lib/gencpp/gen_cpp.py
+/home/twinny/fieldro_bot_ws/devel/include/trash_bot/UnitAliveMsg.h: /home/twinny/fieldro_bot_ws/src/trash_bot/msg/UnitAliveMsg.msg
+/home/twinny/fieldro_bot_ws/devel/include/trash_bot/UnitAliveMsg.h: /opt/ros/melodic/share/gencpp/msg.h.template
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/twinny/fieldro_bot_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Generating C++ code from trash_bot/UnitAliveMsg.msg"
+	cd /home/twinny/fieldro_bot_ws/src/trash_bot && /home/twinny/fieldro_bot_ws/build/catkin_generated/env_cached.sh /usr/bin/python2 /opt/ros/melodic/share/gencpp/cmake/../../../lib/gencpp/gen_cpp.py /home/twinny/fieldro_bot_ws/src/trash_bot/msg/UnitAliveMsg.msg -Itrash_bot:/home/twinny/fieldro_bot_ws/src/trash_bot/msg -Igeometry_msgs:/opt/ros/melodic/share/geometry_msgs/cmake/../msg -Isensor_msgs:/opt/ros/melodic/share/sensor_msgs/cmake/../msg -Istd_msgs:/opt/ros/melodic/share/std_msgs/cmake/../msg -Itwinny_msgs:/home/twinny/fieldro_bot_ws/src/twinny_msgs/msg -p trash_bot -o /home/twinny/fieldro_bot_ws/devel/include/trash_bot -e /opt/ros/melodic/share/gencpp/cmake/..
 
 /home/twinny/fieldro_bot_ws/devel/include/trash_bot/Pose.h: /opt/ros/melodic/lib/gencpp/gen_cpp.py
 /home/twinny/fieldro_bot_ws/devel/include/trash_bot/Pose.h: /home/twinny/fieldro_bot_ws/src/trash_bot/msg/Pose.msg
 /home/twinny/fieldro_bot_ws/devel/include/trash_bot/Pose.h: /opt/ros/melodic/share/gencpp/msg.h.template
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/twinny/fieldro_bot_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Generating C++ code from trash_bot/Pose.msg"
-	cd /home/twinny/fieldro_bot_ws/src/trash_bot && /home/twinny/fieldro_bot_ws/build/catkin_generated/env_cached.sh /usr/bin/python2 /opt/ros/melodic/share/gencpp/cmake/../../../lib/gencpp/gen_cpp.py /home/twinny/fieldro_bot_ws/src/trash_bot/msg/Pose.msg -Itrash_bot:/home/twinny/fieldro_bot_ws/src/trash_bot/msg -Igeometry_msgs:/opt/ros/melodic/share/geometry_msgs/cmake/../msg -Isensor_msgs:/opt/ros/melodic/share/sensor_msgs/cmake/../msg -Istd_msgs:/opt/ros/melodic/share/std_msgs/cmake/../msg -Itwinny_msgs:/home/twinny/IP060A01_ws/src/twinny_msgs/msg -p trash_bot -o /home/twinny/fieldro_bot_ws/devel/include/trash_bot -e /opt/ros/melodic/share/gencpp/cmake/..
-
-/home/twinny/fieldro_bot_ws/devel/include/trash_bot/UnitControl.h: /opt/ros/melodic/lib/gencpp/gen_cpp.py
-/home/twinny/fieldro_bot_ws/devel/include/trash_bot/UnitControl.h: /home/twinny/fieldro_bot_ws/src/trash_bot/msg/UnitControl.msg
-/home/twinny/fieldro_bot_ws/devel/include/trash_bot/UnitControl.h: /opt/ros/melodic/share/gencpp/msg.h.template
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/twinny/fieldro_bot_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Generating C++ code from trash_bot/UnitControl.msg"
-	cd /home/twinny/fieldro_bot_ws/src/trash_bot && /home/twinny/fieldro_bot_ws/build/catkin_generated/env_cached.sh /usr/bin/python2 /opt/ros/melodic/share/gencpp/cmake/../../../lib/gencpp/gen_cpp.py /home/twinny/fieldro_bot_ws/src/trash_bot/msg/UnitControl.msg -Itrash_bot:/home/twinny/fieldro_bot_ws/src/trash_bot/msg -Igeometry_msgs:/opt/ros/melodic/share/geometry_msgs/cmake/../msg -Isensor_msgs:/opt/ros/melodic/share/sensor_msgs/cmake/../msg -Istd_msgs:/opt/ros/melodic/share/std_msgs/cmake/../msg -Itwinny_msgs:/home/twinny/IP060A01_ws/src/twinny_msgs/msg -p trash_bot -o /home/twinny/fieldro_bot_ws/devel/include/trash_bot -e /opt/ros/melodic/share/gencpp/cmake/..
-
-/home/twinny/fieldro_bot_ws/devel/include/trash_bot/IOSignal.h: /opt/ros/melodic/lib/gencpp/gen_cpp.py
-/home/twinny/fieldro_bot_ws/devel/include/trash_bot/IOSignal.h: /home/twinny/fieldro_bot_ws/src/trash_bot/msg/IOSignal.msg
-/home/twinny/fieldro_bot_ws/devel/include/trash_bot/IOSignal.h: /opt/ros/melodic/share/gencpp/msg.h.template
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/twinny/fieldro_bot_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Generating C++ code from trash_bot/IOSignal.msg"
-	cd /home/twinny/fieldro_bot_ws/src/trash_bot && /home/twinny/fieldro_bot_ws/build/catkin_generated/env_cached.sh /usr/bin/python2 /opt/ros/melodic/share/gencpp/cmake/../../../lib/gencpp/gen_cpp.py /home/twinny/fieldro_bot_ws/src/trash_bot/msg/IOSignal.msg -Itrash_bot:/home/twinny/fieldro_bot_ws/src/trash_bot/msg -Igeometry_msgs:/opt/ros/melodic/share/geometry_msgs/cmake/../msg -Isensor_msgs:/opt/ros/melodic/share/sensor_msgs/cmake/../msg -Istd_msgs:/opt/ros/melodic/share/std_msgs/cmake/../msg -Itwinny_msgs:/home/twinny/IP060A01_ws/src/twinny_msgs/msg -p trash_bot -o /home/twinny/fieldro_bot_ws/devel/include/trash_bot -e /opt/ros/melodic/share/gencpp/cmake/..
-
-/home/twinny/fieldro_bot_ws/devel/include/trash_bot/UnitActionComplete.h: /opt/ros/melodic/lib/gencpp/gen_cpp.py
-/home/twinny/fieldro_bot_ws/devel/include/trash_bot/UnitActionComplete.h: /home/twinny/fieldro_bot_ws/src/trash_bot/msg/UnitActionComplete.msg
-/home/twinny/fieldro_bot_ws/devel/include/trash_bot/UnitActionComplete.h: /opt/ros/melodic/share/gencpp/msg.h.template
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/twinny/fieldro_bot_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Generating C++ code from trash_bot/UnitActionComplete.msg"
-	cd /home/twinny/fieldro_bot_ws/src/trash_bot && /home/twinny/fieldro_bot_ws/build/catkin_generated/env_cached.sh /usr/bin/python2 /opt/ros/melodic/share/gencpp/cmake/../../../lib/gencpp/gen_cpp.py /home/twinny/fieldro_bot_ws/src/trash_bot/msg/UnitActionComplete.msg -Itrash_bot:/home/twinny/fieldro_bot_ws/src/trash_bot/msg -Igeometry_msgs:/opt/ros/melodic/share/geometry_msgs/cmake/../msg -Isensor_msgs:/opt/ros/melodic/share/sensor_msgs/cmake/../msg -Istd_msgs:/opt/ros/melodic/share/std_msgs/cmake/../msg -Itwinny_msgs:/home/twinny/IP060A01_ws/src/twinny_msgs/msg -p trash_bot -o /home/twinny/fieldro_bot_ws/devel/include/trash_bot -e /opt/ros/melodic/share/gencpp/cmake/..
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/twinny/fieldro_bot_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Generating C++ code from trash_bot/Pose.msg"
+	cd /home/twinny/fieldro_bot_ws/src/trash_bot && /home/twinny/fieldro_bot_ws/build/catkin_generated/env_cached.sh /usr/bin/python2 /opt/ros/melodic/share/gencpp/cmake/../../../lib/gencpp/gen_cpp.py /home/twinny/fieldro_bot_ws/src/trash_bot/msg/Pose.msg -Itrash_bot:/home/twinny/fieldro_bot_ws/src/trash_bot/msg -Igeometry_msgs:/opt/ros/melodic/share/geometry_msgs/cmake/../msg -Isensor_msgs:/opt/ros/melodic/share/sensor_msgs/cmake/../msg -Istd_msgs:/opt/ros/melodic/share/std_msgs/cmake/../msg -Itwinny_msgs:/home/twinny/fieldro_bot_ws/src/twinny_msgs/msg -p trash_bot -o /home/twinny/fieldro_bot_ws/devel/include/trash_bot -e /opt/ros/melodic/share/gencpp/cmake/..
 
 /home/twinny/fieldro_bot_ws/devel/include/trash_bot/UnitStateMsg.h: /opt/ros/melodic/lib/gencpp/gen_cpp.py
 /home/twinny/fieldro_bot_ws/devel/include/trash_bot/UnitStateMsg.h: /home/twinny/fieldro_bot_ws/src/trash_bot/msg/UnitStateMsg.msg
 /home/twinny/fieldro_bot_ws/devel/include/trash_bot/UnitStateMsg.h: /opt/ros/melodic/share/gencpp/msg.h.template
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/twinny/fieldro_bot_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Generating C++ code from trash_bot/UnitStateMsg.msg"
-	cd /home/twinny/fieldro_bot_ws/src/trash_bot && /home/twinny/fieldro_bot_ws/build/catkin_generated/env_cached.sh /usr/bin/python2 /opt/ros/melodic/share/gencpp/cmake/../../../lib/gencpp/gen_cpp.py /home/twinny/fieldro_bot_ws/src/trash_bot/msg/UnitStateMsg.msg -Itrash_bot:/home/twinny/fieldro_bot_ws/src/trash_bot/msg -Igeometry_msgs:/opt/ros/melodic/share/geometry_msgs/cmake/../msg -Isensor_msgs:/opt/ros/melodic/share/sensor_msgs/cmake/../msg -Istd_msgs:/opt/ros/melodic/share/std_msgs/cmake/../msg -Itwinny_msgs:/home/twinny/IP060A01_ws/src/twinny_msgs/msg -p trash_bot -o /home/twinny/fieldro_bot_ws/devel/include/trash_bot -e /opt/ros/melodic/share/gencpp/cmake/..
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/twinny/fieldro_bot_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Generating C++ code from trash_bot/UnitStateMsg.msg"
+	cd /home/twinny/fieldro_bot_ws/src/trash_bot && /home/twinny/fieldro_bot_ws/build/catkin_generated/env_cached.sh /usr/bin/python2 /opt/ros/melodic/share/gencpp/cmake/../../../lib/gencpp/gen_cpp.py /home/twinny/fieldro_bot_ws/src/trash_bot/msg/UnitStateMsg.msg -Itrash_bot:/home/twinny/fieldro_bot_ws/src/trash_bot/msg -Igeometry_msgs:/opt/ros/melodic/share/geometry_msgs/cmake/../msg -Isensor_msgs:/opt/ros/melodic/share/sensor_msgs/cmake/../msg -Istd_msgs:/opt/ros/melodic/share/std_msgs/cmake/../msg -Itwinny_msgs:/home/twinny/fieldro_bot_ws/src/twinny_msgs/msg -p trash_bot -o /home/twinny/fieldro_bot_ws/devel/include/trash_bot -e /opt/ros/melodic/share/gencpp/cmake/..
+
+/home/twinny/fieldro_bot_ws/devel/include/trash_bot/UnitControl.h: /opt/ros/melodic/lib/gencpp/gen_cpp.py
+/home/twinny/fieldro_bot_ws/devel/include/trash_bot/UnitControl.h: /home/twinny/fieldro_bot_ws/src/trash_bot/msg/UnitControl.msg
+/home/twinny/fieldro_bot_ws/devel/include/trash_bot/UnitControl.h: /opt/ros/melodic/share/gencpp/msg.h.template
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/twinny/fieldro_bot_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Generating C++ code from trash_bot/UnitControl.msg"
+	cd /home/twinny/fieldro_bot_ws/src/trash_bot && /home/twinny/fieldro_bot_ws/build/catkin_generated/env_cached.sh /usr/bin/python2 /opt/ros/melodic/share/gencpp/cmake/../../../lib/gencpp/gen_cpp.py /home/twinny/fieldro_bot_ws/src/trash_bot/msg/UnitControl.msg -Itrash_bot:/home/twinny/fieldro_bot_ws/src/trash_bot/msg -Igeometry_msgs:/opt/ros/melodic/share/geometry_msgs/cmake/../msg -Isensor_msgs:/opt/ros/melodic/share/sensor_msgs/cmake/../msg -Istd_msgs:/opt/ros/melodic/share/std_msgs/cmake/../msg -Itwinny_msgs:/home/twinny/fieldro_bot_ws/src/twinny_msgs/msg -p trash_bot -o /home/twinny/fieldro_bot_ws/devel/include/trash_bot -e /opt/ros/melodic/share/gencpp/cmake/..
+
+/home/twinny/fieldro_bot_ws/devel/include/trash_bot/IOSignal.h: /opt/ros/melodic/lib/gencpp/gen_cpp.py
+/home/twinny/fieldro_bot_ws/devel/include/trash_bot/IOSignal.h: /home/twinny/fieldro_bot_ws/src/trash_bot/msg/IOSignal.msg
+/home/twinny/fieldro_bot_ws/devel/include/trash_bot/IOSignal.h: /opt/ros/melodic/share/gencpp/msg.h.template
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/twinny/fieldro_bot_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Generating C++ code from trash_bot/IOSignal.msg"
+	cd /home/twinny/fieldro_bot_ws/src/trash_bot && /home/twinny/fieldro_bot_ws/build/catkin_generated/env_cached.sh /usr/bin/python2 /opt/ros/melodic/share/gencpp/cmake/../../../lib/gencpp/gen_cpp.py /home/twinny/fieldro_bot_ws/src/trash_bot/msg/IOSignal.msg -Itrash_bot:/home/twinny/fieldro_bot_ws/src/trash_bot/msg -Igeometry_msgs:/opt/ros/melodic/share/geometry_msgs/cmake/../msg -Isensor_msgs:/opt/ros/melodic/share/sensor_msgs/cmake/../msg -Istd_msgs:/opt/ros/melodic/share/std_msgs/cmake/../msg -Itwinny_msgs:/home/twinny/fieldro_bot_ws/src/twinny_msgs/msg -p trash_bot -o /home/twinny/fieldro_bot_ws/devel/include/trash_bot -e /opt/ros/melodic/share/gencpp/cmake/..
+
+/home/twinny/fieldro_bot_ws/devel/include/trash_bot/UnitActionComplete.h: /opt/ros/melodic/lib/gencpp/gen_cpp.py
+/home/twinny/fieldro_bot_ws/devel/include/trash_bot/UnitActionComplete.h: /home/twinny/fieldro_bot_ws/src/trash_bot/msg/UnitActionComplete.msg
+/home/twinny/fieldro_bot_ws/devel/include/trash_bot/UnitActionComplete.h: /opt/ros/melodic/share/gencpp/msg.h.template
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/twinny/fieldro_bot_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Generating C++ code from trash_bot/UnitActionComplete.msg"
+	cd /home/twinny/fieldro_bot_ws/src/trash_bot && /home/twinny/fieldro_bot_ws/build/catkin_generated/env_cached.sh /usr/bin/python2 /opt/ros/melodic/share/gencpp/cmake/../../../lib/gencpp/gen_cpp.py /home/twinny/fieldro_bot_ws/src/trash_bot/msg/UnitActionComplete.msg -Itrash_bot:/home/twinny/fieldro_bot_ws/src/trash_bot/msg -Igeometry_msgs:/opt/ros/melodic/share/geometry_msgs/cmake/../msg -Isensor_msgs:/opt/ros/melodic/share/sensor_msgs/cmake/../msg -Istd_msgs:/opt/ros/melodic/share/std_msgs/cmake/../msg -Itwinny_msgs:/home/twinny/fieldro_bot_ws/src/twinny_msgs/msg -p trash_bot -o /home/twinny/fieldro_bot_ws/devel/include/trash_bot -e /opt/ros/melodic/share/gencpp/cmake/..
 
 trash_bot_generate_messages_cpp: trash_bot/CMakeFiles/trash_bot_generate_messages_cpp
+trash_bot_generate_messages_cpp: /home/twinny/fieldro_bot_ws/devel/include/trash_bot/UnitAliveMsg.h
 trash_bot_generate_messages_cpp: /home/twinny/fieldro_bot_ws/devel/include/trash_bot/Pose.h
+trash_bot_generate_messages_cpp: /home/twinny/fieldro_bot_ws/devel/include/trash_bot/UnitStateMsg.h
 trash_bot_generate_messages_cpp: /home/twinny/fieldro_bot_ws/devel/include/trash_bot/UnitControl.h
 trash_bot_generate_messages_cpp: /home/twinny/fieldro_bot_ws/devel/include/trash_bot/IOSignal.h
 trash_bot_generate_messages_cpp: /home/twinny/fieldro_bot_ws/devel/include/trash_bot/UnitActionComplete.h
-trash_bot_generate_messages_cpp: /home/twinny/fieldro_bot_ws/devel/include/trash_bot/UnitStateMsg.h
 trash_bot_generate_messages_cpp: trash_bot/CMakeFiles/trash_bot_generate_messages_cpp.dir/build.make
 
 .PHONY : trash_bot_generate_messages_cpp

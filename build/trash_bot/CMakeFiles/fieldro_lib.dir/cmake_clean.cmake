@@ -8,6 +8,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/fieldro_lib.dir/src/lib_cpp/helper/helper.cpp.o"
   "CMakeFiles/fieldro_lib.dir/src/lib_cpp/helper/link_checker.cpp.o"
   "CMakeFiles/fieldro_lib.dir/src/lib_cpp/helper/thread_action_info.cpp.o"
+  "CMakeFiles/fieldro_lib.dir/src/lib_cpp/unit_observer/unit_alive_info.cpp.o"
+  "CMakeFiles/fieldro_lib.dir/src/lib_cpp/unit_observer/unit_observer.cpp.o"
   "/home/twinny/fieldro_bot_ws/devel/lib/libfieldro_lib.pdb"
   "/home/twinny/fieldro_bot_ws/devel/lib/libfieldro_lib.so"
 )

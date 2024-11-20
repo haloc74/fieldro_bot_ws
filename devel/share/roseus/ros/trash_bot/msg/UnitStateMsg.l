@@ -14,63 +14,75 @@
 
 (defclass trash_bot::UnitStateMsg
   :super ros::object
-  :slots (_unit_id _state ))
+  :slots (_alive _states ))
 
 (defmethod trash_bot::UnitStateMsg
   (:init
    (&key
-    ((:unit_id __unit_id) 0)
-    ((:state __state) 0)
+    ((:alive __alive) 0)
+    ((:states __states) (make-array 0 :initial-element 0 :element-type :integer))
     )
    (send-super :init)
-   (setq _unit_id (round __unit_id))
-   (setq _state (round __state))
+   (setq _alive (round __alive))
+   (setq _states __states)
    self)
-  (:unit_id
-   (&optional __unit_id)
-   (if __unit_id (setq _unit_id __unit_id)) _unit_id)
-  (:state
-   (&optional __state)
-   (if __state (setq _state __state)) _state)
+  (:alive
+   (&optional __alive)
+   (if __alive (setq _alive __alive)) _alive)
+  (:states
+   (&optional __states)
+   (if __states (setq _states __states)) _states)
   (:serialization-length
    ()
    (+
-    ;; int32 _unit_id
+    ;; int32 _alive
     4
-    ;; int32 _state
-    4
+    ;; int32[] _states
+    (* 4    (length _states)) 4
     ))
   (:serialize
    (&optional strm)
    (let ((s (if strm strm
               (make-string-output-stream (send self :serialization-length)))))
-     ;; int32 _unit_id
-       (write-long _unit_id s)
-     ;; int32 _state
-       (write-long _state s)
+     ;; int32 _alive
+       (write-long _alive s)
+     ;; int32[] _states
+     (write-long (length _states) s)
+     (dotimes (i (length _states))
+       (write-long (elt _states i) s)
+       )
      ;;
      (if (null strm) (get-output-stream-string s))))
   (:deserialize
    (buf &optional (ptr- 0))
-   ;; int32 _unit_id
-     (setq _unit_id (sys::peek buf ptr- :integer)) (incf ptr- 4)
-   ;; int32 _state
-     (setq _state (sys::peek buf ptr- :integer)) (incf ptr- 4)
+   ;; int32 _alive
+     (setq _alive (sys::peek buf ptr- :integer)) (incf ptr- 4)
+   ;; int32[] _states
+   (let (n)
+     (setq n (sys::peek buf ptr- :integer)) (incf ptr- 4)
+     (setq _states (instantiate integer-vector n))
+     (dotimes (i n)
+     (setf (elt _states i) (sys::peek buf ptr- :integer)) (incf ptr- 4)
+     ))
    ;;
    self)
   )
 
-(setf (get trash_bot::UnitStateMsg :md5sum-) "7cd06622fe3c1b94199887fecbe639f5")
+(setf (get trash_bot::UnitStateMsg :md5sum-) "090390084faae6402e136d50389ae081")
 (setf (get trash_bot::UnitStateMsg :datatype-) "trash_bot/UnitStateMsg")
 (setf (get trash_bot::UnitStateMsg :definition-)
-      "
-# 각 Unit이 현재의 상태를 보고 하는 Message
-int32 unit_id           # Unit ID
-int32 state             # 현재 상태 (UnitState index, unit_define.h)
+      "# UnitStateMsg.msg
+
+# bit flag를 통해 각 unit index와 1:1 매칭된다.
+# 0:alive , 1:dead or timeout
+int32 alive
+
+# Array for unit states
+int32[] states
 ")
 
 
 
-(provide :trash_bot/UnitStateMsg "7cd06622fe3c1b94199887fecbe639f5")
+(provide :trash_bot/UnitStateMsg "090390084faae6402e136d50389ae081")
 
 

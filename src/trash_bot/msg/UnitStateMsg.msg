@@ -1,4 +1,8 @@
+# UnitStateMsg.msg
 
-# 각 Unit이 현재의 상태를 보고 하는 Message
-int32 unit_id           # Unit ID
-int32 state             # 현재 상태 (UnitState index, unit_define.h)
+# bit flag를 통해 각 unit index와 1:1 매칭된다.
+# 0:alive , 1:dead or timeout
+int32 alive
+
+# Array for unit states
+int32[] states

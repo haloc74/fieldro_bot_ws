@@ -47,7 +47,7 @@ CMAKE_AR:FILEPATH=/usr/bin/ar
 
 //Choose the type of build, options are: None(CMAKE_CXX_FLAGS or
 // CMAKE_C_FLAGS used) Debug Release RelWithDebInfo MinSizeRel.
-CMAKE_BUILD_TYPE:STRING=RelWithDebInfo
+CMAKE_BUILD_TYPE:STRING=
 
 //Enable/Disable color output during build.
 CMAKE_COLOR_MAKEFILE:BOOL=ON
@@ -441,8 +441,14 @@ trash_bot_BINARY_DIR:STATIC=/home/twinny/fieldro_bot_ws/build/trash_bot
 //Value Computed by CMake
 trash_bot_SOURCE_DIR:STATIC=/home/twinny/fieldro_bot_ws/src/trash_bot
 
+//Value Computed by CMake
+twinny_msgs_BINARY_DIR:STATIC=/home/twinny/fieldro_bot_ws/build/twinny_msgs
+
 //The directory containing a CMake configuration file for twinny_msgs.
-twinny_msgs_DIR:PATH=/home/twinny/IP060A01_ws/devel/share/twinny_msgs/cmake
+twinny_msgs_DIR:PATH=/home/twinny/fieldro_bot_ws/devel/share/twinny_msgs/cmake
+
+//Value Computed by CMake
+twinny_msgs_SOURCE_DIR:STATIC=/home/twinny/fieldro_bot_ws/src/twinny_msgs
 
 //The directory containing a CMake configuration file for xmlrpcpp.
 xmlrpcpp_DIR:PATH=/opt/ros/melodic/share/xmlrpcpp/cmake
@@ -560,7 +566,7 @@ CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_NM
 CMAKE_NM-ADVANCED:INTERNAL=1
 //number of local generators
-CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=5
+CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=6
 //ADVANCED property for variable: CMAKE_OBJCOPY
 CMAKE_OBJCOPY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_OBJDUMP

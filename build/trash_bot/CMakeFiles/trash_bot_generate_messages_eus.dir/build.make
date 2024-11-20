@@ -53,49 +53,56 @@ CMAKE_BINARY_DIR = /home/twinny/fieldro_bot_ws/build
 # Include the progress variables for this target.
 include trash_bot/CMakeFiles/trash_bot_generate_messages_eus.dir/progress.make
 
+trash_bot/CMakeFiles/trash_bot_generate_messages_eus: /home/twinny/fieldro_bot_ws/devel/share/roseus/ros/trash_bot/msg/UnitAliveMsg.l
 trash_bot/CMakeFiles/trash_bot_generate_messages_eus: /home/twinny/fieldro_bot_ws/devel/share/roseus/ros/trash_bot/msg/Pose.l
+trash_bot/CMakeFiles/trash_bot_generate_messages_eus: /home/twinny/fieldro_bot_ws/devel/share/roseus/ros/trash_bot/msg/UnitStateMsg.l
 trash_bot/CMakeFiles/trash_bot_generate_messages_eus: /home/twinny/fieldro_bot_ws/devel/share/roseus/ros/trash_bot/msg/UnitControl.l
 trash_bot/CMakeFiles/trash_bot_generate_messages_eus: /home/twinny/fieldro_bot_ws/devel/share/roseus/ros/trash_bot/msg/IOSignal.l
 trash_bot/CMakeFiles/trash_bot_generate_messages_eus: /home/twinny/fieldro_bot_ws/devel/share/roseus/ros/trash_bot/msg/UnitActionComplete.l
-trash_bot/CMakeFiles/trash_bot_generate_messages_eus: /home/twinny/fieldro_bot_ws/devel/share/roseus/ros/trash_bot/msg/UnitStateMsg.l
 trash_bot/CMakeFiles/trash_bot_generate_messages_eus: /home/twinny/fieldro_bot_ws/devel/share/roseus/ros/trash_bot/manifest.l
 
 
+/home/twinny/fieldro_bot_ws/devel/share/roseus/ros/trash_bot/msg/UnitAliveMsg.l: /opt/ros/melodic/lib/geneus/gen_eus.py
+/home/twinny/fieldro_bot_ws/devel/share/roseus/ros/trash_bot/msg/UnitAliveMsg.l: /home/twinny/fieldro_bot_ws/src/trash_bot/msg/UnitAliveMsg.msg
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/twinny/fieldro_bot_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Generating EusLisp code from trash_bot/UnitAliveMsg.msg"
+	cd /home/twinny/fieldro_bot_ws/build/trash_bot && ../catkin_generated/env_cached.sh /usr/bin/python2 /opt/ros/melodic/share/geneus/cmake/../../../lib/geneus/gen_eus.py /home/twinny/fieldro_bot_ws/src/trash_bot/msg/UnitAliveMsg.msg -Itrash_bot:/home/twinny/fieldro_bot_ws/src/trash_bot/msg -Igeometry_msgs:/opt/ros/melodic/share/geometry_msgs/cmake/../msg -Isensor_msgs:/opt/ros/melodic/share/sensor_msgs/cmake/../msg -Istd_msgs:/opt/ros/melodic/share/std_msgs/cmake/../msg -Itwinny_msgs:/home/twinny/fieldro_bot_ws/src/twinny_msgs/msg -p trash_bot -o /home/twinny/fieldro_bot_ws/devel/share/roseus/ros/trash_bot/msg
+
 /home/twinny/fieldro_bot_ws/devel/share/roseus/ros/trash_bot/msg/Pose.l: /opt/ros/melodic/lib/geneus/gen_eus.py
 /home/twinny/fieldro_bot_ws/devel/share/roseus/ros/trash_bot/msg/Pose.l: /home/twinny/fieldro_bot_ws/src/trash_bot/msg/Pose.msg
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/twinny/fieldro_bot_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Generating EusLisp code from trash_bot/Pose.msg"
-	cd /home/twinny/fieldro_bot_ws/build/trash_bot && ../catkin_generated/env_cached.sh /usr/bin/python2 /opt/ros/melodic/share/geneus/cmake/../../../lib/geneus/gen_eus.py /home/twinny/fieldro_bot_ws/src/trash_bot/msg/Pose.msg -Itrash_bot:/home/twinny/fieldro_bot_ws/src/trash_bot/msg -Igeometry_msgs:/opt/ros/melodic/share/geometry_msgs/cmake/../msg -Isensor_msgs:/opt/ros/melodic/share/sensor_msgs/cmake/../msg -Istd_msgs:/opt/ros/melodic/share/std_msgs/cmake/../msg -Itwinny_msgs:/home/twinny/IP060A01_ws/src/twinny_msgs/msg -p trash_bot -o /home/twinny/fieldro_bot_ws/devel/share/roseus/ros/trash_bot/msg
-
-/home/twinny/fieldro_bot_ws/devel/share/roseus/ros/trash_bot/msg/UnitControl.l: /opt/ros/melodic/lib/geneus/gen_eus.py
-/home/twinny/fieldro_bot_ws/devel/share/roseus/ros/trash_bot/msg/UnitControl.l: /home/twinny/fieldro_bot_ws/src/trash_bot/msg/UnitControl.msg
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/twinny/fieldro_bot_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Generating EusLisp code from trash_bot/UnitControl.msg"
-	cd /home/twinny/fieldro_bot_ws/build/trash_bot && ../catkin_generated/env_cached.sh /usr/bin/python2 /opt/ros/melodic/share/geneus/cmake/../../../lib/geneus/gen_eus.py /home/twinny/fieldro_bot_ws/src/trash_bot/msg/UnitControl.msg -Itrash_bot:/home/twinny/fieldro_bot_ws/src/trash_bot/msg -Igeometry_msgs:/opt/ros/melodic/share/geometry_msgs/cmake/../msg -Isensor_msgs:/opt/ros/melodic/share/sensor_msgs/cmake/../msg -Istd_msgs:/opt/ros/melodic/share/std_msgs/cmake/../msg -Itwinny_msgs:/home/twinny/IP060A01_ws/src/twinny_msgs/msg -p trash_bot -o /home/twinny/fieldro_bot_ws/devel/share/roseus/ros/trash_bot/msg
-
-/home/twinny/fieldro_bot_ws/devel/share/roseus/ros/trash_bot/msg/IOSignal.l: /opt/ros/melodic/lib/geneus/gen_eus.py
-/home/twinny/fieldro_bot_ws/devel/share/roseus/ros/trash_bot/msg/IOSignal.l: /home/twinny/fieldro_bot_ws/src/trash_bot/msg/IOSignal.msg
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/twinny/fieldro_bot_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Generating EusLisp code from trash_bot/IOSignal.msg"
-	cd /home/twinny/fieldro_bot_ws/build/trash_bot && ../catkin_generated/env_cached.sh /usr/bin/python2 /opt/ros/melodic/share/geneus/cmake/../../../lib/geneus/gen_eus.py /home/twinny/fieldro_bot_ws/src/trash_bot/msg/IOSignal.msg -Itrash_bot:/home/twinny/fieldro_bot_ws/src/trash_bot/msg -Igeometry_msgs:/opt/ros/melodic/share/geometry_msgs/cmake/../msg -Isensor_msgs:/opt/ros/melodic/share/sensor_msgs/cmake/../msg -Istd_msgs:/opt/ros/melodic/share/std_msgs/cmake/../msg -Itwinny_msgs:/home/twinny/IP060A01_ws/src/twinny_msgs/msg -p trash_bot -o /home/twinny/fieldro_bot_ws/devel/share/roseus/ros/trash_bot/msg
-
-/home/twinny/fieldro_bot_ws/devel/share/roseus/ros/trash_bot/msg/UnitActionComplete.l: /opt/ros/melodic/lib/geneus/gen_eus.py
-/home/twinny/fieldro_bot_ws/devel/share/roseus/ros/trash_bot/msg/UnitActionComplete.l: /home/twinny/fieldro_bot_ws/src/trash_bot/msg/UnitActionComplete.msg
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/twinny/fieldro_bot_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Generating EusLisp code from trash_bot/UnitActionComplete.msg"
-	cd /home/twinny/fieldro_bot_ws/build/trash_bot && ../catkin_generated/env_cached.sh /usr/bin/python2 /opt/ros/melodic/share/geneus/cmake/../../../lib/geneus/gen_eus.py /home/twinny/fieldro_bot_ws/src/trash_bot/msg/UnitActionComplete.msg -Itrash_bot:/home/twinny/fieldro_bot_ws/src/trash_bot/msg -Igeometry_msgs:/opt/ros/melodic/share/geometry_msgs/cmake/../msg -Isensor_msgs:/opt/ros/melodic/share/sensor_msgs/cmake/../msg -Istd_msgs:/opt/ros/melodic/share/std_msgs/cmake/../msg -Itwinny_msgs:/home/twinny/IP060A01_ws/src/twinny_msgs/msg -p trash_bot -o /home/twinny/fieldro_bot_ws/devel/share/roseus/ros/trash_bot/msg
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/twinny/fieldro_bot_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Generating EusLisp code from trash_bot/Pose.msg"
+	cd /home/twinny/fieldro_bot_ws/build/trash_bot && ../catkin_generated/env_cached.sh /usr/bin/python2 /opt/ros/melodic/share/geneus/cmake/../../../lib/geneus/gen_eus.py /home/twinny/fieldro_bot_ws/src/trash_bot/msg/Pose.msg -Itrash_bot:/home/twinny/fieldro_bot_ws/src/trash_bot/msg -Igeometry_msgs:/opt/ros/melodic/share/geometry_msgs/cmake/../msg -Isensor_msgs:/opt/ros/melodic/share/sensor_msgs/cmake/../msg -Istd_msgs:/opt/ros/melodic/share/std_msgs/cmake/../msg -Itwinny_msgs:/home/twinny/fieldro_bot_ws/src/twinny_msgs/msg -p trash_bot -o /home/twinny/fieldro_bot_ws/devel/share/roseus/ros/trash_bot/msg
 
 /home/twinny/fieldro_bot_ws/devel/share/roseus/ros/trash_bot/msg/UnitStateMsg.l: /opt/ros/melodic/lib/geneus/gen_eus.py
 /home/twinny/fieldro_bot_ws/devel/share/roseus/ros/trash_bot/msg/UnitStateMsg.l: /home/twinny/fieldro_bot_ws/src/trash_bot/msg/UnitStateMsg.msg
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/twinny/fieldro_bot_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Generating EusLisp code from trash_bot/UnitStateMsg.msg"
-	cd /home/twinny/fieldro_bot_ws/build/trash_bot && ../catkin_generated/env_cached.sh /usr/bin/python2 /opt/ros/melodic/share/geneus/cmake/../../../lib/geneus/gen_eus.py /home/twinny/fieldro_bot_ws/src/trash_bot/msg/UnitStateMsg.msg -Itrash_bot:/home/twinny/fieldro_bot_ws/src/trash_bot/msg -Igeometry_msgs:/opt/ros/melodic/share/geometry_msgs/cmake/../msg -Isensor_msgs:/opt/ros/melodic/share/sensor_msgs/cmake/../msg -Istd_msgs:/opt/ros/melodic/share/std_msgs/cmake/../msg -Itwinny_msgs:/home/twinny/IP060A01_ws/src/twinny_msgs/msg -p trash_bot -o /home/twinny/fieldro_bot_ws/devel/share/roseus/ros/trash_bot/msg
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/twinny/fieldro_bot_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Generating EusLisp code from trash_bot/UnitStateMsg.msg"
+	cd /home/twinny/fieldro_bot_ws/build/trash_bot && ../catkin_generated/env_cached.sh /usr/bin/python2 /opt/ros/melodic/share/geneus/cmake/../../../lib/geneus/gen_eus.py /home/twinny/fieldro_bot_ws/src/trash_bot/msg/UnitStateMsg.msg -Itrash_bot:/home/twinny/fieldro_bot_ws/src/trash_bot/msg -Igeometry_msgs:/opt/ros/melodic/share/geometry_msgs/cmake/../msg -Isensor_msgs:/opt/ros/melodic/share/sensor_msgs/cmake/../msg -Istd_msgs:/opt/ros/melodic/share/std_msgs/cmake/../msg -Itwinny_msgs:/home/twinny/fieldro_bot_ws/src/twinny_msgs/msg -p trash_bot -o /home/twinny/fieldro_bot_ws/devel/share/roseus/ros/trash_bot/msg
+
+/home/twinny/fieldro_bot_ws/devel/share/roseus/ros/trash_bot/msg/UnitControl.l: /opt/ros/melodic/lib/geneus/gen_eus.py
+/home/twinny/fieldro_bot_ws/devel/share/roseus/ros/trash_bot/msg/UnitControl.l: /home/twinny/fieldro_bot_ws/src/trash_bot/msg/UnitControl.msg
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/twinny/fieldro_bot_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Generating EusLisp code from trash_bot/UnitControl.msg"
+	cd /home/twinny/fieldro_bot_ws/build/trash_bot && ../catkin_generated/env_cached.sh /usr/bin/python2 /opt/ros/melodic/share/geneus/cmake/../../../lib/geneus/gen_eus.py /home/twinny/fieldro_bot_ws/src/trash_bot/msg/UnitControl.msg -Itrash_bot:/home/twinny/fieldro_bot_ws/src/trash_bot/msg -Igeometry_msgs:/opt/ros/melodic/share/geometry_msgs/cmake/../msg -Isensor_msgs:/opt/ros/melodic/share/sensor_msgs/cmake/../msg -Istd_msgs:/opt/ros/melodic/share/std_msgs/cmake/../msg -Itwinny_msgs:/home/twinny/fieldro_bot_ws/src/twinny_msgs/msg -p trash_bot -o /home/twinny/fieldro_bot_ws/devel/share/roseus/ros/trash_bot/msg
+
+/home/twinny/fieldro_bot_ws/devel/share/roseus/ros/trash_bot/msg/IOSignal.l: /opt/ros/melodic/lib/geneus/gen_eus.py
+/home/twinny/fieldro_bot_ws/devel/share/roseus/ros/trash_bot/msg/IOSignal.l: /home/twinny/fieldro_bot_ws/src/trash_bot/msg/IOSignal.msg
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/twinny/fieldro_bot_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Generating EusLisp code from trash_bot/IOSignal.msg"
+	cd /home/twinny/fieldro_bot_ws/build/trash_bot && ../catkin_generated/env_cached.sh /usr/bin/python2 /opt/ros/melodic/share/geneus/cmake/../../../lib/geneus/gen_eus.py /home/twinny/fieldro_bot_ws/src/trash_bot/msg/IOSignal.msg -Itrash_bot:/home/twinny/fieldro_bot_ws/src/trash_bot/msg -Igeometry_msgs:/opt/ros/melodic/share/geometry_msgs/cmake/../msg -Isensor_msgs:/opt/ros/melodic/share/sensor_msgs/cmake/../msg -Istd_msgs:/opt/ros/melodic/share/std_msgs/cmake/../msg -Itwinny_msgs:/home/twinny/fieldro_bot_ws/src/twinny_msgs/msg -p trash_bot -o /home/twinny/fieldro_bot_ws/devel/share/roseus/ros/trash_bot/msg
+
+/home/twinny/fieldro_bot_ws/devel/share/roseus/ros/trash_bot/msg/UnitActionComplete.l: /opt/ros/melodic/lib/geneus/gen_eus.py
+/home/twinny/fieldro_bot_ws/devel/share/roseus/ros/trash_bot/msg/UnitActionComplete.l: /home/twinny/fieldro_bot_ws/src/trash_bot/msg/UnitActionComplete.msg
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/twinny/fieldro_bot_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Generating EusLisp code from trash_bot/UnitActionComplete.msg"
+	cd /home/twinny/fieldro_bot_ws/build/trash_bot && ../catkin_generated/env_cached.sh /usr/bin/python2 /opt/ros/melodic/share/geneus/cmake/../../../lib/geneus/gen_eus.py /home/twinny/fieldro_bot_ws/src/trash_bot/msg/UnitActionComplete.msg -Itrash_bot:/home/twinny/fieldro_bot_ws/src/trash_bot/msg -Igeometry_msgs:/opt/ros/melodic/share/geometry_msgs/cmake/../msg -Isensor_msgs:/opt/ros/melodic/share/sensor_msgs/cmake/../msg -Istd_msgs:/opt/ros/melodic/share/std_msgs/cmake/../msg -Itwinny_msgs:/home/twinny/fieldro_bot_ws/src/twinny_msgs/msg -p trash_bot -o /home/twinny/fieldro_bot_ws/devel/share/roseus/ros/trash_bot/msg
 
 /home/twinny/fieldro_bot_ws/devel/share/roseus/ros/trash_bot/manifest.l: /opt/ros/melodic/lib/geneus/gen_eus.py
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/twinny/fieldro_bot_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Generating EusLisp manifest code for trash_bot"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/twinny/fieldro_bot_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Generating EusLisp manifest code for trash_bot"
 	cd /home/twinny/fieldro_bot_ws/build/trash_bot && ../catkin_generated/env_cached.sh /usr/bin/python2 /opt/ros/melodic/share/geneus/cmake/../../../lib/geneus/gen_eus.py -m -o /home/twinny/fieldro_bot_ws/devel/share/roseus/ros/trash_bot trash_bot geometry_msgs sensor_msgs std_msgs twinny_msgs
 
 trash_bot_generate_messages_eus: trash_bot/CMakeFiles/trash_bot_generate_messages_eus
+trash_bot_generate_messages_eus: /home/twinny/fieldro_bot_ws/devel/share/roseus/ros/trash_bot/msg/UnitAliveMsg.l
 trash_bot_generate_messages_eus: /home/twinny/fieldro_bot_ws/devel/share/roseus/ros/trash_bot/msg/Pose.l
+trash_bot_generate_messages_eus: /home/twinny/fieldro_bot_ws/devel/share/roseus/ros/trash_bot/msg/UnitStateMsg.l
 trash_bot_generate_messages_eus: /home/twinny/fieldro_bot_ws/devel/share/roseus/ros/trash_bot/msg/UnitControl.l
 trash_bot_generate_messages_eus: /home/twinny/fieldro_bot_ws/devel/share/roseus/ros/trash_bot/msg/IOSignal.l
 trash_bot_generate_messages_eus: /home/twinny/fieldro_bot_ws/devel/share/roseus/ros/trash_bot/msg/UnitActionComplete.l
-trash_bot_generate_messages_eus: /home/twinny/fieldro_bot_ws/devel/share/roseus/ros/trash_bot/msg/UnitStateMsg.l
 trash_bot_generate_messages_eus: /home/twinny/fieldro_bot_ws/devel/share/roseus/ros/trash_bot/manifest.l
 trash_bot_generate_messages_eus: trash_bot/CMakeFiles/trash_bot_generate_messages_eus.dir/build.make
 
