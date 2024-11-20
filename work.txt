@@ -24,23 +24,26 @@
 
 
 
-. UnitObserver Class refactoring
-  - state 보고가 아닌 alive 보고의 개념으로 변경
-  - 전체 unit의 상태를 publish 하는 개념 반영
-  - alive info check하기 위한 변수명
-
-. UnitObserver node 추가하기
-
-//=========================================================
-//========== 작 업 중
-//=========================================================
-
+. 현재 각 node별로 소멸자에서 
+  ros::shutdown();
+  ros::waitForShutdown(); 
+  호출되 되던것을 node::shutdown(), node::waitForShutdown(); 형식으로 변경
 
 
 //=========================================================
 //=========================================================
 
 ID :  - JD 24.11.20
+1. UnitObserver Class refactoring
+  - state 보고가 아닌 alive 보고의 개념으로 변경
+  - 전체 unit의 상태를 publish 하는 개념 반영
+  - alive info check하기 위한 변수명
+  - UnitObserver Class 동작속도 50Hz로 변경
+2. UnitObserver node 추가하기
+  - unit_observer node 추가로 인한 CMakeLists.txt 변경
+
+
+ID : 264f1bb - JD 24.11.20
 1. .gitignore 파일 추가
   - devel Dir 무시.
   - build Dir 무시.

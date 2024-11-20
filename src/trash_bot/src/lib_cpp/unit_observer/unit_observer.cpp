@@ -15,14 +15,14 @@ namespace fieldro_bot
 
     _node_handle = new ros::NodeHandle();       // node handler 생성
 
-    // unit 상태 subscribing
+    // unit alive subscribing
     _subscribe_unit_alive = _node_handle->subscribe("trash_bot/UnitAliveMsg", 100, &UnitObserver::subscribe_unit_alive, this);
 
-    // unit 상태 publishing
+    // unit state publishing
     _publish_units_state = _node_handle->advertise<trash_bot::UnitStateMsg>("trash_bot/UnitStateMsg", 100);
 
-    // update timer 생성 (20 Hz로 update 함수 호출)
-    _update_interval = 1.0/20.0;
+    // update timer 생성 (50 Hz로 update 함수 호출)
+    _update_interval = 1.0/50.0;
     _update_timer = _node_handle->createTimer(ros::Duration(_update_interval), &UnitObserver::update, this);
 
     _last_update_time = ros::Time::now();
@@ -37,7 +37,9 @@ namespace fieldro_bot
     }
     _unit_alive_info.clear();
 
-    // node handler 삭제
+
+    // ros 해제
+    _node_handle->shutdown();
     safe_delete(_node_handle);
   }
 
@@ -118,7 +120,7 @@ namespace fieldro_bot
 
     trash_bot::UnitStateMsg msg;
 
-    msg.alive         = _unit_alive;
+    msg.alive = _unit_alive;
     msg.states.clear();
     
     for(auto &unit_state_info : _unit_alive_info)
@@ -126,7 +128,6 @@ namespace fieldro_bot
       msg.states.push_back(unit_state_info->get_state());
     }
     _publish_units_state.publish(msg);
-
     _last_update_time = ros::Time::now();
 
     return;

@@ -235,38 +235,42 @@ message(STATUS "")
       fieldro_lib                          # fieldro   라이브러리
     )
 
+  ############################################################
+  ## 6-3. unit_observer_node 실행파일 생성 설정
+  message(STATUS "   6-3. unit_observer_node executable generate")
 
-  # ## 6-3. node_loader 실행파일 생성 설정
-  # message(STATUS "   6-2. node_loader executable generate")
+    ## 6-2-0 project name 설정
+    set(PROJECT_OBSERVER_NAME "observer_unit")
 
-  #   ## 6-3-0 project name 설정
-  #   set(PROJECT_LOADER_NAME "loader")
+    ## 6-2-1. source_dir/unit_observer 하위의 모든 cpp 파일을 찾아서 SRC_OBSERVER_FILES에 저장
+    ## UnitObserver는 lib 형태로 만들어져 있어서 별도의 cpp 파일이 필요하지 않음
+    #file(GLOB_RECURSE SRC_OBSERVER_FILES에 "${CMAKE_CURRENT_SOURCE_DIR}/src/io_unit/*.cpp")
 
-  #   ## 6-3-1. source_dir/loader 하위의 모든 cpp 파일을 찾아서 SRC_HANDLER_FORK_FILES에 저장
-  #   file(GLOB_RECURSE SRC_LOADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/loader/*.cpp")
+    ## 6-3-2. SRC_OBSERVER_FILES의 모든 파일과 
+    ## observer_node.cpp을 컴파일하고 링크하여 실행 파일 생성
+    ## 별도의 cpp 파일이 필요하지 않아서 observer_node.cpp만 추가
+    add_executable(
+      ${PROJECT_OBSERVER_NAME}
+      #${SRC_OBSERVER_FILES}
+      "${CMAKE_CURRENT_SOURCE_DIR}/src/_node/observer_node.cpp"
+    )
 
-  #   ## 6-3-2. SRC_HANDLER_FORK_FILES의 모든 파일과 node_loader.cpp을 컴파일하고 링크하여 실행 파일 생성
-  #   add_executable(
-  #     ${PROJECT_LOADER_NAME}
-  #     ${SRC_LOADER_FILES}
-  #     "${CMAKE_CURRENT_SOURCE_DIR}/src/_node/node_loader.cpp"
-  #   )
+    ## 6-3-3. 빌드 순서를 정의 (의존성)
+    add_dependencies(
+      ${PROJECT_OBSERVER_NAME}             # 빌드 대상
+      ${${PROJECT_NAME}_EXPORTED_TARGETS}  # package 내부의 다른 빌드 대상
+      ${catkin_EXPORTED_TARGETS}           # catkin 빌드 시스템에서 정의한 빌드 대상
+    )
 
-  #   ## 6-3-3. 빌드 순서를 정의 (의존성)
-  #   add_dependencies(
-  #     ${PROJECT_LOADER_NAME}                # 빌드 대상
-  #     ${${PROJECT_NAME}_EXPORTED_TARGETS}   # package 내부의 다른 빌드 대상
-  #     ${catkin_EXPORTED_TARGETS}            # catkin 빌드 시스템에서 정의한 빌드 대상
-  #   )
+    ## 6-3-4. 빌드시 필요한 Lib 링크 설정
+    target_link_libraries(
+      ${PROJECT_OBSERVER_NAME}             # 빌드 대상
+      ${catkin_LIBRARIES}                  # catkin 빌드 시스템에서 정의한 라이브러리
+      ${YAML_CPP_LIBRARIES}                # yaml-cpp 라이브러리
+      ${MODBUS_LIBRARIES}                  # libmodbus 라이브러리
+      fieldro_lib                          # fieldro   라이브러리
+    )    
 
-    # ## 6-3-4. 빌드시 필요한 Lib 링크 설정
-    # target_link_libraries(
-    #   ${PROJECT_LOADER_NAME}
-    #   ${catkin_LIBRARIES}
-    #   ${YAML_CPP_LIBRARIES}
-    #   ${MODBUS_LIBRARIES}
-    #   fieldro_lib
-    # )
 
 
 ## =============================================================================
@@ -279,8 +283,9 @@ message(STATUS "")
 
   ## 빌드된 Target을 설치할 위치를 지정
   install(
-    TARGETS ${PROJECT_NAME}                               # 설치할 target 지정
-            # ${PROJECT_IO_NAME} 
+    TARGETS ${PROJECT_NAME}                               # 설치할 target 지정            
+            ${PROJECT_IO_NAME} 
+            ${PROJECT_OBSERVER_NAME}
             # ${PROJECT_LOADER_NAME} 
             # fieldro_lib    
     ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION} # 정적 라이브러리 설치 위치 지정 (lib dir /.a 파일)
