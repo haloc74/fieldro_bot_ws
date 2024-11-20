@@ -22,8 +22,7 @@
 . droid_node에 LinkChecker object 추가하기
   - LinkChecker object 삭제 (UnitObserver node가 관리하는 방법으로 변경)
 
-. Wago class refactoring
-  - state 보고가 아닌 alive 보고의 개념으로 변경
+
 
 . UnitObserver Class refactoring
   - state 보고가 아닌 alive 보고의 개념으로 변경
@@ -32,11 +31,25 @@
 
 . UnitObserver node 추가하기
 
-//===================
+//=========================================================
 //========== 작 업 중
-//===================
+//=========================================================
+
+
+
+//=========================================================
+//=========================================================
 
 ID :  - JD 24.11.20
+1. .gitignore 파일 추가
+  - devel Dir 무시.
+  - build Dir 무시.
+
+2. Wago class refactoring
+  - state 보고가 아닌 alive 보고의 개념으로 변경
+  - _last_state_time 변수명을 _last_alive_time로 변경
+
+ID : 1b893fe - JD 24.11.20
 1. UnitObserver Class 추가.
 2. UnitAliveInfo Class 추가.
 3. UnitAliveMsg.msg 추가.

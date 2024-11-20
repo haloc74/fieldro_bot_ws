@@ -37,12 +37,12 @@ namespace fieldro_bot
     ros::AsyncSpinner*  _spinner;                     // ROS 시스템과 통신을 위한 스피너 
     ModbusWrapper*      _modbus;                      // modbus wrapper 객체
     ros::Time           _last_update_time;            // 마지막 update 시간
-    ros::Time           _last_state_time;             // 마지막 state 발송 시간
+    ros::Time           _last_alive_time;             // 마지막 alive 발송 시간
     std::mutex          _lock;                        // thread lock
     int32_t             _state;                       // 현재 state
 
     // alive message 발송을 위하 publisher
-    ros::Publisher      _publish_alive;
+    ros::Publisher  _publish_alive;
     void publish_alive();
 
     // control 지령을 받기 위한 subscriber
@@ -54,7 +54,7 @@ namespace fieldro_bot
     void publish_unit_action_complete(const int32_t action, const int32_t result);    
 
     // io signal을 발송하기 위한 publisher
-    ros::Publisher      _publish_io_signal;           
+    ros::Publisher  _publish_io_signal;           
     void publish_io_signal(const int64_t signal_bit, bool update_flag);
 
     // io signal을 저장하기 위한 배열

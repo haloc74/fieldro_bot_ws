@@ -75,7 +75,7 @@ namespace fieldro_bot
   */
   void Wago::publish_alive()
   {
-    if(ros::Time::now() - _last_state_time < ros::Duration(0.5))
+    if(ros::Time::now() - _last_alive_time < ros::Duration(0.5))
     {
       return;
     }
@@ -87,7 +87,7 @@ namespace fieldro_bot
     _publish_alive.publish(alive_msg);
 
     // 마지막 발송 시간 업데이트
-    _last_state_time = ros::Time::now();
+    _last_alive_time = ros::Time::now();
 
     return;
   }

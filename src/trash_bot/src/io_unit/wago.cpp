@@ -38,7 +38,7 @@ namespace fieldro_bot
     _spinner->start();
 
     _last_update_time = ros::Time::now();
-    _last_state_time  = ros::Time::now();
+    _last_alive_time  = ros::Time::now();
 
     _state = static_cast<int>(fieldro_bot::UnitState::InitReady);
 
@@ -105,10 +105,6 @@ namespace fieldro_bot
       std::this_thread::sleep_for(std::chrono::milliseconds(_thread_info->_sleep));
     }  
   }
-
-
-
-  
 
   /**
   * @brief      digital input signal을 읽는 함수
