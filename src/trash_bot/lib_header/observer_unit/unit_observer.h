@@ -3,6 +3,7 @@
 
 #include <ros/ros.h>
 #include <vector>
+#include <mutex>
 
 #include "trash_bot/UnitStateMsg.h"
 #include "trash_bot/UnitAliveMsg.h"
@@ -42,6 +43,7 @@ namespace fieldro_bot
     ThreadActionInfo*       _thread_info;       // thread action 객체
     fieldro_bot::UnitState  _state;	        // unit 현재 상태
     bool                    _shut_down;         // node 종료 flag
+    std::mutex              _lock;	            // thread lock
 
     // SUBSCRIBER : control 지령
     ros::Subscriber     _subscribe_unit_control;      

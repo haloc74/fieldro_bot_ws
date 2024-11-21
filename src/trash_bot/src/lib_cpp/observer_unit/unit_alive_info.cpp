@@ -36,7 +36,7 @@ namespace fieldro_bot
   bool UnitAliveInfo::alive_check() 
   {
     if(_unit_index == 0)  return true;      // None Unit
-    if(_unit_index == 1)  return true;      // Observer Unit
+    if(_unit_index == 2)  return true;      // Observer Unit
 
     return (ros::Time::now() - _last_update_time).toSec() < ALIVE_THRESHOLD;
   }

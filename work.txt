@@ -1,25 +1,23 @@
 
-?. digital_in_define.h, digital_out_define.h io_unit director로 이동 
-. code refactoring
-. main controller <---> sub unit 구조 만들기
-. 모든 unit에 heartbeat 추가하기
-. droid에 heartbeat 판독 
-. 모든 unit은 PrevInit 상태에서 droid의 init 명령으로 초기화 과정을 수행
-. 모든 unit은 PrevInit 상태에서 init 명령을 수신후 초기화 동작 및 동작 완료후 Initialized 메세지 전송
-. io heartbeat 메세지 수신이 2초이상 update되지 않으면 truble log
-. io heartbeat 메세지 수신이 2초이상 update되지 않으면 모든 unit 동작 정지
-. io_node에 heartbeat를 발송하는 publisher 만들기
-  publisher는 UnitState.msg를 발송한다. 
-  dorid_node에서는 이것을 가지고 unit의 상태의 판단과 heartbeat관리를 한다.
 
-. unit들의 초기화 sequence를 담당하는 node를 만들 필요성이 있을까 ???
+!!! . unit들의 초기화 sequence를 담당하는 node를 만들 필요성이 있을까 ???
 
+. heartbeat 관련 메세지는 20Hz 동작하도록 공통으로 적용
+. heartbeat 정책 점검하여 정리하기
+
+. parent class Unit을 만들어서 모든 Unit담당 Class는 Unit Class를 상속하도록 수정
+
+. 각 node main class의 message.cpp -> subscribe.cpp, publish.cpp로 분할
+. 현재 Observer Class가 Lib 형태로 되어있는것을 Lib에서 빼기
 . Droid 초기화 Sequence 처리
-  void Droid::subscribe_unit_state(const trash_bot::UnitStateMsg &msg)
-
 
 
 ID :  - JD 24.11.21
+1. io_node heartbeat 버그 수정
+2. unit_alive_info::alive_check() 수정
+
+
+ID : 1b42a6d - JD 24.11.21
 1. system node도 alive msg 발송기능 추가
 2. droid option load 함수 추가.
 

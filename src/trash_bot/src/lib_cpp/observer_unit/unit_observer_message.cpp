@@ -80,6 +80,9 @@ namespace fieldro_bot
   */
   void UnitObserver::publish_unit_state(bool time_check_flag)
   {
+    // mutex lock
+    std::lock_guard<std::mutex> lock(_lock);
+
     if(time_check_flag && !is_publish_interval())
     {
       return;
@@ -96,6 +99,10 @@ namespace fieldro_bot
     }
     _publish_units_state.publish(msg);
     _last_publish_time = ros::Time::now();
+
+    //log_msg(LogInfo, 0, "Publish Alive Message");
+    LOG->add_log(fieldro_bot::Unit::Observer, fieldro_bot::LogLevel::Info, 0, "state_pub - "+std::to_string(_unit_alive));
+
 
     return;
   }

@@ -36,7 +36,7 @@ namespace fieldro_bot
     _publish_unit_action_complete = _node_handle->advertise<trash_bot::UnitActionComplete>("trash_bot/action_complete", 100);    
 
     // spinner 생성 및 구동
-    _spinner = new ros::AsyncSpinner(2);
+    _spinner = new ros::AsyncSpinner(1);
     _spinner->start();
 
     // main thread
@@ -97,6 +97,9 @@ namespace fieldro_bot
     int32_t new_alive_state = 0;
     for(size_t i=0; i<_unit_alive_info.size(); i++) 
     {
+      if(i == 0)    continue;     // None
+      if(i == 2)    continue;     // Observer
+
       // alive 상태가 아니라면
       if (!_unit_alive_info[i]->alive_check()) 
       {
@@ -107,6 +110,9 @@ namespace fieldro_bot
     if(_unit_alive != new_alive_state)
     {
       _unit_alive = new_alive_state;
+
+      LOG->add_log(fieldro_bot::Unit::Observer, LogInfo, 0, "Unit Alive State Update : " + std::to_string(_unit_alive));
+
       return true;
     }
     return false;

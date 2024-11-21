@@ -1,5 +1,5 @@
 main:
-  hz: 100 
+  hz: 50 
   alive_publish_interval: 50          ## heartbeat 및 상태정보를 publish 하는 주기 (millisecond)
 
 logger:

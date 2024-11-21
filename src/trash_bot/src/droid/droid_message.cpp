@@ -39,7 +39,7 @@ namespace fieldro_bot
       if(msg.alive == 0x00)
       {
         log_msg(LogInfo, 0, "All Unit Init - Next Step Process");
-        *_action = fieldro_bot::UnitState::InitReady;
+        *_action = fieldro_bot::UnitState::Init;
 
         // 각 unit에 초기화 sequence 추가
         // None   - skip
@@ -67,7 +67,7 @@ namespace fieldro_bot
   */
   void Droid::publish_unit_alive()
   {
-    if(ros::Time::now() - _last_alive_publish_time < ros::Duration(_alive_publish_interval))    
+    if( (ros::Time::now()-_last_alive_publish_time).toSec()*1000 < _alive_publish_interval)    
     {
       return;
     }
