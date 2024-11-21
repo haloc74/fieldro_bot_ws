@@ -17,10 +17,14 @@
 . Droid 초기화 Sequence 처리
   void Droid::subscribe_unit_state(const trash_bot::UnitStateMsg &msg)
 
-. system node도 alive msg 발송기능 추가
 
 
 ID :  - JD 24.11.21
+1. system node도 alive msg 발송기능 추가
+2. droid option load 함수 추가.
+
+
+ID : 9f993b0 - JD 24.11.21
 1. observer에서 alive 판단시 none, observer는 항상 on으로 판단하기.
 2. observer class에 UnitState 변수 추가
 3. observer class main controler로 부터 초기화 요청 들어오면 state 변수 Ready로 변경

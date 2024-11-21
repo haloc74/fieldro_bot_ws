@@ -57,6 +57,7 @@ namespace fieldro_bot
     ros::AsyncSpinner*  _spinner;                     // ROS 시스템과 통신을 위한 스피너 
 
     ros::Publisher      _publish_unit_control;        // unit control을 발송하기 위한 publisher
+    ros::Publisher      _publish_unit_alive;          // unit alive를 발송하기 위한 publisher
     ros::Subscriber     _subscribe_switch_report;     // 스위치 상태를 받기 위한 subscriber
     ros::Subscriber     _subscribe_velocity_control;  // 속도 제어를 받기 위한 subscriber  
     ros::Subscriber     _subscribe_io_signal;         // 신호를 받기 위한 subscriber
@@ -71,6 +72,7 @@ namespace fieldro_bot
     void message_publish();
     void publish_unit_control(uint32_t unit, uint32_t action, std::string command="");
     void publish_unit_control(std::unique_ptr<trash_bot::UnitControl> unit_control_msg);
+    void publish_unit_alive();
 
     void subscribe_switch_report(const twinny_msgs::SwitchReport Switch_Check);    
     void subscribe_velocity_control(const geometry_msgs::Twist &twist_msg);
@@ -78,20 +80,24 @@ namespace fieldro_bot
     void subscribe_action_complete(const trash_bot::UnitActionComplete &action_complete_msg);
     void subscribe_unit_state(const trash_bot::UnitStateMsg &msg);
 
+
     // IO Signal Message
     int8_t _sensor[(int)DISignal::END];                             // 센서 상태 정보
     int64_t _signal_bit;                                            // 
     bool update_sensor_data(DISignal sensor, int64_t signal_bit);   // sensor data 업데이트
     ros::Time _last_io_update_time;                                 // 마지막 센서 정보 업데이트 시간
+    ros::Time _last_alive_publish_time;                             // 마지막 alive 정보 업데이트 시간
+    int32_t   _alive_publish_interval;                              // alive 정보 업데이트 주기
 
     fieldro_bot::UnitState _state[unit_to_int(fieldro_bot::Unit::End)];           // unit 상태 정보
-    fieldro_bot::UnitState& _action;
+    fieldro_bot::UnitState* _action;
 
     // user command control
     std::map<int32_t, int32_t, std::string> _command_map;
 
     void log_msg(LogLevel level, int32_t error_code, std::string log);  // log 기록 함수
     void system_finish();   // system 종료 함수
+    void load_option();
   };
 
 }

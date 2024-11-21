@@ -50,9 +50,9 @@ namespace fieldro_bot
     }
 
     // 모든 unit의 초기화가 완료되었을 경우
-    if(_action == fieldro_bot::UnitState::Init && _pending_sequence.empty())
+    if(*_action == fieldro_bot::UnitState::Init && _pending_sequence.empty())
     {
-      _action = fieldro_bot::UnitState::Ready;
+      *_action = fieldro_bot::UnitState::Ready;
       log_msg(LogInfo, 0, "All Unit Initialize Complete - Next Step Process");
     }
 

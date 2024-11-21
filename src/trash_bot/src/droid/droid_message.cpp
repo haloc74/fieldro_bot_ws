@@ -3,6 +3,7 @@
 #include "helper/helper.h"
 #include "log/log.h"
 #include <trash_bot/UnitControl.h>
+#include <trash_bot/UnitAliveMsg.h>
 
 #include "define/unit_define.h"
 #include "define/unit_action_define.h"
@@ -29,7 +30,7 @@ namespace fieldro_bot
     //   add_sequence(unit_to_int(fieldro_bot::Unit::Signal), unit_action_to_int(fieldro_bot::UnitAction::Init));
     // }
 
-    switch(_action)
+    switch(*_action)
     {
     case fieldro_bot::UnitState::BeforeConnect:  break;
     case fieldro_bot::UnitState::UnConnect:      break;
@@ -38,7 +39,7 @@ namespace fieldro_bot
       if(msg.alive == 0x00)
       {
         log_msg(LogInfo, 0, "All Unit Init - Next Step Process");
-        _action = fieldro_bot::UnitState::InitReady;
+        *_action = fieldro_bot::UnitState::InitReady;
 
         // 각 unit에 초기화 sequence 추가
         // None   - skip
@@ -58,4 +59,26 @@ namespace fieldro_bot
 
     return;
   }  
+
+  /**
+  * @brief      unit의 heartbeat 및 현재 상태를 발송
+  * @note       현 Class가 main controller이므로 Unit::System으로 치환시켜 보낸다.
+  *             _alive_publish_interval이 경과 하지 않을 경우에는 리턴
+  */
+  void Droid::publish_unit_alive()
+  {
+    if(ros::Time::now() - _last_alive_publish_time < ros::Duration(_alive_publish_interval))    
+    {
+      return;
+    }
+
+    trash_bot::UnitAliveMsg alive_msg;
+    alive_msg.index = unit_to_int(fieldro_bot::Unit::System);
+    alive_msg.state = static_cast<int32_t>(*_action);
+    _publish_unit_alive.publish(alive_msg);
+
+    return;
+  }
+
+
 }

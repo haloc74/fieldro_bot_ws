@@ -4,6 +4,7 @@
 #include "helper/helper.h"
 #include "log/log.h"
 #include <trash_bot/UnitControl.h>
+#include <trash_bot/UnitAliveMsg.h>
 
 #include "define/unit_define.h"
 #include "define/unit_action_define.h"
@@ -11,9 +12,14 @@
  
 namespace fieldro_bot
 {
-  Droid::Droid() : _lock(), _action(_state[static_cast<int>(Unit::System)])
+  Droid::Droid() : _lock()
   {
-    _action = fieldro_bot::UnitState::InitReady;
+    // 관련 옵션 로드
+    load_option();
+
+    _action = _state+static_cast<int>(Unit::System);
+    *_action = fieldro_bot::UnitState::InitReady;
+
     _node_handle = new ros::NodeHandle();       // node handler 생성
 
     for(int i=0; i<(int)DISignal::END; i++)  
@@ -38,6 +44,9 @@ namespace fieldro_bot
     _publish_unit_control = 
     _node_handle->advertise<trash_bot::UnitControl>("trash_bot/unit_control", 100);
 
+    _publish_unit_alive =
+    _node_handle->advertise<trash_bot::UnitAliveMsg>("trash_bot/UnitAliveMsg", 100);
+
     _control_sequence.clear();
     _pending_sequence.clear();
     _command_map.clear();
@@ -58,7 +67,10 @@ namespace fieldro_bot
     {
       _state[i] = UnitState::UnConnect;
     }
-    _action = fieldro_bot::UnitState::InitReady;
+    *_action = fieldro_bot::UnitState::InitReady;
+
+    // 마지막 상태 보고 시간
+    _last_alive_publish_time = ros::Time::now();
 
     // // Test : 현재 IO만 연결이 되어 있으므로 나머지는 Ready 상태로 설정하자...
     // update_unit_state(fieldro_bot::Unit::None,    fieldro_bot::UnitState::Ready);
@@ -111,6 +123,9 @@ namespace fieldro_bot
     {
       // topic message 발송
       message_publish();
+
+      // unit의 상태를 publish
+      publish_unit_alive();
 
       // thread Hz 싱크 및 독점 방지를 위한 sleep
       std::this_thread::sleep_for(std::chrono::milliseconds(_thread_info->_sleep));
@@ -326,4 +341,36 @@ namespace fieldro_bot
       }
       return false;
   }  
+
+  /**
+  * @brief      Droid 관련 option 로드
+  * @note       
+  */
+  void Droid::load_option()
+  {
+    try
+    {
+      // file open
+      std::ifstream yaml_file("config/droid.yaml");
+      YAML::Node yaml = YAML::Load(yaml_file);
+      yaml_file.close();
+
+      // 여러개의 object처리 할 필요가 있어 session_name으로 구분한다.
+      _alive_publish_interval = yaml["main"]["alive_publish_interval"].as<int32_t>();
+    }
+    catch(YAML::Exception& e)
+    {
+      std::cout << "YAML Exception : " << e.what() << std::endl;
+    }
+    catch(std::exception& e)
+    {
+      std::cout << "Exception : " << e.what() << std::endl;
+    }
+    catch(...)
+    {
+      std::cout << "Unknown Exception" << std::endl;
+    }  
+
+    return;
+  }
 }
