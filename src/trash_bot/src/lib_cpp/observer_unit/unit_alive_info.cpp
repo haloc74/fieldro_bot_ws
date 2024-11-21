@@ -30,14 +30,15 @@ namespace fieldro_bot
   /**
   * @brief      unit의 상태를 확인하는 함수
   * @return     unit이 현재 alive 상태인지 여부
-  * @attention  0번 index는 None으로 예약되어있어 예외처리
+  * @attention  0번 index는 None으로, 2번 index는 Observer로 예약되어있어 예외처리
   * @see        Unit 
   */
   bool UnitAliveInfo::alive_check() 
   {
-    if(_unit_index == 0)  return true;
+    if(_unit_index == 0)  return true;      // None Unit
+    if(_unit_index == 1)  return true;      // Observer Unit
 
-    return (ros::Time::now() - _last_update_time).toSec() > ALIVE_THRESHOLD;
+    return (ros::Time::now() - _last_update_time).toSec() < ALIVE_THRESHOLD;
   }
 
   /**

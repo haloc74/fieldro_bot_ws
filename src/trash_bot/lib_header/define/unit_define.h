@@ -17,17 +17,29 @@ namespace fieldro_bot
     End,
   };
 
+  /**
+  * @author		  Fieldro : haloc@fieldro.tech
+  * @date			  24-11-21
+  * @brief		  Robot을 구성하는 Unit의 종류
+  * @attention	None, Syste, Observer 3종류는 절대로 바뀌면 안됨
+  *             삭제도, 순서변경도 하면 안됨 !!!!!!!!
+  * @details	
+  * @see			
+  */
   enum class Unit
   {
+    // Absolute value
     None = 0x00,        // 없음                 Fix
     System,             // main(droid) 시스템   Fix  
     Observer,           // Observer 시스템      Fix
 
+    // Variable value
     Signal,             // wago
-    // Loader,             // 로더
-    // Gripper,            // 핸들러 포크
+    // Loader,          // 로더
+    // Gripper,         // 핸들러 포크
 
     
+    // Absolute value
     All,                // 모든 unit          
     End = All,
   };

@@ -80,7 +80,7 @@ namespace fieldro_bot
 
     // IO Signal Message
     int8_t _sensor[(int)DISignal::END];                             // 센서 상태 정보
-    int64_t _signal_bit;
+    int64_t _signal_bit;                                            // 
     bool update_sensor_data(DISignal sensor, int64_t signal_bit);   // sensor data 업데이트
     ros::Time _last_io_update_time;                                 // 마지막 센서 정보 업데이트 시간
 
@@ -90,9 +90,8 @@ namespace fieldro_bot
     // user command control
     std::map<int32_t, int32_t, std::string> _command_map;
 
-    void log_msg(LogLevel level, int32_t error_code, std::string log);
-
-    void system_finish();
+    void log_msg(LogLevel level, int32_t error_code, std::string log);  // log 기록 함수
+    void system_finish();   // system 종료 함수
   };
 
 }

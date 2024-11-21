@@ -37,10 +37,11 @@ namespace fieldro_bot
     void update();			                    // main thread 업데이트
 
   private:
-    ros::NodeHandle*    _node_handle;	      // ROS 시스템과 통신을 위한 노드 핸들
-    ros::AsyncSpinner*  _spinner;           // ROS 시스템과 통신을 위한 스피너
-    ThreadActionInfo*   _thread_info;       // thread action 객체
-    bool                _shut_down;         // node 종료 flag
+    ros::NodeHandle*        _node_handle;	      // ROS 시스템과 통신을 위한 노드 핸들
+    ros::AsyncSpinner*      _spinner;           // ROS 시스템과 통신을 위한 스피너
+    ThreadActionInfo*       _thread_info;       // thread action 객체
+    fieldro_bot::UnitState  _state;	        // unit 현재 상태
+    bool                    _shut_down;         // node 종료 flag
 
     // SUBSCRIBER : control 지령
     ros::Subscriber     _subscribe_unit_control;      
@@ -53,6 +54,10 @@ namespace fieldro_bot
     // PUBLISHER - unit의 state
     ros::Publisher _publish_units_state;	                        
     void publish_unit_state(bool time_check_flag);    
+
+    // PUBLISEHER - unit action coplete 
+    ros::Publisher _publish_unit_action_complete;
+    void publish_unit_action_complete(const int32_t action, const int32_t result);
    
     ros::Time         _last_publish_time;	        // 마지막 Pub 시간
     int32_t           _publish_interval;	        // Pub 주기

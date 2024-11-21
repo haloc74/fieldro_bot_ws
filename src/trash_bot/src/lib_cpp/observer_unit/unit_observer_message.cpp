@@ -2,6 +2,7 @@
 #include "observer_unit/unit_observer.h"
 #include "helper/helper.h"
 #include "log/log.h"
+#include <trash_bot/UnitActionComplete.h>
 
 namespace fieldro_bot
 {
@@ -30,8 +31,9 @@ namespace fieldro_bot
       break;
 
     case fieldro_bot::UnitAction::Init:
-//      _state =  static_cast<int>(fieldro_bot::UnitState::Ready);
-//      publish_unit_action_complete(unit_action_to_int(action), error_to_int(fieldro_bot::Error::None));
+      _state =  fieldro_bot::UnitState::Ready;
+      _unit_alive_info[static_cast<int>(fieldro_bot::Unit::Observer)]->update(static_cast<int>(_state));
+      publish_unit_action_complete(unit_action_to_int(action), error_to_int(fieldro_bot::Error::None));
       break;
 
     case fieldro_bot::UnitAction::Finish:  
@@ -96,5 +98,25 @@ namespace fieldro_bot
     _last_publish_time = ros::Time::now();
 
     return;
-  }  
+  }
+
+  /**
+  * @brief      unit action 처리 결과를 발송하는 함수
+  * @param[in]  int32_t action : 처리된 action
+  * @param[in]  int32_t result : 처리 결과
+  * @return     void
+  * @note       
+  */
+  void UnitObserver::publish_unit_action_complete(const int32_t action, const int32_t result)
+  {
+    trash_bot::UnitActionComplete action_msg;
+    action_msg.time_stamp     = ros::Time::now();
+    action_msg.receive_object = unit_to_int(fieldro_bot::Unit::System);
+    action_msg.action_object  = unit_to_int(fieldro_bot::Unit::Observer);
+    action_msg.complete_action= action;
+    action_msg.error_code     = result;
+    _publish_unit_action_complete.publish(action_msg);
+    return;
+  }
+
 }

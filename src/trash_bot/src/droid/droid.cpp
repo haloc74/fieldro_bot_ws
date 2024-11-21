@@ -33,7 +33,7 @@ namespace fieldro_bot
     _subscribe_action_complete = 
     _node_handle->subscribe("trash_bot/action_complete", 100, &Droid::subscribe_action_complete, this);
 
-    _subscribe_unit_state = _node_handle->subscribe("trash_bot/UnitState", 100, &Droid::subscribe_unit_state, this);
+    _subscribe_unit_state = _node_handle->subscribe("trash_bot/UnitStateMsg", 100, &Droid::subscribe_unit_state, this);
 
     _publish_unit_control = 
     _node_handle->advertise<trash_bot::UnitControl>("trash_bot/unit_control", 100);
@@ -170,22 +170,7 @@ namespace fieldro_bot
     return;
   }
 
-  // todo : unit 상태를 받아서 처리를 해야 함
-  void Droid::subscribe_unit_state(const trash_bot::UnitStateMsg &msg)
-  {
-    // 현재 상태가 WaitForLink 상태이고 모든 link가 연결이 되어 있을 경우
-    if(_action == fieldro_bot::UnitState::InitReady && msg.alive == 0x00)
-    {
-      log_msg(LogInfo, 0, "All Unit Linked - Next Step Process");
-      _action = fieldro_bot::UnitState::Init;
 
-      // todo 
-      // io_node에 초기화 요청 sequence 추가
-      add_sequence(unit_to_int(fieldro_bot::Unit::Signal), unit_action_to_int(fieldro_bot::UnitAction::Init));
-    }
-
-    return;
-  }
 
   // void Droid::update_io_pulse()
   // {

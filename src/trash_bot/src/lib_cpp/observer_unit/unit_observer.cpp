@@ -2,16 +2,18 @@
 #include "observer_unit/unit_observer.h"
 #include "helper/helper.h"
 #include "log/log.h"
+#include <trash_bot/UnitActionComplete.h>
 
 namespace fieldro_bot
 {
   UnitObserver::UnitObserver()
   {
-    _node_handle       = new ros::NodeHandle();        // node handler 생성
-    _shut_down         = false;                       // node 종료 flag
-    _last_publish_time = ros::Time::now();            // 마지막 업데이트 시간
-    _publish_interval  = 20;                          // publish 주기 (20 ms)
-    load_option();                                    // 옵션 로드
+    _state              = fieldro_bot::UnitState::InitReady;  // unit 현재 상태  
+    _node_handle        = new ros::NodeHandle();              // node handler 생성
+    _shut_down          = false;                              // node 종료 flag
+    _last_publish_time  = ros::Time::now();                   // 마지막 업데이트 시간
+    _publish_interval   = 20;                                 // publish 주기 (20 ms)
+    load_option();                                            // 옵션 로드
 
     // unit_alive_info 초기화 
     _unit_alive_info = std::vector<UnitAliveInfo*>();
@@ -29,6 +31,9 @@ namespace fieldro_bot
 
     // unit state publishing
     _publish_units_state = _node_handle->advertise<trash_bot::UnitStateMsg>("trash_bot/UnitStateMsg", 100);
+
+    // unit control message 처리 결과 발송을 위한 publisher 생성 및 link
+    _publish_unit_action_complete = _node_handle->advertise<trash_bot::UnitActionComplete>("trash_bot/action_complete", 100);    
 
     // spinner 생성 및 구동
     _spinner = new ros::AsyncSpinner(2);
@@ -92,7 +97,8 @@ namespace fieldro_bot
     int32_t new_alive_state = 0;
     for(size_t i=0; i<_unit_alive_info.size(); i++) 
     {
-      if (_unit_alive_info[i]->alive_check()) 
+      // alive 상태가 아니라면
+      if (!_unit_alive_info[i]->alive_check()) 
       {
         new_alive_state |= (1 << i);
       }
@@ -112,7 +118,7 @@ namespace fieldro_bot
   */
   bool UnitObserver::is_publish_interval()
   {
-    if((ros::Time::now() - _last_publish_time).toMSec() < _publish_interval)
+    if(((ros::Time::now() - _last_publish_time).toSec())*1000 < _publish_interval)
     {
       return false;
     }
