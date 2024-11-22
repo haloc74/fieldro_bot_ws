@@ -3,7 +3,7 @@
 #include <iostream>
 #include "log/log.h"
 #include "helper/helper.h"
-#include "observer_unit/unit_observer.h"
+#include "observer_unit/observer.h"
 
 fieldro_bot::Log* fieldro_bot::Log::_instance = nullptr;
  
@@ -22,7 +22,7 @@ int main(int argc, char **argv)
   LOG->add_log(fieldro_bot::Unit::System, fieldro_bot::LogLevel::Info, 0, "Unit Observer Start");
 
   // Observer 객체 생성
-  fieldro_bot::UnitObserver* observer = new fieldro_bot::UnitObserver();
+  fieldro_bot::Observer* observer = new fieldro_bot::Observer();
 
   // command 사용여부 설정
   bool command_use = false;

@@ -1,5 +1,5 @@
 
-#include "observer_unit/unit_observer.h"
+#include "observer_unit/observer.h"
 #include "helper/helper.h"
 #include "log/log.h"
 #include <trash_bot/UnitActionComplete.h>
@@ -11,7 +11,7 @@ namespace fieldro_bot
   * @param[in]  bool time_check_flag : update interval을 체크할지 여부
   * @note       
   */
-  void UnitObserver::publish_unit_state(bool time_check_flag)
+  void Observer::publish_unit_state(bool time_check_flag)
   {
     // mutex lock
     std::lock_guard<std::mutex> lock(_lock);
@@ -47,7 +47,7 @@ namespace fieldro_bot
   * @return     void
   * @note       
   */
-  void UnitObserver::publish_unit_action_complete(const int32_t action, const int32_t result)
+  void Observer::publish_unit_action_complete(const int32_t action, const int32_t result)
   {
     trash_bot::UnitActionComplete action_msg;
     action_msg.time_stamp     = ros::Time::now();

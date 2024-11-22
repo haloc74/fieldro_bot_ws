@@ -1,5 +1,5 @@
 
-#include "observer_unit/unit_observer.h"
+#include "observer_unit/observer.h"
 #include "helper/helper.h"
 #include "log/log.h"
 #include <trash_bot/UnitActionComplete.h>
@@ -13,7 +13,7 @@ namespace fieldro_bot
   * @attention  target이 signal이 아닌 메세지는 무시한다.
   * @note       
   */
-  void UnitObserver::subscribe_unit_control(const trash_bot::UnitControl& unit_control_msg)
+  void Observer::subscribe_unit_control(const trash_bot::UnitControl& unit_control_msg)
   {
     // target의 signal이 아닌 메세지는 무시한다. 
     fieldro_bot::Unit unit = int_to_unit(unit_control_msg.target_object);
@@ -53,7 +53,7 @@ namespace fieldro_bot
   * @param[in]  const trash_bot::UnitStateMsg &msg : unit 상태 메시지
   * @note       unit의 상태가 이전과 달라졌다면 즉시 update 한다.
   */
-  void UnitObserver::subscribe_unit_alive(const trash_bot::UnitAliveMsg &msg)
+  void Observer::subscribe_unit_alive(const trash_bot::UnitAliveMsg &msg)
   {
     int32_t index = msg.index;
     int32_t state = msg.state;

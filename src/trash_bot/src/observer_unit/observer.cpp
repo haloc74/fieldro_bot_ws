@@ -1,12 +1,12 @@
 
-#include "observer_unit/unit_observer.h"
+#include "observer_unit/observer.h"
 #include "helper/helper.h"
 #include "log/log.h"
 #include <trash_bot/UnitActionComplete.h>
 
 namespace fieldro_bot
 {
-  UnitObserver::UnitObserver()
+  Observer::Observer()
   {
     _state              = fieldro_bot::UnitState::InitReady;  // unit 현재 상태  
     _node_handle        = new ros::NodeHandle();              // node handler 생성
@@ -16,18 +16,18 @@ namespace fieldro_bot
     load_option();                                            // 옵션 로드
 
     // unit_alive_info 초기화 
-    _unit_alive_info = std::vector<UnitAliveInfo*>();
+    _unit_alive_info = std::vector<AliveInfo*>();
     _unit_alive_info.clear();
     for(int i = 0; i < static_cast<int>(fieldro_bot::Unit::End); i++)
     {
-      _unit_alive_info.push_back(new UnitAliveInfo(i));
+      _unit_alive_info.push_back(new AliveInfo(i));
     }
 
     // unit alive subscribing
-    _subscribe_unit_alive = _node_handle->subscribe("trash_bot/UnitAliveMsg", 100, &UnitObserver::subscribe_unit_alive, this);
+    _subscribe_unit_alive = _node_handle->subscribe("trash_bot/UnitAliveMsg", 100, &Observer::subscribe_unit_alive, this);
 
     // unit control message 수신을 위한 subscriber 생성 및 link
-    _subscribe_unit_control = _node_handle->subscribe("trash_bot/unit_control", 100, &UnitObserver::subscribe_unit_control, this);    
+    _subscribe_unit_control = _node_handle->subscribe("trash_bot/unit_control", 100, &Observer::subscribe_unit_control, this);    
 
     // unit state publishing
     _publish_units_state = _node_handle->advertise<trash_bot::UnitStateMsg>("trash_bot/UnitStateMsg", 100);
@@ -42,10 +42,10 @@ namespace fieldro_bot
     // main thread
     _thread_info = new ThreadActionInfo("config/observer.yaml", "main");
     _thread_info->_active = true;
-    _thread_info->_thread = std::thread(std::bind(&UnitObserver::update, this));    
+    _thread_info->_thread = std::thread(std::bind(&Observer::update, this));    
   }
 
-  UnitObserver::~UnitObserver()
+  Observer::~Observer()
   {
     // main thread 해제
     _thread_info->_active = false;
@@ -71,7 +71,7 @@ namespace fieldro_bot
   * @brief      units의 상태를 업데이트 하는 함수
   * @note       unit들의 상태에 대하여 정기적인 update를 한다.
   */
-  void UnitObserver::update()
+  void Observer::update()
   {
     while(_thread_info->_active)
     {    
@@ -92,7 +92,7 @@ namespace fieldro_bot
   * @brief      unit들의 alive 상태를 update
   * @return     변경된 상태가 있으면 true, 없으면 false
   */
-  bool UnitObserver::update_units_alive_value()
+  bool Observer::update_units_alive_value()
   {
     int32_t new_alive_state = 0;
     for(size_t i=0; i<_unit_alive_info.size(); i++) 
@@ -122,7 +122,7 @@ namespace fieldro_bot
   * @brief  업데이트 주기를 확인하는 함수
   * @note   옵션으로 설정된 시간이 경과했는지 확인    
   */
-  bool UnitObserver::is_publish_interval()
+  bool Observer::is_publish_interval()
   {
     if(((ros::Time::now() - _last_publish_time).toSec())*1000 < _publish_interval)
     {
@@ -135,7 +135,7 @@ namespace fieldro_bot
   * @brief      옵션 로드 함수
   * @note       
   */
-  void UnitObserver::load_option()
+  void Observer::load_option()
   {
     try
     {

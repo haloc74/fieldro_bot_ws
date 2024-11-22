@@ -11,10 +11,10 @@ namespace fieldro_bot
   * @brief		구성 unit의 heartbeat을 관리하는 클래스
   * @note			alive_check() 함수는 마지막 update 이후 THRESHOLD 시간이 경과하면 false를 반환
   * @details	
-  * @see			UnitObserver
+  * @see			Observer
   */
 
-  class UnitAliveInfo 
+  class AliveInfo 
   {
   private:
       int32_t     _unit_index;              // unit에 할당된 index 번호
@@ -24,8 +24,8 @@ namespace fieldro_bot
       const double  ALIVE_THRESHOLD = 0.5;        // heartbeat 임계값
 
   public:
-      UnitAliveInfo(int32_t unit_index);    // 생성자
-      virtual ~UnitAliveInfo() = default;   // 소멸자
+      AliveInfo(int32_t unit_index);    // 생성자
+      virtual ~AliveInfo() = default;   // 소멸자
 
       bool alive_check();                   // heartbeat가 정상적으로 동작하는지 확인
       bool update(int32_t state);           // unit의 상태를 업데이트

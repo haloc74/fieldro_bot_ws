@@ -1,5 +1,5 @@
 
-#include "observer_unit/unit_alive_info.h"
+#include "observer_unit/alive_info.h"
 
 namespace fieldro_bot
 {
@@ -8,7 +8,7 @@ namespace fieldro_bot
   * @param[in]  int32_t unit_index : unit index (Unit 참조)
   * @see        Unit
   */
-  UnitAliveInfo::UnitAliveInfo(int32_t unit_index)
+  AliveInfo::AliveInfo(int32_t unit_index)
   {
     _unit_index       = unit_index;
     _state            = -1;
@@ -33,10 +33,10 @@ namespace fieldro_bot
   * @attention  0번 index는 None으로, 2번 index는 Observer로 예약되어있어 예외처리
   * @see        Unit 
   */
-  bool UnitAliveInfo::alive_check() 
+  bool AliveInfo::alive_check() 
   {
     if(_unit_index == 0)  return true;      // None Unit
-    if(_unit_index == 2)  return true;      // Observer Unit
+    if(_unit_index == 2)  return true;      // AliveInfo Unit
 
     return (ros::Time::now() - _last_update_time).toSec() < ALIVE_THRESHOLD;
   }
@@ -47,7 +47,7 @@ namespace fieldro_bot
   * @return     이전 상태와 달라진 점이 있는지 여부
   * @note       UnitState 참조
   */
-  bool UnitAliveInfo::update(int32_t state) 
+  bool AliveInfo::update(int32_t state) 
   {
     bool update = false;
     _last_update_time = ros::Time::now();

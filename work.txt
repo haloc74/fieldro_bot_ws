@@ -21,9 +21,14 @@
 
 . UnitState Define에 Sleep 상태를 추가하고 MainController에서 Activate 메세지 전송 하는 방안 ?
 . parent class Unit을 만들어서 모든 Unit담당 Class는 Unit Class를 상속하도록 수정
-. unit_observer Class name -> observer로 변경
+
 
 ID :  - JD 24.11.22
+1. unit_observer Class name -> observer로 변경
+  - CMakeLists.txt 수정
+
+
+ID : 5cef9a5 - JD 24.11.22
 1. 현재 Observer Class가 Lib 형태로 되어있는것을 Lib에서 빼기
   - CMakeLists.txt lib 생성 부분 수정
   - CMakeLists.txt observer_node 생성 부분 수정

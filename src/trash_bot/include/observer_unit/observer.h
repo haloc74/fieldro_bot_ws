@@ -11,7 +11,7 @@
 
 #include "helper/thread_action_info.h"
 #include "define/unit_define.h"
-#include "observer_unit/unit_alive_info.h"
+#include "observer_unit/alive_info.h"
 
  
 namespace fieldro_bot
@@ -25,11 +25,11 @@ namespace fieldro_bot
   * @details	
   * @see			
   */
-  class UnitObserver
+  class Observer
   {
   public:
-    UnitObserver();		    // 생성자
-    ~UnitObserver();		  // 소멸자
+    Observer();		    // 생성자
+    ~Observer();		  // 소멸자
  
     ros::NodeHandle* get_node_handle()  { return _node_handle; }
     bool is_shutdown()                  { return _shut_down; }
@@ -65,7 +65,7 @@ namespace fieldro_bot
     int32_t           _publish_interval;	        // Pub 주기
 
     int32_t                     _unit_alive;      // 전체 unit의 alive 상태 변수
-    std::vector<UnitAliveInfo*> _unit_alive_info;	// unit 상태 정보를 저장하는 vector
+    std::vector<AliveInfo*> _unit_alive_info;	// unit 상태 정보를 저장하는 vector
       
     // 일반 함수
     bool update_units_alive_value();	// unit들의 상태를 확인하는 함수
