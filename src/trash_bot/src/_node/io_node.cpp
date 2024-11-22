@@ -51,7 +51,10 @@ int main(int argc, char **argv)
     }
     else if(input[0] == "clear")  
     {
-      system("clear");
+      if(system("clear") == -1)
+      {
+        LOG->add_log(fieldro_bot::Unit::System, fieldro_bot::LogLevel::Error, 0, "system clear error");
+      }
     }
     else
     {

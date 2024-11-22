@@ -27,8 +27,12 @@
 
 . 현재 Observer Class가 Lib 형태로 되어있는것을 Lib에서 빼기
 
-
 ID :  - JD 24.11.22
+1. Observer Class message.cpp 부분을 pub, sub로 분리
+2. node main 함수에서 system("clear"); 경고 뜨던 부분 수정
+
+
+ID : a24e459 - JD 24.11.22
 1. Droid 초기화 Sequence 처리
   - Observer node에서 모든 Unit의 Alive를 확인하고 초기화 Sequence 생성 확인
   - Observer node로 초기화 Action 요청 발송 확인
