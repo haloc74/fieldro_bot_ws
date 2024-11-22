@@ -19,14 +19,17 @@
 . heartbeat 관련 메세지는 20Hz 동작하도록 공통으로 적용
 . heartbeat 정책 점검하여 정리하기
 
-. UnitState Define에 Sleep 상태를 추가하고 MainController에서 Activate 메세지 전송 하는 방안 ?
 . parent class Unit을 만들어서 모든 Unit담당 Class는 Unit Class를 상속하도록 수정
+. UnitState Define에 Sleep 상태를 추가하고 MainController에서 Activate 메세지 전송 하는 방안 ?
 
 
 ID :  - JD 24.11.22
-1. unit_observer Class name -> observer로 변경
-  - CMakeLists.txt 수정
+1. UnitState enum class 변수 정리
 
+ID : a41c937 - JD 24.11.22
+1. unit_observer Class name -> observer로 변경
+  - 연관된 파일명 모두 수정
+  - CMakeLists.txt 수정
 
 ID : 5cef9a5 - JD 24.11.22
 1. 현재 Observer Class가 Lib 형태로 되어있는것을 Lib에서 빼기

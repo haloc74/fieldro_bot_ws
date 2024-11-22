@@ -1,7 +1,9 @@
 #include "wago.h"
 #include "define/unit_define.h"
 #include "define/unit_action_define.h"
+#include "define/unit_state.h"
 #include "helper/helper.h"
+
 #include <trash_bot/IOSignal.h>
 #include <trash_bot/UnitAliveMsg.h>
 #include <trash_bot/UnitActionComplete.h>
@@ -18,7 +20,7 @@ namespace fieldro_bot
   void Wago::subscribe_unit_control(const trash_bot::UnitControl& unit_control_msg)
   {
     // target이 signal이 아닌 메세지는 무시한다. 
-    fieldro_bot::Unit unit = int_to_unit(unit_control_msg.target_object);
+    fieldro_bot::Unit unit = to_enum<fieldro_bot::Unit>(unit_control_msg.target_object);
 
     if(unit != fieldro_bot::Unit::Signal && 
        unit != fieldro_bot::Unit::All)      return;
@@ -33,7 +35,8 @@ namespace fieldro_bot
       break;
 
     case fieldro_bot::UnitAction::Init:
-      _state =  static_cast<int>(fieldro_bot::UnitState::Ready);
+      //_state =  static_cast<int>(fieldro_bot::UnitState::Idle);
+      _state = to_int(fieldro_bot::UnitState::Idle);
       publish_unit_action_complete(unit_action_to_int(action), error_to_int(fieldro_bot::Error::None));
       break;
 
@@ -60,8 +63,8 @@ namespace fieldro_bot
   {
     trash_bot::UnitActionComplete action_msg;
     action_msg.time_stamp     = ros::Time::now();
-    action_msg.receive_object = unit_to_int(fieldro_bot::Unit::System);
-    action_msg.action_object  = unit_to_int(fieldro_bot::Unit::Signal);
+    action_msg.receive_object = to_int(fieldro_bot::Unit::System);
+    action_msg.action_object  = to_int(fieldro_bot::Unit::Signal);
     action_msg.complete_action= action;
     action_msg.error_code     = result;
     _publish_unit_action_complete.publish(action_msg);
@@ -82,7 +85,7 @@ namespace fieldro_bot
 
     // unit alive message 발송
     trash_bot::UnitAliveMsg alive_msg;
-    alive_msg.index = unit_to_int(fieldro_bot::Unit::Signal);
+    alive_msg.index = to_int(fieldro_bot::Unit::Signal);
     alive_msg.state = _state;
     _publish_alive.publish(alive_msg);
 

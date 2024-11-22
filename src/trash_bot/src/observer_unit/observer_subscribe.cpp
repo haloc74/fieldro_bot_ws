@@ -16,7 +16,7 @@ namespace fieldro_bot
   void Observer::subscribe_unit_control(const trash_bot::UnitControl& unit_control_msg)
   {
     // target의 signal이 아닌 메세지는 무시한다. 
-    fieldro_bot::Unit unit = int_to_unit(unit_control_msg.target_object);
+    fieldro_bot::Unit unit = to_enum<fieldro_bot::Unit>(unit_control_msg.target_object);
 
     if(unit != fieldro_bot::Unit::Observer && 
        unit != fieldro_bot::Unit::All)      return;
@@ -31,7 +31,7 @@ namespace fieldro_bot
       break;
 
     case fieldro_bot::UnitAction::Init:
-      _state =  fieldro_bot::UnitState::Ready;
+      _state =  fieldro_bot::UnitState::Idle;
       _unit_alive_info[static_cast<int>(fieldro_bot::Unit::Observer)]->update(static_cast<int>(_state));
       publish_unit_action_complete(unit_action_to_int(action), error_to_int(fieldro_bot::Error::None));
       break;

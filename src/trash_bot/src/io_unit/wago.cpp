@@ -1,8 +1,12 @@
 
 #include "wago.h"
+
 #include "define/unit_define.h"
 #include "define/unit_action_define.h"
+#include "define/unit_state.h"
 #include "helper/helper.h"
+
+
 #include <trash_bot/IOSignal.h>
 #include <trash_bot/UnitAliveMsg.h>
 #include <trash_bot/UnitActionComplete.h>
@@ -43,7 +47,7 @@ namespace fieldro_bot
     _last_update_time = ros::Time::now();
     _last_alive_time  = ros::Time::now();
 
-    _state = static_cast<int>(fieldro_bot::UnitState::InitReady);
+    _state = static_cast<int>(fieldro_bot::UnitState::Created);
 
     // io signal map 생성
     create_io_map();

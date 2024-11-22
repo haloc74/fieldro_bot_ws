@@ -51,8 +51,8 @@ namespace fieldro_bot
   {
     trash_bot::UnitActionComplete action_msg;
     action_msg.time_stamp     = ros::Time::now();
-    action_msg.receive_object = unit_to_int(fieldro_bot::Unit::System);
-    action_msg.action_object  = unit_to_int(fieldro_bot::Unit::Observer);
+    action_msg.receive_object = to_int(fieldro_bot::Unit::System);
+    action_msg.action_object  = to_int(fieldro_bot::Unit::Observer);
     action_msg.complete_action= action;
     action_msg.error_code     = result;
     _publish_unit_action_complete.publish(action_msg);

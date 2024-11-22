@@ -11,6 +11,7 @@
 
 #include "helper/thread_action_info.h"
 #include "define/unit_define.h"
+#include "define/unit_state.h"
 #include "observer_unit/alive_info.h"
 
  

@@ -16,25 +16,22 @@ namespace fieldro_bot
   {
     switch(*_action)
     {
-    case fieldro_bot::UnitState::BeforeConnect:  break;
-    case fieldro_bot::UnitState::UnConnect:      break;
-
-    case fieldro_bot::UnitState::InitReady:
+    case fieldro_bot::UnitState::Created:
       if(msg.alive == 0x00)
       {
         log_msg(LogInfo, 0, "All Unit Init - Next Step Process");
-        *_action = fieldro_bot::UnitState::Init;
+        *_action = fieldro_bot::UnitState::Active;
 
         // 각 unit에 초기화 sequence 추가
         // None   - skip
         // System - this
-        add_sequence(unit_to_int(fieldro_bot::Unit::Observer), unit_action_to_int(fieldro_bot::UnitAction::Init));
-        add_sequence(unit_to_int(fieldro_bot::Unit::Signal), unit_action_to_int(fieldro_bot::UnitAction::Init));
+        add_sequence(to_int(fieldro_bot::Unit::Observer), unit_action_to_int(fieldro_bot::UnitAction::Init));
+        add_sequence(to_int(fieldro_bot::Unit::Signal), unit_action_to_int(fieldro_bot::UnitAction::Init));
       }
       break;
 
-    case fieldro_bot::UnitState::Init:      break;
-    case fieldro_bot::UnitState::Ready:     break;
+    case fieldro_bot::UnitState::Active:    break;
+    case fieldro_bot::UnitState::Idle:      break;
     case fieldro_bot::UnitState::Busy:      break;
     case fieldro_bot::UnitState::Error:     break;
     case fieldro_bot::UnitState::End:       break;
@@ -59,7 +56,7 @@ namespace fieldro_bot
     if(_pending_sequence.empty())    
     {
         log_msg(LogInfo, 0, "action_complete (extend) :" 
-                + unit_to_string(int_to_unit(action_complete_msg.action_object)) 
+                + to_string(to_enum<fieldro_bot::Unit>(action_complete_msg.action_object)) 
                 + " - "
                 + unit_action_to_string(int_to_unit_action(action_complete_msg.complete_action)));      
       return;
@@ -74,13 +71,13 @@ namespace fieldro_bot
       if(action_complete_msg.error_code != error_to_int(Error::None))
       {
         log_msg(LogError, action_complete_msg.error_code, "action_fail : "+ 
-        unit_to_string(int_to_unit((*it)->target_object)) + " - " +
+        to_string(to_enum<fieldro_bot::Unit>((*it)->target_object)) + " - " +
         unit_action_to_string(int_to_unit_action((*it)->action)));
       }
       else
       {
         log_msg(LogInfo, 0, "action_complete : "+
-        unit_to_string(int_to_unit((*it)->target_object)) + " - " +
+        to_string(to_enum<fieldro_bot::Unit>((*it)->target_object)) + " - " +
         unit_action_to_string(int_to_unit_action((*it)->action)));
       }
       _pending_sequence.erase(it);
@@ -89,9 +86,9 @@ namespace fieldro_bot
     }
 
     // 모든 unit의 초기화가 완료되었을 경우
-    if(*_action == fieldro_bot::UnitState::Init && is_all_sequence_empty())
+    if(*_action == fieldro_bot::UnitState::Active && is_all_sequence_empty())
     {
-      *_action = fieldro_bot::UnitState::Ready;
+      *_action = fieldro_bot::UnitState::Idle;
       log_msg(LogInfo, 0, "All Unit Initialize Complete - Next Step Process");
     }
 

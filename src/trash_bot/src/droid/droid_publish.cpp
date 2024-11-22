@@ -81,7 +81,7 @@ namespace fieldro_bot
     }
 
     trash_bot::UnitAliveMsg alive_msg;
-    alive_msg.index = unit_to_int(fieldro_bot::Unit::System);
+    alive_msg.index = to_int(fieldro_bot::Unit::System);
     alive_msg.state = static_cast<int32_t>(*_action);
     _publish_unit_alive.publish(alive_msg);
 

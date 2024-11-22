@@ -16,8 +16,9 @@ namespace fieldro_bot
     // 관련 옵션 로드
     load_option();
 
+    // 현재 상태를 _state값중 system에 해당하는 값으로 연결
     _action = _state+static_cast<int>(Unit::System);
-    *_action = fieldro_bot::UnitState::InitReady;
+    
 
     _node_handle = new ros::NodeHandle();       // node handler 생성
 
@@ -64,9 +65,10 @@ namespace fieldro_bot
     // 각 unit 상태 초기화
     for(int i=0; i<(int)Unit::End; i++)
     {
-      _state[i] = UnitState::UnConnect;
+      _state[i] = UnitState::End;
     }
-    *_action = fieldro_bot::UnitState::InitReady;
+    //*_action = fieldro_bot::UnitState::Created;
+    _state[to_int(Unit::System)] = UnitState::Created;
 
     // 마지막 상태 보고 시간
     _last_alive_publish_time = ros::Time::now();
@@ -164,7 +166,7 @@ namespace fieldro_bot
     unit_control_msg->command        = command; 
     _control_sequence.push_back(std::move(unit_control_msg));
 
-    if(unit == unit_to_int(fieldro_bot::Unit::All) && 
+    if(unit == to_int(fieldro_bot::Unit::All) && 
       action == unit_action_to_int(fieldro_bot::UnitAction::Finish))
     {
       delay_call(3000, std::bind(&Droid::system_finish, this));
@@ -188,7 +190,7 @@ namespace fieldro_bot
     // command 분석
     std::tuple<int32_t, int32_t, int32_t, std::string> cmd_data = interpret_command(command_list);
 
-    if(std::get<1>(cmd_data) == unit_to_int(fieldro_bot::Unit::None))               return false;
+    if(std::get<1>(cmd_data) == to_int(fieldro_bot::Unit::End))               return false;
     if(std::get<2>(cmd_data) == unit_action_to_int(fieldro_bot::UnitAction::None))  return false;
 
     // 요청 list에 등록

@@ -1,22 +1,9 @@
 #pragma once
 
-#include <cstdint>
-#include <string>
+#include "helper/enum_template.h"
 
 namespace fieldro_bot
 {
-  enum class UnitState
-  {
-    BeforeConnect = 0x00,
-    UnConnect,           // 연결 안됨
-    InitReady,          // 초기화 준비
-    Init,               // 초기화 중
-    Ready,
-    Busy,
-    Error,
-    End,
-  };
-
   /**
   * @author		  Fieldro : haloc@fieldro.tech
   * @date			  24-11-21
@@ -26,10 +13,10 @@ namespace fieldro_bot
   * @details	
   * @see			
   */
-  enum class Unit
+  enum class Unit : int32_t
   {
     // Absolute value
-    None = 0x00,        // 없음                 Fix
+    All = 0x00,         // 모든 유닛            Fix
     System,             // main(droid) 시스템   Fix  
     Observer,           // Observer 시스템      Fix
 
@@ -40,54 +27,43 @@ namespace fieldro_bot
 
     
     // Absolute value
-    All,                // 모든 unit          
-    End = All,
+    End,
   };
 
-  constexpr int32_t unit_to_int(Unit unit)
+  template<>
+  inline std::string to_string<Unit>(Unit value)
   {
-    return static_cast<int32_t>(unit);
-  }
-  constexpr Unit int_to_unit(int32_t unit)
-  {
-    return static_cast<Unit>(unit);
-  }
-
-  inline std::string unit_to_string(Unit unit)
-  {
-    switch(unit)
+    switch(value)
     {
-      case Unit::None:            return "None";
-      case Unit::System:          return "System";
-      case Unit::Observer:        return "Observer";
-      case Unit::Signal:          return "Signal";
-      // case Unit::Loader:          return "Loader";
-      // case Unit::HandlerFork:     return "HandlerFork";
-      case Unit::All:             return "All";
-      default:                    return "None";
+      case Unit::All:      return "All";
+      case Unit::System:    return "System";
+      case Unit::Observer:  return "Observer";
+      case Unit::Signal:    return "Signal";
+      // case Unit::Loader:    return "Loader";
+      // case Unit::HandlerFork:return "HandlerFork";
+      case Unit::End:       return "End";
     }
-    return "None";
+    return "UnKnown";
   }
 
-  /**
-  * @brief      string을 unit name 비교하여 unit index 값 반환
-  * @param[in]  unit : unit name
-  * @return     unit index
-  * @note       
-  */
-  inline int32_t string_to_unit(std::string unit)
+  template<>
+  inline Unit string_to_enum<Unit>(const std::string& str)
   {
-    int unit_index = unit_to_int(Unit::None);
-
-    for(int i=0; i<unit_to_int(Unit::End)+1; i++)
-    {
-      if(unit == unit_to_string(int_to_unit(i)))
-      {
-        unit_index = i;
-        break;
-      }
-    }
-    return unit_index;
+    if(str == "All")        return Unit::All;
+    if(str == "System")     return Unit::System;
+    if(str == "Observer")   return Unit::Observer;
+    if(str == "Signal")     return Unit::Signal;
+    // if(str == "Loader")     return Unit::Loader;
+    // if(str == "HandlerFork")return Unit::HandlerFork;
+    if(str == "End")        return Unit::End;
+    return Unit::End;
   }
+
+  template<>
+  inline std::string to_name<Unit>(int32_t value)
+  {
+    return to_string(to_enum<Unit>(value));
+  }
+
 
 }

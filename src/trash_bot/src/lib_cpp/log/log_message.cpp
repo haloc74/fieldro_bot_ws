@@ -24,7 +24,7 @@ namespace fieldro_bot
               timeinfo.tm_sec,
               (int)(curtime%1000));
 
-    _unit       = unit_to_string(unit);
+    _unit       = to_string(unit);//unit_to_string(unit);
     _log_level  = log_level_to_string(level);
   }
 

@@ -8,7 +8,7 @@ namespace fieldro_bot
 {
   Observer::Observer()
   {
-    _state              = fieldro_bot::UnitState::InitReady;  // unit 현재 상태  
+    _state              = fieldro_bot::UnitState::Created;    // unit 현재 상태  
     _node_handle        = new ros::NodeHandle();              // node handler 생성
     _shut_down          = false;                              // node 종료 flag
     _last_publish_time  = ros::Time::now();                   // 마지막 업데이트 시간
