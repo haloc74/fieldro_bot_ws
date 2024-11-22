@@ -139,7 +139,6 @@ message(STATUS "")
     "${CMAKE_CURRENT_SOURCE_DIR}/src/lib_cpp/communication/*.cpp"
 #    "${CMAKE_CURRENT_SOURCE_DIR}/src/lib_cpp/motor/*.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/lib_cpp/helper/*.cpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/src/lib_cpp/observer_unit/*.cpp"
   )
 
   ## 5-2. LIB_SRC_FILES의 모든 파일을 컴파일하고 링크하여 실행 파일 생성 하도록 설정
@@ -243,15 +242,13 @@ message(STATUS "")
     set(PROJECT_OBSERVER_NAME "observer_unit")
 
     ## 6-2-1. source_dir/unit_observer 하위의 모든 cpp 파일을 찾아서 SRC_OBSERVER_FILES에 저장
-    ## UnitObserver는 lib 형태로 만들어져 있어서 별도의 cpp 파일이 필요하지 않음
-    #file(GLOB_RECURSE SRC_OBSERVER_FILES에 "${CMAKE_CURRENT_SOURCE_DIR}/src/io_unit/*.cpp")
+    file(GLOB_RECURSE SRC_OBSERVER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/observer_unit/*.cpp")
 
     ## 6-3-2. SRC_OBSERVER_FILES의 모든 파일과 
     ## observer_node.cpp을 컴파일하고 링크하여 실행 파일 생성
-    ## 별도의 cpp 파일이 필요하지 않아서 observer_node.cpp만 추가
     add_executable(
       ${PROJECT_OBSERVER_NAME}
-      #${SRC_OBSERVER_FILES}
+      ${SRC_OBSERVER_FILES}
       "${CMAKE_CURRENT_SOURCE_DIR}/src/_node/observer_node.cpp"
     )
 

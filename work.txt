@@ -20,14 +20,16 @@
 . heartbeat 정책 점검하여 정리하기
 
 . UnitState Define에 Sleep 상태를 추가하고 MainController에서 Activate 메세지 전송 하는 방안 ?
-
 . parent class Unit을 만들어서 모든 Unit담당 Class는 Unit Class를 상속하도록 수정
-
-. 각 node main class의 message.cpp -> subscribe.cpp, publish.cpp로 분할
-
-. 현재 Observer Class가 Lib 형태로 되어있는것을 Lib에서 빼기
+. unit_observer Class name -> observer로 변경
 
 ID :  - JD 24.11.22
+1. 현재 Observer Class가 Lib 형태로 되어있는것을 Lib에서 빼기
+  - CMakeLists.txt lib 생성 부분 수정
+  - CMakeLists.txt observer_node 생성 부분 수정
+
+
+ID : 597f6ca - JD 24.11.22
 1. Observer Class message.cpp 부분을 pub, sub로 분리
 2. node main 함수에서 system("clear"); 경고 뜨던 부분 수정
 
