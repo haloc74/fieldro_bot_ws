@@ -14,6 +14,10 @@ namespace fieldro_bot
     End,
   };
 
+  /**
+  * @brief      enum => string 변환
+  * @see        enum_template.h 참조 
+  */  
   template<>
   inline std::string to_string<UnitState>(UnitState value)
   {
@@ -27,5 +31,45 @@ namespace fieldro_bot
       case UnitState::End:      return "End";
     }
     return "UnKnown";
+  }
+
+  /**
+  * @brief      string => enum 변환
+  * @note       to_enum<UnitState, std::string>(std::string value)
+  * @see        enum_template.h 참조 
+  */  
+  template<>
+  inline UnitState to_enum<UnitState, std::string>(const std::string& str)
+  {
+    if(str == "Created")  return UnitState::Created;
+    if(str == "Active")   return UnitState::Active;
+    if(str == "Idle")     return UnitState::Idle;
+    if(str == "Busy")     return UnitState::Busy;
+    if(str == "Error")    return UnitState::Error;
+    if(str == "End")      return UnitState::End;
+
+    return UnitState::End;
+  }
+
+  /**
+  * @brief      int => string 변환
+  * @note       to_string<UnitState, int32_t>(int32_t value)
+  * @see        enum_template.h 참조 
+  */
+  template<>
+  inline std::string to_string<UnitState, int32_t>(int32_t value)
+  {
+    return to_string<UnitState>(to_enum<UnitState>(value));
+  }
+
+  /**
+  * @brief      string => int 변환
+  * @note       to_int<UnitState, std::string>(std::string value)
+  * @see        enum_template.h 참조 
+  */
+  template<>
+  inline int32_t to_int<UnitState, std::string>(const std::string& str)
+  {
+    return to_int(to_enum<UnitState>(str));
   }
 }    

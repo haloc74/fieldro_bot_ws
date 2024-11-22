@@ -21,7 +21,14 @@
 
 . parent class Unit을 만들어서 모든 Unit담당 Class는 Unit Class를 상속하도록 수정
 . UnitState Define에 Sleep 상태를 추가하고 MainController에서 Activate 메세지 전송 하는 방안 ?
+. template를 이용한 UnitAction enum class type_casting 정리
 
+ID :  - JD 24.11.22
+1. template를 이용한 Unit enum class type_casting 정리
+2. template를 이용한 UnitState enum class type_casting 정리
+3. twinny_msgs 삭제 : 압축파일로 남겨놓은
+   build, devel 폴더 삭제시 압축파일 풀어서 전체 컴파일 해줘야 한다.
+   앞으로는 catkin_make clean 만 해야 한다....
 
 ID :  - JD 24.11.22
 1. UnitState enum class 변수 정리

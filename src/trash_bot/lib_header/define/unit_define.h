@@ -30,6 +30,10 @@ namespace fieldro_bot
     End,
   };
 
+  /**
+  * @brief      enum => string 변환
+  * @see        enum_template.h 참조 
+  */  
   template<>
   inline std::string to_string<Unit>(Unit value)
   {
@@ -46,8 +50,13 @@ namespace fieldro_bot
     return "UnKnown";
   }
 
+  /**
+  * @brief      string => enum 변환
+  * @note       to_enum<Unit, std::string>(std::string value)
+  * @see        enum_template.h 참조 
+  */  
   template<>
-  inline Unit string_to_enum<Unit>(const std::string& str)
+  inline Unit to_enum<Unit, std::string>(const std::string& str)
   {
     if(str == "All")        return Unit::All;
     if(str == "System")     return Unit::System;
@@ -59,11 +68,25 @@ namespace fieldro_bot
     return Unit::End;
   }
 
+  /**
+  * @brief      int => string 변환
+  * @note       to_string<Unit, int32_t>(int32_t value)
+  * @see        enum_template.h 참조 
+  */
   template<>
-  inline std::string to_name<Unit>(int32_t value)
+  inline std::string to_string<Unit, int32_t>(int32_t value)
   {
     return to_string(to_enum<Unit>(value));
   }
 
-
+  /**
+  * @brief      string => int 변환
+  * @note       to_int<Unit, std::string>(std::string value)
+  * @see        enum_template.h 참조 
+  */
+  template<>
+  inline int32_t to_int<Unit, std::string>(const std::string& str)
+  {
+    return static_cast<int32_t>(to_enum<Unit>(str));
+  }
 }
