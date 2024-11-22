@@ -9,6 +9,9 @@
    - Observer 객체도 없는 상태라면 ?
    - 각 Unit 객체 자체에 Observer 객체의 Link 확인 Logic을 추가 ?
   
+3. Droid Class에 Sensor topic subscribe가 필요한가 ????
+  - EMO 입력은 Twinny Board에서 받는데...
+  - Unit Parent Class를 만들기 ????
 
 //=========================================================
 //=========================================================
@@ -24,11 +27,17 @@
 
 . 현재 Observer Class가 Lib 형태로 되어있는것을 Lib에서 빼기
 
-. Droid 초기화 Sequence 처리
-. Droid Class에 Sensor topic subscribe가 필요한가 ????
-  - EMO 입력은 Twinny Board에서 받는데...
 
 ID :  - JD 24.11.22
+1. Droid 초기화 Sequence 처리
+  - Observer node에서 모든 Unit의 Alive를 확인하고 초기화 Sequence 생성 확인
+  - Observer node로 초기화 Action 요청 발송 확인
+  - Observer node에서 초기화 Action 응답 수신 확인
+  - io_node로 초기화 Action 요청 발송 확인
+  - io_node에서 초기화 Action 응답 수신 확인
+
+
+ID : 982455a - JD 24.11.22
 1. Droid Class Pub, Sub cpp 분리
   - droid_message.cpp 삭제
   - droid_unit_control.cpp 삭제

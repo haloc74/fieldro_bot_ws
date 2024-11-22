@@ -70,22 +70,26 @@ namespace fieldro_bot
       if((*it)->target_object != action_complete_msg.action_object)   continue;
       if((*it)->action != action_complete_msg.complete_action)        continue;
 
-      // todo : result에 따른 처리
+      // todo : action fail 처리
       if(action_complete_msg.error_code != error_to_int(Error::None))
       {
-        log_msg(LogError, action_complete_msg.error_code, "action_fail : "+ unit_action_to_string(int_to_unit_action((*it)->action)));
+        log_msg(LogError, action_complete_msg.error_code, "action_fail : "+ 
+        unit_to_string(int_to_unit((*it)->target_object)) + " - " +
+        unit_action_to_string(int_to_unit_action((*it)->action)));
       }
       else
       {
-        log_msg(LogInfo, 0, "action_complete : "+unit_action_to_string(int_to_unit_action((*it)->action)));
+        log_msg(LogInfo, 0, "action_complete : "+
+        unit_to_string(int_to_unit((*it)->target_object)) + " - " +
+        unit_action_to_string(int_to_unit_action((*it)->action)));
       }
-
       _pending_sequence.erase(it);
+
       break;
     }
 
     // 모든 unit의 초기화가 완료되었을 경우
-    if(*_action == fieldro_bot::UnitState::Init && _pending_sequence.empty())
+    if(*_action == fieldro_bot::UnitState::Init && is_all_sequence_empty())
     {
       *_action = fieldro_bot::UnitState::Ready;
       log_msg(LogInfo, 0, "All Unit Initialize Complete - Next Step Process");
@@ -93,6 +97,15 @@ namespace fieldro_bot
 
     return;
   }  
+
+  /**
+  * @brief      constro_sequence 및 pending_sequence가 모두 비어 있는지 확인하는 함수
+  * @note       
+  */
+  bool Droid::is_all_sequence_empty()
+  {
+    return _control_sequence.empty() && _pending_sequence.empty();
+  }
 
   /**
   * @brief      switch report message를 수신하는 callback 함수

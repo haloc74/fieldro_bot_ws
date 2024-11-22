@@ -96,9 +96,10 @@ namespace fieldro_bot
     // user command control
     std::map<int32_t, int32_t, std::string> _command_map;
 
+    bool is_all_sequence_empty();  // 모든 sequence가 비어 있는지 확인
     void log_msg(LogLevel level, int32_t error_code, std::string log);  // log 기록 함수
     void system_finish();   // system 종료 함수
-    void load_option();
+    void load_option();     // option 로드 함수
   };
 
 }
