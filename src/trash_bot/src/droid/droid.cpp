@@ -3,7 +3,6 @@
 #include "droid.h"
 #include "helper/helper.h"
 #include "log/log.h"
-#include <trash_bot/UnitControl.h>
 #include <trash_bot/UnitAliveMsg.h>
 
 #include "define/unit_define.h"
@@ -71,22 +70,15 @@ namespace fieldro_bot
 
     // 마지막 상태 보고 시간
     _last_alive_publish_time = ros::Time::now();
-
-    // // Test : 현재 IO만 연결이 되어 있으므로 나머지는 Ready 상태로 설정하자...
-    // update_unit_state(fieldro_bot::Unit::None,    fieldro_bot::UnitState::Ready);
-    // update_unit_state(fieldro_bot::Unit::System,  fieldro_bot::UnitState::InitReady);
   }
 
-  // void Droid::update_unit_state(fieldro_bot::Unit unit, fieldro_bot::UnitState state)
-  // {
-  //   _state[unit_to_int(unit)] = state;
-  //   return;
-  // }
-
+  /**
+  * @brief      Droid 소멸자
+  * @note       
+  * @attention  Robot의 Main Controller이므로 객체 소멸시 ROS 시스템을 종료한다.
+  */
   Droid::~Droid()
   {
-    // todo : unit을 구성하는 전체 node에 객체 소멸에 대한 topic 전송
-
     // 객체 소멸 topic 메세지 전송을 위한 약간의 시간 대기
     usleep(1000000);
 
@@ -94,12 +86,16 @@ namespace fieldro_bot
     _thread_info->_active = false;
     safe_delete(_thread_info);
 
-    //
+    // user 입력 command 해제
     _command_map.clear();
+
+    // control_sequence 해제
     while(!_control_sequence.empty())
     {
       _control_sequence.pop_front();
     }
+
+    // pending_sequence 해제
     while(!_pending_sequence.empty())
     {
       _pending_sequence.pop_front();
@@ -132,145 +128,21 @@ namespace fieldro_bot
     }  
   }
 
-  /**
-  * @brief      switch report message를 수신하는 callback 함수
-  * @param      const twinny_msgs::SwitchReport : switch report message
-  * @return     void
-  */
-  void Droid::subscribe_switch_report(const twinny_msgs::SwitchReport Switch_Check)
-  {
-    if(Switch_Check.E_STOP_button == true)
-    {
-      // todo : E_STOP_button 이 눌렸을 때의 처리
-    }
-    else
-    {
-      // todo : E_STOP_button 이 눌리지 않았을 때의 처리
-    }
-  }
 
   /**
-  * @brief      속도 제어 message를 수신하는 callback 함수
-  * @param      const geometry_msgs::Twist& twist_msg : 속도 제어 message
-  * @return     void
-  * @attention  Motor의 회전은 RPM으로 제어가 되므로 
-  *             속도를 rmp으로 변환 해야 하는 작업이 필요하다.       
+  * @brief      log기록 하기위한 wrapper 함수
+  * @param[in]  LogLevel level      : log level
+  * @param[in]  int32_t error_code  : error code
+  * @param[in]  std::string log     : log message
+  * @return     
+  * @note       
   */
-  void Droid::subscribe_velocity_control(const geometry_msgs::Twist &twist_msg)
-  {
-    return;
-  }
-
-  void Droid::subscribe_io_signal(const trash_bot::IOSignal &io_signal_msg)
-  {
-    _last_io_update_time = ros::Time::now();
-
-    // io unit 초기화 완료로 설정 
-    // update_unit_state(fieldro_bot::Unit::Signal, fieldro_bot::UnitState::Ready);
-    //update_io_pulse();
-
-    if(_signal_bit == io_signal_msg.signal_bit)    return;
-
-    _signal_bit = io_signal_msg.signal_bit;
-
-    log_msg(LogInfo, 0, "Sensor Update : " + std::to_string(io_signal_msg.signal_bit));                  
-
-    // for(int i=0; i<(int)DISignal::End; ++i)
-    // {
-    //   if(update_sensor_data((DISignal)i, io_signal_msg.signal_bit))
-    //   {
-    //      // todo : 해당 센서에 대한 처리를 하자
-    //   }
-    // }
-    return;
-  }
-
-
-
-  // void Droid::update_io_pulse()
-  // {
-  //   if(_state[unit_to_int(fieldro_bot::Unit::Signal)] == fieldro_bot::UnitState::UnConnect)
-  //   {
-  //     update_unit_state(fieldro_bot::Unit::Signal, fieldro_bot::UnitState::InitReady);
-  //   }
-  //   return;
-  // }
-
-  // /**
-  // * @brief      io link check
-  // * @return     io unit의 link 상태여부 
-  // * @note       io_unit node로 부터 3초 이상 메세지 전송이 없을 경우 link error로 판단
-  // * @attention  update시간이 ros::TIME_MAX일 경우는 link error가 아닌 것으로 판단
-  // */
-  // bool Droid::io_link_check()
-  // {
-  //   if(_last_io_update_time == ros::TIME_MAX)    return true;
-
-  //   if(ros::Time::now() - _last_io_update_time > ros::Duration(2.0))
-  //   {
-  //     log_msg(LogError, 0, "IO Link Error");
-
-  //     // io unit error 설정
-  //     update_unit_state(fieldro_bot::Unit::Signal, fieldro_bot::UnitState::Error);
-
-  //     // todo : link error에 대한 처리
-  //     // 1. 모든 unit에게 비상 정지 신호 보내기 
-  //     // 2. 
-
-  //     return false;
-  //   }
-
-  //   return true;
-  // } 
-
   void Droid::log_msg(LogLevel level, int32_t error_code, std::string log)
   {
     LOG->add_log(fieldro_bot::Unit::System, level, error_code, log);
     return;
   }
 
-
-
-  /**
-  * @brief      message 발송 여건을 확인하고 message 발송
-  * @note       
-  */
-  void Droid::message_publish()
-  {
-    if(!_pending_sequence.empty())    return;  // 응답 대기중인 요청이 없을 경우에만 신규 요청 발송
-    if(_control_sequence.empty())    return;   // control_sequence에 요소가 있을 경우 발송
-
-    // 실제 메세지 발송      
-    publish_unit_control(std::move(_control_sequence.front()));
-  }
-
-  /**
-  * @brief      unit control message를 발송하는 함수
-  * @param[in]  unit_control_msg : AGV를 구성하는 Unit node에 전달되는 control message
-  * @return     void
-  * @note       unit_control_msg의 time_stamp는 발송 시간으로 변경한다.
-  * @attention  발행된 message는 pending_sequence에 저장.
-  *             pending_sequence에 저장된 message는 action_complete message를 받아서 삭제된다.
-  *             pending_sequence에 요소가 있을 경우 더이상 publish하지 않는다.
-  */
-  void Droid::publish_unit_control(std::unique_ptr<trash_bot::UnitControl> unit_control_msg)
-  {
-    std::lock_guard<std::mutex> lock(_lock);
-
-    // time_stamp를 발송 시간으로 변경
-    unit_control_msg->time_stamp = ros::Time::now();
-
-    // unit_control_msg 발송 (실제 publish)
-    _publish_unit_control.publish(*unit_control_msg);
-
-    // unit_control_msg를 pending_sequence로 이관  
-    _pending_sequence.push_back(std::move(unit_control_msg));
-
-    // 요청 대기 리스트에서 삭제
-    _control_sequence.pop_front();
-
-    return;
-  }
 
   /**
   * @brief      control sequence에 unit control message를 추가하는 함수
