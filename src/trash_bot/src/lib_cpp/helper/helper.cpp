@@ -115,7 +115,7 @@ namespace fieldro_bot
     for(int i = 0; i < command_list.size(); i++)
     {
       if     (i == 0)   unit  = to_int<Unit, std::string>(command_list[i]);
-      else if(i == 1)   action= string_to_unit_action_index(command_list[i]);
+      else if(i == 1)   action= to_int<UnitAction, std::string>(command_list[i]);
       else              cmd   = command_list[i];
     }
     return std::make_tuple(size, unit, action, cmd);    

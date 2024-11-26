@@ -1,43 +1,17 @@
 
 #pragma once
 
-#include <string>
+#include "helper/enum_template.h"
 
 namespace fieldro_bot
 {
-  enum class CommandType
-  {
-    Index = 0x0000,   // 명령 인덱스
-    String = 0x0001,  // 명령 문자열
-    End,
-  };
-  
-  constexpr int32_t command_type_to_int(CommandType type)
-  {
-    return static_cast<int32_t>(type);
-  }
-  constexpr CommandType int_to_command_type(int32_t type)
-  {
-    return static_cast<CommandType>(type);
-  }
-  inline std::string CommandTypeToString(CommandType type)
-  {
-    switch(type)
-    {
-      case CommandType::Index:  return "Index";
-      case CommandType::String: return "String";
-      default:                  return "Unknown";
-    }
-    return "Unknown";
-  }
-
   enum class UnitAction
   {
     None   = 0x0000,   // 없음
     WaitForLink,       // Link 대기
     
     
-    Init    = 0x0001,   Initializing,  Initialized,      // 초기화    (System)
+    Init    = 0x0002,   Initializing,  Initialized,      // 초기화    (System)
 
     Open    = 0x0010,   Opening,      Opened,            // 열림      (Door)
     Close   = 0x0020,   Closing,      Closed,            // 닫힘      (Door)
@@ -73,24 +47,22 @@ namespace fieldro_bot
     End, 
   };
 
-  constexpr int32_t unit_action_to_int(UnitAction action)
-  {
-    return static_cast<int32_t>(action);
-  }
-  constexpr UnitAction int_to_unit_action(int32_t action)
-  {
-    return static_cast<UnitAction>(action);
-  }
 
-  inline std::string unit_action_to_string(UnitAction action)
+  /**
+  * @brief      enum => string 변환
+  * @see        enum_template.h 참조
+  */
+  template<>
+  inline std::string to_string<UnitAction>(UnitAction value)
   {
-    switch(action)
+    switch(value)
     {
       case UnitAction::None:          return "None";
+      case UnitAction::WaitForLink:   return "WaitForLink";
 
-      case UnitAction::Init:          return "Init";
-      case UnitAction::Initializing:  return "Initializing";
-      case UnitAction::Initialized:   return "Initialized";
+      case UnitAction::Init:            return "Init";
+      case UnitAction::Initializing:    return "Initializing";
+      case UnitAction::Initialized:     return "Initialized";
 
       case UnitAction::Open:            return "Open";
       case UnitAction::Opening:         return "Opening";
@@ -107,22 +79,23 @@ namespace fieldro_bot
       case UnitAction::Reverse:         return "Reverse";
       case UnitAction::Reversing:       return "Reversing";
       case UnitAction::Reversed:        return "Reversed";
-      
+
+      case UnitAction::Fall:            return "Fall";
+      case UnitAction::Falling:         return "Falling";
+      case UnitAction::Fell:            return "Fell";
+
+      case UnitAction::Middle:          return "Middle";
+      case UnitAction::Middleing:       return "Middleing";
+      case UnitAction::Middled:         return "Middled";
+
+      case UnitAction::Home:            return "Home";
+      case UnitAction::Homing:          return "Homing";
+      case UnitAction::Homed:           return "Homed";
+
       case UnitAction::Raise:           return "Raise";
       case UnitAction::Raising:         return "Raising";
       case UnitAction::Raised:          return "Raised";
       
-      case UnitAction::Middle:          return "Middle";
-      case UnitAction::Middleing:       return "Middleing";
-      case UnitAction::Middled:         return "Middled";
-      
-      case UnitAction::Fall:            return "Fall";
-      case UnitAction::Falling:         return "Falling";
-      case UnitAction::Fell:            return "Fell";
-      
-      case UnitAction::Home:            return "Home";
-      case UnitAction::Homing:          return "Homing";
-      case UnitAction::Homed:           return "Homed";
       
       case UnitAction::Transfer:        return "Transfer";
       case UnitAction::Transfering:     return "Transfering";
@@ -139,11 +112,11 @@ namespace fieldro_bot
       case UnitAction::Move:            return "Move";
       case UnitAction::Moving:          return "Moving";
       case UnitAction::Moved:           return "Moved";
-      
+
       case UnitAction::Stop:            return "Stop";
       case UnitAction::Stopping:        return "Stopping";
       case UnitAction::Stopped:         return "Stopped";
-      
+
       case UnitAction::MoveToLowLimit:  return "MoveToLowLimit";
       case UnitAction::MoveToHighLimit: return "MoveToHighLimit";
 
@@ -154,30 +127,111 @@ namespace fieldro_bot
       case UnitAction::GetPosition:     return "GetPosition";
 
       case UnitAction::Finish:          return "Finish";
-      default:                          return "None";
     }
-    return "None";
+    return "UnKnown";
+  }
+
+
+  /**
+  * @brief      string => enum 변환
+  * @see        enum_template.h 참조
+  */
+  template<>
+  inline UnitAction to_enum<UnitAction, std::string>(const std::string& str)
+  {
+    if(str == "None")          return UnitAction::None;
+    if(str == "WaitForLink")   return UnitAction::WaitForLink;
+
+    if(str == "Init")          return UnitAction::Init;
+    if(str == "Initializing")  return UnitAction::Initializing;
+    if(str == "Initialized")   return UnitAction::Initialized;
+
+    if(str == "Open")          return UnitAction::Open;
+    if(str == "Opening")       return UnitAction::Opening;
+    if(str == "Opened")        return UnitAction::Opened;
+
+    if(str == "Close")         return UnitAction::Close;
+    if(str == "Closing")       return UnitAction::Closing;
+    if(str == "Closed")        return UnitAction::Closed;
+
+    if(str == "Advance")       return UnitAction::Advance;
+    if(str == "Advancing")     return UnitAction::Advancing;
+    if(str == "Advanced")      return UnitAction::Advanced;
+
+    if(str == "Reverse")       return UnitAction::Reverse;
+    if(str == "Reversing")     return UnitAction::Reversing;
+    if(str == "Reversed")      return UnitAction::Reversed;
+
+    if(str == "Fall")          return UnitAction::Fall;
+    if(str == "Falling")       return UnitAction::Falling;
+    if(str == "Fell")          return UnitAction::Fell;
+
+    if(str == "Middle")        return UnitAction::Middle;
+    if(str == "Middleing")     return UnitAction::Middleing;
+    if(str == "Middled")       return UnitAction::Middled;
+
+    if(str == "Home")          return UnitAction::Home;
+    if(str == "Homing")        return UnitAction::Homing;
+    if(str == "Homed")         return UnitAction::Homed;
+
+    if(str == "Raise")         return UnitAction::Raise;
+    if(str == "Raising")       return UnitAction::Raising;
+    if(str == "Raised")        return UnitAction::Raised;
+
+    if(str == "Transfer")      return UnitAction::Transfer;
+    if(str == "Transfering")   return UnitAction::Transfering;
+    if(str == "Transfered")    return UnitAction::Transfered;
+
+    if(str == "Grip")          return UnitAction::Grip;
+    if(str == "Gripping")      return UnitAction::Gripping;
+    if(str == "Gripped")       return UnitAction::Gripped;
+
+    if(str == "Release")       return UnitAction::Release;
+    if(str == "Releasing")     return UnitAction::Releasing;
+    if(str == "Released")      return UnitAction::Released;
+
+    if(str == "Move")          return UnitAction::Move;
+    if(str == "Moving")        return UnitAction::Moving;
+    if(str == "Moved")         return UnitAction::Moved;
+
+    if(str == "Stop")          return UnitAction::Stop;
+    if(str == "Stopping")      return UnitAction::Stopping;
+    if(str == "Stopped")       return UnitAction::Stopped;
+
+    if(str == "MoveToLowLimit")return UnitAction::MoveToLowLimit;
+    if(str == "MoveToHighLimit")return UnitAction::MoveToHighLimit;
+
+    if(str == "PowerOn")       return UnitAction::PowerOn;
+    if(str == "PowerOff")      return UnitAction::PowerOff;
+
+    if(str == "GetStatus")     return UnitAction::GetStatus;
+    if(str == "GetPosition")   return UnitAction::GetPosition;
+
+    if(str == "Finish")        return UnitAction::Finish;
+
+    return UnitAction::End;
+  }
+
+
+
+  /**
+  * @brief      int => string 변환
+  * @see        enum_template.h 참조       
+  */
+  template<>
+  inline std::string to_string<UnitAction, int32_t>(int32_t value)
+  {
+    return to_string<UnitAction>(to_enum<UnitAction>(value));
   }
 
   /**
-  * @brief      string을 unit action 비교하여 unit action index 값 반환
-  * @param[in]  action : unit action name
-  * @return     unit action index
-  * @note       
+  * @brief      string => int 변환
+  * @see        enum_template.h 참조              
   */
-  inline int32_t string_to_unit_action_index(std::string action)
+  template<>
+  inline int32_t to_int<UnitAction, std::string>(const std::string& str)
   {
-    int action_index = unit_action_to_int(UnitAction::None);
-
-    for(int i=0; i<unit_action_to_int(UnitAction::End); i++)
-    {
-      if(action == unit_action_to_string(int_to_unit_action(i)))
-      {
-        action_index = i;
-        break;
-      }
-    }
-    return action_index;
-  }
+    return to_int(to_enum<UnitAction>(str));
+  } 
 
 }

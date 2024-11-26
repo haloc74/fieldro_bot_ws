@@ -26,7 +26,7 @@ namespace fieldro_bot
        unit != fieldro_bot::Unit::All)      return;
 
     // 요청된 action에 따른 처리
-    fieldro_bot::UnitAction action = int_to_unit_action(unit_control_msg.action);
+    fieldro_bot::UnitAction action = to_enum<fieldro_bot::UnitAction>(unit_control_msg.action);
 
     switch(action)
     {       
@@ -37,7 +37,7 @@ namespace fieldro_bot
     case fieldro_bot::UnitAction::Init:
       //_state =  static_cast<int>(fieldro_bot::UnitState::Idle);
       _state = to_int(fieldro_bot::UnitState::Idle);
-      publish_unit_action_complete(unit_action_to_int(action), error_to_int(fieldro_bot::Error::None));
+      publish_unit_action_complete(to_int<fieldro_bot::UnitAction>(action), error_to_int(fieldro_bot::Error::None));
       break;
 
     case fieldro_bot::UnitAction::Finish:  

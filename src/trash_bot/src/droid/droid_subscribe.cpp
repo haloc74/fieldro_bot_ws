@@ -25,8 +25,8 @@ namespace fieldro_bot
         // 각 unit에 초기화 sequence 추가
         // None   - skip
         // System - this
-        add_sequence(to_int(fieldro_bot::Unit::Observer), unit_action_to_int(fieldro_bot::UnitAction::Init));
-        add_sequence(to_int(fieldro_bot::Unit::Signal), unit_action_to_int(fieldro_bot::UnitAction::Init));
+        add_sequence(to_int(fieldro_bot::Unit::Observer), to_int(fieldro_bot::UnitAction::Init));
+        add_sequence(to_int(fieldro_bot::Unit::Signal), to_int(fieldro_bot::UnitAction::Init));
       }
       break;
 
@@ -58,7 +58,8 @@ namespace fieldro_bot
         log_msg(LogInfo, 0, "action_complete (extend) :" 
                 + to_string(to_enum<fieldro_bot::Unit>(action_complete_msg.action_object)) 
                 + " - "
-                + unit_action_to_string(int_to_unit_action(action_complete_msg.complete_action)));      
+                + to_string<fieldro_bot::UnitAction>(action_complete_msg.complete_action));
+                //+ unit_action_to_string(int_to_unit_action(action_complete_msg.complete_action)));      
       return;
     }
 
@@ -72,13 +73,15 @@ namespace fieldro_bot
       {
         log_msg(LogError, action_complete_msg.error_code, "action_fail : "+ 
         to_string(to_enum<fieldro_bot::Unit>((*it)->target_object)) + " - " +
-        unit_action_to_string(int_to_unit_action((*it)->action)));
+        to_string<fieldro_bot::UnitAction>((*it)->action));
+        //unit_action_to_string(to_enum<fieldro_bot::UnitAction>((*it)->action)));
       }
       else
       {
         log_msg(LogInfo, 0, "action_complete : "+
-        to_string(to_enum<fieldro_bot::Unit>((*it)->target_object)) + " - " +
-        unit_action_to_string(int_to_unit_action((*it)->action)));
+        to_string<fieldro_bot::Unit>((*it)->target_object) + " - " +
+        to_string<fieldro_bot::UnitAction>((*it)->action));
+        //unit_action_to_string(int_to_unit_action((*it)->action)));
       }
       _pending_sequence.erase(it);
 

@@ -167,7 +167,7 @@ namespace fieldro_bot
     _control_sequence.push_back(std::move(unit_control_msg));
 
     if(unit == to_int(fieldro_bot::Unit::All) && 
-      action == unit_action_to_int(fieldro_bot::UnitAction::Finish))
+      action == to_int(fieldro_bot::UnitAction::Finish))
     {
       delay_call(3000, std::bind(&Droid::system_finish, this));
     }
@@ -191,7 +191,7 @@ namespace fieldro_bot
     std::tuple<int32_t, int32_t, int32_t, std::string> cmd_data = interpret_command(command_list);
 
     if(std::get<1>(cmd_data) == to_int(fieldro_bot::Unit::End))               return false;
-    if(std::get<2>(cmd_data) == unit_action_to_int(fieldro_bot::UnitAction::None))  return false;
+    if(std::get<2>(cmd_data) == to_int(fieldro_bot::UnitAction::None))  return false;
 
     // 요청 list에 등록
     add_sequence(std::get<1>(cmd_data), std::get<2>(cmd_data), std::get<3>(cmd_data));

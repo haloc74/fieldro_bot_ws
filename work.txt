@@ -21,9 +21,21 @@
 
 . parent class Unit을 만들어서 모든 Unit담당 Class는 Unit Class를 상속하도록 수정
 . UnitState Define에 Sleep 상태를 추가하고 MainController에서 Activate 메세지 전송 하는 방안 ?
-. template를 이용한 UnitAction enum class type_casting 정리
 
-ID :  - JD 24.11.22
+
+
+
+ID :  - JD 24.11.26
+1. template를 이용한 unit_action_define.h 수정
+2. command_define.h 추가 
+   - 기존 unit_action_define.h에 있던것을 분리
+
+
+
+//=========================================================
+//=========================================================
+
+ID : e57b61e - JD 24.11.22
 1. template를 이용한 Unit enum class type_casting 정리
 2. template를 이용한 UnitState enum class type_casting 정리
 3. twinny_msgs 삭제 : 압축파일로 남겨놓은
@@ -62,12 +74,7 @@ ID : 982455a - JD 24.11.22
 1. Droid Class Pub, Sub cpp 분리
   - droid_message.cpp 삭제
   - droid_unit_control.cpp 삭제
-
-
-
-//=========================================================
-//=========================================================
-
+  
 ID : 67533db - JD 24.11.21
 1. io_node heartbeat 버그 수정
 2. unit_alive_info::alive_check() 수정

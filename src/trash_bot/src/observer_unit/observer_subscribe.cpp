@@ -22,7 +22,7 @@ namespace fieldro_bot
        unit != fieldro_bot::Unit::All)      return;
 
     // 요청된 action에 따른 처리
-    fieldro_bot::UnitAction action = int_to_unit_action(unit_control_msg.action);
+    fieldro_bot::UnitAction action = to_enum<fieldro_bot::UnitAction>(unit_control_msg.action);
 
     switch(action)
     {       
@@ -33,7 +33,7 @@ namespace fieldro_bot
     case fieldro_bot::UnitAction::Init:
       _state =  fieldro_bot::UnitState::Idle;
       _unit_alive_info[static_cast<int>(fieldro_bot::Unit::Observer)]->update(static_cast<int>(_state));
-      publish_unit_action_complete(unit_action_to_int(action), error_to_int(fieldro_bot::Error::None));
+      publish_unit_action_complete(to_int(action), error_to_int(fieldro_bot::Error::None));
       break;
 
     case fieldro_bot::UnitAction::Finish:  
