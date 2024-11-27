@@ -130,7 +130,7 @@ namespace fieldro_bot
 
     if(error != fieldro_bot::Error::None)
     {
-      LOG->add_log(fieldro_bot::Unit::Signal, fieldro_bot::LogLevel::Error, error_to_int(error), "Read DI Signal Error");
+      LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Error, error_to_int(error), "Read DI Signal Error");
       return;
     }
     update_di_signal(signal);
@@ -161,7 +161,7 @@ namespace fieldro_bot
       if(_signal[i]->update_value(signal[i], log_string, on))
       {
         // 변경 로그 남기기
-        LOG->add_log(fieldro_bot::Unit::Signal, fieldro_bot::LogLevel::Info, 0, log_string+std::string(" : ")+std::to_string(on)); 
+        LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Info, 0, log_string+std::string(" : ")+std::to_string(on)); 
         
         update = true;
       }

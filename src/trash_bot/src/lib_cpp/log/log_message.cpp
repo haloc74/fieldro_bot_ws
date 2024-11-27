@@ -3,7 +3,7 @@
 
 namespace fieldro_bot
 {
-  LogMessage::LogMessage(LogLevel level, Unit unit, int32_t error, std::string msg)
+  LogMessage::LogMessage(LogLevel level, UnitName unit, int32_t error, std::string msg)
               :_error(error), _msg(std::move(msg))
   {
     std::memset(_file_name, 0, sizeof(_file_name));

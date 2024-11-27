@@ -18,7 +18,7 @@ namespace fieldro_bot
     // unit_alive_info 초기화 
     _unit_alive_info = std::vector<AliveInfo*>();
     _unit_alive_info.clear();
-    for(int i = 0; i < static_cast<int>(fieldro_bot::Unit::End); i++)
+    for(int i = 0; i < static_cast<int>(fieldro_bot::UnitName::End); i++)
     {
       _unit_alive_info.push_back(new AliveInfo(i));
     }
@@ -111,7 +111,7 @@ namespace fieldro_bot
     {
       _unit_alive = new_alive_state;
 
-      LOG->add_log(fieldro_bot::Unit::Observer, LogInfo, 0, "Unit Alive State Update : " + std::to_string(_unit_alive));
+      LOG->add_log(fieldro_bot::UnitName::Observer, LogInfo, 0, "UnitName Alive State Update : " + std::to_string(_unit_alive));
 
       return true;
     }

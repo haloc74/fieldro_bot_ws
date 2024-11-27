@@ -16,10 +16,10 @@ namespace fieldro_bot
   void Observer::subscribe_unit_control(const trash_bot::UnitControl& unit_control_msg)
   {
     // target의 signal이 아닌 메세지는 무시한다. 
-    fieldro_bot::Unit unit = to_enum<fieldro_bot::Unit>(unit_control_msg.target_object);
+    fieldro_bot::UnitName unit = to_enum<fieldro_bot::UnitName>(unit_control_msg.target_object);
 
-    if(unit != fieldro_bot::Unit::Observer && 
-       unit != fieldro_bot::Unit::All)      return;
+    if(unit != fieldro_bot::UnitName::Observer && 
+       unit != fieldro_bot::UnitName::All)      return;
 
     // 요청된 action에 따른 처리
     fieldro_bot::UnitAction action = to_enum<fieldro_bot::UnitAction>(unit_control_msg.action);
@@ -27,12 +27,12 @@ namespace fieldro_bot
     switch(action)
     {       
     case fieldro_bot::UnitAction::None:
-      //LOG->add_log(fieldro_bot::Unit::Signal, fieldro_bot::LogLevel::Error, 0, "Unit Action None");
+      //LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Error, 0, "UnitName Action None");
       break;
 
     case fieldro_bot::UnitAction::Init:
       _state =  fieldro_bot::UnitState::Idle;
-      _unit_alive_info[static_cast<int>(fieldro_bot::Unit::Observer)]->update(static_cast<int>(_state));
+      _unit_alive_info[static_cast<int>(fieldro_bot::UnitName::Observer)]->update(static_cast<int>(_state));
       publish_unit_action_complete(to_int(action), error_to_int(fieldro_bot::Error::None));
       break;
 

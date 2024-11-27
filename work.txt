@@ -13,19 +13,34 @@
   - EMO 입력은 Twinny Board에서 받는데...
   - Unit Parent Class를 만들기 ????
 
-//=========================================================
-//=========================================================
-
-. heartbeat 관련 메세지는 20Hz 동작하도록 공통으로 적용
-. heartbeat 정책 점검하여 정리하기
 
 . parent class Unit을 만들어서 모든 Unit담당 Class는 Unit Class를 상속하도록 수정
+
+//=========================================================
+//=========================================================
+
+
 . UnitState Define에 Sleep 상태를 추가하고 MainController에서 Activate 메세지 전송 하는 방안 ?
 
 
 
+. heartbeat 관련 메세지는 20Hz 동작하도록 공통으로 적용
+. heartbeat 정책 점검하여 정리하기
 
-ID :  - JD 24.11.26
+
+
+
+. Unit Class 설계
+  - state 변수
+
+
+ID :  - JD 24.11.27
+1. document dir에 draw 문서 추가
+2. enum Class Unit -> UnitName 으로 변경
+
+
+
+ID : ff61de5 - JD 24.11.26
 1. template를 이용한 unit_action_define.h 수정
 2. command_define.h 추가 
    - 기존 unit_action_define.h에 있던것을 분리
@@ -42,7 +57,7 @@ ID : e57b61e - JD 24.11.22
    build, devel 폴더 삭제시 압축파일 풀어서 전체 컴파일 해줘야 한다.
    앞으로는 catkin_make clean 만 해야 한다....
 
-ID :  - JD 24.11.22
+ID : b18ea04 - JD 24.11.22
 1. UnitState enum class 변수 정리
 
 ID : a41c937 - JD 24.11.22

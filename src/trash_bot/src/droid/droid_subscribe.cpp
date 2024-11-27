@@ -19,14 +19,14 @@ namespace fieldro_bot
     case fieldro_bot::UnitState::Created:
       if(msg.alive == 0x00)
       {
-        log_msg(LogInfo, 0, "All Unit Init - Next Step Process");
+        log_msg(LogInfo, 0, "All UnitName Init - Next Step Process");
         *_action = fieldro_bot::UnitState::Active;
 
         // 각 unit에 초기화 sequence 추가
         // None   - skip
         // System - this
-        add_sequence(to_int(fieldro_bot::Unit::Observer), to_int(fieldro_bot::UnitAction::Init));
-        add_sequence(to_int(fieldro_bot::Unit::Signal), to_int(fieldro_bot::UnitAction::Init));
+        add_sequence(to_int(fieldro_bot::UnitName::Observer), to_int(fieldro_bot::UnitAction::Init));
+        add_sequence(to_int(fieldro_bot::UnitName::Signal), to_int(fieldro_bot::UnitAction::Init));
       }
       break;
 
@@ -56,7 +56,7 @@ namespace fieldro_bot
     if(_pending_sequence.empty())    
     {
         log_msg(LogInfo, 0, "action_complete (extend) :" 
-                + to_string(to_enum<fieldro_bot::Unit>(action_complete_msg.action_object)) 
+                + to_string(to_enum<fieldro_bot::UnitName>(action_complete_msg.action_object)) 
                 + " - "
                 + to_string<fieldro_bot::UnitAction>(action_complete_msg.complete_action));
                 //+ unit_action_to_string(int_to_unit_action(action_complete_msg.complete_action)));      
@@ -72,14 +72,14 @@ namespace fieldro_bot
       if(action_complete_msg.error_code != error_to_int(Error::None))
       {
         log_msg(LogError, action_complete_msg.error_code, "action_fail : "+ 
-        to_string(to_enum<fieldro_bot::Unit>((*it)->target_object)) + " - " +
+        to_string(to_enum<fieldro_bot::UnitName>((*it)->target_object)) + " - " +
         to_string<fieldro_bot::UnitAction>((*it)->action));
         //unit_action_to_string(to_enum<fieldro_bot::UnitAction>((*it)->action)));
       }
       else
       {
         log_msg(LogInfo, 0, "action_complete : "+
-        to_string<fieldro_bot::Unit>((*it)->target_object) + " - " +
+        to_string<fieldro_bot::UnitName>((*it)->target_object) + " - " +
         to_string<fieldro_bot::UnitAction>((*it)->action));
         //unit_action_to_string(int_to_unit_action((*it)->action)));
       }
@@ -92,7 +92,7 @@ namespace fieldro_bot
     if(*_action == fieldro_bot::UnitState::Active && is_all_sequence_empty())
     {
       *_action = fieldro_bot::UnitState::Idle;
-      log_msg(LogInfo, 0, "All Unit Initialize Complete - Next Step Process");
+      log_msg(LogInfo, 0, "All UnitName Initialize Complete - Next Step Process");
     }
 
     return;
@@ -141,7 +141,7 @@ namespace fieldro_bot
     _last_io_update_time = ros::Time::now();
 
     // io unit 초기화 완료로 설정 
-    // update_unit_state(fieldro_bot::Unit::Signal, fieldro_bot::UnitState::Ready);
+    // update_unit_state(fieldro_bot::UnitName::Signal, fieldro_bot::UnitState::Ready);
     //update_io_pulse();
 
     if(_signal_bit == io_signal_msg.signal_bit)    return;

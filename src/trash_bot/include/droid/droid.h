@@ -91,7 +91,7 @@ namespace fieldro_bot
     ros::Time _last_alive_publish_time;                             // 마지막 alive 정보 업데이트 시간
     int32_t   _alive_publish_interval;                              // alive 정보 업데이트 주기
 
-    fieldro_bot::UnitState _state[to_int(fieldro_bot::Unit::End)];           // unit 상태 정보
+    fieldro_bot::UnitState _state[to_int(fieldro_bot::UnitName::End)];           // unit 상태 정보
     fieldro_bot::UnitState* _action;
 
     // user command control

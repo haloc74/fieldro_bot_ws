@@ -70,13 +70,13 @@ namespace fieldro_bot
     /**
     * @brief      file로 남겨야 할 log 기록 추가
     * @param[in]  level Log Level
-    * @param[in]  unit  Unit ID   (H/W ID)
+    * @param[in]  unit  UnitName ID   (H/W ID)
     * @param[in]  error Error Code
     * @param[in]  msg   Log Message
     * @return     void
     * @note       message를 _log_queue에 추가시 lock 설정하는 부분 주의해야 함.
     */
-    void add_log(Unit unit, LogLevel level, int32_t error, std::string msg);
+    void add_log(UnitName unit, LogLevel level, int32_t error, std::string msg);
 
   private:
     /**

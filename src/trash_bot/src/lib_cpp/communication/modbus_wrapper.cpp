@@ -39,7 +39,7 @@ namespace fieldro_bot
     case ModbusType::RS232:     break;
     case ModbusType::RS485:     load_option_485();  break;
     default:
-      LOG->add_log(fieldro_bot::Unit::Signal, fieldro_bot::LogLevel::Error, 0, "Invalid ModbusType");
+      LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Error, 0, "Invalid ModbusType");
       break;
     }      
   }
@@ -60,7 +60,7 @@ namespace fieldro_bot
     case ModbusType::RS485:     disconnect_modbus_485();      break;
 
     default:                    
-      LOG->add_log(fieldro_bot::Unit::Signal, fieldro_bot::LogLevel::Error, 0, "Invalid ModbusType");
+      LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Error, 0, "Invalid ModbusType");
       break;
     }      
   }
@@ -80,7 +80,7 @@ namespace fieldro_bot
     case ModbusType::RS485:     return connect_check_modbus_485();
 
     default:    
-      LOG->add_log(fieldro_bot::Unit::Signal, fieldro_bot::LogLevel::Error, 0, "Invalid ModbusType");
+      LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Error, 0, "Invalid ModbusType");
       break;
     }
     return CommStatus::Error;
@@ -94,7 +94,7 @@ namespace fieldro_bot
     case ModbusType::RS485:     return disconnect_modbus_485();
 
     default:    
-      LOG->add_log(fieldro_bot::Unit::Signal, fieldro_bot::LogLevel::Error, 0, "Invalid ModbusType");
+      LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Error, 0, "Invalid ModbusType");
       break;
     }    
   }
@@ -126,7 +126,7 @@ namespace fieldro_bot
 
     if(!_modbus)
     {
-      LOG->add_log(fieldro_bot::Unit::Signal, fieldro_bot::LogLevel::Error, 0, "modbus_connect fail !!!");
+      LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Error, 0, "modbus_connect fail !!!");
       disconnect_modbus_tcp();
       return fieldro_bot::Error::UnConnect;
     }
@@ -134,7 +134,7 @@ namespace fieldro_bot
     int32_t socket = modbus_get_socket(_modbus);
     if(socket == -1)
     {
-      LOG->add_log(fieldro_bot::Unit::Signal, fieldro_bot::LogLevel::Error, 0, "modbus_connect fail !!!");
+      LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Error, 0, "modbus_connect fail !!!");
       disconnect_modbus_tcp();
       return fieldro_bot::Error::UnConnect;
     }
@@ -142,7 +142,7 @@ namespace fieldro_bot
     // modbus 연결 되어있지 않으면 return
     if(is_connect() != CommStatus::Connect)
     {
-      LOG->add_log(fieldro_bot::Unit::Signal, fieldro_bot::LogLevel::Error, 0, "modbus_connect fail !!!");
+      LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Error, 0, "modbus_connect fail !!!");
       disconnect_modbus_tcp();
       return fieldro_bot::Error::UnConnect;
     }
@@ -151,7 +151,7 @@ namespace fieldro_bot
     socklen_t addrlen = sizeof(error);
     if(getsockopt(socket, SOL_SOCKET, SO_ERROR, &error, &addrlen) != 0)
     {
-      LOG->add_log(fieldro_bot::Unit::Signal, fieldro_bot::LogLevel::Error, 0, "getsockopt fail !!!");
+      LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Error, 0, "getsockopt fail !!!");
       disconnect_modbus_tcp();
       return fieldro_bot::Error::UnConnect;
     }
@@ -167,7 +167,7 @@ namespace fieldro_bot
       std::string error_msg = modbus_strerror(errno);
       ros::Duration duration = ros::Time::now() - current_time;
         
-      LOG->add_log(fieldro_bot::Unit::Signal, fieldro_bot::LogLevel::Error, 0, 
+      LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Error, 0, 
                   "modbus_read_bits fail: " + error_msg + " (took " + 
                   std::to_string(duration.toSec()) + "s)");
         
@@ -177,7 +177,7 @@ namespace fieldro_bot
 
     if(result != read_len)
     {
-      LOG->add_log(fieldro_bot::Unit::Signal, fieldro_bot::LogLevel::Error, 0, 
+      LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Error, 0, 
                     "Incomplete read: got " + std::to_string(result) + 
                     " bits, expected " + std::to_string(read_len));
         
@@ -188,14 +188,14 @@ namespace fieldro_bot
     // // 읽어들인 Data 길이 확인
     // if(read_bits != read_len)
     // {
-    //   LOG->add_log(fieldro_bot::Unit::Signal, fieldro_bot::LogLevel::Error, 0, "modbus_read_bits fail !!!");
+    //   LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Error, 0, "modbus_read_bits fail !!!");
 
     //   disconnect_modbus_tcp();
 
     //   // error 내용 및 경과시간 log 기록
     //   std::string str = modbus_strerror(errno);
     //   ros::Duration duration = ros::Time::now() - current_time;
-    //   LOG->add_log(fieldro_bot::Unit::Signal, fieldro_bot::LogLevel::Error, 0, "Error : "+ str + "   " + std::to_string(duration.toSec()));
+    //   LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Error, 0, "Error : "+ str + "   " + std::to_string(duration.toSec()));
       
     //   return fieldro_bot::Error::ReadFail;
     // }
@@ -212,7 +212,7 @@ namespace fieldro_bot
   //   // modbus 연결 되어있지 않으면 return
   //   if(is_connect() != CommStatus::Connect || modbus_get_socket(_modbus) == -1)
   //   {
-  //     LOG->add_log(fieldro_bot::Unit::Signal, fieldro_bot::LogLevel::Error, 0, "modbus_connect fail !!!");
+  //     LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Error, 0, "modbus_connect fail !!!");
   //     disconnect_modbus_tcp();
   //     return fieldro_bot::Error::UnConnect;
   //   }
@@ -221,7 +221,7 @@ namespace fieldro_bot
   //   socklen_t addrlen = sizeof(error);
   //   if(getsockopt(modbus_get_socket(_modbus), SOL_SOCKET, SO_ERROR, &error, &addrlen) != 0)
   //   {
-  //     LOG->add_log(fieldro_bot::Unit::Signal, fieldro_bot::LogLevel::Error, 0, "getsockopt fail !!!");
+  //     LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Error, 0, "getsockopt fail !!!");
   //     disconnect_modbus_tcp();
   //     return fieldro_bot::Error::UnConnect;
   //   }
@@ -233,14 +233,14 @@ namespace fieldro_bot
   //   // 읽어들인 Data 길이 확인
   //   if(read_bits != read_len)
   //   {
-  //     LOG->add_log(fieldro_bot::Unit::Signal, fieldro_bot::LogLevel::Error, 0, "modbus_read_bits fail !!!");
+  //     LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Error, 0, "modbus_read_bits fail !!!");
 
   //     disconnect_modbus_tcp();
 
   //     // error 내용 및 경과시간 log 기록
   //     std::string str = modbus_strerror(errno);
   //     ros::Duration duration = ros::Time::now() - current_time;
-  //     LOG->add_log(fieldro_bot::Unit::Signal, fieldro_bot::LogLevel::Error, 0, "Error : "+ str + "   " + std::to_string(duration.toSec()));
+  //     LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Error, 0, "Error : "+ str + "   " + std::to_string(duration.toSec()));
       
   //     return fieldro_bot::Error::ReadFail;
   //   }
@@ -271,7 +271,7 @@ namespace fieldro_bot
     // 쓰기 성공 여부 확인
     if(write_bits != 1)
     {
-      LOG->add_log(fieldro_bot::Unit::Signal, fieldro_bot::LogLevel::Error, 0, "modbus_write_bit fail !!!");
+      LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Error, 0, "modbus_write_bit fail !!!");
       disconnect_modbus_tcp();
       return fieldro_bot::Error::WriteFail;
     }
@@ -311,7 +311,7 @@ namespace fieldro_bot
     if(ret == -1)
     {
       std::string str = modbus_strerror(errno);
-      LOG->add_log(fieldro_bot::Unit::Signal, fieldro_bot::LogLevel::Error, 0, "modbus_read_registers fail : " + str);
+      LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Error, 0, "modbus_read_registers fail : " + str);
       disconnect();
       return fieldro_bot::Error::ReadFail;
     }

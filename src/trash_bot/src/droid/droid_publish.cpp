@@ -12,7 +12,7 @@ namespace fieldro_bot
   * @param[in]  action : 명령어 index
   * @return     
   * @note       
-  * @see        global/define/unit_define.h Unit 참조
+  * @see        global/define/unit_define.h UnitName 참조
   * @see        global/define/unit_action_define.h UnitAction 참조
   */
   void Droid::publish_unit_control(uint32_t unit, uint32_t action, std::string command)
@@ -42,7 +42,7 @@ namespace fieldro_bot
 
   /**
   * @brief      unit control message를 발송하는 함수
-  * @param[in]  unit_control_msg : AGV를 구성하는 Unit node에 전달되는 control message
+  * @param[in]  unit_control_msg : AGV를 구성하는 UnitName node에 전달되는 control message
   * @return     void
   * @note       unit_control_msg의 time_stamp는 발송 시간으로 변경한다.
   * @attention  발행된 message는 pending_sequence에 저장.
@@ -70,7 +70,7 @@ namespace fieldro_bot
 
   /**
   * @brief      unit의 heartbeat 및 현재 상태를 발송
-  * @note       현 Class가 main controller이므로 Unit::System으로 치환시켜 보낸다.
+  * @note       현 Class가 main controller이므로 UnitName::System으로 치환시켜 보낸다.
   *             _alive_publish_interval이 경과 하지 않을 경우에는 리턴
   */
   void Droid::publish_unit_alive()
@@ -81,7 +81,7 @@ namespace fieldro_bot
     }
 
     trash_bot::UnitAliveMsg alive_msg;
-    alive_msg.index = to_int(fieldro_bot::Unit::System);
+    alive_msg.index = to_int(fieldro_bot::UnitName::System);
     alive_msg.state = static_cast<int32_t>(*_action);
     _publish_unit_alive.publish(alive_msg);
 

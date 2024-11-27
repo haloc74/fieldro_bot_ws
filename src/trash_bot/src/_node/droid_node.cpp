@@ -16,9 +16,9 @@ int main(int argc, char **argv)
 
   // log 객체 초기화
   LOG->initialize("config/droid.yaml", "logger");
-  LOG->add_log(fieldro_bot::Unit::System, fieldro_bot::LogLevel::Info, 0, "   ");
-  LOG->add_log(fieldro_bot::Unit::System, fieldro_bot::LogLevel::Info, 0, "   ");
-  LOG->add_log(fieldro_bot::Unit::System, fieldro_bot::LogLevel::Info, 0, "Trash Bot Start");
+  LOG->add_log(fieldro_bot::UnitName::System, fieldro_bot::LogLevel::Info, 0, "   ");
+  LOG->add_log(fieldro_bot::UnitName::System, fieldro_bot::LogLevel::Info, 0, "   ");
+  LOG->add_log(fieldro_bot::UnitName::System, fieldro_bot::LogLevel::Info, 0, "Trash Bot Start");
 
   // carrybot 객체 생성
   fieldro_bot::Droid* droid = new fieldro_bot::Droid();
@@ -50,14 +50,14 @@ int main(int argc, char **argv)
     {
       if(system("clear") == -1)
       {
-        LOG->add_log(fieldro_bot::Unit::System, fieldro_bot::LogLevel::Error, 0, "system clear error");
+        LOG->add_log(fieldro_bot::UnitName::System, fieldro_bot::LogLevel::Error, 0, "system clear error");
       } 
     }
     else
     {
       if(!droid->control(input))
       {
-        LOG->add_log(fieldro_bot::Unit::System, fieldro_bot::LogLevel::Error, 0, std::string("Command Error : ")+str);
+        LOG->add_log(fieldro_bot::UnitName::System, fieldro_bot::LogLevel::Error, 0, std::string("Command Error : ")+str);
       }
     }                        
   }

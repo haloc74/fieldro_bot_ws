@@ -34,7 +34,7 @@ namespace fieldro_bot
     _last_publish_time = ros::Time::now();
 
     //log_msg(LogInfo, 0, "Publish Alive Message");
-    LOG->add_log(fieldro_bot::Unit::Observer, fieldro_bot::LogLevel::Info, 0, "state_pub - "+std::to_string(_unit_alive));
+    LOG->add_log(fieldro_bot::UnitName::Observer, fieldro_bot::LogLevel::Info, 0, "state_pub - "+std::to_string(_unit_alive));
 
 
     return;
@@ -51,8 +51,8 @@ namespace fieldro_bot
   {
     trash_bot::UnitActionComplete action_msg;
     action_msg.time_stamp     = ros::Time::now();
-    action_msg.receive_object = to_int(fieldro_bot::Unit::System);
-    action_msg.action_object  = to_int(fieldro_bot::Unit::Observer);
+    action_msg.receive_object = to_int(fieldro_bot::UnitName::System);
+    action_msg.action_object  = to_int(fieldro_bot::UnitName::Observer);
     action_msg.complete_action= action;
     action_msg.error_code     = result;
     _publish_unit_action_complete.publish(action_msg);

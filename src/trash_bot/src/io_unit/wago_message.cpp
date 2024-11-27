@@ -20,10 +20,10 @@ namespace fieldro_bot
   void Wago::subscribe_unit_control(const trash_bot::UnitControl& unit_control_msg)
   {
     // target이 signal이 아닌 메세지는 무시한다. 
-    fieldro_bot::Unit unit = to_enum<fieldro_bot::Unit>(unit_control_msg.target_object);
+    fieldro_bot::UnitName unit = to_enum<fieldro_bot::UnitName>(unit_control_msg.target_object);
 
-    if(unit != fieldro_bot::Unit::Signal && 
-       unit != fieldro_bot::Unit::All)      return;
+    if(unit != fieldro_bot::UnitName::Signal && 
+       unit != fieldro_bot::UnitName::All)      return;
 
     // 요청된 action에 따른 처리
     fieldro_bot::UnitAction action = to_enum<fieldro_bot::UnitAction>(unit_control_msg.action);
@@ -31,7 +31,7 @@ namespace fieldro_bot
     switch(action)
     {       
     case fieldro_bot::UnitAction::None:
-      LOG->add_log(fieldro_bot::Unit::Signal, fieldro_bot::LogLevel::Error, 0, "Unit Action None");
+      LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Error, 0, "UnitName Action None");
       break;
 
     case fieldro_bot::UnitAction::Init:
@@ -63,8 +63,8 @@ namespace fieldro_bot
   {
     trash_bot::UnitActionComplete action_msg;
     action_msg.time_stamp     = ros::Time::now();
-    action_msg.receive_object = to_int(fieldro_bot::Unit::System);
-    action_msg.action_object  = to_int(fieldro_bot::Unit::Signal);
+    action_msg.receive_object = to_int(fieldro_bot::UnitName::System);
+    action_msg.action_object  = to_int(fieldro_bot::UnitName::Signal);
     action_msg.complete_action= action;
     action_msg.error_code     = result;
     _publish_unit_action_complete.publish(action_msg);
@@ -85,7 +85,7 @@ namespace fieldro_bot
 
     // unit alive message 발송
     trash_bot::UnitAliveMsg alive_msg;
-    alive_msg.index = to_int(fieldro_bot::Unit::Signal);
+    alive_msg.index = to_int(fieldro_bot::UnitName::Signal);
     alive_msg.state = _state;
     _publish_alive.publish(alive_msg);
 
@@ -111,7 +111,7 @@ namespace fieldro_bot
     // 변경사항이 있을 때만 로그를 남긴다.
     if(update_flag)
     {
-      LOG->add_log(fieldro_bot::Unit::Signal, 
+      LOG->add_log(fieldro_bot::UnitName::Signal, 
                     fieldro_bot::LogLevel::Info, 
                     0, std::string("Update IO Signal : ")+std::to_string(signal_bit));
     }
