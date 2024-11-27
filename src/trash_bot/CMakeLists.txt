@@ -137,7 +137,7 @@ message(STATUS "")
   file(GLOB_RECURSE LIB_SRC_FILES 
     "${CMAKE_CURRENT_SOURCE_DIR}/src/lib_cpp/log/*.cpp"  
     "${CMAKE_CURRENT_SOURCE_DIR}/src/lib_cpp/communication/*.cpp"
-#    "${CMAKE_CURRENT_SOURCE_DIR}/src/lib_cpp/motor/*.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/lib_cpp/unit/*.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/lib_cpp/helper/*.cpp"
   )
 

@@ -21,20 +21,18 @@
 
 
 . UnitState Define에 Sleep 상태를 추가하고 MainController에서 Activate 메세지 전송 하는 방안 ?
-
-
-
 . heartbeat 관련 메세지는 20Hz 동작하도록 공통으로 적용
 . heartbeat 정책 점검하여 정리하기
-
-
-
-
-. Unit Class 설계
-  - state 변수
+. Unit class를 상속받는 UnitChild class를 만들어서 체크 하기 
+. Wago class가 Unit Class를 상속 받도록 하기
 
 
 ID :  - JD 24.11.27
+1. 모든 Unit들의 Parent Class로 Unit Class 설계
+2. Unit Class 선언 및 정의
+
+
+ID : f2bc233 - JD 24.11.27
 1. document dir에 draw 문서 추가
 2. enum Class Unit -> UnitName 으로 변경
 
