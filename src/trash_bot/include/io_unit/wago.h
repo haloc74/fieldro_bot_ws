@@ -1,13 +1,14 @@
 
 #pragma once
 
-#include "ros/ros.h"
-#include "helper/thread_action_info.h"
-#include "trash_bot/UnitControl.h"
-#include "communication/modbus_wrapper.h"
 #include <mutex>
-#include "signal_info.h"
+
+#include "ros/ros.h"
+
+#include "unit/unit.h"
 #include "define/digital_in_define.h"
+#include "communication/modbus_wrapper.h"
+#include "signal_info.h"
 
 
 /**
@@ -21,39 +22,41 @@
 
 namespace fieldro_bot
 {
-  class Wago
+  class Wago : public Unit
   { 
   public:
-    Wago();
-    ~Wago();
-    ros::NodeHandle* get_node_handle() { return _node_handle; }
-    bool is_shutdown() { return _shut_down; }
+    Wago(std::string config_file, std::string session);
+    virtual ~Wago();
+    
+    //bool is_shutdown() { return _shut_down; }
 
   private:
     void update();
-    void system_finish();
+    //void system_finish();
 
-    ThreadActionInfo*   _thread_info;                 // thread action 객체
-    ros::NodeHandle*    _node_handle;                 // ROS 시스템과 통신을 위한 노드 핸들
-    ros::AsyncSpinner*  _spinner;                     // ROS 시스템과 통신을 위한 스피너 
+    // ThreadActionInfo*   _thread_info;                 // thread action 객체
+    // ros::NodeHandle*    _node_handle;                 // ROS 시스템과 통신을 위한 노드 핸들
+    // ros::AsyncSpinner*  _spinner;                     // ROS 시스템과 통신을 위한 스피너 
+
     ModbusWrapper*      _modbus;                      // modbus wrapper 객체
     ros::Time           _last_update_time;            // 마지막 update 시간
-    ros::Time           _last_alive_time;             // 마지막 alive 발송 시간
-    std::mutex          _lock;                        // thread lock
-    int32_t             _state;                       // 현재 state
-    bool                _shut_down;                   // 종료 flag
+    //ros::Time           _last_alive_time;             // 마지막 alive 발송 시간
+    
+    //std::mutex          _lock;                        // thread lock
+    //int32_t             _state;                       // 현재 state
+    //bool                _shut_down;                   // 종료 flag
 
-    // alive message 발송을 위하 publisher
-    ros::Publisher  _publish_alive;
-    void publish_alive();
+    // // alive message 발송을 위하 publisher
+    // ros::Publisher  _publish_alive;
+    // void publish_alive();
 
     // control 지령을 받기 위한 subscriber
-    ros::Subscriber     _subscribe_unit_control;      
-    void subscribe_unit_control(const trash_bot::UnitControl& unit_control_msg);
+    //ros::Subscriber     _subscribe_unit_control;      
+    virtual void subscribe_unit_action(const trash_bot::UnitControl& msg);
 
     // control 지령 처리 결과 통보를 위한 publisher
-    ros::Publisher      _publish_unit_action_complete;
-    void publish_unit_action_complete(const int32_t action, const int32_t result);    
+    //ros::Publisher      _publish_unit_action_complete;
+    //virtual void publish_unit_action_complete(const int32_t action, const int32_t result);    
 
     // io signal을 발송하기 위한 publisher
     ros::Publisher  _publish_io_signal;           

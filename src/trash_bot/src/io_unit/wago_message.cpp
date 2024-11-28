@@ -17,7 +17,7 @@ namespace fieldro_bot
   * @attention  target이 signal이 아닌 메세지는 무시한다.
   * @note       
   */
-  void Wago::subscribe_unit_control(const trash_bot::UnitControl& unit_control_msg)
+  void Wago::subscribe_unit_action(const trash_bot::UnitControl& unit_control_msg)
   {
     // target이 signal이 아닌 메세지는 무시한다. 
     fieldro_bot::UnitName unit = to_enum<fieldro_bot::UnitName>(unit_control_msg.target_object);
@@ -36,12 +36,13 @@ namespace fieldro_bot
 
     case fieldro_bot::UnitAction::Init:
       //_state =  static_cast<int>(fieldro_bot::UnitState::Idle);
-      _state = to_int(fieldro_bot::UnitState::Idle);
+      _state = fieldro_bot::UnitState::Idle;
       publish_unit_action_complete(to_int<fieldro_bot::UnitAction>(action), error_to_int(fieldro_bot::Error::None));
       break;
 
     case fieldro_bot::UnitAction::Finish:  
-      system_finish();
+      //system_finish();
+      destroy();
       break;
 
     case fieldro_bot::UnitAction::End:        
@@ -59,41 +60,41 @@ namespace fieldro_bot
   * @return     void
   * @note       
   */
-  void Wago::publish_unit_action_complete(const int32_t action, const int32_t result)
-  {
-    trash_bot::UnitActionComplete action_msg;
-    action_msg.time_stamp     = ros::Time::now();
-    action_msg.receive_object = to_int(fieldro_bot::UnitName::System);
-    action_msg.action_object  = to_int(fieldro_bot::UnitName::Signal);
-    action_msg.complete_action= action;
-    action_msg.error_code     = result;
-    _publish_unit_action_complete.publish(action_msg);
-    return;
-  }
+  // void Wago::publish_unit_action_complete(const int32_t action, const int32_t result)
+  // {
+  //   trash_bot::UnitActionComplete action_msg;
+  //   action_msg.time_stamp     = ros::Time::now();
+  //   action_msg.receive_object = to_int(fieldro_bot::UnitName::System);
+  //   action_msg.action_object  = to_int(fieldro_bot::UnitName::Signal);
+  //   action_msg.complete_action= action;
+  //   action_msg.error_code     = result;
+  //   _publish_unit_action_complete.publish(action_msg);
+  //   return;
+  // }
 
   /**
   * @brief      alive message를 발송하는 함수
   * @return     void
   * @note       현재 상태를 0.5초 간격으로 발송한다.
   */
-  void Wago::publish_alive()
-  {
-    if(ros::Time::now() - _last_alive_time < ros::Duration(0.5))
-    {
-      return;
-    }
+  // void Wago::publish_alive()
+  // {
+  //   if(ros::Time::now() - _last_alive_time < ros::Duration(0.5))
+  //   {
+  //     return;
+  //   }
 
-    // unit alive message 발송
-    trash_bot::UnitAliveMsg alive_msg;
-    alive_msg.index = to_int(fieldro_bot::UnitName::Signal);
-    alive_msg.state = _state;
-    _publish_alive.publish(alive_msg);
+  //   // unit alive message 발송
+  //   trash_bot::UnitAliveMsg alive_msg;
+  //   alive_msg.index = to_int(fieldro_bot::UnitName::Signal);
+  //   alive_msg.state = _state;
+  //   _publish_alive.publish(alive_msg);
 
-    // 마지막 발송 시간 업데이트
-    _last_alive_time = ros::Time::now();
+  //   // 마지막 발송 시간 업데이트
+  //   _last_alive_time = ros::Time::now();
 
-    return;
-  }
+  //   return;
+  // }
 
   /**
   * @brief      io signal을 발송하는 함수

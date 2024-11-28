@@ -1,6 +1,9 @@
 main:
   hz: 50 
 
+alive:
+  hz: 20
+
 logger:
   debug               : 1             ## debug 옵션 (0: off, 그외 : on)
   hz                  : 50            ## thread 동작 속도

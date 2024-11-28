@@ -22,7 +22,7 @@ int main(int argc, char **argv)
   LOG->add_log(fieldro_bot::UnitName::System, fieldro_bot::LogLevel::Info, 0, "IO Signal Start");
 
   // wago 객체 생성
-  fieldro_bot::Wago* wago = new fieldro_bot::Wago();
+  fieldro_bot::Wago* wago = new fieldro_bot::Wago("config/io.yaml", "wago");
  
   bool command_use = false;
   wago->get_node_handle()->getParam("command_use", command_use);

@@ -34,8 +34,8 @@ namespace fieldro_bot
     _alive_thread->_thread = std::thread(std::bind(&Unit::publish_unit_alive, this));
 
 
-    _update_thread = nullptr;
-   
+    _update_thread  = nullptr;
+    _shut_down      = false;
 
     // child class에서 해야 할일
     // 1. subscriber 생성
@@ -72,6 +72,7 @@ namespace fieldro_bot
   {
     trash_bot::UnitActionComplete msg;
 
+    msg.time_stamp      = ros::Time::now();
     msg.receive_object  = to_int(fieldro_bot::UnitName::System);
     msg.action_object   = to_int(_name);
     msg.complete_action = action;

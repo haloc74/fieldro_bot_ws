@@ -24,7 +24,7 @@ namespace fieldro_bot
 
     ros::NodeHandle* get_node_handle();    // 노드 핸들러 반환
     virtual void update(){}		                                        // 업데이트
-
+    virtual bool is_shutdown() { return _shut_down; }		                    // 종료 여부
     virtual bool control(std::vector<std::string> command_list){}        // 컨트롤 함수(consol input을 이용한 control)
 
   protected:
@@ -45,11 +45,13 @@ namespace fieldro_bot
     ThreadActionInfo* _alive_thread;                  // alive  thread 동작 정보
 
     std::map<int32_t, int32_t, std::string> _command; // command map
+
+    bool              _shut_down;                     // 종료 flag
     
 
   protected:
     void publish_unit_alive();                                                  // unit alive publish
-    void destroy(){}                                                            // 객체 소멸 예약
+    void destroy(){ _shut_down = true; }                                                            // 객체 소멸 예약
     void log_msg(LogLevel level, int32_t error_code, const std::string& msg);   // 로그 메시지 출력
 
   protected:
