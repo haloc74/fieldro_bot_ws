@@ -41,7 +41,6 @@ namespace fieldro_bot
       break;
 
     case fieldro_bot::UnitAction::Finish:  
-      //system_finish();
       destroy();
       break;
 
@@ -53,48 +52,6 @@ namespace fieldro_bot
     }
   }
 
-  /**
-  * @brief      unit action 처리 결과를 발송하는 함수
-  * @param[in]  int32_t action : 처리된 action
-  * @param[in]  int32_t result : 처리 결과
-  * @return     void
-  * @note       
-  */
-  // void Wago::publish_unit_action_complete(const int32_t action, const int32_t result)
-  // {
-  //   trash_bot::UnitActionComplete action_msg;
-  //   action_msg.time_stamp     = ros::Time::now();
-  //   action_msg.receive_object = to_int(fieldro_bot::UnitName::System);
-  //   action_msg.action_object  = to_int(fieldro_bot::UnitName::Signal);
-  //   action_msg.complete_action= action;
-  //   action_msg.error_code     = result;
-  //   _publish_unit_action_complete.publish(action_msg);
-  //   return;
-  // }
-
-  /**
-  * @brief      alive message를 발송하는 함수
-  * @return     void
-  * @note       현재 상태를 0.5초 간격으로 발송한다.
-  */
-  // void Wago::publish_alive()
-  // {
-  //   if(ros::Time::now() - _last_alive_time < ros::Duration(0.5))
-  //   {
-  //     return;
-  //   }
-
-  //   // unit alive message 발송
-  //   trash_bot::UnitAliveMsg alive_msg;
-  //   alive_msg.index = to_int(fieldro_bot::UnitName::Signal);
-  //   alive_msg.state = _state;
-  //   _publish_alive.publish(alive_msg);
-
-  //   // 마지막 발송 시간 업데이트
-  //   _last_alive_time = ros::Time::now();
-
-  //   return;
-  // }
 
   /**
   * @brief      io signal을 발송하는 함수
@@ -103,8 +60,8 @@ namespace fieldro_bot
   */
   void Wago::publish_io_signal(const int64_t signal_bit, bool update_flag)
   {
-    // update가 없고 마지막 전송 이후 0.5초가 경과하지 않았다면 발송하지 않는다.
-    if(!update_flag && ros::Time::now() - _last_update_time < ros::Duration(0.5))
+    // update가 없고 마지막 전송 이후 _publish_io_signal_period 초가 경과하지 않았다면 발송하지 않는다.
+    if(!update_flag && ros::Time::now() - _last_update_time < ros::Duration(_publish_io_signal_period))
     {
       return;
     }

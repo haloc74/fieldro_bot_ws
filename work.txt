@@ -13,7 +13,6 @@
   - EMO 입력은 Twinny Board에서 받는데...
   - Unit Parent Class를 만들기 ????
 
-
 . parent class Unit을 만들어서 모든 Unit담당 Class는 Unit Class를 상속하도록 수정
 
 //=========================================================
@@ -24,12 +23,23 @@
 . heartbeat 관련 메세지는 20Hz 동작하도록 공통으로 적용
 . heartbeat 정책 점검하여 정리하기
 
+. alive msg -> heartbeat msg로 naming 변경
+. unit 객체가 아닌 child 객체에서 사용하기 위한 옵션 load 함수 구현
+. Wago Class Test
+
 
 ID :  - JD 24.11.28
+1. Wago class 주석 처리된 부분 삭제
+2. Wago class Refactoring 
+3. Wago signal publish 시간을 option으로 정의
+4. Unit Class private 접근자 구분
+
+
+ID : bbd0897 - JD 24.11.28
 1. Wago class가 Unit Class를 상속 받도록 하기
 
 
-ID :  - JD 24.11.27
+ID : d08628e - JD 24.11.27
 1. 모든 Unit들의 Parent Class로 Unit Class 설계
 2. Unit Class 선언 및 정의
 

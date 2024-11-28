@@ -17,17 +17,13 @@ namespace fieldro_bot
   Wago::Wago(std::string config_file, std::string session)
        : Unit(config_file, session) 
   {
-    // _node_handle  = new ros::NodeHandle();     // node handler 생성
-    // _shut_down    = false;
+    // unit action message 수신을 위한 subscriber 생성 및 link
+    _subscribe_unit_action = 
+    _node_handle->subscribe("trash_bot/unit_control", 50, &Wago::subscribe_unit_action, this);
 
-    // alive message 발송을 위한 publisher 생성 및 link
-    //_publish_alive = _node_handle->advertise<trash_bot::UnitAliveMsg>("trash_bot/UnitAliveMsg", 100);
-
-    // unit control message 수신을 위한 subscriber 생성 및 link
-    _subscribe_unit_action = _node_handle->subscribe("trash_bot/unit_control", 100, &Wago::subscribe_unit_action, this);
-
-    // unit control message 처리 결과 발송을 위한 publisher 생성 및 link
-    _publish_unit_action_complete = _node_handle->advertise<trash_bot::UnitActionComplete>("trash_bot/action_complete", 100);
+    // unit action message 처리 결과 발송을 위한 publisher 생성 및 link
+    _publish_unit_action_complete = 
+    _node_handle->advertise<trash_bot::UnitActionComplete>("trash_bot/action_complete", 50);
 
     // publisher 생성 및 link
     ros::AdvertiseOptions option = 
@@ -39,17 +35,11 @@ namespace fieldro_bot
     option.latch = true;
     _publish_io_signal = _node_handle->advertise(option);
 
-    
-
-    // // spinner 생성 및 구동
-    // _spinner = new ros::AsyncSpinner(1);
     // spinn 구동 (생성은 Unit Class 담당)
     _spinner->start();
 
     _last_update_time = ros::Time::now();
-    //_last_alive_time  = ros::Time::now();
 
-    //_state = static_cast<int>(fieldro_bot::UnitState::Created);
     _state = fieldro_bot::UnitState::Created;
 
     // io signal map 생성
@@ -58,7 +48,7 @@ namespace fieldro_bot
     // modbus wrapper 생성
     _modbus = new ModbusWrapper(ModbusType::TCP, "config/io.yaml", "comm", nullptr);
 
-    // main thread
+    // main update thread
     _update_thread = new ThreadActionInfo("config/io.yaml", "main");
     _update_thread->_active = true;
     _update_thread->_thread = std::thread(std::bind(&Wago::update, this));
@@ -70,26 +60,12 @@ namespace fieldro_bot
     safe_delete(_modbus);
 
     // thread 해제
-    _alive_thread->_active = false;
-    safe_delete(_alive_thread);
+    _update_thread->_active = false;
+    safe_delete(_update_thread);
 
     // io signal map 해제
     delete_io_map();
-
-
-    // spinner 해제 : Unit Class
-    // _spinner->stop();
-    // safe_delete(_spinner);
-
-    // node 해제 : Unit Class
-    // _node_handle->shutdown();
-    // safe_delete(_node_handle);
   }
-
-//  void Wago::system_finish()
-//  {
-//    _shut_down = true;
-//  } 
 
   /**
   * @brief      main thread update 함수
@@ -107,7 +83,6 @@ namespace fieldro_bot
       }
 
       read_di_signal();     // digital input signal read
-      //publish_alive();      // 상태보고 (heartbeat)
 
       // thread Hz 싱크 및 독점 방지를 위한 sleep
       std::this_thread::sleep_for(std::chrono::milliseconds(_update_thread->_sleep));
@@ -137,6 +112,7 @@ namespace fieldro_bot
       LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Error, error_to_int(error), "Read DI Signal Error");
       return;
     }
+
     update_di_signal(signal);
   }
 
@@ -179,6 +155,30 @@ namespace fieldro_bot
 
     // sensor signal data 발송
     publish_io_signal(signal_bit, update);
+  }
+
+  void Wago::load_option(std::string config_file)
+  {
+    try
+    {
+      std::ifstream yaml_file(config_file);
+      YAML::Node yaml = YAML::Load(yaml_file);
+      yaml_file.close();
+
+      _publish_io_signal_period = yaml["main"]["signal_period"].as<double>();
+    }
+    catch(YAML::Exception& e)
+    {
+      std::cout << "YAML Exception : " << e.what() << std::endl;
+    }
+    catch(std::exception& e)
+    {
+      std::cout << "Exception : " << e.what() << std::endl;
+    }
+    catch(...)
+    {
+      std::cout << "Unknown Exception" << std::endl;
+    }    
   }
 }
 

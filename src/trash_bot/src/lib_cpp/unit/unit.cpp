@@ -9,7 +9,7 @@ namespace fieldro_bot
   Unit::Unit(std::string config_file, std::string session)
   {
     // main option 로드
-    load_option(config_file, session);
+    load_unit_option(config_file, session);
 
     // command map 초기화
     _command.clear();
@@ -61,6 +61,22 @@ namespace fieldro_bot
   }
 
   /**
+  * @brief      객체 소멸 예약
+  * @note       예약이 되면 object를 소유하고 있는 쪽에서 is_shutdown()을 확인하여 소멸시킨다.
+  */
+  void Unit::destroy()
+  {
+    _shut_down = true;
+    return;
+  }
+  bool Unit::is_shutdown()
+  {
+    return _shut_down;
+  }
+
+  
+
+  /**
   * @brief      unit action complete publish
   * @param[in]  int32_t action : 동작 완료된 action
   * @param[in]  int32_t error_code : 에러 코드
@@ -110,7 +126,7 @@ namespace fieldro_bot
     return _node_handle;
   }
 
-  void Unit::load_option(std::string config_file, std::string session)
+  void Unit::load_unit_option(std::string config_file, std::string session)
   {
     try
     {

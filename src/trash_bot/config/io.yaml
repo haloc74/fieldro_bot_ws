@@ -1,5 +1,7 @@
 main:
-  hz: 50 
+  hz                : 50 
+  spinner_count     : 1
+  io_signal_period  : 0.2             ## second
 
 alive:
   hz: 20
