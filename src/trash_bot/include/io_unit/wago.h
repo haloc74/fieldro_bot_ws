@@ -32,8 +32,6 @@ namespace fieldro_bot
     virtual void update();
 
     ModbusWrapper*      _modbus;                  // modbus wrapper 객체
-    ros::Time           _last_update_time;        // 마지막 update 시간
-    
 
     // Wago object 옵션 로드
     virtual void load_option(std::string config_file);
@@ -42,6 +40,7 @@ namespace fieldro_bot
     virtual void subscribe_unit_action(const trash_bot::UnitControl& msg);
 
     // io signal을 발송하기 위한 publisher
+    ros::Time      _last_publish_time;               // 마지막 update 시간    
     double         _publish_io_signal_period;
     ros::Publisher  _publish_io_signal;           
     void publish_io_signal(const int64_t signal_bit, bool update_flag);

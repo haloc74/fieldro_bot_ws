@@ -4,7 +4,7 @@ main:
   io_signal_period  : 0.2             ## second
 
 alive:
-  hz: 20
+  hz: 20                              ## heartbeat 보고 주기          
 
 logger:
   debug               : 1             ## debug 옵션 (0: off, 그외 : on)

@@ -11,10 +11,7 @@ namespace fieldro_bot
            : Unit(config_file, session)
   {
     _state              = fieldro_bot::UnitState::Created;    // unit 현재 상태  
-    // _node_handle        = new ros::NodeHandle();              // node handler 생성
-    // _shut_down          = false;                              // node 종료 flag
     _last_publish_time  = ros::Time::now();                   // 마지막 업데이트 시간
-    _publish_interval   = 20;                                 // publish 주기 (20 ms)
     load_option(config_file);                                 // 옵션 로드
 
     // unit_alive_info 초기화 
@@ -34,11 +31,7 @@ namespace fieldro_bot
     // unit state publishing
     _publish_units_state = _node_handle->advertise<trash_bot::UnitStateMsg>("trash_bot/UnitStateMsg", 100);
 
-//    // unit control message 처리 결과 발송을 위한 publisher 생성 및 link
-//    _publish_unit_action_complete = _node_handle->advertise<trash_bot::UnitActionComplete>("trash_bot/action_complete", 100);    
-
-    // spinner 생성 및 구동
-    //_spinner = new ros::AsyncSpinner(1);
+    // spinner 구동
     _spinner->start();
 
     // main thread
@@ -59,14 +52,6 @@ namespace fieldro_bot
       safe_delete(unit_alive_info);
     }
     _unit_alive_info.clear();
-
-    // // spinner 해제
-    //_spinner->stop();
-    //safe_delete(_spinner);
-
-    // // ros 해제
-    //_node_handle->shutdown();
-    //safe_delete(_node_handle);
   }
 
   /**
@@ -126,7 +111,7 @@ namespace fieldro_bot
   */
   bool Observer::is_publish_interval()
   {
-    if(((ros::Time::now() - _last_publish_time).toSec())*1000 < _publish_interval)
+    if(((ros::Time::now() - _last_publish_time).toSec()) < _publish_units_state_period)
     {
       return false;
     }
@@ -147,7 +132,7 @@ namespace fieldro_bot
       yaml_file.close();
 
       // 여러개의 object처리 할 필요가 있어 session_name으로 구분한다.
-      _publish_interval = yaml["main"]["publish_interval"].as<int32_t>();
+      _publish_units_state_period = yaml["main"]["units_state_period"].as<double>();
     }
     catch(YAML::Exception& e)
     {

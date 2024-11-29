@@ -1,6 +1,10 @@
 main:
   hz                  : 50            ## main thread 동작 속도
-  publish_interval    : 50            ## alive publish 주기 (millisecond)
+  spinner_count       : 1             ## spinner 갯수
+  units_state_period  : 0.05          ## alive publish 주기 (sec)
+
+alive:
+  hz: 20                              ## heartbeat 보고 주기
 
 logger:
   debug               : 1             ## debug 옵션 (0: off, 그외 : on)

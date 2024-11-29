@@ -61,7 +61,7 @@ namespace fieldro_bot
   void Wago::publish_io_signal(const int64_t signal_bit, bool update_flag)
   {
     // update가 없고 마지막 전송 이후 _publish_io_signal_period 초가 경과하지 않았다면 발송하지 않는다.
-    if(!update_flag && ros::Time::now() - _last_update_time < ros::Duration(_publish_io_signal_period))
+    if(!update_flag && ros::Time::now() - _last_publish_time < ros::Duration(_publish_io_signal_period))
     {
       return;
     }
@@ -81,7 +81,7 @@ namespace fieldro_bot
     _publish_io_signal.publish(io_signal_msg);
 
     // 마지막 발송 시간 업데이트
-    _last_update_time = ros::Time::now();
+    _last_publish_time = ros::Time::now();
 
     return;
   }

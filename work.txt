@@ -17,22 +17,19 @@
 
 //=========================================================
 //=========================================================
-
-
 . UnitState Define에 Sleep 상태를 추가하고 MainController에서 Activate 메세지 전송 하는 방안 ?
 . heartbeat 관련 메세지는 20Hz 동작하도록 공통으로 적용
 . heartbeat 정책 점검하여 정리하기
-
-. alive msg -> heartbeat msg로 naming 변경
-. unit 객체가 아닌 child 객체에서 사용하기 위한 옵션 load 함수 구현
-. Wago Class Test
-. Observer Class Unit Class 상속 하도록 하기
-. alive로 명명된 heart_beat
-
-. Observer Class Refactoring
-
+. Droid class가 Unit Class를 상속하도록 하기
 
 ID :  - JD 24.11.29
+0. Observer Class Refactoring 완료
+1. Observer Option Load Refactoring
+2. Observer _publish_units_state_period 변수명 변경
+3. Observer config file에 항목 변수 추가 
+
+
+ID : d80bdfe - JD 24.11.29
 1. Observer도 Alive Publish 하게 됨으로 써 Unit::Observer 예외처리 하던 부분 수정
    - AliveInfo::alive_check() 함수를 Function Pointer로 변경
    - All, Observer 두개의 Unit에 대한 예외처리를 매 호출시 마다 한던것을 생성자에서 처리

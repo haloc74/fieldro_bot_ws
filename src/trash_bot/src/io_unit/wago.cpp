@@ -38,7 +38,7 @@ namespace fieldro_bot
     // spinn 구동 (생성은 Unit Class 담당)
     _spinner->start();
 
-    _last_update_time = ros::Time::now();
+    _last_publish_time = ros::Time::now();
 
     _state = fieldro_bot::UnitState::Created;
 
