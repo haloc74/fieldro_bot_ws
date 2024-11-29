@@ -16,20 +16,25 @@ namespace fieldro_bot
 
   class AliveInfo 
   {
-  private:
-      int32_t     _unit_index;              // unit에 할당된 index 번호
-      int32_t     _state;                   // 현재 unit 상태
-      ros::Time   _last_update_time;        // 마지막 update 시간
-      
-      const double  ALIVE_THRESHOLD = 0.5;        // heartbeat 임계값
-
   public:
       AliveInfo(int32_t unit_index);    // 생성자
       virtual ~AliveInfo() = default;   // 소멸자
 
-      bool alive_check();                   // heartbeat가 정상적으로 동작하는지 확인
-      bool update(int32_t state);           // unit의 상태를 업데이트
-      int32_t get_state() { return _state; } // unit의 상태 반환
+  private:
+      int32_t               _unit_index;          // unit에 할당된 index 번호
+      int32_t               _state;               // 현재 unit 상태
+      ros::Time             _last_update_time;    // 마지막 update 시간
+      std::function<bool()> _alive_check_func;    // unit의 heartbeat 확인 함수
+
+      const double  ALIVE_THRESHOLD = 0.5;        // heartbeat 임계값
+
+  public:
+      bool alive_check();                         // heartbeat가 정상적으로 동작하는지 확인
+      bool update(int32_t state);                 // unit의 상태를 업데이트
+      int32_t get_state() { return _state; }      // unit의 상태 반환
+
+  protected:
+      bool alive_check_unit();                    // unit의 heartbeat 확인 필요
   };
 
 }

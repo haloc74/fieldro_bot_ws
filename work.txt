@@ -29,6 +29,19 @@
 . Observer Class Unit Class 상속 하도록 하기
 . alive로 명명된 heart_beat
 
+. Observer Class Refactoring
+
+
+ID :  - JD 24.11.29
+1. Observer도 Alive Publish 하게 됨으로 써 Unit::Observer 예외처리 하던 부분 수정
+   - AliveInfo::alive_check() 함수를 Function Pointer로 변경
+   - All, Observer 두개의 Unit에 대한 예외처리를 매 호출시 마다 한던것을 생성자에서 처리
+2. Observer Class Refactoring을 위한 주석 모두 삭제
+3. log 호출 부분을 Unit::log_msg() 함수로 모두 변경
+
+ID : a96bda6 - JD 24.11.29
+1. Observer Class가 Unit Class 상속 하도록 변경
+
 
 //=========================================================
 //=========================================================

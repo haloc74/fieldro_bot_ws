@@ -27,7 +27,6 @@ namespace fieldro_bot
     switch(action)
     {       
     case fieldro_bot::UnitAction::None:
-      //LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Error, 0, "UnitName Action None");
       break;
 
     case fieldro_bot::UnitAction::Init:
@@ -60,7 +59,7 @@ namespace fieldro_bot
 
     if (index < 0 || index >= _unit_alive_info.size())
     {
-      ROS_ERROR("Invalid unit index : %d", index);
+      log_msg(LogLevel::Error, 0, "Invalid unit index : " + std::to_string(index));
       return;
     }
 

@@ -1,17 +1,28 @@
-
 #include "observer_unit/alive_info.h"
+#include "define/unit_define.h"
 
 namespace fieldro_bot
 {
   /**
   * @brief      생성자
   * @param[in]  int32_t unit_index : unit index (Unit 참조)
+  * @attention  alive_check() 함수로 어떤 함수를 사용 할 것인지 미리 정의해야 한다.
   * @see        Unit
   */
   AliveInfo::AliveInfo(int32_t unit_index)
   {
     _unit_index       = unit_index;
     _state            = -1;
+
+    if(_unit_index == to_int(fieldro_bot::UnitName::All) ||
+       _unit_index == to_int(fieldro_bot::UnitName::Observer))
+    {
+      _alive_check_func = []() { return true; };
+    }
+    else
+    {
+      _alive_check_func = std::bind(&AliveInfo::alive_check_unit, this);
+    }
 
     try
     {
@@ -25,21 +36,24 @@ namespace fieldro_bot
     {
       std::cerr << e.what() << '\n';
     }    
-  }
+  } 
 
   /**
   * @brief      unit의 상태를 확인하는 함수
   * @return     unit이 현재 alive 상태인지 여부
-  * @attention  0번 index는 None으로, 2번 index는 Observer로 예약되어있어 예외처리
+  * @attention  생성자에서 어떤 함수를 사용할것인지 미리 결정해야 한다.
+  *             Unit 갯수 * Hz 만큼 빈번하게 호출되는 로직이므로 최대한 overhead를 줄여야 한다.
   * @see        Unit 
   */
   bool AliveInfo::alive_check() 
   {
-    if(_unit_index == 0)  return true;      // None Unit
-    if(_unit_index == 2)  return true;      // AliveInfo Unit
-
+    return _alive_check_func();  
+  }
+  bool AliveInfo::alive_check_unit() 
+  {
     return (ros::Time::now() - _last_update_time).toSec() < ALIVE_THRESHOLD;
   }
+ 
 
   /**
   * @brief      unit의 상태를 업데이트하는 함수
