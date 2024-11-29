@@ -28,7 +28,7 @@ namespace fieldro_bot
     Wago(std::string config_file, std::string session);
     virtual ~Wago();
 
-  private:
+  protected:
     virtual void update();
 
     ModbusWrapper*      _modbus;                  // modbus wrapper 객체

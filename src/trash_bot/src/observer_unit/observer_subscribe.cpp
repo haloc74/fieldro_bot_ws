@@ -13,7 +13,7 @@ namespace fieldro_bot
   * @attention  target이 signal이 아닌 메세지는 무시한다.
   * @note       
   */
-  void Observer::subscribe_unit_control(const trash_bot::UnitControl& unit_control_msg)
+  void Observer::subscribe_unit_action(const trash_bot::UnitControl& unit_control_msg)
   {
     // target의 signal이 아닌 메세지는 무시한다. 
     fieldro_bot::UnitName unit = to_enum<fieldro_bot::UnitName>(unit_control_msg.target_object);
@@ -37,7 +37,7 @@ namespace fieldro_bot
       break;
 
     case fieldro_bot::UnitAction::Finish:  
-      system_finish();
+      destroy();
       break;
 
     case fieldro_bot::UnitAction::End:        

@@ -2,6 +2,8 @@
 #include "observer_unit/observer.h"
 #include "helper/helper.h"
 #include "log/log.h"
+
+#include <trash_bot/UnitStateMsg.h>
 #include <trash_bot/UnitActionComplete.h>
 
 namespace fieldro_bot
@@ -47,15 +49,15 @@ namespace fieldro_bot
   * @return     void
   * @note       
   */
-  void Observer::publish_unit_action_complete(const int32_t action, const int32_t result)
-  {
-    trash_bot::UnitActionComplete action_msg;
-    action_msg.time_stamp     = ros::Time::now();
-    action_msg.receive_object = to_int(fieldro_bot::UnitName::System);
-    action_msg.action_object  = to_int(fieldro_bot::UnitName::Observer);
-    action_msg.complete_action= action;
-    action_msg.error_code     = result;
-    _publish_unit_action_complete.publish(action_msg);
-    return;
-  }
+  // void Observer::publish_unit_action_complete(const int32_t action, const int32_t result)
+  // {
+  //   trash_bot::UnitActionComplete action_msg;
+  //   action_msg.time_stamp     = ros::Time::now();
+  //   action_msg.receive_object = to_int(fieldro_bot::UnitName::System);
+  //   action_msg.action_object  = to_int(fieldro_bot::UnitName::Observer);
+  //   action_msg.complete_action= action;
+  //   action_msg.error_code     = result;
+  //   _publish_unit_action_complete.publish(action_msg);
+  //   return;
+  // }
 }  

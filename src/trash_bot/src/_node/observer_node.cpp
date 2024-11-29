@@ -22,7 +22,7 @@ int main(int argc, char **argv)
   LOG->add_log(fieldro_bot::UnitName::System, fieldro_bot::LogLevel::Info, 0, "UnitName Observer Start");
 
   // Observer 객체 생성
-  fieldro_bot::Observer* observer = new fieldro_bot::Observer();
+  fieldro_bot::Observer* observer = new fieldro_bot::Observer("config/observer.yaml", "main");
 
   // command 사용여부 설정
   bool command_use = false;

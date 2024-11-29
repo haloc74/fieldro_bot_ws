@@ -3,17 +3,19 @@
 #include "helper/helper.h"
 #include "log/log.h"
 #include <trash_bot/UnitActionComplete.h>
+#include <trash_bot/UnitStateMsg.h>
 
 namespace fieldro_bot
 {
-  Observer::Observer()
+  Observer::Observer(std::string config_file, std::string session)
+           : Unit(config_file, session)
   {
     _state              = fieldro_bot::UnitState::Created;    // unit 현재 상태  
-    _node_handle        = new ros::NodeHandle();              // node handler 생성
-    _shut_down          = false;                              // node 종료 flag
+    // _node_handle        = new ros::NodeHandle();              // node handler 생성
+    // _shut_down          = false;                              // node 종료 flag
     _last_publish_time  = ros::Time::now();                   // 마지막 업데이트 시간
     _publish_interval   = 20;                                 // publish 주기 (20 ms)
-    load_option();                                            // 옵션 로드
+    load_option(config_file);                                 // 옵션 로드
 
     // unit_alive_info 초기화 
     _unit_alive_info = std::vector<AliveInfo*>();
@@ -27,29 +29,29 @@ namespace fieldro_bot
     _subscribe_unit_alive = _node_handle->subscribe("trash_bot/UnitAliveMsg", 100, &Observer::subscribe_unit_alive, this);
 
     // unit control message 수신을 위한 subscriber 생성 및 link
-    _subscribe_unit_control = _node_handle->subscribe("trash_bot/unit_control", 100, &Observer::subscribe_unit_control, this);    
+    _subscribe_unit_action = _node_handle->subscribe("trash_bot/unit_control", 100, &Observer::subscribe_unit_action, this);    
 
     // unit state publishing
     _publish_units_state = _node_handle->advertise<trash_bot::UnitStateMsg>("trash_bot/UnitStateMsg", 100);
 
-    // unit control message 처리 결과 발송을 위한 publisher 생성 및 link
-    _publish_unit_action_complete = _node_handle->advertise<trash_bot::UnitActionComplete>("trash_bot/action_complete", 100);    
+//    // unit control message 처리 결과 발송을 위한 publisher 생성 및 link
+//    _publish_unit_action_complete = _node_handle->advertise<trash_bot::UnitActionComplete>("trash_bot/action_complete", 100);    
 
     // spinner 생성 및 구동
-    _spinner = new ros::AsyncSpinner(1);
+    //_spinner = new ros::AsyncSpinner(1);
     _spinner->start();
 
     // main thread
-    _thread_info = new ThreadActionInfo("config/observer.yaml", "main");
-    _thread_info->_active = true;
-    _thread_info->_thread = std::thread(std::bind(&Observer::update, this));    
+    _update_thread = new ThreadActionInfo("config/observer.yaml", "main");
+    _update_thread->_active = true;
+    _update_thread->_thread = std::thread(std::bind(&Observer::update, this));    
   }
 
   Observer::~Observer()
   {
     // main thread 해제
-    _thread_info->_active = false;
-    safe_delete(_thread_info);
+    _update_thread->_active = false;
+    safe_delete(_update_thread);
 
     // unit_alive_info 삭제
     for(auto &unit_alive_info : _unit_alive_info)
@@ -58,13 +60,13 @@ namespace fieldro_bot
     }
     _unit_alive_info.clear();
 
-    // spinner 해제
-    _spinner->stop();
-    safe_delete(_spinner);
+    // // spinner 해제
+    //_spinner->stop();
+    //safe_delete(_spinner);
 
-    // ros 해제
-    _node_handle->shutdown();
-    safe_delete(_node_handle);
+    // // ros 해제
+    //_node_handle->shutdown();
+    //safe_delete(_node_handle);
   }
 
   /**
@@ -73,7 +75,7 @@ namespace fieldro_bot
   */
   void Observer::update()
   {
-    while(_thread_info->_active)
+    while(_update_thread->_active)
     {    
       // unit의 alive 상태를 업데이트
       update_units_alive_value();
@@ -82,7 +84,7 @@ namespace fieldro_bot
       publish_unit_state(true);
 
       // thread Hz 싱크 및 독점 방지를 위한 sleep
-      std::this_thread::sleep_for(std::chrono::milliseconds(_thread_info->_sleep));      
+      std::this_thread::sleep_for(std::chrono::milliseconds(_update_thread->_sleep));      
     }
 
     return;
@@ -135,12 +137,12 @@ namespace fieldro_bot
   * @brief      옵션 로드 함수
   * @note       
   */
-  void Observer::load_option()
+  void Observer::load_option(std::string config_file)
   {
     try
     {
       // file open
-      std::ifstream yaml_file("config/observer.yaml");
+      std::ifstream yaml_file(config_file);
       YAML::Node yaml = YAML::Load(yaml_file);
       yaml_file.close();
 

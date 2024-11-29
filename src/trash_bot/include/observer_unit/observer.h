@@ -5,13 +5,8 @@
 #include <vector>
 #include <mutex>
 
-#include "trash_bot/UnitStateMsg.h"
+#include "unit/unit.h"
 #include "trash_bot/UnitAliveMsg.h"
-#include "trash_bot/UnitControl.h"
-
-#include "helper/thread_action_info.h"
-#include "define/unit_define.h"
-#include "define/unit_state.h"
 #include "observer_unit/alive_info.h"
 
  
@@ -26,29 +21,28 @@ namespace fieldro_bot
   * @details	
   * @see			
   */
-  class Observer
+  class Observer : public Unit
   {
   public:
-    Observer();		    // 생성자
-    ~Observer();		  // 소멸자
+    Observer(std::string config_file, std::string session);		    // 생성자
+    virtual ~Observer();		  // 소멸자
  
-    ros::NodeHandle* get_node_handle()  { return _node_handle; }
-    bool is_shutdown()                  { return _shut_down; }
+    // ros::NodeHandle* get_node_handle()  { return _node_handle; }
+    // bool is_shutdown()                  { return _shut_down; }
 
-  private:
-    void update();			                    // main thread 업데이트
+  protected:
+    virtual void update();			                    // main thread 업데이트
 
-  private:
-    ros::NodeHandle*        _node_handle;	      // ROS 시스템과 통신을 위한 노드 핸들
-    ros::AsyncSpinner*      _spinner;           // ROS 시스템과 통신을 위한 스피너
-    ThreadActionInfo*       _thread_info;       // thread action 객체
-    fieldro_bot::UnitState  _state;	        // unit 현재 상태
-    bool                    _shut_down;         // node 종료 flag
-    std::mutex              _lock;	            // thread lock
+    // ros::NodeHandle*        _node_handle;	      // ROS 시스템과 통신을 위한 노드 핸들
+    // ros::AsyncSpinner*      _spinner;           // ROS 시스템과 통신을 위한 스피너
+    // ThreadActionInfo*       _thread_info;       // thread action 객체
+    // fieldro_bot::UnitState  _state;	        // unit 현재 상태
+    // bool                    _shut_down;         // node 종료 flag
+    // std::mutex              _lock;	            // thread lock
 
     // SUBSCRIBER : control 지령
-    ros::Subscriber     _subscribe_unit_control;      
-    void subscribe_unit_control(const trash_bot::UnitControl& unit_control_msg);
+    //ros::Subscriber     _subscribe_unit_control;      
+    void subscribe_unit_action(const trash_bot::UnitControl& unit_control_msg);
 
     // SUBSCRIBER : unit들의 alive 상태 
     ros::Subscriber _subscribe_unit_alive;	                        
@@ -58,9 +52,9 @@ namespace fieldro_bot
     ros::Publisher _publish_units_state;	                        
     void publish_unit_state(bool time_check_flag);    
 
-    // PUBLISEHER - unit action coplete 
-    ros::Publisher _publish_unit_action_complete;
-    void publish_unit_action_complete(const int32_t action, const int32_t result);
+    // // PUBLISEHER - unit action coplete 
+    // ros::Publisher _publish_unit_action_complete;
+    // void publish_unit_action_complete(const int32_t action, const int32_t result);
    
     ros::Time         _last_publish_time;	        // 마지막 Pub 시간
     int32_t           _publish_interval;	        // Pub 주기
@@ -71,9 +65,9 @@ namespace fieldro_bot
     // 일반 함수
     bool update_units_alive_value();	// unit들의 상태를 확인하는 함수
     bool is_publish_interval();	      // 업데이트 주기를 확인하는 함수
-    void load_option();               // 옵션 로드 함수
+    virtual void load_option(std::string config_file);               // 옵션 로드 함수
 
-    void system_finish()    { _shut_down = true;  }   // 시스템 종료 함수
+    //void system_finish()    { _shut_down = true;  }   // 시스템 종료 함수
   };
 
 

@@ -26,7 +26,12 @@
 . alive msg -> heartbeat msg로 naming 변경
 . unit 객체가 아닌 child 객체에서 사용하기 위한 옵션 load 함수 구현
 . Wago Class Test
+. Observer Class Unit Class 상속 하도록 하기
+. alive로 명명된 heart_beat
 
+
+//=========================================================
+//=========================================================
 
 ID :  - JD 24.11.28
 1. Wago class 주석 처리된 부분 삭제
@@ -34,31 +39,21 @@ ID :  - JD 24.11.28
 3. Wago signal publish 시간을 option으로 정의
 4. Unit Class private 접근자 구분
 
-
 ID : bbd0897 - JD 24.11.28
 1. Wago class가 Unit Class를 상속 받도록 하기
-
 
 ID : d08628e - JD 24.11.27
 1. 모든 Unit들의 Parent Class로 Unit Class 설계
 2. Unit Class 선언 및 정의
 
-
 ID : f2bc233 - JD 24.11.27
 1. document dir에 draw 문서 추가
 2. enum Class Unit -> UnitName 으로 변경
-
-
 
 ID : ff61de5 - JD 24.11.26
 1. template를 이용한 unit_action_define.h 수정
 2. command_define.h 추가 
    - 기존 unit_action_define.h에 있던것을 분리
-
-
-
-//=========================================================
-//=========================================================
 
 ID : e57b61e - JD 24.11.22
 1. template를 이용한 Unit enum class type_casting 정리
@@ -80,11 +75,9 @@ ID : 5cef9a5 - JD 24.11.22
   - CMakeLists.txt lib 생성 부분 수정
   - CMakeLists.txt observer_node 생성 부분 수정
 
-
 ID : 597f6ca - JD 24.11.22
 1. Observer Class message.cpp 부분을 pub, sub로 분리
 2. node main 함수에서 system("clear"); 경고 뜨던 부분 수정
-
 
 ID : a24e459 - JD 24.11.22
 1. Droid 초기화 Sequence 처리
@@ -93,7 +86,6 @@ ID : a24e459 - JD 24.11.22
   - Observer node에서 초기화 Action 응답 수신 확인
   - io_node로 초기화 Action 요청 발송 확인
   - io_node에서 초기화 Action 응답 수신 확인
-
 
 ID : 982455a - JD 24.11.22
 1. Droid Class Pub, Sub cpp 분리
@@ -104,11 +96,9 @@ ID : 67533db - JD 24.11.21
 1. io_node heartbeat 버그 수정
 2. unit_alive_info::alive_check() 수정
 
-
 ID : 1b42a6d - JD 24.11.21
 1. system node도 alive msg 발송기능 추가
 2. droid option load 함수 추가.
-
 
 ID : 9f993b0 - JD 24.11.21
 1. observer에서 alive 판단시 none, observer는 항상 on으로 판단하기.
@@ -120,7 +110,6 @@ ID : 10c93d6 - JD 24.11.20
 2. All Finish 로 종료 되지 않던 버그 수정
 3. UnitObserver publish interval option으로 동작하도록 변경
 4. unit_observer_message.cpp 추가하여 SUB, PUB 항목 이전
-
 
 ID : b866552 - JD 24.11.20
 1. UnitObserver Class도 Thread를 이용한 Message 처리로 변경
@@ -139,7 +128,6 @@ ID : 853f700 - JD 24.11.20
   - UnitObserver node가 관리하는 방법으로 변경
   - LinkChecker Class 삭제
 
-  
 ID : 65b128c - JD 24.11.20
 1. UnitObserver Class refactoring
   - state 보고가 아닌 alive 보고의 개념으로 변경
@@ -148,7 +136,6 @@ ID : 65b128c - JD 24.11.20
   - UnitObserver Class 동작속도 50Hz로 변경
 2. UnitObserver node 추가하기
   - unit_observer node 추가로 인한 CMakeLists.txt 변경
-
 
 ID : 264f1bb - JD 24.11.20
 1. .gitignore 파일 추가
@@ -168,24 +155,20 @@ ID : 1b893fe - JD 24.11.20
 6. twinny_msgs package 추가.
 7. fieldro lib에 message 의존성 추가
 
-
 ID : e88c1e7 - JD 24.11.13
 1. modbus wrapper reconnect 횟수 option 적용 안되는 부분 수정
 2. modbus tcp connect logic 중 일부 체크 옵션 추가
-
 
 ID : ad7df98 - JD 24.11.11
 1. doxygen snippets 수정
 2. cppclass snippets 추가
 3. doxygen_class snippets 추가
 
-
 ID : 98a9e80 - JD 24.11.07
 1. modbus wrapper 통신 끊김 현상 수정
   socket buffer 64k로 변경
   io thread hz 50으로 변경
   (iptime router 이상, LET router 사용시 문제 없음)
-
 
 ID : 88ad4a4 - JD 24.11.04
 1. io_unit config 정리
@@ -196,8 +179,6 @@ ID : 88ad4a4 - JD 24.11.04
 6. io heartbeat 0.5초에 한번씩 또는 update 시전에 publish 하도록 변경
 7. unit class에 상태보고 publish 만들기.
 8. LinkChecker class 추가 (각 unit에 대한 연결 상태 관리를 위한 class)
-
-
 
 ID : a51f5ac - JD 24.11.04
 1. droid node 추가
