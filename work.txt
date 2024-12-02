@@ -17,12 +17,28 @@
 
 //=========================================================
 //=========================================================
+
+
+
 . UnitState Define에 Sleep 상태를 추가하고 MainController에서 Activate 메세지 전송 하는 방안 ?
 . heartbeat 관련 메세지는 20Hz 동작하도록 공통으로 적용
 . heartbeat 정책 점검하여 정리하기
-. Droid class가 Unit Class를 상속하도록 하기
 
-ID :  - JD 24.11.29
+
+
+
+ID :  - JD 24.12.02
+1. Droid class가 Unit Class를 상속하도록 하기
+  - publish_unit_alive 삭제
+  - alive publish 하는 부분 삭제 (Unit Class 에서 처리)
+  - spinner count option으로 처리
+  - io 신호 처리 하는 부분 삭제
+
+
+//=========================================================
+//=========================================================
+
+ID : 94b85c3 - JD 24.11.29
 0. Observer Class Refactoring 완료
 1. Observer Option Load Refactoring
 2. Observer _publish_units_state_period 변수명 변경
@@ -38,10 +54,6 @@ ID : d80bdfe - JD 24.11.29
 
 ID : a96bda6 - JD 24.11.29
 1. Observer Class가 Unit Class 상속 하도록 변경
-
-
-//=========================================================
-//=========================================================
 
 ID :  - JD 24.11.28
 1. Wago class 주석 처리된 부분 삭제

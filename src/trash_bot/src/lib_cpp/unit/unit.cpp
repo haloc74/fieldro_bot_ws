@@ -22,7 +22,7 @@ namespace fieldro_bot
 
     // action complete publish 생성
     _publish_unit_action_complete =
-    _node_handle->advertise<trash_bot::UnitActionComplete>("trash_bot/action_complete", 20);
+    _node_handle->advertise<trash_bot::UnitActionComplete>("trash_bot/UnitActionComplete", 20);
   
     // alive publish 생성
     _publish_unit_alive =
@@ -58,6 +58,12 @@ namespace fieldro_bot
     // node handler 해제
     _node_handle->shutdown();
     safe_delete(_node_handle);
+
+    if(_name == UnitName::System)
+    {
+      ros::shutdown();
+      ros::waitForShutdown();      
+    }
   }
 
   /**

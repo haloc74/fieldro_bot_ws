@@ -73,19 +73,17 @@ namespace fieldro_bot
   * @note       현 Class가 main controller이므로 UnitName::System으로 치환시켜 보낸다.
   *             _alive_publish_interval이 경과 하지 않을 경우에는 리턴
   */
-  void Droid::publish_unit_alive()
-  {
-    if( (ros::Time::now()-_last_alive_publish_time).toSec()*1000 < _alive_publish_interval)    
-    {
-      return;
-    }
-
-    trash_bot::UnitAliveMsg alive_msg;
-    alive_msg.index = to_int(fieldro_bot::UnitName::System);
-    alive_msg.state = static_cast<int32_t>(*_action);
-    _publish_unit_alive.publish(alive_msg);
-
-    return;
-  }  
+  // void Droid::publish_unit_alive()
+  // {
+  //   if( (ros::Time::now()-_last_alive_publish_time).toSec()*1000 < _alive_publish_interval)    
+  //   {
+  //     return;
+  //   }
+  //   trash_bot::UnitAliveMsg alive_msg;
+  //   alive_msg.index = to_int(fieldro_bot::UnitName::System);
+  //   alive_msg.state = static_cast<int32_t>(*_action);
+  //   _publish_unit_alive.publish(alive_msg);
+  //   return;
+  // }  
 
 }

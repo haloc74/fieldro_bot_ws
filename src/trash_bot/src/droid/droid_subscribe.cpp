@@ -14,29 +14,27 @@ namespace fieldro_bot
   */
   void Droid::subscribe_unit_state(const trash_bot::UnitStateMsg &msg)
   {
-    switch(*_action)
-    {
-    case fieldro_bot::UnitState::Created:
-      if(msg.alive == 0x00)
-      {
-        log_msg(LogInfo, 0, "All UnitName Init - Next Step Process");
-        *_action = fieldro_bot::UnitState::Active;
-
-        // 각 unit에 초기화 sequence 추가
-        // None   - skip
-        // System - this
-        add_sequence(to_int(fieldro_bot::UnitName::Observer), to_int(fieldro_bot::UnitAction::Init));
-        add_sequence(to_int(fieldro_bot::UnitName::Signal), to_int(fieldro_bot::UnitAction::Init));
-      }
-      break;
-
-    case fieldro_bot::UnitState::Active:    break;
-    case fieldro_bot::UnitState::Idle:      break;
-    case fieldro_bot::UnitState::Busy:      break;
-    case fieldro_bot::UnitState::Error:     break;
-    case fieldro_bot::UnitState::End:       break;
-    default:                                break;
-    }
+    // switch(_action)
+    // {
+    // case fieldro_bot::UnitState::Created:
+    //   if(msg.alive == 0x00)
+    //   {
+    //     log_msg(LogInfo, 0, "All UnitName Init - Next Step Process");
+    //     *_action = fieldro_bot::UnitState::Active;
+    //     // 각 unit에 초기화 sequence 추가
+    //     // None   - skip
+    //     // System - this
+    //     add_sequence(to_int(fieldro_bot::UnitName::Observer), to_int(fieldro_bot::UnitAction::Init));
+    //     add_sequence(to_int(fieldro_bot::UnitName::Signal), to_int(fieldro_bot::UnitAction::Init));
+    //   }
+    //   break;
+    // case fieldro_bot::UnitState::Active:    break;
+    // case fieldro_bot::UnitState::Idle:      break;
+    // case fieldro_bot::UnitState::Busy:      break;
+    // case fieldro_bot::UnitState::Error:     break;
+    // case fieldro_bot::UnitState::End:       break;
+    // default:                                break;
+    // }
 
     return;
   }  
@@ -89,9 +87,9 @@ namespace fieldro_bot
     }
 
     // 모든 unit의 초기화가 완료되었을 경우
-    if(*_action == fieldro_bot::UnitState::Active && is_all_sequence_empty())
+    if(_state == fieldro_bot::UnitState::Active && is_all_sequence_empty())
     {
-      *_action = fieldro_bot::UnitState::Idle;
+      _state = fieldro_bot::UnitState::Idle;
       log_msg(LogInfo, 0, "All UnitName Initialize Complete - Next Step Process");
     }
 
@@ -136,27 +134,27 @@ namespace fieldro_bot
     return;
   }  
 
-  void Droid::subscribe_io_signal(const trash_bot::IOSignal &io_signal_msg)
-  {
-    _last_io_update_time = ros::Time::now();
+  // void Droid::subscribe_io_signal(const trash_bot::IOSignal &io_signal_msg)
+  // {
+  //   //_last_io_update_time = ros::Time::now();
 
-    // io unit 초기화 완료로 설정 
-    // update_unit_state(fieldro_bot::UnitName::Signal, fieldro_bot::UnitState::Ready);
-    //update_io_pulse();
+  //   // io unit 초기화 완료로 설정 
+  //   // update_unit_state(fieldro_bot::UnitName::Signal, fieldro_bot::UnitState::Ready);
+  //   //update_io_pulse();
 
-    if(_signal_bit == io_signal_msg.signal_bit)    return;
+  //   if(_signal_bit == io_signal_msg.signal_bit)    return;
 
-    _signal_bit = io_signal_msg.signal_bit;
+  //   _signal_bit = io_signal_msg.signal_bit;
 
-    log_msg(LogInfo, 0, "Sensor Update : " + std::to_string(io_signal_msg.signal_bit));                  
+  //   log_msg(LogInfo, 0, "Sensor Update : " + std::to_string(io_signal_msg.signal_bit));                  
 
-    // for(int i=0; i<(int)DISignal::End; ++i)
-    // {
-    //   if(update_sensor_data((DISignal)i, io_signal_msg.signal_bit))
-    //   {
-    //      // todo : 해당 센서에 대한 처리를 하자
-    //   }
-    // }
-    return;
-  }  
+  //   // for(int i=0; i<(int)DISignal::End; ++i)
+  //   // {
+  //   //   if(update_sensor_data((DISignal)i, io_signal_msg.signal_bit))
+  //   //   {
+  //   //      // todo : 해당 센서에 대한 처리를 하자
+  //   //   }
+  //   // }
+  //   return;
+  // }  
 }

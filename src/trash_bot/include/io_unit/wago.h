@@ -21,7 +21,7 @@
 */
 
 namespace fieldro_bot
-{
+{ 
   class Wago : public Unit
   { 
   public:

@@ -21,7 +21,7 @@ int main(int argc, char **argv)
   LOG->add_log(fieldro_bot::UnitName::System, fieldro_bot::LogLevel::Info, 0, "Trash Bot Start");
 
   // carrybot 객체 생성
-  fieldro_bot::Droid* droid = new fieldro_bot::Droid();
+  fieldro_bot::Droid* droid = new fieldro_bot::Droid("config/droid.yaml", "main");
 
   bool command_use = false;
   droid->get_node_handle()->getParam("command_use", command_use);
@@ -30,7 +30,9 @@ int main(int argc, char **argv)
 
   while(ros::ok())
   {
-    if(!command_use)    continue;
+    if(droid->is_shutdown())    break;
+
+    if(!command_use)            continue;
 
     // 표준 입력에 data가 있는지 체크 
     if(!fieldro_bot::check_std_in(10000))    continue;
