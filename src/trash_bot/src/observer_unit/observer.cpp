@@ -10,6 +10,8 @@ namespace fieldro_bot
   Observer::Observer(std::string config_file, std::string session)
            : Unit(config_file, session)
   {
+    _name               = fieldro_bot::UnitName::Observer;     // unit 이름
+    _action             = fieldro_bot::UnitAction::None;       // unit action
     _state              = fieldro_bot::UnitState::Created;    // unit 현재 상태  
     _last_publish_time  = ros::Time::now();                   // 마지막 업데이트 시간
     load_option(config_file);                                 // 옵션 로드

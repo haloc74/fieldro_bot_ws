@@ -18,6 +18,10 @@ namespace fieldro_bot
        : Unit(config_file, session) 
   {
     load_option(config_file);
+
+    _name   = UnitName::Signal;
+    _action = UnitAction::None;
+    _state  = fieldro_bot::UnitState::Created;
     
     // unit action message 수신을 위한 subscriber 생성 및 link
     _subscribe_unit_action = 

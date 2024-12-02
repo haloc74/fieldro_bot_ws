@@ -7,6 +7,19 @@
 namespace fieldro_bot
 {
   /**
+  * @brief      message 발송 여건을 확인하고 message 발송
+  * @note       
+  */
+  void Droid::message_publish()
+  {
+    if(!_pending_sequence.empty())    return;  // 응답 대기중인 요청이 없을 경우에만 신규 요청 발송
+    if(_control_sequence.empty())    return;   // control_sequence에 요소가 있을 경우 발송
+
+    // 실제 메세지 발송      
+    publish_unit_control(std::move(_control_sequence.front()));
+  }
+
+  /**
   * @brief      unit control message를 발송하는 함수
   * @param[in]  unit : 명령어가 전달 되어야 하는 unit index 
   * @param[in]  action : 명령어 index
@@ -26,19 +39,6 @@ namespace fieldro_bot
 
     return;
   }  
-
-  /**
-  * @brief      message 발송 여건을 확인하고 message 발송
-  * @note       
-  */
-  void Droid::message_publish()
-  {
-    if(!_pending_sequence.empty())    return;  // 응답 대기중인 요청이 없을 경우에만 신규 요청 발송
-    if(_control_sequence.empty())    return;   // control_sequence에 요소가 있을 경우 발송
-
-    // 실제 메세지 발송      
-    publish_unit_control(std::move(_control_sequence.front()));
-  }
 
   /**
   * @brief      unit control message를 발송하는 함수
@@ -67,23 +67,4 @@ namespace fieldro_bot
 
     return;
   }
-
-  /**
-  * @brief      unit의 heartbeat 및 현재 상태를 발송
-  * @note       현 Class가 main controller이므로 UnitName::System으로 치환시켜 보낸다.
-  *             _alive_publish_interval이 경과 하지 않을 경우에는 리턴
-  */
-  // void Droid::publish_unit_alive()
-  // {
-  //   if( (ros::Time::now()-_last_alive_publish_time).toSec()*1000 < _alive_publish_interval)    
-  //   {
-  //     return;
-  //   }
-  //   trash_bot::UnitAliveMsg alive_msg;
-  //   alive_msg.index = to_int(fieldro_bot::UnitName::System);
-  //   alive_msg.state = static_cast<int32_t>(*_action);
-  //   _publish_unit_alive.publish(alive_msg);
-  //   return;
-  // }  
-
 }

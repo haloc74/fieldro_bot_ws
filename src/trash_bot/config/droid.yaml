@@ -1,12 +1,14 @@
 main:
   hz                    : 50 
   spinner_count         : 5
-  alive_publish_interval: 50          ## heartbeat 및 상태정보를 publish 하는 주기 (millisecond)
+
+alive:
+  hz                   : 20          ## heartbeat 보고 주기
 
 logger:
   debug               : 1             ## debug 옵션 (0: off, 그외 : on)
   hz                  : 50            ## thread 동작 속도
-  suffix              : _carrybot     ## 로그 파일 이름 뒤에 붙는 suffix
+  suffix              : _trashbot     ## 로그 파일 이름 뒤에 붙는 suffix
   dir_name            : log           ## 로그 파일 저장 디렉토리
   max_log_per_write   : 50            ## 한번에 기록 할 최대 로그 갯수
   auto_write_interval : 500           ## millisecond 로그 파일을 자동으로 기록하는 주기

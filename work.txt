@@ -25,6 +25,9 @@
 . heartbeat 정책 점검하여 정리하기
 
 
+ID :  - JD 24.12.02
+1. Droid Class 주석 처리 부분 모두 삭제
+2. Droid Option Load 필요한 부분 체크 및 정리
 
 
 ID :  - JD 24.12.02
