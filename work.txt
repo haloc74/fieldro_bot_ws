@@ -18,6 +18,12 @@
 
 . UnitState Define에 Sleep 상태를 추가하고 MainController에서 Activate 메세지 전송 하는 방안 ?
 
+. loader load 추가 
+
+
+ID :  - JD 24.12.03
+1. eld2_rs7020b class 추가
+2. eld2_rs7020b_define.h 추가
 
 ID :  - JD 24.12.03
 1. wago.cpp casting 오류 수정

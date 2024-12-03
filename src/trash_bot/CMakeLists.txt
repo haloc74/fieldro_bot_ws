@@ -269,6 +269,40 @@ message(STATUS "")
     )    
 
 
+  ############################################################
+  ## 6-4. loader_node 실행파일 생성 설정
+  message(STATUS "   6-3. loader_node executable generate")
+
+    ## 6-4-0 project name 설정
+    set(PROJECT_LOADER_NAME "loader_unit")
+
+    ## 6-4-1. source_dir/loader_unit 하위의 모든 cpp 파일을 찾아서 SRC_LOADER_FILES에 저장
+    file(GLOB_RECURSE SRC_LOADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/loader_unit/*.cpp")
+
+    ## 6-4-2. SRC_LOADER_FILES의 모든 파일과 
+    ## loader_node.cpp을 컴파일하고 링크하여 실행 파일 생성
+    add_executable(
+      ${PROJECT_LOADER_NAME}
+      ${SRC_LOADER_FILES}
+      "${CMAKE_CURRENT_SOURCE_DIR}/src/_node/loader_node.cpp"
+    )
+
+    ## 6-4-3. 빌드 순서를 정의 (의존성)
+    add_dependencies(
+      ${PROJECT_LOADER_NAME}               # 빌드 대상
+      ${${PROJECT_NAME}_EXPORTED_TARGETS}  # package 내부의 다른 빌드 대상
+      ${catkin_EXPORTED_TARGETS}           # catkin 빌드 시스템에서 정의한 빌드 대상
+    )
+
+    ## 6-3-4. 빌드시 필요한 Lib 링크 설정
+    target_link_libraries(
+      ${PROJECT_LOADER_NAME}               # 빌드 대상
+      ${catkin_LIBRARIES}                  # catkin 빌드 시스템에서 정의한 라이브러리
+      ${YAML_CPP_LIBRARIES}                # yaml-cpp 라이브러리
+      ${MODBUS_LIBRARIES}                  # libmodbus 라이브러리
+      fieldro_lib                          # fieldro   라이브러리
+    )    
+
 
 ## =============================================================================
 ##            각 노드별로 설정이 되어야 하는 부분 종료

@@ -16,4 +16,8 @@
   <node name="io_unit" pkg="trash_bot" type="io_unit" output="screen" />
     <param name="command_use" value="true"/>
 
+  // loader 노드 실행
+  <node name="loader_unit" pkg="trash_bot" type="loader_unit" output="screen" />
+    <param name="command_use" value="true"/>
+
 </launch>

@@ -22,7 +22,7 @@ namespace fieldro_bot
 
     // Variable value
     Signal,             // wago
-    // Loader,          // 로더
+    Loader,          // 로더
     // Gripper,         // 핸들러 포크
 
     
@@ -43,7 +43,7 @@ namespace fieldro_bot
       case UnitName::System:    return "System";
       case UnitName::Observer:  return "Observer";
       case UnitName::Signal:    return "Signal";
-      // case UnitName::Loader:    return "Loader";
+      case UnitName::Loader:    return "Loader";
       // case UnitName::HandlerFork:return "HandlerFork";
       case UnitName::End:       return "End";
     }
@@ -62,7 +62,7 @@ namespace fieldro_bot
     if(str == "System")     return UnitName::System;
     if(str == "Observer")   return UnitName::Observer;
     if(str == "Signal")     return UnitName::Signal;
-    // if(str == "Loader")     return UnitName::Loader;
+    if(str == "Loader")     return UnitName::Loader;
     // if(str == "HandlerFork")return UnitName::HandlerFork;
     if(str == "End")        return UnitName::End;
     return UnitName::End;
