@@ -13,22 +13,24 @@
   - EMO 입력은 Twinny Board에서 받는데...
   - Unit Parent Class를 만들기 ????
 
-. parent class Unit을 만들어서 모든 Unit담당 Class는 Unit Class를 상속하도록 수정
-
 //=========================================================
 //=========================================================
 
 . UnitState Define에 Sleep 상태를 추가하고 MainController에서 Activate 메세지 전송 하는 방안 ?
-. heartbeat 관련 메세지는 20Hz 동작하도록 공통으로 적용
-. heartbeat 정책 점검하여 정리하기
+
 
 ID :  - JD 24.12.03
+1. wago.cpp casting 오류 수정
+2. heartbeat 20hz 동작 확인
+
+
+ID : 76a3836 - JD 24.12.03
 1. All Finish로 Unit 종료 되지 않는 부분 체크
    - Unit Class의 trash_bot/action_complete 메세지 명이 잘못 된 문제
 2. topic message 갯수 점검 및 수정 
 
 
-ID :  - JD 24.12.02
+ID : d4b76be - JD 24.12.02
 1. Droid Unit Control Message 발송시 log 기록
 2. Droid Unit Unit Action Complete 수신시 log 기록
 . io_unit Unit Control Message 수신시 log 기록

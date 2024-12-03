@@ -175,7 +175,7 @@ namespace fieldro_bot
 
       // io signal publish 주기 옵션 설정
       int32_t hz = yaml["main"]["io_signal_publish_hz"].as<int32_t>();
-      _publish_io_signal_period = (1.0/static_cast<double>hz);
+      _publish_io_signal_period = (1.0/static_cast<double>(hz));
     }
     catch(YAML::Exception& e)
     {
