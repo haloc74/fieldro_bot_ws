@@ -25,15 +25,17 @@ namespace fieldro_bot
     
     // unit action message 수신을 위한 subscriber 생성 및 link
     _subscribe_unit_action = 
-    _node_handle->subscribe("trash_bot/unit_control", 50, &Wago::subscribe_unit_action, this);
+    _node_handle->subscribe("trash_bot/unit_control", 10, &Wago::subscribe_unit_action, this);
 
     // unit action message 처리 결과 발송을 위한 publisher 생성 및 link
     _publish_unit_action_complete = 
-    _node_handle->advertise<trash_bot::UnitActionComplete>("trash_bot/action_complete", 50);
+    _node_handle->advertise<trash_bot::UnitActionComplete>("trash_bot/action_complete", 10);
 
     // publisher 생성 및 link
+    // io message는 아주 중요한 정보이므로 latch를 true로 설정하여 
+    // 나중에 subscriber가 생성되는 node도 마지막(최신) 정보를 받을 수 있도록 한다.
     ros::AdvertiseOptions option = 
-      ros::AdvertiseOptions::create<trash_bot::IOSignal>("trash_bot/io_signal", 100,
+      ros::AdvertiseOptions::create<trash_bot::IOSignal>("trash_bot/io_signal", 20,
                                                               ros::SubscriberStatusCallback(),
                                                               ros::SubscriberStatusCallback(),
                                                               ros::VoidPtr(),
@@ -171,7 +173,9 @@ namespace fieldro_bot
       YAML::Node yaml = YAML::Load(yaml_file);
       yaml_file.close();
 
-      _publish_io_signal_period = yaml["main"]["signal_period"].as<double>();
+      // io signal publish 주기 옵션 설정
+      int32_t hz = yaml["main"]["io_signal_publish_hz"].as<int32_t>();
+      _publish_io_signal_period = (1.0/static_cast<double>hz);
     }
     catch(YAML::Exception& e)
     {

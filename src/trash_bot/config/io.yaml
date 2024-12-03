@@ -1,7 +1,7 @@
 main:
-  hz                : 50 
-  spinner_count     : 1
-  io_signal_period  : 0.2             ## second
+  hz                    : 50 
+  spinner_count         : 1
+  io_signal_publish_hz  : 5           ## io signal publish 주기 (변화가 있을 때는 즉시)
 
 alive:
   hz: 20                              ## heartbeat 보고 주기          

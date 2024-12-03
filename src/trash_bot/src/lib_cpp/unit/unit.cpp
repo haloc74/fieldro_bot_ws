@@ -22,7 +22,7 @@ namespace fieldro_bot
 
     // action complete publish 생성
     _publish_unit_action_complete =
-    _node_handle->advertise<trash_bot::UnitActionComplete>("trash_bot/UnitActionComplete", 20);
+    _node_handle->advertise<trash_bot::UnitActionComplete>("trash_bot/action_complete", 10);
   
     // alive publish 생성
     _publish_unit_alive =

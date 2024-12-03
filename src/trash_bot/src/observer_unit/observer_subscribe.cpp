@@ -18,11 +18,16 @@ namespace fieldro_bot
     // target의 signal이 아닌 메세지는 무시한다. 
     fieldro_bot::UnitName unit = to_enum<fieldro_bot::UnitName>(unit_control_msg.target_object);
 
+    log_msg(LogInfo, 0, "UnitName Action Sub : " + to_string(unit));
+
     if(unit != fieldro_bot::UnitName::Observer && 
        unit != fieldro_bot::UnitName::All)      return;
 
     // 요청된 action에 따른 처리
+
     fieldro_bot::UnitAction action = to_enum<fieldro_bot::UnitAction>(unit_control_msg.action);
+
+    log_msg(LogInfo, 0, "UnitName Action Sub : " + to_string(unit) + " - " + to_string(action));
 
     switch(action)
     {       

@@ -28,7 +28,7 @@ namespace fieldro_bot
   * @see        global/define/unit_define.h UnitName 참조
   * @see        global/define/unit_action_define.h UnitAction 참조
   */
-  void Droid::publish_unit_control(uint32_t unit, uint32_t action, std::string command)
+  void Droid::publish_unit_control(int32_t unit, int32_t action, std::string command)
   {
     trash_bot::UnitControl unit_control_msg;
     unit_control_msg.time_stamp     = ros::Time::now();
@@ -36,6 +36,13 @@ namespace fieldro_bot
     unit_control_msg.action         = action;
     unit_control_msg.command        = command;
     _publish_unit_control.publish(unit_control_msg);
+
+    log_msg(LogInfo, 
+            0, 
+            "unit control Pub (Command Req) : " + 
+            to_string(to_enum<fieldro_bot::UnitName>(unit)) + 
+            " - " + 
+            to_string<fieldro_bot::UnitAction>(action));
 
     return;
   }  
@@ -52,6 +59,14 @@ namespace fieldro_bot
   void Droid::publish_unit_control(std::unique_ptr<trash_bot::UnitControl> unit_control_msg)
   {
     std::lock_guard<std::mutex> lock(_lock);
+
+    log_msg(LogInfo, 
+            0, 
+            "unit control Pub : " + 
+            to_string(to_enum<fieldro_bot::UnitName>(unit_control_msg->target_object)) + 
+            " - " + 
+            to_string<fieldro_bot::UnitAction>(unit_control_msg->action));
+
 
     // time_stamp를 발송 시간으로 변경
     unit_control_msg->time_stamp = ros::Time::now();

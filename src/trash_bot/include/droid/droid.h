@@ -72,10 +72,10 @@ namespace fieldro_bot
     std::list<std::unique_ptr<trash_bot::UnitControl>> _control_sequence;  // 동작 요청 list
     std::list<std::unique_ptr<trash_bot::UnitControl>> _pending_sequence;  // 동작 요청된 list (완료시 까지 유지)
 
-    void add_sequence(uint32_t unit, uint32_t action, std::string command="");
+    void add_sequence(int32_t unit, int32_t action, std::string command="");
     void message_publish();
 
-    void publish_unit_control(uint32_t unit, uint32_t action, std::string command="");
+    void publish_unit_control(int32_t unit, int32_t action, std::string command="");
     void publish_unit_control(std::unique_ptr<trash_bot::UnitControl> unit_control_msg);
 
     // user command control

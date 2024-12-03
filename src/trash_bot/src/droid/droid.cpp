@@ -32,7 +32,7 @@ namespace fieldro_bot
     // _signal_bit = __INT64_MAX__;
 
     _subscribe_switch_report =
-    _node_handle->subscribe("twinny_robot/SwitchReport", 100, &Droid::subscribe_switch_report, this);
+    _node_handle->subscribe("twinny_robot/SwitchReport", 10, &Droid::subscribe_switch_report, this);
 
     _subscribe_velocity_control =
     _node_handle->subscribe("twinny_robot/VelControl", 100, &Droid::subscribe_velocity_control, this);
@@ -40,12 +40,12 @@ namespace fieldro_bot
     //_subscribe_io_signal = _node_handle->subscribe("trash_bot/io_signal", 100, &Droid::subscribe_io_signal, this);
 
     _subscribe_action_complete = 
-    _node_handle->subscribe("trash_bot/action_complete", 100, &Droid::subscribe_action_complete, this);
+    _node_handle->subscribe("trash_bot/action_complete", 10, &Droid::subscribe_action_complete, this);
 
     _subscribe_unit_state = _node_handle->subscribe("trash_bot/UnitStateMsg", 100, &Droid::subscribe_unit_state, this);
 
     _publish_unit_control = 
-    _node_handle->advertise<trash_bot::UnitControl>("trash_bot/unit_control", 100);
+    _node_handle->advertise<trash_bot::UnitControl>("trash_bot/unit_control", 10);
 
     // _publish_unit_alive =
     // _node_handle->advertise<trash_bot::UnitAliveMsg>("trash_bot/UnitAliveMsg", 100);
@@ -162,7 +162,7 @@ namespace fieldro_bot
   * @return     void
   * @note       
   */
-  void Droid::add_sequence(uint32_t unit, uint32_t action, std::string command)
+  void Droid::add_sequence(int32_t unit, int32_t action, std::string command)
   {
     std::lock_guard<std::mutex> lock(_lock);
 

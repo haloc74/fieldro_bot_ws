@@ -57,7 +57,6 @@ namespace fieldro_bot
                 + to_string(to_enum<fieldro_bot::UnitName>(action_complete_msg.action_object)) 
                 + " - "
                 + to_string<fieldro_bot::UnitAction>(action_complete_msg.complete_action));
-                //+ unit_action_to_string(int_to_unit_action(action_complete_msg.complete_action)));      
       return;
     }
 
