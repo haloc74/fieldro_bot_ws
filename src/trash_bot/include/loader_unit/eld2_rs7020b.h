@@ -15,7 +15,7 @@ namespace fieldro_bot
   {
   public:
     ELD2_RS7020B(std::function<void(fieldro_bot::Error)> action_result_callback, 
-                 std::function<void(fieldro_bot::UnitName, fieldro_bot::LogLevel, int32_t, std::string)> log_callback,
+                 std::function<void(fieldro_bot::LogLevel, int32_t, const std::string&)> log_callback,
                  std::string config_file);
     ~ELD2_RS7020B();
 
@@ -37,7 +37,7 @@ namespace fieldro_bot
     bool                _servo_power;         // 서보 전원 상태
 
     std::function<void(fieldro_bot::Error)>  action_result_notify;  // 동작 완료 통보 (상위 : callback)
-    std::function<void(fieldro_bot::UnitName, fieldro_bot::LogLevel, int32_t, std::string)> log_msg_notify;  // 로그 통보 (상위 : callback)
+    std::function<void(fieldro_bot::LogLevel, int32_t, const std::string&)> log_msg_notify;  // 로그 통보 (상위 : callback)
     void modbus_state_receive(const CommStatus notify);              // modbus 상태 변경 통보 (하위 : callback)
     
     bool _error;

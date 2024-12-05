@@ -10,7 +10,7 @@
 
 namespace fieldro_bot
 {
-/**
+  /**
   * @brief      unit control message를 수신하는 callback 함수
   * @param[in]  unit_control_msg : main control node에서 전달되는 unit control message
   * @return     void

@@ -9,7 +9,7 @@
 namespace fieldro_bot
 {
   ELD2_RS7020B::ELD2_RS7020B(std::function<void(fieldro_bot::Error)> action_result_callback, 
-                             std::function<void(fieldro_bot::UnitName, fieldro_bot::LogLevel, int32_t, std::string)> log_callback,
+                             std::function<void(fieldro_bot::LogLevel, int32_t, const std::string&)> log_callback,
                              std::string config_file)
   {
     // callback 함수 등록 
@@ -366,7 +366,7 @@ namespace fieldro_bot
   {
     if(log_msg_notify == nullptr)   return;
 
-    log_msg_notify(fieldro_bot::UnitName::Loader, level, 0, log);
+    log_msg_notify(level, 0, log);
 
     return;
   }  

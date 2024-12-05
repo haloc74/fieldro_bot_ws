@@ -3,6 +3,7 @@
 #include <ros/ros.h>
 #include "log/log.h"
 #include "helper/helper.h"
+#include "loader_unit/loader.h"
 
 
 fieldro_bot::Log* fieldro_bot::Log::_instance = nullptr;
@@ -10,7 +11,7 @@ fieldro_bot::Log* fieldro_bot::Log::_instance = nullptr;
 int main(int argc, char ** argv)
 {
   // process node name 초기화
-  ros::init(argc, argv, "io_signal");    
+  ros::init(argc, argv, "loader");    
 
   // 실행 파일 경로로 현재 디렉토리 설정
   fieldro_bot::set_current_dir_to_executable_path();
@@ -22,19 +23,19 @@ int main(int argc, char ** argv)
   LOG->add_log(fieldro_bot::UnitName::System, fieldro_bot::LogLevel::Info, 0, "Loader Start");
 
   // node main 객체 생성
-  // fieldro_bot::Class* .... = new fieldro_bot::Class("config/option.yaml", "main");
+  fieldro_bot::Loader* loader = new fieldro_bot::Loader("config/option.yaml", "main");
  
   bool command_use = false;
   
-  // parameter server에서 command_use를 읽어옴
-  //....->get_node_handle()->getParam("command_use", command_use);
+  //parameter server에서 command_use를 읽어옴
+  loader->get_node_handle()->getParam("command_use", command_use);
 
   char cmd_input[256];
 
   while(ros::ok())
   {
     // 종료 예약 확인
-    // if(....->is_shutdown())    break;
+    if(loader->is_shutdown())    break;
 
     if(!command_use)   continue;
 
@@ -50,7 +51,7 @@ int main(int argc, char ** argv)
 
     if(input[0] == "finish") 
     {
-      // safe_delete(wago);
+      safe_delete(loader);
     }
     else if(input[0] == "clear")  
     {
@@ -65,7 +66,7 @@ int main(int argc, char ** argv)
   }
 
   // node main 객체 삭제
-  // safe_delete(....);
+  safe_delete(loader);
 
   delete LOG;
 

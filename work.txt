@@ -4,6 +4,7 @@
 //=========================================================
 
 1. unit들의 초기화 sequence를 담당하는 node를 만들 필요성이 있을까 ???
+
 2. MainControl 객체 소멸시 모든 Unit들에게 메인컨트롤러 소멸에 대한 메세지를 날려야 하나 ??
    - Observer 객체가 감지하고 날려줘야 하지 않을까 ?
    - Observer 객체도 없는 상태라면 ?
@@ -13,19 +14,29 @@
   - EMO 입력은 Twinny Board에서 받는데...
   - Unit Parent Class를 만들기 ????
 
+4. node name과 node cpp name launch에서 실행시키는 name 명명 규칙
+
+
 //=========================================================
 //=========================================================
 
 . UnitState Define에 Sleep 상태를 추가하고 MainController에서 Activate 메세지 전송 하는 방안 ?
+. loader 상세 동작 구현
+  - 초기화 : max limit sensor 위치 파악
+  - 초기화 : up position 위치 설정 (home position)
+  - 초기화 : low limit sensor 위치 파악
+  - 초기화 : down position 위치 설정 
+  - home 위치 이동
+  - down 위치 이동
 
-. loader load 추가 
+1. loader_unit class 추가
+2. loader 기본 기능 구현
 
-
-ID :  - JD 24.12.03
+ID : e63ae73 - JD 24.12.03
 1. eld2_rs7020b class 추가
 2. eld2_rs7020b_define.h 추가
 
-ID :  - JD 24.12.03
+ID : a77385d - JD 24.12.03
 1. wago.cpp casting 오류 수정
 2. heartbeat 20hz 동작 확인
 
