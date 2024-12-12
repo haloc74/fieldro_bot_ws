@@ -1,4 +1,3 @@
-
 #pragma once
 
 #include <mutex>
@@ -29,6 +28,8 @@ namespace fieldro_bot
     MotionInfo          _motion;                                    // 동작 정보 (범위, 시간, 속도, timeout 등 정보)
 
     // sensor info receive
+    int64_t _sensor_data_update_mask;          // sensor data update mask
+    int64_t _prev_sensor_data;                // 이전 센서 상태를 저장하기 위한 변수
     int8_t _sensor[(int)DISignal::END];                                   // 센서 상태 정보
     ros::Subscriber _subscribe_iosignal;                                  // IOSignal을 받기 위한 subscriber 
     void subscribe_iosignal(const trash_bot::IOSignal& msg); // IOSignal을 받기 위한 callback 함수
@@ -40,5 +41,18 @@ namespace fieldro_bot
         
     // callback
     void action_complete_notify(const Error error);                 // motor object로 부터 동작 완료 알림 콜백
+
+    void fall_limit_sensor_on();
+    void raise_limit_sensor_on();
+
+    bool is_sensor_update_and_on(int32_t index, int64_t change_bit, int64_t sensor_bit);                   // sensor data update 여부 확인
+    bool is_sensor_on(int32_t index, int64_t sensor_bit);
+
+    bool set_middle_position();
+    bool confirm_active_position();
+    int32_t _safety_distance;         // limit sensor에서 실제 fall, raise 위치까지의 안전 거리
+    int32_t _fall_position;
+    int32_t _raise_position;
+    int32_t _middle_position;
   };
 }

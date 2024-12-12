@@ -14,6 +14,18 @@ namespace fieldro_bot
     load_option(config_file);           // option load     
     initialize_signal_data();           // signal data 초기화
 
+    // position data 초기화
+    _fall_position   = INT32_MAX;
+    _raise_position  = INT32_MAX;
+    _middle_position = INT32_MAX;
+
+    // sensor data중 loader와 관련된 곳만 마스킹
+    // digital_in_define.h 참조
+    _sensor_data_update_mask = 0x00;
+    _sensor_data_update_mask |= (1 << (int)DISignal::LoaderFall);
+    _sensor_data_update_mask |= (1 << (int)DISignal::LoaderRaise);
+
+
     _name   = UnitName::Loader;
     _action = UnitAction::None;
     _state  = fieldro_bot::UnitState::Created;
@@ -73,6 +85,22 @@ namespace fieldro_bot
     }
   }
 
+  /**
+  * @brief      
+  * @param[in]  
+  * @return     
+  * @note       
+  */
+  bool Loader::confirm_active_position()
+  {
+    if(_fall_position == INT32_MAX)   return false;
+    if(_raise_position == INT32_MAX)  return false;    
+
+    _middle_position = (_fall_position + _raise_position) / 2;
+    
+    return true;
+  }
+
 
 
   // virtual 
@@ -84,6 +112,7 @@ namespace fieldro_bot
       YAML::Node yaml = YAML::Load(yaml_file);
       yaml_file.close();
 
+      _safety_distance = yaml["safety_distance"].as<int32_t>();
     }
     catch(YAML::Exception& e)
     {

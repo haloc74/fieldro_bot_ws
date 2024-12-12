@@ -1,6 +1,7 @@
 main:
-  hz                    : 50          ## loader_unit object thread 동작 속도
-  spinner_count         : 1           ## spinner 갯수
+  hz                : 50              ## loader_unit object thread 동작 속도
+  spinner_count     : 1               ## spinner 갯수
+  safety_distance   : 5000            ## limit sensor에서 실제 loader limit 가동 범위까지의 거리
 
 alive:
   hz: 20                              ## heartbeat 보고 주기          

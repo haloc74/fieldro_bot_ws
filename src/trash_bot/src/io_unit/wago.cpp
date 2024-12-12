@@ -107,7 +107,7 @@ namespace fieldro_bot
   {
     std::lock_guard<std::mutex> lock(_lock);
 
-    int32_t read_len = di_to_int(fieldro_bot::DISignal::END) - 1;
+    int32_t read_len = to_int(fieldro_bot::DISignal::END) - 1;
     uint8_t signal[IO_MAX_COUNT];  // 읽은 data를 저장할 변수
     memset(signal, 0x00, IO_MAX_COUNT);
 
@@ -142,7 +142,7 @@ namespace fieldro_bot
     int64_t     signal_bit  = 0;
 
 
-    for(int i=0; i<di_to_int(fieldro_bot::DISignal::COUNT); ++i)
+    for(int i=0; i<to_int(fieldro_bot::DISignal::COUNT); ++i)
     {
       if(_signal[i] == nullptr)   continue;
 
