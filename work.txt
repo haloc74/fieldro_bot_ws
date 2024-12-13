@@ -21,21 +21,23 @@
 //=========================================================
 
 . UnitState Define에 Sleep 상태를 추가하고 MainController에서 Activate 메세지 전송 하는 방안 ?
-. loader 상세 동작 구현
-  - 초기화 : max limit sensor 위치 파악
-  - 초기화 : up position 위치 설정 (home position)
-  - 초기화 : low limit sensor 위치 파악
-  - 초기화 : down position 위치 설정 
-  - home 위치 이동
-  - down 위치 이동
-
 . 기존 action 수행중 다른 action 요청이 들어왔을 경우 error 통보 후 어떻게 처리를 해야 할까 ???
   기존 action 종료시까지 대기 했다가 신규로 들어온 action 처리를 해야 할까 ???
-
 . object 초기화 작업
 . limit sensor 상태 체크
 
-ID :  - JD 24.12.13
+. trash_bot_node, io_node, loader_node, observer_node 연동 체크
+
+. loader_node - fall action 요청 (초기화 fall 확인)
+. loader_node - raise action 요청 (초기화 raise 확인)
+. loader_node - UnitState::Idle 상태 변경 확인
+
+
+ID :  - JD 24.12.14
+1. Loader::confirm_active_position() Refactoring
+
+
+ID : 86f8fa2 - JD 24.12.14
 1. execute_fall_action() 함수 추가 
 2. execute_raise_action() 함수 추가
 3. loader.yaml에 동작속도, 체크시가, 타임아웃 옵션 추가

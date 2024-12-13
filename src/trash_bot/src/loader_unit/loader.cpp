@@ -91,18 +91,49 @@ namespace fieldro_bot
   * @return     
   * @note       
   */
+  // bool Loader::confirm_active_position()
+  // {
+  //   if(_fall_position == INT32_MAX)   return false;
+  //   if(_raise_position == INT32_MAX)  return false;    
+
+  //   // 중간 위치 설정
+  //   _middle_position  = (_fall_position + _raise_position) / 2;
+
+  //   // loader 상태 변경
+  //   _state = UnitState::Idle;
+
+  //   return true;
+  // }
+
   bool Loader::confirm_active_position()
   {
-    if(_fall_position == INT32_MAX)   return false;
-    if(_raise_position == INT32_MAX)  return false;    
+    if(_action == UnitAction::Fall && _fall_position == INT32_MAX)
+    {
+      _fall_position = _motor->get_motor_position() + _safety_distance;
+      _action = UnitAction::None;
+    }
+    else if(_action == UnitAction::Raise && _raise_position != INT32_MAX)
+    {
+      _raise_position = _motor->get_motor_position() - _safety_distance;
+      _action = UnitAction::None;
+    }
+    else
+    {
+      log_msg(LogError, 0, "Error : position initialize failed"+
+                            std::to_string(to_int(_action))+
+                            " - " + std::to_string(_fall_position) +
+                            " - " + std::to_string(_raise_position)+
+                            + " - " + __FILE__);
+    }
 
-    // 중간 위치 설정
-    _middle_position  = (_fall_position + _raise_position) / 2;
+    if(_fall_position != INT32_MAX && _raise_position != INT32_MAX)
+    {
+      _middle_position  = (_fall_position + _raise_position) / 2;     // 중간 위치 설정
+      _state = UnitState::Idle;                                       // loader 상태 변경
+      return true;
+    }
 
-    // loader 상태 변경
-    _state = UnitState::Idle;
-
-    return true;
+    return false;
   }
 
   /**

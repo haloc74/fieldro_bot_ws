@@ -58,16 +58,18 @@ namespace fieldro_bot
     if(current_bits == _prev_sensor_data)   return;
 
     // 이전 sensor data와 비교하여 변동된 비트만 추출
-    int64_t changed_bits = current_bits ^ _prev_sensor_data;
+    // int64_t changed_bits = current_bits ^ _prev_sensor_data;
 
     // 하한 limit 센서 신호 변경 + On
-    if(is_sensor_update_and_on((int)DISignal::LoaderFall, changed_bits, current_bits))
+    //if(is_sensor_update_and_on((int)DISignal::LoaderFall, changed_bits, current_bits))
+    if(is_sensor_update_and_on((int)DISignal::LoaderFall, current_bits))
     {
       fall_limit_sensor_on();
     }
 
     // 상한 limit 센서 신호 변경 + On
-    if(is_sensor_update_and_on((int)DISignal::LoaderRaise, changed_bits, current_bits))
+    //if(is_sensor_update_and_on((int)DISignal::LoaderRaise, changed_bits, current_bits))
+    if(is_sensor_update_and_on((int)DISignal::LoaderRaise, current_bits))
     {
       raise_limit_sensor_on();
     }
@@ -85,17 +87,20 @@ namespace fieldro_bot
 
     if(_state == UnitState::Active && _action == UnitAction::Fall)
     {
-      // 초기화 동작이면 motor 객체에 fall limit position 설정
-      _fall_position = _motor->get_motor_position() + _safety_distance;
+      // // 초기화 동작이면 motor 객체에 fall limit position 설정
+      // _fall_position = _motor->get_motor_position() + _safety_distance;
+
+      // 위치 설정 보고 
+      confirm_active_position();
 
       // 동작 완료 보고
       publish_unit_action_complete(to_int(_action), 0);
 
       // action 
-      _action = UnitAction::None;
+      // _action = UnitAction::None;
 
-      // 중간 위치 설정
-      confirm_active_position();
+      // // 중간 위치 설정
+      // confirm_active_position();
     }
     else
     {
@@ -106,19 +111,20 @@ namespace fieldro_bot
 
   void Loader::raise_limit_sensor_on()
   {
-    // motor stop
     _motor->stop_motor();
 
     if(_state == UnitState::Active && _action == UnitAction::Fall)
     {
-      // 초기화 동작이면 motor 객체에 raise limit position 설정
-      _raise_position = _motor->get_motor_position() - _safety_distance;
+      // // 초기화 동작이면 motor 객체에 raise limit position 설정
+      // _raise_position = _motor->get_motor_position() - _safety_distance;
+
+      // 위치 설정 보고 
+      confirm_active_position();
 
       // 동작 완료 보고
       publish_unit_action_complete(to_int(_action), 0);
 
-      // 중간 위치 설정
-      confirm_active_position();
+      // _action = UnitAction::None;
     }
     else
     {
@@ -126,7 +132,6 @@ namespace fieldro_bot
     }
     return;
   }
-
 
 
   /**
@@ -137,12 +142,11 @@ namespace fieldro_bot
   * @return     해당 bit가 update 되었고 On 되었는지 여부
   * @attention  update되었으나 Off 되는건 의미가 없음       
   */
-  bool Loader::is_sensor_update_and_on(int32_t index, int64_t change_bit, int64_t sensor_bit)
+  bool Loader::is_sensor_update_and_on(int32_t index, int64_t sensor_bit)
   {
-    return (change_bit & (1 << index)) && (sensor_bit & (1 << index));
+    // 이전 sensor data와 비교하여 변동된 비트만 추출
+    int64_t changed_bits = sensor_bit ^ _prev_sensor_data;
+
+    return (changed_bits & (1 << index)) && (sensor_bit & (1 << index));
   }
-  // bool Loader::is_sensor_on(int32_t index, int64_t sensor_bit)
-  // {
-  //   return (_prev_sensor_data & (1 << index));
-  // }
 }

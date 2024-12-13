@@ -1,3 +1,4 @@
+
 #include "droid.h"
 #include "helper/helper.h"
 #include "log/log.h"
@@ -36,13 +37,12 @@ namespace fieldro_bot
     unit_control_msg.command        = command;
     _publish_unit_control.publish(unit_control_msg);
 
-    std::string log_message = "unit control Pub (Command Req) : " + 
-                              to_string(to_enum<fieldro_bot::UnitName>(unit)) + 
-                              " - " + 
-                              to_string<fieldro_bot::UnitAction>(action);
-
-    log_msg(LogInfo, 0, log_message);
-
+    log_msg(LogInfo, 
+            0, 
+            "unit control Pub (Command Req) : " + 
+            to_string(to_enum<fieldro_bot::UnitName>(unit)) + 
+            " - " + 
+            to_string<fieldro_bot::UnitAction>(action));
     return;
   }  
 
