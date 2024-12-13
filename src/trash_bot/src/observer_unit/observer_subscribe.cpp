@@ -17,8 +17,10 @@ namespace fieldro_bot
   {
     // target의 signal이 아닌 메세지는 무시한다. 
     fieldro_bot::UnitName unit = to_enum<fieldro_bot::UnitName>(unit_control_msg.target_object);
+  
+    //log_msg(LogInfo, 0, std::to_string("UnitName Action Sub : "+ fieldro_bot::to_string(unit)));
 
-    log_msg(LogInfo, 0, "UnitName Action Sub : " + to_string(unit));
+    log_msg(LogInfo, 0, "UnitName Action Sub : "+ fieldro_bot::to_string(unit));
 
     if(unit != fieldro_bot::UnitName::Observer && 
        unit != fieldro_bot::UnitName::All)      return;

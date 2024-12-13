@@ -121,7 +121,7 @@ namespace fieldro_bot
     }
   }
 
-  void Unit::log_msg(LogLevel level, int32_t error_code, const std::string& msg)
+  void Unit::log_msg(LogLevel level, int32_t error_code, std::string msg)
   {
     LOG->add_log(_name, level, error_code, msg);
     return;

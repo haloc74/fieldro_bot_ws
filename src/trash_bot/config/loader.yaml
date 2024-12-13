@@ -2,6 +2,9 @@ main:
   hz                : 50              ## loader_unit object thread 동작 속도
   spinner_count     : 1               ## spinner 갯수
   safety_distance   : 5000            ## limit sensor에서 실제 loader limit 가동 범위까지의 거리
+  action_rpm        : 100             ## 동작 rpm (초기화 속도는 50%)
+  action_check      : 1000            ## 동작 완료 check 주기 (millisecond)
+  action_timeout    : 30000           ## 동작 timeout (millisecond) - 초기화에서는 200%
 
 alive:
   hz: 20                              ## heartbeat 보고 주기          

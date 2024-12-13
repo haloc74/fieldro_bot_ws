@@ -29,11 +29,19 @@
   - home 위치 이동
   - down 위치 이동
 
+. 기존 action 수행중 다른 action 요청이 들어왔을 경우 error 통보 후 어떻게 처리를 해야 할까 ???
+  기존 action 종료시까지 대기 했다가 신규로 들어온 action 처리를 해야 할까 ???
+
 . object 초기화 작업
 . limit sensor 상태 체크
-. 
 
-ID :  - JD 24.12.12
+ID :  - JD 24.12.13
+1. execute_fall_action() 함수 추가 
+2. execute_raise_action() 함수 추가
+3. loader.yaml에 동작속도, 체크시가, 타임아웃 옵션 추가
+
+
+ID : 29991f2 - JD 24.12.12
 1. 12.06 commit 되지 않았고 버그 있었던 부분 수정
 
 //=========================================================

@@ -25,7 +25,7 @@ namespace fieldro_bot
     virtual bool is_shutdown();		                                    // 종료 여부
     virtual void update()                                        {}   // 업데이트
     virtual bool control(std::vector<std::string> command_list)  {}   // 컨트롤 함수(consol input을 이용한 control)
-    void log_msg(LogLevel level, int32_t error_code, const std::string& msg);       // 로그 메시지 출력
+    void log_msg(LogLevel level, int32_t error_code, std::string msg);       // 로그 메시지 출력
 
   private:
     ThreadActionInfo* _alive_thread;                                        // alive  thread 동작 정보

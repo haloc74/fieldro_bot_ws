@@ -1,5 +1,14 @@
 
 #include "loader.h"
+#include "define/unit_state.h"
+
+/*
+  1. loader 움직임시 초기화 움직임은 sensor의 입력으로 완료가 되기 때문에 
+     action_complete_notify callback 함수 호출이 이루어지지 않는다.
+  2. action_complete_notify callback 함수는 일반 action에서만 이루어진다.
+
+*/
+
 
 namespace fieldro_bot
 {
@@ -13,14 +22,32 @@ namespace fieldro_bot
   {
     if(error == Error::None)
     {
-      // todo : motor 동작 완료 후 처리
+      if(_action == UnitAction::None)   
+      {
+        // todo : action이 없는데 동작 완료가 되는 상황은 에러이다 !!!!!.
+        log_msg(LogInfo, 0, "Loader : action is None !!! - What is this ???");
+        return;
+      }
+
+      // 동작 완료 보고 (정상 완료)
+      Unit::publish_unit_action_complete(to_int(_action), error_to_int(Error::None));
+
+      // action 초기화
+      _action = UnitAction::None;
+      _state  = UnitState::Idle;
     }
     else
     {
-      // todo : motor 동작 실패 후 처리
-    }
+      // 동작 완료 보고 (Error)
+      Unit::publish_unit_action_complete(to_int(_action), error_to_int(error));
 
-    Unit::publish_unit_action_complete(to_int<UnitAction>(UnitAction::Init), error_to_int(Error::None));
+      // error log 표기 
+      log_msg(LogError, to_int(error), "Error : error code - " + std::to_string(to_int(error)));      
+
+      // action 초기화
+      _action = UnitAction::None;
+      _state  = UnitState::Error;
+    }
 
     return;
   }

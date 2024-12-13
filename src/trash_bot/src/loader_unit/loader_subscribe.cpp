@@ -1,4 +1,5 @@
 #include "loader.h"
+#include "define/unit_state.h"
 
 namespace fieldro_bot
 {
@@ -28,6 +29,14 @@ namespace fieldro_bot
 
     case fieldro_bot::UnitAction::Init:
       break;
+
+    case fieldro_bot::UnitAction::Fall:
+      execute_fall_action();
+      break;
+
+    case fieldro_bot::UnitAction::Raise:
+      execute_raise_action();
+      break;
     }
     
     return;
@@ -48,9 +57,6 @@ namespace fieldro_bot
     // loader와 관련된 bit중 변경된 bit가 없다.
     if(current_bits == _prev_sensor_data)   return;
 
-    // prev sensor data update
-    _prev_sensor_data = current_bits;
-
     // 이전 sensor data와 비교하여 변동된 비트만 추출
     int64_t changed_bits = current_bits ^ _prev_sensor_data;
 
@@ -66,6 +72,9 @@ namespace fieldro_bot
       raise_limit_sensor_on();
     }
 
+    // prev sensor data update
+    _prev_sensor_data = current_bits;
+
     return;
   }
 
@@ -74,7 +83,7 @@ namespace fieldro_bot
     // motor stop
     _motor->stop_motor();
 
-    if(_state == UnitState::Active)
+    if(_state == UnitState::Active && _action == UnitAction::Fall)
     {
       // 초기화 동작이면 motor 객체에 fall limit position 설정
       _fall_position = _motor->get_motor_position() + _safety_distance;
@@ -87,12 +96,10 @@ namespace fieldro_bot
 
       // 중간 위치 설정
       confirm_active_position();
-
-      
     }
     else
     {
-      // 동작 중이면 error 발생
+      _state = UnitState::Error;
     }
     return;
   }
@@ -102,27 +109,20 @@ namespace fieldro_bot
     // motor stop
     _motor->stop_motor();
 
-    if(_state == UnitState::Active)
+    if(_state == UnitState::Active && _action == UnitAction::Fall)
     {
-      if(_action == UnitAction::Fall)
-      {
-        // 초기화 동작이면 motor 객체에 raise limit position 설정
-        _raise_position = _motor->get_motor_position() - _safety_distance;
+      // 초기화 동작이면 motor 객체에 raise limit position 설정
+      _raise_position = _motor->get_motor_position() - _safety_distance;
 
-        // 동작 완료 보고
-        publish_unit_action_complete(to_int(_action), 0);
+      // 동작 완료 보고
+      publish_unit_action_complete(to_int(_action), 0);
 
-        // 중간 위치 설정
-        confirm_active_position();
-      }
-      else
-      {
-        // 
-      }
+      // 중간 위치 설정
+      confirm_active_position();
     }
     else
     {
-      // 동작 중이면 error 발생
+      _state = UnitState::Error;
     }
     return;
   }
@@ -141,8 +141,8 @@ namespace fieldro_bot
   {
     return (change_bit & (1 << index)) && (sensor_bit & (1 << index));
   }
-  bool Loader::is_sensor_on(int32_t index, int64_t sensor_bit)
-  {
-    return (_prev_sensor_data & (1 << index));
-  }
+  // bool Loader::is_sensor_on(int32_t index, int64_t sensor_bit)
+  // {
+  //   return (_prev_sensor_data & (1 << index));
+  // }
 }

@@ -25,6 +25,7 @@ namespace fieldro_bot
     Close,
     Open,
     Lock,
+    Busy, 
     
     RatchUnlock = 1000,
     RatchLock,

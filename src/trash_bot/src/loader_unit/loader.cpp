@@ -96,14 +96,76 @@ namespace fieldro_bot
     if(_fall_position == INT32_MAX)   return false;
     if(_raise_position == INT32_MAX)  return false;    
 
-    _middle_position = (_fall_position + _raise_position) / 2;
-    
+    // 중간 위치 설정
+    _middle_position  = (_fall_position + _raise_position) / 2;
+
+    // loader 상태 변경
+    _state = UnitState::Idle;
+
     return true;
   }
 
+  /**
+  * @brief      loader fall action 수행
+  * @attention  _fall_position의 설정 여부에 따라 수행 방법을 달리 해야 한다.
+  *             _fall_position == INT32_MAX : 저속으로 fall_limit sensor까지 이동
+  *             _fall_position != INT32_MAX : 일반속도로 _fall_position까지 이동         
+  */
+  void Loader::execute_fall_action()
+  {
+    if(!is_controlable())
+    {
+      Unit::log_msg(LogInfo, static_cast<int32_t>(fieldro_bot::Error::Busy), "Loader is busy");
+      return;
+    }
+
+    if(_fall_position == INT32_MAX)
+    {
+      // 저속으로 fall_limit sensor까지 이동
+      _motor->control_move(0, _action_rpm/2, CHECK_NONE, TIMEOUT_NONE);
+    }
+    else
+    {
+      // 일반속도로 _fall_position까지 이동
+      _motor->control_move(_fall_position, _action_rpm, _action_check, _action_timeout);
+    }
+
+    return;
+  }
+
+  /**
+  * @brief      loader raise action 수행
+  * @attention  _raise_position의 설정 여부에 따라 수행 방법을 달리 해야 한다.
+  *             _raise_position == INT32_MAX : 저속으로 raise_limit sensor까지 이동
+  *             _raise_position != INT32_MAX : 일반속도로 _raise_position까지 이동                
+  */
+  void Loader::execute_raise_action()
+  {
+    if(!is_controlable())
+    {
+      log_msg(LogInfo, static_cast<int32_t>(fieldro_bot::Error::Busy), "Loader is busy");
+      return;
+    }
+
+    if(_raise_position == INT32_MAX)
+    {
+      // 저속으로 raise_limit sensor까지 이동
+      _motor->control_move(INT32_MAX, _action_rpm/2, CHECK_NONE, TIMEOUT_NONE);
+    }
+    else
+    {
+      // 일반속도로 _raise_position까지 이동
+      _motor->control_move(_raise_position, _action_rpm, _action_check, _action_timeout);
+    }
+    return;
+  }
 
 
-  // virtual 
+  /**
+  * @brief      loader option load
+  * @param[in]  std::string config_file : loader option 설정 파일
+  * @note       
+  */
   void Loader::load_option(std::string config_file)
   {
     try
@@ -112,7 +174,9 @@ namespace fieldro_bot
       YAML::Node yaml = YAML::Load(yaml_file);
       yaml_file.close();
 
-      _safety_distance = yaml["safety_distance"].as<int32_t>();
+      _safety_distance  = yaml["safety_distance"].as<int32_t>();
+      _action_rpm       = yaml["action_rpm"].as<int32_t>();
+      _action_timeout   = yaml["action_timeout"].as<int32_t>();
     }
     catch(YAML::Exception& e)
     {
@@ -128,6 +192,10 @@ namespace fieldro_bot
     }    
   }
 
+  /**
+  * @brief      sensor data 초기화 
+  * @note       현재 sensor 상태 정보 초기화.
+  */
   void Loader::initialize_signal_data()
   {
     for(int i=0; i<(int)DISignal::END; ++i)
@@ -136,8 +204,16 @@ namespace fieldro_bot
     }
   }
 
-  bool Loader::is_controllable()
+  /**
+  * @brief      loader의 동작 가능 여부 확인
+  * @return     bool : 동작 가능 여부
+  */
+  bool Loader::is_controlable()
   {
+    if(_action != UnitAction::None)
+    {
+      return false;
+    }
     return false;
   }
 

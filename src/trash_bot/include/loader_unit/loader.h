@@ -13,6 +13,9 @@
 
 namespace fieldro_bot
 {
+  #define CHECK_NONE    0
+  #define TIMEOUT_NONE  0
+
   class Loader : public Unit
   {
   public:
@@ -37,22 +40,28 @@ namespace fieldro_bot
     bool update_sensor_data(DISignal sensor, int64_t signal_bit);         // sensor data 업데이트
 
     // loader
-    bool is_controllable();                                         // Loader의 동작 가능여부
+    bool is_controlable();                                         // Loader의 동작 가능여부
         
     // callback
     void action_complete_notify(const Error error);                 // motor object로 부터 동작 완료 알림 콜백
 
-    void fall_limit_sensor_on();
-    void raise_limit_sensor_on();
+    bool is_sensor_update_and_on(int32_t index, int64_t change_bit, int64_t sensor_bit);  // sensor data update 여부 확인
+    //bool is_sensor_on(int32_t index, int64_t sensor_bit);     // sensor data on 여부 확인
+    void fall_limit_sensor_on();                              // fall limit sensor on
+    void raise_limit_sensor_on();                             // raise limit sensor on
 
-    bool is_sensor_update_and_on(int32_t index, int64_t change_bit, int64_t sensor_bit);                   // sensor data update 여부 확인
-    bool is_sensor_on(int32_t index, int64_t sensor_bit);
+    bool confirm_active_position();   // 초기화 완료 : fall, raise 위치에 대한 확인
 
-    bool set_middle_position();
-    bool confirm_active_position();
     int32_t _safety_distance;         // limit sensor에서 실제 fall, raise 위치까지의 안전 거리
+    int32_t _action_check;            // 동작 check interval  
+    int32_t _action_timeout;          // 동작 timeout
+    int32_t _action_rpm;              // 동작 속도
+
     int32_t _fall_position;
     int32_t _raise_position;
     int32_t _middle_position;
+
+    void execute_fall_action();       // loader up    동작
+    void execute_raise_action();      // loader down  동작
   };
 }
