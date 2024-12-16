@@ -4,6 +4,8 @@
 
 namespace fieldro_bot
 {
+  // Active, Idle, Busy 삭제
+  // Normal 추가 
   enum class UnitState : int32_t
   {
     Created = 0x00, // 생성됨

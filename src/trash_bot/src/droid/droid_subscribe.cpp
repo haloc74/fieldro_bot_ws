@@ -85,7 +85,7 @@ namespace fieldro_bot
     if(_state == fieldro_bot::UnitState::Active && is_all_sequence_empty())
     {
       _state = fieldro_bot::UnitState::Idle;
-      log_msg(LogInfo, 0, "All UnitName Initialize Complete - Next Step Process");
+      log_msg(LogInfo, 0, "All Unit Initialize Complete !!!");
     }
 
     return;

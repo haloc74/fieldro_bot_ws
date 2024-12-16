@@ -8,7 +8,7 @@ namespace fieldro_bot
     add_sequence(to_int(fieldro_bot::UnitName::Observer), to_int(fieldro_bot::UnitAction::Init));
     add_sequence(to_int(fieldro_bot::UnitName::Signal), to_int(fieldro_bot::UnitAction::Init));  
 
-   //  // Loader 
+     // Loader 
    // add_sequence(to_int(fieldro_bot::UnitName::Loader), to_int(fieldro_bot::UnitAction::Fall));
    //  add_sequence(to_int(fieldro_bot::UnitName::Loader), to_int(fieldro_bot::UnitAction::Raise));
  }

@@ -20,7 +20,7 @@ namespace fieldro_bot
   */
   void Loader::action_complete_notify(const Error error)
   {
-    if(error == Error::None)
+     if(error == Error::None)
     {
       if(_action == UnitAction::None)   
       {
@@ -33,8 +33,8 @@ namespace fieldro_bot
       Unit::publish_unit_action_complete(to_int(_action), error_to_int(Error::None));
 
       // action 초기화
-      _action = UnitAction::None;
-      _state  = UnitState::Idle;
+      _action = fieldro_bot::UnitAction::None;
+      _state  = fieldro_bot::UnitState::Idle;
     }
     else
     {
@@ -45,8 +45,9 @@ namespace fieldro_bot
       log_msg(LogError, to_int(error), "Error : error code - " + std::to_string(to_int(error)));      
 
       // action 초기화
-      _action = UnitAction::None;
-      _state  = UnitState::Error;
+      _action = fieldro_bot::UnitAction::None;
+      _state  = fieldro_bot::UnitState::Error;
+      log_msg(LogError, 0, "Error : action complete notify"+std::to_string(__LINE__));
     }
 
     return;

@@ -70,6 +70,11 @@ namespace fieldro_bot
     // unit의 상태가 이전과는 뭔가 달라짐
     if(_unit_alive_info[index]->update(state))
     {
+      if(state == to_int(UnitState::Error))
+      {
+        log_msg(LogLevel::Error, 0, "Unit Error : " + to_string(to_enum<UnitName>(index)));
+      }
+
       // unit 상태 변경에 따른 즉각적인 publishing
       publish_unit_state(false);
     }

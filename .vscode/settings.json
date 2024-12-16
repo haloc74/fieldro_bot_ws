@@ -78,6 +78,7 @@
     "string": "cpp",
     "string_view": "cpp",
     "*.ipp": "cpp",
-    "valarray": "cpp"
+    "valarray": "cpp",
+    "future": "cpp"
   }
 }

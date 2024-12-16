@@ -110,12 +110,10 @@ namespace fieldro_bot
     if(_action == UnitAction::Fall && _fall_position == INT32_MAX)
     {
       _fall_position = _motor->get_motor_position() + _safety_distance;
-      _action = UnitAction::None;
     }
     else if(_action == UnitAction::Raise && _raise_position != INT32_MAX)
     {
       _raise_position = _motor->get_motor_position() - _safety_distance;
-      _action = UnitAction::None;
     }
     else
     {
@@ -129,7 +127,7 @@ namespace fieldro_bot
     if(_fall_position != INT32_MAX && _raise_position != INT32_MAX)
     {
       _middle_position  = (_fall_position + _raise_position) / 2;     // 중간 위치 설정
-      _state = UnitState::Idle;                                       // loader 상태 변경
+      _state = fieldro_bot::UnitState::Idle;                                       // loader 상태 변경
       return true;
     }
 
@@ -206,11 +204,20 @@ namespace fieldro_bot
   */
   bool Loader::is_controlable()
   {
-    if(_action != UnitAction::None)
+    bool ret = true;
+    
+    if(_action != fieldro_bot::UnitAction::None)  ret = false;  // 동작 상태
+    if(_state == fieldro_bot::UnitState::Error)   ret = false;  // 에러 상태
+
+    if(!ret)
     {
-      return false;
+      log_msg(LogInfo, 0, std::string("Loader is not controlable : ") + 
+                          std::string("state : ") + fieldro_bot::to_string(_state) + 
+                          std::string("action :") + fieldro_bot::to_string(_action) +
+                          std::string("code line : ") + std::to_string(__LINE__));      
     }
-    return true;
+
+    return ret;
   }
 
   /**

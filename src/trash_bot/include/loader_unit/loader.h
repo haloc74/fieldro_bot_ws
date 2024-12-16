@@ -47,6 +47,7 @@ namespace fieldro_bot
     bool is_sensor_update_and_on(int32_t index, int64_t sensor_bit);  // sensor data update 및 ON 여부
     void fall_limit_sensor_on();                                      // fall limit sensor on
     void raise_limit_sensor_on();                                     // raise limit sensor on
+    bool is_sensor_on(DISignal signal);                                 // sensor on 여부 확인
 
     bool confirm_active_position();   // 초기화 완료 : fall, raise 위치에 대한 확인
 

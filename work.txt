@@ -27,23 +27,27 @@
   기존 action 종료시까지 대기 했다가 신규로 들어온 action 처리를 해야 할까 ???
 . object 초기화 작업
 . limit sensor 상태 체크
-
 . trash_bot_node, io_node, loader_node, observer_node 연동 체크
 
+. UnitState enum Refactoring
+. loader refactoring
+. loader 초기화 완료시 state 변경 확인
+. loader 초기화 diagram 작성
 
-. loader_node - raise action 요청 (초기화 raise 확인)
 . droid에서 cmd를 이용한 loader raise 구현
+. loader_node - raise action 요청
+. raise action complete 확인
 . loader raise action 수행시 raise limit sensor check 로직 추가
-
-. loader_node - UnitState::Idle 상태 변경 확인
-
-
-. droid에서 cmd를 이용한 loader fall 구현
-. loader_node - fall action 요청
-. loader fall action 수행시 fall limit sensor check 로직 추가
 
 
 ID :  - JD 24.12.16
+1. droid에서 cmd를 이용한 loader fall 구현
+2. loader_node - fall action 요청
+3. fall action complete 확인
+4. loader fall action 수행시 fall limit sensor check 로직 추가
+
+
+ID : 200b5ad - JD 24.12.16
 1. wago 또는 observer에서 객체 생성 이후 일정시간 action subscribe가 되지 않던 버그 수정
 
 

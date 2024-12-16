@@ -17,6 +17,8 @@ namespace fieldro_bot
     // node handler 생성
     _node_handle = new ros::NodeHandle();
 
+    ros::Duration(2.0).sleep();
+
     // spinner 설정
     _spinner = new ros::AsyncSpinner(_spinner_count);
 

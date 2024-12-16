@@ -83,6 +83,15 @@ namespace fieldro_bot
       raise_limit_sensor_on();
     }
 
+    if(is_sensor_error())
+    {
+      log_msg(LogError, 0, "Error : sensor error : " + 
+                          std::to_string(_prev_sensor_data) + 
+                          "  " + 
+                          std::to_string(__LINE__));
+      _state = fieldro_bot::UnitState::Error;
+    }
+
     // prev sensor data update
     _prev_sensor_data = current_bits;
 
@@ -94,26 +103,33 @@ namespace fieldro_bot
     // motor stop
     _motor->stop_motor();
 
-    if(_state == UnitState::Active && _action == UnitAction::Fall)
+    log_msg(LogInfo, 0, "fall limit sensor on");
+    log_msg(LogInfo, 0, "state : " + to_string(_state) + " action : " + to_string(_action));
+
+    if(_state == UnitState::Created && _action == UnitAction::Fall)
     {
       // // 초기화 동작이면 motor 객체에 fall limit position 설정
       // _fall_position = _motor->get_motor_position() + _safety_distance;
 
-      // 위치 설정 보고 
-      confirm_active_position();
-
       // 동작 완료 보고
       publish_unit_action_complete(to_int(_action), 0);
 
+      // 위치 설정 보고 
+      confirm_active_position();
+
       // action 
-      // _action = UnitAction::None;
+      _action = UnitAction::None;
 
       // // 중간 위치 설정
       // confirm_active_position();
     }
     else
     {
-      _state = UnitState::Error;
+      if(_state != UnitState::Created)
+      {
+        log_msg(LogError, 0, "Error : fall limit sensor on" + std::to_string(__LINE__));
+        _state = fieldro_bot::UnitState::Error;
+      }      
     }
     return;
   }
@@ -122,22 +138,29 @@ namespace fieldro_bot
   {
     _motor->stop_motor();
 
-    if(_state == UnitState::Active && _action == UnitAction::Fall)
+    log_msg(LogInfo, 0, "raise limit sensor on");
+    log_msg(LogInfo, 0, "state : " + to_string(_state) + " action : " + to_string(_action));
+
+    if(_state == UnitState::Created && _action == UnitAction::Raise)
     {
       // // 초기화 동작이면 motor 객체에 raise limit position 설정
       // _raise_position = _motor->get_motor_position() - _safety_distance;
 
+      // 동작 완료 보고
+      Unit::publish_unit_action_complete(to_int(_action), 0);
+
       // 위치 설정 보고 
       confirm_active_position();
 
-      // 동작 완료 보고
-      publish_unit_action_complete(to_int(_action), 0);
-
-      // _action = UnitAction::None;
+      _action = fieldro_bot::UnitAction::None;
     }
     else
     {
-      _state = UnitState::Error;
+      if(_state != UnitState::Created)
+      {
+        log_msg(LogError, 0, "Error : raise limit sensor on" + std::to_string(__LINE__));
+        _state = fieldro_bot::UnitState::Error;
+      }
     }
     return;
   }
