@@ -35,7 +35,7 @@ namespace fieldro_bot
     _publish_units_state.publish(msg);
     _last_publish_time = ros::Time::now();
 
-    log_msg(fieldro_bot::LogLevel::Info, 0, "state_pub : " + std::to_string(_unit_alive));
+    //log_msg(fieldro_bot::LogLevel::Info, 0, "state_pub : " + std::to_string(_unit_alive));
     
     return;
   }

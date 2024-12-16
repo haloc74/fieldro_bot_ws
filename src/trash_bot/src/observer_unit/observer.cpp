@@ -28,7 +28,7 @@ namespace fieldro_bot
     _subscribe_unit_alive = _node_handle->subscribe("trash_bot/UnitAliveMsg", 100, &Observer::subscribe_unit_alive, this);
 
     // unit control message 수신을 위한 subscriber 생성 및 link
-    _subscribe_unit_action = _node_handle->subscribe("trash_bot/unit_control", 100, &Observer::subscribe_unit_action, this);    
+    _subscribe_unit_action = _node_handle->subscribe("trash_bot/unit_control", 50, &Observer::subscribe_unit_action, this);    
 
     // unit state publishing
     _publish_units_state = _node_handle->advertise<trash_bot::UnitStateMsg>("trash_bot/UnitStateMsg", 100);

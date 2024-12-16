@@ -25,7 +25,7 @@ namespace fieldro_bot
     
     // unit action message 수신을 위한 subscriber 생성 및 link
     _subscribe_unit_action = 
-    _node_handle->subscribe("trash_bot/unit_control", 10, &Wago::subscribe_unit_action, this);
+    _node_handle->subscribe("trash_bot/unit_control", 50, &Wago::subscribe_unit_action, this);
 
     // unit action message 처리 결과 발송을 위한 publisher 생성 및 link
     _publish_unit_action_complete = 

@@ -177,7 +177,15 @@ namespace fieldro_bot
                             std::to_string(_action_rpm)+
                             " - " + __FILE__);
       _action_rpm = 100;
-    }    
+    }
+
+    log_msg(LogInfo, 0, "Loader : option load complete");
+    log_msg(LogInfo, 0, "_safety_distance : "+std::to_string(_safety_distance));
+    log_msg(LogInfo, 0, "_action_rpm : "+std::to_string(_action_rpm));
+    log_msg(LogInfo, 0, "_action_timeout : "+std::to_string(_action_timeout));
+    log_msg(LogInfo, 0, "---");    
+    log_msg(LogInfo, 0, "");    
+    return;
   }
 
   /**

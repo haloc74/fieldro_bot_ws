@@ -19,11 +19,9 @@ namespace fieldro_bot
     case fieldro_bot::UnitState::Created:
       if(msg.alive == 0x00)
       {
-        log_msg(LogInfo, 0, "All UnitName Init - Next Step Process");
-
+        log_msg(LogInfo, 0, "All Init - Next Step Process");
         _state = fieldro_bot::UnitState::Active;
-
-        create_unit_initialize_sequence();
+        delay_call(3000, std::bind(&Droid::create_unit_initialize_sequence, this));
       }
       break;
     case fieldro_bot::UnitState::Active:    break;

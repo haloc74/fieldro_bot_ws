@@ -20,6 +20,8 @@
 //=========================================================
 //=========================================================
 
+. req message 수신응답이 필요할까 ???
+
 . UnitState Define에 Sleep 상태를 추가하고 MainController에서 Activate 메세지 전송 하는 방안 ?
 . 기존 action 수행중 다른 action 요청이 들어왔을 경우 error 통보 후 어떻게 처리를 해야 할까 ???
   기존 action 종료시까지 대기 했다가 신규로 들어온 action 처리를 해야 할까 ???
@@ -28,11 +30,24 @@
 
 . trash_bot_node, io_node, loader_node, observer_node 연동 체크
 
-. loader_node - fall action 요청 (초기화 fall 확인)
+
 . loader_node - raise action 요청 (초기화 raise 확인)
+. droid에서 cmd를 이용한 loader raise 구현
+. loader raise action 수행시 raise limit sensor check 로직 추가
+
 . loader_node - UnitState::Idle 상태 변경 확인
 
+
+. droid에서 cmd를 이용한 loader fall 구현
+. loader_node - fall action 요청
+. loader fall action 수행시 fall limit sensor check 로직 추가
+
+
 ID :  - JD 24.12.16
+1. wago 또는 observer에서 객체 생성 이후 일정시간 action subscribe가 되지 않던 버그 수정
+
+
+ID : ccf6d93 - JD 24.12.16
 1. All Finish 명령은 최우선 전달 되도록 한다.
 2. Loader config file name 잘못 되어있던것 수정
 3. Loader action rpm 유효 범위를 50 ~ 500 rpm으로 
@@ -40,12 +55,10 @@ ID :  - JD 24.12.16
 ID : d66f10c - JD 24.12.14
 1. Loader::confirm_active_position() Refactoring
 
-
 ID : 86f8fa2 - JD 24.12.14
 1. execute_fall_action() 함수 추가 
 2. execute_raise_action() 함수 추가
 3. loader.yaml에 동작속도, 체크시가, 타임아웃 옵션 추가
-
 
 ID : 29991f2 - JD 24.12.12
 1. 12.06 commit 되지 않았고 버그 있었던 부분 수정

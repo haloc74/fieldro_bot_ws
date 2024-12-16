@@ -93,14 +93,14 @@ namespace fieldro_bot
   void Unit::publish_unit_action_complete(int32_t action, int32_t error_code)
   {
     trash_bot::UnitActionComplete msg;
-
     msg.time_stamp      = ros::Time::now();
     msg.receive_object  = to_int(fieldro_bot::UnitName::System);
     msg.action_object   = to_int(_name);
     msg.complete_action = action;
     msg.error_code      = error_code;
-
     _publish_unit_action_complete.publish(msg);
+
+    log_msg(LogInfo, error_code, "Action Complete : " + std::to_string(action));
 
     return;
   }
