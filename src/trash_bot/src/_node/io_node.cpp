@@ -31,7 +31,8 @@ int main(int argc, char **argv)
 
   while(ros::ok())
   {
-    if(wago->is_shutdown())    break;
+    if(wago->is_shutdown())  
+      break;
 
     if(!command_use)   continue;
 

@@ -136,60 +136,9 @@ namespace fieldro_bot
     return false;
   }
 
-  /**
-  * @brief      loader fall action 수행
-  * @attention  _fall_position의 설정 여부에 따라 수행 방법을 달리 해야 한다.
-  *             _fall_position == INT32_MAX : 저속으로 fall_limit sensor까지 이동
-  *             _fall_position != INT32_MAX : 일반속도로 _fall_position까지 이동         
-  */
-  void Loader::execute_fall_action()
-  {
-    if(!is_controlable())
-    {
-      Unit::log_msg(LogInfo, static_cast<int32_t>(fieldro_bot::Error::Busy), "Loader is busy");
-      return;
-    }
 
-    if(_fall_position == INT32_MAX)
-    {
-      // 저속으로 fall_limit sensor까지 이동
-      _motor->control_move(0, _action_rpm/2, CHECK_NONE, TIMEOUT_NONE);
-    }
-    else
-    {
-      // 일반속도로 _fall_position까지 이동
-      _motor->control_move(_fall_position, _action_rpm, _action_check, _action_timeout);
-    }
 
-    return;
-  }
 
-  /**
-  * @brief      loader raise action 수행
-  * @attention  _raise_position의 설정 여부에 따라 수행 방법을 달리 해야 한다.
-  *             _raise_position == INT32_MAX : 저속으로 raise_limit sensor까지 이동
-  *             _raise_position != INT32_MAX : 일반속도로 _raise_position까지 이동                
-  */
-  void Loader::execute_raise_action()
-  {
-    if(!is_controlable())
-    {
-      log_msg(LogInfo, static_cast<int32_t>(fieldro_bot::Error::Busy), "Loader is busy");
-      return;
-    }
-
-    if(_raise_position == INT32_MAX)
-    {
-      // 저속으로 raise_limit sensor까지 이동
-      _motor->control_move(INT32_MAX, _action_rpm/2, CHECK_NONE, TIMEOUT_NONE);
-    }
-    else
-    {
-      // 일반속도로 _raise_position까지 이동
-      _motor->control_move(_raise_position, _action_rpm, _action_check, _action_timeout);
-    }
-    return;
-  }
 
 
   /**
@@ -205,9 +154,9 @@ namespace fieldro_bot
       YAML::Node yaml = YAML::Load(yaml_file);
       yaml_file.close();
 
-      _safety_distance  = yaml["safety_distance"].as<int32_t>();
-      _action_rpm       = yaml["action_rpm"].as<int32_t>();
-      _action_timeout   = yaml["action_timeout"].as<int32_t>();
+      _safety_distance  = yaml["main"]["safety_distance"].as<int32_t>();
+      _action_rpm       = yaml["main"]["action_rpm"].as<int32_t>();
+      _action_timeout   = yaml["main"]["action_timeout"].as<int32_t>();
     }
     catch(YAML::Exception& e)
     {
@@ -220,6 +169,14 @@ namespace fieldro_bot
     catch(...)
     {
       std::cout << "Unknown Exception" << std::endl;
+    }
+
+    if(_action_rpm < 50 || _action_rpm > 500)
+    {
+      log_msg(LogWarning, 0, "Warning : action rpm is out of range"+
+                            std::to_string(_action_rpm)+
+                            " - " + __FILE__);
+      _action_rpm = 100;
     }    
   }
 
@@ -245,7 +202,7 @@ namespace fieldro_bot
     {
       return false;
     }
-    return false;
+    return true;
   }
 
   /**

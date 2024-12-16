@@ -160,24 +160,30 @@ namespace fieldro_bot
   * @param[in]  action : 명령어 index
   * @param[in]  command : 명령어
   * @return     void
+  * @attention  action이 finish일 경우 명령 list를 무시하고 최우선 전송 후 종료 
   * @note       
   */
   void Droid::add_sequence(int32_t unit, int32_t action, std::string command)
   {
     std::lock_guard<std::mutex> lock(_lock);
 
-    std::unique_ptr<trash_bot::UnitControl> unit_control_msg = std::make_unique<trash_bot::UnitControl>();
-    unit_control_msg->time_stamp     = ros::Time(0);
-    unit_control_msg->target_object  = unit;
-    unit_control_msg->action         = action;
-    unit_control_msg->command        = command; 
-    _control_sequence.push_back(std::move(unit_control_msg));
-
     if(unit == to_int(fieldro_bot::UnitName::All) && 
       action == to_int(fieldro_bot::UnitAction::Finish))
     {
-      //delay_call(3000, std::bind(&Droid::system_finish, this));
+      publish_unit_control(unit, action, "");
       delay_call(3000, std::bind(&Droid::destroy, this));
+    }
+    else
+    {
+      std::unique_ptr<trash_bot::UnitControl> 
+      unit_control_msg = std::make_unique<trash_bot::UnitControl>();
+
+      unit_control_msg->time_stamp     = ros::Time(0);
+      unit_control_msg->target_object  = unit;
+      unit_control_msg->action         = action;
+      unit_control_msg->command        = command;
+
+      _control_sequence.push_back(std::move(unit_control_msg));
     }
     
     return;
@@ -193,12 +199,12 @@ namespace fieldro_bot
 
   bool Droid::control(std::vector<std::string> command_list)
   {
-    if(command_list.size() < 2 || command_list.size() > 3)                        return false;
+    if(command_list.size() < 2 || command_list.size() > 3)              return false;
 
     // command 분석
     std::tuple<int32_t, int32_t, int32_t, std::string> cmd_data = interpret_command(command_list);
 
-    if(std::get<1>(cmd_data) == to_int(fieldro_bot::UnitName::End))               return false;
+    if(std::get<1>(cmd_data) == to_int(fieldro_bot::UnitName::End))     return false;
     if(std::get<2>(cmd_data) == to_int(fieldro_bot::UnitAction::None))  return false;
 
     // 요청 list에 등록

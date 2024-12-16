@@ -32,8 +32,12 @@
 . loader_node - raise action 요청 (초기화 raise 확인)
 . loader_node - UnitState::Idle 상태 변경 확인
 
+ID :  - JD 24.12.16
+1. All Finish 명령은 최우선 전달 되도록 한다.
+2. Loader config file name 잘못 되어있던것 수정
+3. Loader action rpm 유효 범위를 50 ~ 500 rpm으로 
 
-ID :  - JD 24.12.14
+ID : d66f10c - JD 24.12.14
 1. Loader::confirm_active_position() Refactoring
 
 

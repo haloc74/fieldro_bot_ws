@@ -23,7 +23,7 @@ int main(int argc, char ** argv)
   LOG->add_log(fieldro_bot::UnitName::System, fieldro_bot::LogLevel::Info, 0, "Loader Start");
 
   // node main 객체 생성
-  fieldro_bot::Loader* loader = new fieldro_bot::Loader("config/option.yaml", "main");
+  fieldro_bot::Loader* loader = new fieldro_bot::Loader("config/loader.yaml", "main");
  
   bool command_use = false;
   
@@ -35,7 +35,8 @@ int main(int argc, char ** argv)
   while(ros::ok())
   {
     // 종료 예약 확인
-    if(loader->is_shutdown())    break;
+    if(loader->is_shutdown())   
+     break;
 
     if(!command_use)   continue;
 

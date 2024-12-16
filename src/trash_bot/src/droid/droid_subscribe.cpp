@@ -20,12 +20,10 @@ namespace fieldro_bot
       if(msg.alive == 0x00)
       {
         log_msg(LogInfo, 0, "All UnitName Init - Next Step Process");
+
         _state = fieldro_bot::UnitState::Active;
-        // 각 unit에 초기화 sequence 추가
-        // None   - skip
-        // System - this
-        add_sequence(to_int(fieldro_bot::UnitName::Observer), to_int(fieldro_bot::UnitAction::Init));
-        add_sequence(to_int(fieldro_bot::UnitName::Signal), to_int(fieldro_bot::UnitAction::Init));
+
+        create_unit_initialize_sequence();
       }
       break;
     case fieldro_bot::UnitState::Active:    break;

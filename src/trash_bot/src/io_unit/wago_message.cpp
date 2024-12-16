@@ -45,6 +45,7 @@ namespace fieldro_bot
       break;
 
     case fieldro_bot::UnitAction::Finish:  
+      log_msg(LogInfo, 0, "REQ : Finish");
       destroy();
       break;
 

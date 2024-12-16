@@ -81,6 +81,7 @@ namespace fieldro_bot
     // user command control
     std::map<int32_t, int32_t, std::string> _command_map;
     bool is_all_sequence_empty();  // 모든 sequence가 비어 있는지 확인
+    void create_unit_initialize_sequence();
   };
 
 }

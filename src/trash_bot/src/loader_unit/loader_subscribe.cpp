@@ -1,5 +1,9 @@
+
+#include <future>
+
 #include "loader.h"
 #include "define/unit_state.h"
+
 
 namespace fieldro_bot
 {
@@ -31,11 +35,16 @@ namespace fieldro_bot
       break;
 
     case fieldro_bot::UnitAction::Fall:
-      execute_fall_action();
+      std::async(std::launch::async, [this] { execute_fall_action(); });
       break;
 
     case fieldro_bot::UnitAction::Raise:
-      execute_raise_action();
+      std::async(std::launch::async, [this] { execute_raise_action(); });
+      break;
+
+    case fieldro_bot::UnitAction::Finish:
+      log_msg(LogInfo, 0, "REQ : Finish");
+      destroy();
       break;
     }
     
