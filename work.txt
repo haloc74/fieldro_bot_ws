@@ -31,19 +31,20 @@
 
 . UnitState enum Refactoring
 . loader refactoring
-. loader 초기화 완료시 state 변경 확인
 . loader 초기화 diagram 작성
 . droid에서 Loader Stop 을 이용한 cmd 처리 구현
 . droid에서 cmd를 이용한 loader raise 구현
 
 
 ID :  - JD 24.12.17
+1. loader 초기화 완료시 state 변경 확인
+
+
+ID : e5572f1 - JD 24.12.17
 1. droid에서 cmd를 이용한 stop 구현
 2. loader_node - raise action 요청
 3. raise action complete 확인
 4. loader raise action 수행시 raise limit sensor check 로직 추가
-
-
 
 //=========================================================
 //=========================================================  

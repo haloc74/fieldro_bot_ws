@@ -27,7 +27,8 @@
 				"isDefault": true															// 기본 빌드 작업으로 설정
 																											// 다른 빌드 작업이 없는 경우 이 작업이 실행됨
 			},
-			"label": "catkin_make: build"										// 작업의 라벨을 지정
+			//"label": "catkin_make: build"										// 작업의 라벨을 지정
+			"label": "catkin build: build"										// 작업의 라벨을 지정
 																											// VSCode에서 작업을 선택 할 때 표시되는 이름
 		},
 

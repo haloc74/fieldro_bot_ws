@@ -111,7 +111,7 @@ namespace fieldro_bot
     {
       _fall_position = _motor->get_motor_position() + _safety_distance;
     }
-    else if(_action == UnitAction::Raise && _raise_position != INT32_MAX)
+    else if(_action == UnitAction::Raise && _raise_position == INT32_MAX)
     {
       _raise_position = _motor->get_motor_position() - _safety_distance;
     }
