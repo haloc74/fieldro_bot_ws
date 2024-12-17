@@ -134,8 +134,19 @@ namespace fieldro_bot
     return false;
   }
 
+  // bool Loader::is_sensor_error()
+  // {
+  //   if(is_sensor_on(DISignal::LoaderFall) || is_sensor_on(DISignal::LoaderRaise))
+  //   {
+  //     log_msg(LogError, 0, "Error : loader sensor error : " + 
+  //                         std::to_string(_prev_sensor_data) + 
+  //                         "  " + 
+  //                         std::to_string(__LINE__));
 
-
+  //     _state = fieldro_bot::UnitState::Error;
+  //     return true;
+  //   }
+  // }
 
 
 

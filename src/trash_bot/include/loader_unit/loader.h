@@ -48,6 +48,7 @@ namespace fieldro_bot
     void fall_limit_sensor_on();                                      // fall limit sensor on
     void raise_limit_sensor_on();                                     // raise limit sensor on
     bool is_sensor_on(DISignal signal);                                 // sensor on 여부 확인
+    bool is_sensor_error();
 
     bool confirm_active_position();   // 초기화 완료 : fall, raise 위치에 대한 확인
 

@@ -23,7 +23,7 @@ namespace fieldro_bot
   bool Loader::is_sensor_error()
   {
     int64_t compare = (0x01 << to_int(DISignal::LoaderFall)) | (0x01 << to_int(DISignal::LoaderRaise));
-    if(_prev_sensor_data & compare)
+    if(_prev_sensor_data == compare)
     {
       return true;
     }

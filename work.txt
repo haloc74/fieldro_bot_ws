@@ -33,14 +33,22 @@
 . loader refactoring
 . loader 초기화 완료시 state 변경 확인
 . loader 초기화 diagram 작성
-
+. droid에서 Loader Stop 을 이용한 cmd 처리 구현
 . droid에서 cmd를 이용한 loader raise 구현
-. loader_node - raise action 요청
-. raise action complete 확인
-. loader raise action 수행시 raise limit sensor check 로직 추가
 
 
-ID :  - JD 24.12.16
+ID :  - JD 24.12.17
+1. droid에서 cmd를 이용한 stop 구현
+2. loader_node - raise action 요청
+3. raise action complete 확인
+4. loader raise action 수행시 raise limit sensor check 로직 추가
+
+
+
+//=========================================================
+//=========================================================  
+
+ID : 1bc38bc - JD 24.12.16
 1. droid에서 cmd를 이용한 loader fall 구현
 2. loader_node - fall action 요청
 3. fall action complete 확인
@@ -66,9 +74,6 @@ ID : 86f8fa2 - JD 24.12.14
 
 ID : 29991f2 - JD 24.12.12
 1. 12.06 commit 되지 않았고 버그 있었던 부분 수정
-
-//=========================================================
-//=========================================================  
 
 ID : 2366970 - JD 24.12.05
 1. loader_unit class 추가

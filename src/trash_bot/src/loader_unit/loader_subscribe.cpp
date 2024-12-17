@@ -42,6 +42,10 @@ namespace fieldro_bot
       std::async(std::launch::async, [this] { execute_raise_action(); });
       break;
 
+    case fieldro_bot::UnitAction::Stop:
+      _motor->stop_motor();
+      break;
+
     case fieldro_bot::UnitAction::Finish:
       log_msg(LogInfo, 0, "REQ : Finish");
       destroy();
@@ -83,14 +87,18 @@ namespace fieldro_bot
       raise_limit_sensor_on();
     }
 
+
+    // limit sensor error check
     if(is_sensor_error())
     {
-      log_msg(LogError, 0, "Error : sensor error : " + 
+      log_msg(LogError, 0, "Error : loader sensor error : " + 
                           std::to_string(_prev_sensor_data) + 
                           "  " + 
                           std::to_string(__LINE__));
+
       _state = fieldro_bot::UnitState::Error;
     }
+
 
     // prev sensor data update
     _prev_sensor_data = current_bits;
@@ -98,30 +106,24 @@ namespace fieldro_bot
     return;
   }
 
+  /**
+  * @brief      fall limit sensor가 on 되었을 경우 처리
+  * @note       초기화 상태와 일반 상태를 구분해서 처리.
+  * @attention  초기화 상태에서는 각 limit sensor를 가지고 위치를 인식하게 되므로 
+  *             sensor가 on 되어도 에러 처리를 하지 않는다.
+  */
   void Loader::fall_limit_sensor_on()
   {
-    // motor stop
-    _motor->stop_motor();
+    _motor->stop_motor();                                 // motor stop                       
 
     log_msg(LogInfo, 0, "fall limit sensor on");
     log_msg(LogInfo, 0, "state : " + to_string(_state) + " action : " + to_string(_action));
 
     if(_state == UnitState::Created && _action == UnitAction::Fall)
     {
-      // // 초기화 동작이면 motor 객체에 fall limit position 설정
-      // _fall_position = _motor->get_motor_position() + _safety_distance;
-
-      // 동작 완료 보고
-      publish_unit_action_complete(to_int(_action), 0);
-
-      // 위치 설정 보고 
-      confirm_active_position();
-
-      // action 
-      _action = UnitAction::None;
-
-      // // 중간 위치 설정
-      // confirm_active_position();
+      publish_unit_action_complete(to_int(_action), 0);   // 동작 완료 보고
+      confirm_active_position();                          // 위치 설정 보고 
+      _action = UnitAction::None;                         // action release
     }
     else
     {
@@ -134,6 +136,12 @@ namespace fieldro_bot
     return;
   }
 
+  /**
+  * @brief      raise limit sensor가 on 되었을 경우 처리
+  * @note       초기화 상태와 일반 상태를 구분해서 처리.
+  * @attention  초기화 상태에서는 각 limit sensor를 가지고 위치를 인식하게 되므로
+  *             sensor가 on 되어도 에러 처리를 하지 않는다.
+  */
   void Loader::raise_limit_sensor_on()
   {
     _motor->stop_motor();
@@ -143,16 +151,9 @@ namespace fieldro_bot
 
     if(_state == UnitState::Created && _action == UnitAction::Raise)
     {
-      // // 초기화 동작이면 motor 객체에 raise limit position 설정
-      // _raise_position = _motor->get_motor_position() - _safety_distance;
-
-      // 동작 완료 보고
-      Unit::publish_unit_action_complete(to_int(_action), 0);
-
-      // 위치 설정 보고 
-      confirm_active_position();
-
-      _action = fieldro_bot::UnitAction::None;
+      Unit::publish_unit_action_complete(to_int(_action), 0); // 동작 완료 보고
+      confirm_active_position();                              // 위치 설정 보고 
+      _action = fieldro_bot::UnitAction::None;                // action release         
     }
     else
     {
