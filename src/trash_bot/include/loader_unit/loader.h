@@ -33,24 +33,25 @@ namespace fieldro_bot
     // sensor info receive
     int64_t _sensor_data_update_mask;                                 // sensor data update mask
     int64_t _prev_sensor_data;                                        // 이전 센서 상태를 저장하기 위한 변수
-    int8_t _sensor[(int)DISignal::END];                               // 센서 상태 정보
+  //  int8_t _sensor[(int)DISignal::END];                               // 센서 상태 정보
     ros::Subscriber _subscribe_iosignal;                              // IOSignal을 받기 위한 subscriber 
     void subscribe_iosignal(const trash_bot::IOSignal& msg);          // IOSignal을 받기 위한 callback 함수
-    void initialize_signal_data();                                    // signal data 초기화
-    bool update_sensor_data(DISignal sensor, int64_t signal_bit);     // sensor data 업데이트
+    //void initialize_signal_data();                                    // signal data 초기화
+    //bool update_sensor_data(DISignal sensor, int64_t signal_bit);     // sensor data 업데이트
 
     // loader
     bool is_controlable();                                            // Loader의 동작 가능여부
         
     // callback
     void action_complete_notify(const Error error);                   // motor object로 부터 동작 완료 알림 콜백
+    
+    // 일반 함수
     bool is_sensor_update_and_on(int32_t index, int64_t sensor_bit);  // sensor data update 및 ON 여부
     void fall_limit_sensor_on();                                      // fall limit sensor on
     void raise_limit_sensor_on();                                     // raise limit sensor on
-    bool is_sensor_on(DISignal signal);                                 // sensor on 여부 확인
-    bool is_sensor_error();
-
-    bool confirm_active_position();   // 초기화 완료 : fall, raise 위치에 대한 확인
+    bool is_sensor_on(DISignal signal);                               // sensor on 여부 확인
+    bool is_sensor_error();                                           // loader 관련 센서가 error 상태인지 체크
+    bool confirm_active_position();                                   // 초기화 완료 : fall, raise 위치에 대한 확인
 
     int32_t _safety_distance;         // limit sensor에서 실제 fall, raise 위치까지의 안전 거리
     int32_t _action_check;            // 동작 check interval  
@@ -63,5 +64,6 @@ namespace fieldro_bot
 
     void execute_fall_action();       // loader up    동작
     void execute_raise_action();      // loader down  동작
+    void execute_middle_action();     // loader middle 동작
   };
 }

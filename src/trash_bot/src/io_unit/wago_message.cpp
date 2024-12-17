@@ -39,7 +39,7 @@ namespace fieldro_bot
     case fieldro_bot::UnitAction::Init:
       //_state =  static_cast<int>(fieldro_bot::UnitState::Idle);
       _state = fieldro_bot::UnitState::Normal;
-      publish_unit_action_complete(to_int<fieldro_bot::UnitAction>(action), error_to_int(fieldro_bot::Error::None));
+      publish_unit_action_complete(to_int<fieldro_bot::UnitAction>(action), fieldro_bot::to_int(fieldro_bot::Error::None));
       break;
 
     case fieldro_bot::UnitAction::Finish:  

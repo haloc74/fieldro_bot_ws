@@ -20,6 +20,11 @@ namespace fieldro_bot
   */
   void Loader::action_complete_notify(const Error error)
   {
+    log_msg(LogInfo, 0, std::string("action complete notify : ") + 
+                        fieldro_bot::to_string(_action) + 
+                        std::string(" - error code : ") + 
+                        std::to_string(fieldro_bot::to_int(error)));
+
      if(error == Error::None)
     {
       if(_action == UnitAction::None)   
@@ -30,7 +35,7 @@ namespace fieldro_bot
       }
 
       // 동작 완료 보고 (정상 완료)
-      Unit::publish_unit_action_complete(to_int(_action), error_to_int(Error::None));
+      Unit::publish_unit_action_complete(to_int(_action), fieldro_bot::to_int(Error::None));
 
       // action 초기화
       _action = fieldro_bot::UnitAction::None;
@@ -38,17 +43,14 @@ namespace fieldro_bot
     else
     {
       // 동작 완료 보고 (Error)
-      Unit::publish_unit_action_complete(to_int(_action), error_to_int(error));
+      Unit::publish_unit_action_complete(to_int(_action), fieldro_bot::to_int(error));
 
       // error log 표기 
       log_msg(LogError, to_int(error), "Error : error code - " + std::to_string(to_int(error)));      
 
-      // action 초기화
-      _action = fieldro_bot::UnitAction::None;
+      // state 변경
       _state  = fieldro_bot::UnitState::Error;
-      log_msg(LogError, 0, "Error : action complete notify"+std::to_string(__LINE__));
     }
-
     return;
   }
 

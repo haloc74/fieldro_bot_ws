@@ -1,9 +1,10 @@
 
 #pragma once
 
-#include <string>
-#include <cstdint>
+// #include <string>
+// #include <cstdint>
 
+#include "helper/enum_template.h"
 
 namespace fieldro_bot
 {
@@ -68,18 +69,44 @@ namespace fieldro_bot
     End,
   };
 
-  constexpr int32_t error_to_int(Error error)
+  /**
+  * @brief      enum => string 변환
+  * @note       구현되지 않음 (나중에 하자 ..)
+  */
+  template<>
+  inline std::string to_string<Error>(Error value)
   {
-    return static_cast<int32_t>(error);
-  }
-  constexpr Error int_to_error(int32_t error)
-  {
-    return static_cast<Error>(error);
-  }
-
-  inline std::string ErrorToString(Error error)
-  {
-    return "Not Implemented";
+    return "not implemented";
   }
 
+  /**
+  * @brief      string => enum 변환
+  * @note       구현되지 않음 (나중에 하자 ..)
+  */
+  template<>
+  inline Error to_enum<Error, std::string>(const std::string& str)
+  {
+    return Error::Unknown;
+  }
+
+  /**
+  * @brief      int => string 변환
+  * @note       구현되지 않음 (나중에 하자 ..)
+  */
+  template<>
+  inline std::string to_string<Error, int32_t>(int32_t value)
+  {
+    return to_string<Error>(to_enum<Error>(value));
+  }  
+
+  /**
+  * @brief      string => int 변환
+  * @note       구현되지 않음 (나중에 하자 ..)
+  */
+  template<>
+  inline int32_t to_int<Error, std::string>(const std::string& str)
+  {
+    return to_int<Error>(to_enum<Error, std::string>(str));
+  }
+  
 }

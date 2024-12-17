@@ -20,10 +20,16 @@ namespace fieldro_bot
     }
     return false;
   }
+
+  /**
+  * @brief      loader의 sensor data가 error 상태인지 확인
+  * @return     bool : loader의 fall, raise sensor 두개 모두가 on 상태인지
+  * @note       추후 다른 sensor 추가시 수정 필요
+  */
   bool Loader::is_sensor_error()
   {
-    int64_t compare = (0x01 << to_int(DISignal::LoaderFall)) | (0x01 << to_int(DISignal::LoaderRaise));
-    if(_prev_sensor_data == compare)
+    //int64_t compare = (0x01 << to_int(DISignal::LoaderFall)) | (0x01 << to_int(DISignal::LoaderRaise));
+    if(_prev_sensor_data == _sensor_data_update_mask)
     {
       return true;
     }
@@ -74,10 +80,10 @@ namespace fieldro_bot
   {
     if(!is_controlable())
     {
-      Unit::log_msg(LogInfo, 0, std::string("Loader is not controlable : ") + 
-                                std::string("state : ") + to_string(_state) + 
-                                std::string("action :") + to_string(_action) +
-                                std::string("code line : ") + std::to_string(__LINE__));
+      log_msg(LogInfo, 0, std::string("Loader is not controlable : ") + 
+                          std::string("state : ") + to_string(_state) + 
+                          std::string("action :") + to_string(_action) +
+                          std::string("code line : ") + std::to_string(__LINE__));
       return;
     }
 
@@ -88,11 +94,8 @@ namespace fieldro_bot
       return;
     }
 
-
     _action = UnitAction::Raise;
-
     
-
     if(_raise_position == INT32_MAX || _state == fieldro_bot::UnitState::Created)
     {
       log_msg(LogInfo, 0, "Loader initialize raise action start -- ");
@@ -103,6 +106,40 @@ namespace fieldro_bot
       log_msg(LogInfo, 0, "Loader fall action start -- ");
       _motor->control_move(_raise_position, _action_rpm, _action_check, _action_timeout);
     }
+    return;
+  }
+
+  /**
+  * @brief      loader middle action 수행
+  * @note       middle position으로의 이동은 초기화 이후에 만 할 수있다.
+  *             초기화가 완료 되지 않은 상태에서는 middle position 값이 유효하지 않음
+  *            _middle_position == INT32_MAX : middle position이 설정되지 않았다.
+  *   
+  */
+  void Loader::execute_middle_action()
+  {
+    if(_state != fieldro_bot::UnitState::Normal)  
+    {
+      log_msg(LogError, 0, "Error : loader is not initialized");
+      return;
+    }
+
+    if(!is_controlable())                         
+    {
+      log_msg(LogInfo, 0, "Loader is not controlable");
+      return;
+    }
+
+    if(_middle_position == INT32_MAX)             
+    {
+      log_msg(LogError, 0, "Error : middle position is not set");
+      return;
+    }
+
+    log_msg(LogInfo, 0, "Loader middle action start -- ");
+    _action = UnitAction::Middle;
+    _motor->control_move(_middle_position, _action_rpm, _action_check, _action_timeout);
+
     return;
   }  
 }

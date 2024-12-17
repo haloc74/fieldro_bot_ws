@@ -12,7 +12,7 @@ namespace fieldro_bot
           : Unit(config_file, session)
   {
     load_option(config_file);           // option load     
-    initialize_signal_data();           // signal data 초기화
+    //initialize_signal_data();           // signal data 초기화
 
     // position data 초기화
     _fall_position   = INT32_MAX;
@@ -86,25 +86,10 @@ namespace fieldro_bot
   }
 
   /**
-  * @brief      
-  * @param[in]  
-  * @return     
-  * @note       
+  * @brief      loader 가동 범위 설정
+  * @return     bool : 모든 가동 범위가 설정 되었는지 여부
+  * @note       모든 가동 범위가 설정 되었다면 _state를 변경해서 실제 구동이 가능하도록 한다.
   */
-  // bool Loader::confirm_active_position()
-  // {
-  //   if(_fall_position == INT32_MAX)   return false;
-  //   if(_raise_position == INT32_MAX)  return false;    
-
-  //   // 중간 위치 설정
-  //   _middle_position  = (_fall_position + _raise_position) / 2;
-
-  //   // loader 상태 변경
-  //   _state = UnitState::Idle;
-
-  //   return true;
-  // }
-
   bool Loader::confirm_active_position()
   {
     if(_action == UnitAction::Fall && _fall_position == INT32_MAX)
@@ -117,7 +102,7 @@ namespace fieldro_bot
     }
     else
     {
-      log_msg(LogError, 0, "Error : position initialize failed"+
+      log_msg(LogWarning, 0, "Warning : position initialize failed"+
                             std::to_string(to_int(_action))+
                             " - " + std::to_string(_fall_position) +
                             " - " + std::to_string(_raise_position)+
@@ -130,25 +115,106 @@ namespace fieldro_bot
       _state = fieldro_bot::UnitState::Normal;                        // loader 상태 변경
       return true;
     }
-
     return false;
   }
 
-  // bool Loader::is_sensor_error()
-  // {
-  //   if(is_sensor_on(DISignal::LoaderFall) || is_sensor_on(DISignal::LoaderRaise))
-  //   {
-  //     log_msg(LogError, 0, "Error : loader sensor error : " + 
-  //                         std::to_string(_prev_sensor_data) + 
-  //                         "  " + 
-  //                         std::to_string(__LINE__));
+  /**
+  * @brief      fall limit sensor가 on 되었을 경우 처리
+  * @note       초기화 상태와 일반 상태를 구분해서 처리.
+  * @attention  초기화 상태에서는 각 limit sensor를 가지고 위치를 인식하게 되므로 
+  *             sensor가 on 되어도 에러 처리를 하지 않는다.
+  */
+  void Loader::fall_limit_sensor_on()
+  {
+    _motor->stop_motor();                                 // motor stop                       
 
-  //     _state = fieldro_bot::UnitState::Error;
-  //     return true;
-  //   }
-  // }
+    log_msg(LogInfo, 0, "fall limit sensor on");
+    log_msg(LogInfo, 0, "state : " + to_string(_state) + " action : " + to_string(_action));
 
+    if(_state == UnitState::Created && _action == UnitAction::Fall)
+    {
+      publish_unit_action_complete(to_int(_action), 0);   // 동작 완료 보고
+      confirm_active_position();                          // 위치 설정 보고 
+      _action = UnitAction::None;                         // action release
+    }
+    else
+    {
+      if(_state != UnitState::Created)
+      {
+        log_msg(LogError, 0, "Error : fall limit sensor on" + std::to_string(__LINE__));
+        _state = fieldro_bot::UnitState::Error;
+      }      
+    }
+    return;
+  }
 
+  /**
+  * @brief      raise limit sensor가 on 되었을 경우 처리
+  * @note       초기화 상태와 일반 상태를 구분해서 처리.
+  * @attention  초기화 상태에서는 각 limit sensor를 가지고 위치를 인식하게 되므로
+  *             sensor가 on 되어도 에러 처리를 하지 않는다.
+  */
+  void Loader::raise_limit_sensor_on()
+  {
+    _motor->stop_motor();
+
+    log_msg(LogInfo, 0, "raise limit sensor on");
+    log_msg(LogInfo, 0, "state : " + to_string(_state) + " action : " + to_string(_action));
+
+    if(_state == UnitState::Created && _action == UnitAction::Raise)
+    {
+      Unit::publish_unit_action_complete(to_int(_action), 0); // 동작 완료 보고
+      confirm_active_position();                              // 위치 설정 보고 
+      _action = fieldro_bot::UnitAction::None;                // action release         
+    }
+    else
+    {
+      if(_state != UnitState::Created)
+      {
+        log_msg(LogError, 0, "Error : raise limit sensor on" + std::to_string(__LINE__));
+        _state = fieldro_bot::UnitState::Error;
+      }
+    }
+    return;
+  }
+
+  /**
+  * @brief      sensor data가 update 되었고 On 되었는지 확인
+  * @param[in]  int32_t index : sensor index
+  * @param[in]  int64_t update_bit : 사전 체크된 update flag bit
+  * @param[in]  int64_t sensor_bit : topic으로 전달 된 sensor data
+  * @return     해당 bit가 update 되었고 On 되었는지 여부
+  * @attention  update되었으나 Off 되는건 의미가 없음       
+  */
+  bool Loader::is_sensor_update_and_on(int32_t index, int64_t sensor_bit)
+  {
+    // 이전 sensor data와 비교하여 변동된 비트만 추출
+    int64_t changed_bits = sensor_bit ^ _prev_sensor_data;
+
+    return (changed_bits & (1 << index)) && (sensor_bit & (1 << index));
+  }  
+
+  /**
+  * @brief      loader의 동작 가능 여부 확인
+  * @return     bool : 동작 가능 여부
+  */
+  bool Loader::is_controlable()
+  {
+    bool ret = true;
+    
+    if(_action != fieldro_bot::UnitAction::None)  ret = false;  // 동작 상태
+    if(_state == fieldro_bot::UnitState::Error)   ret = false;  // 에러 상태
+
+    if(!ret)
+    {
+      log_msg(LogInfo, 0, std::string("Loader is not controlable : ") + 
+                          std::string("state : ") + fieldro_bot::to_string(_state) + 
+                          std::string("action :") + fieldro_bot::to_string(_action) +
+                          std::string("code line : ") + std::to_string(__LINE__));      
+    }
+
+    return ret;
+  }  
 
   /**
   * @brief      loader option load
@@ -195,56 +261,5 @@ namespace fieldro_bot
     log_msg(LogInfo, 0, "---");    
     log_msg(LogInfo, 0, "");    
     return;
-  }
-
-  /**
-  * @brief      sensor data 초기화 
-  * @note       현재 sensor 상태 정보 초기화.
-  */
-  void Loader::initialize_signal_data()
-  {
-    for(int i=0; i<(int)DISignal::END; ++i)
-    {
-      _sensor[i] = __INT8_MAX__;
-    }
-  }
-
-  /**
-  * @brief      loader의 동작 가능 여부 확인
-  * @return     bool : 동작 가능 여부
-  */
-  bool Loader::is_controlable()
-  {
-    bool ret = true;
-    
-    if(_action != fieldro_bot::UnitAction::None)  ret = false;  // 동작 상태
-    if(_state == fieldro_bot::UnitState::Error)   ret = false;  // 에러 상태
-
-    if(!ret)
-    {
-      log_msg(LogInfo, 0, std::string("Loader is not controlable : ") + 
-                          std::string("state : ") + fieldro_bot::to_string(_state) + 
-                          std::string("action :") + fieldro_bot::to_string(_action) +
-                          std::string("code line : ") + std::to_string(__LINE__));      
-    }
-
-    return ret;
-  }
-
-  /**
-  * @brief      sensor data가 update 되었는지 확인 (기존과 달라졌는지)
-  * @param[in]  sensor      : sensor index
-  * @param[in]  signal_bit  : topic으로 전달 된 sensor data
-  * @return     true        : sensor data가 변경 되었는지 여부
-  */
-  bool Loader::update_sensor_data(DISignal sensor, int64_t signal_bit)
-  {
-    if(check_io_sensor((int)sensor, signal_bit) != _sensor[(int)sensor])
-    {
-      _sensor[(int)sensor] = check_io_sensor((int)sensor, signal_bit);       
-      return true;
-    }
-
-    return false;
   }
 }

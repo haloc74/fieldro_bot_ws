@@ -117,7 +117,10 @@ namespace fieldro_bot
 
     if(error != fieldro_bot::Error::None)
     {
-      LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Error, error_to_int(error), "Read DI Signal Error");
+      LOG->add_log(fieldro_bot::UnitName::Signal, 
+                    fieldro_bot::LogLevel::Error, 
+                    fieldro_bot::to_int(error), 
+                    "Read DI Signal Error");
       return;
     }
 

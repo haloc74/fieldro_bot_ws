@@ -63,7 +63,7 @@ namespace fieldro_bot
       if((*it)->action != action_complete_msg.complete_action)        continue;
 
       // todo : action fail 처리
-      if(action_complete_msg.error_code != error_to_int(Error::None))
+      if(action_complete_msg.error_code != fieldro_bot::to_int(Error::None))
       {
         log_msg(LogError, action_complete_msg.error_code, "action_fail : "+ 
         to_string(to_enum<fieldro_bot::UnitName>((*it)->target_object)) + " - " +

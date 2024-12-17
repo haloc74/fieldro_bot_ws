@@ -35,6 +35,16 @@
 . loader refactoring
 
 ID :  - JD 24.12.17
+1. middle action 추가 
+2. Loader::int8_t _sensor[(int)DISignal::END];  변수 삭제
+3. Loader::void initialize_signal_data(); 함수 삭제
+4. Loader::bool update_sensor_data(DISignal sensor, int64_t signal_bit); 함수 삭제
+5. Loader::Is_sensor_error() compare 변수를 만들어서 비교하던것을 
+   member 변수 _sensor_data_update_mask 이용하여 비교 
+6. error_code 형변환 부분 enum_template 형식으로 변경
+
+
+ID :  - JD 24.12.17
 1. loader 초기화 diagram 작성
 
 
