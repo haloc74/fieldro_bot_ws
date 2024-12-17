@@ -58,7 +58,6 @@ namespace fieldro_bot
     else
     {
       log_msg(LogInfo, 0, "Loader fall action start -- ");
-      _state  = fieldro_bot::UnitState::Busy;  
       _motor->control_move(_fall_position, _action_rpm, _action_check, _action_timeout);
     }
 
@@ -97,14 +96,11 @@ namespace fieldro_bot
     if(_raise_position == INT32_MAX || _state == fieldro_bot::UnitState::Created)
     {
       log_msg(LogInfo, 0, "Loader initialize raise action start -- ");
-
       _motor->control_move(INT32_MAX, _action_rpm/3*2, CHECK_NONE, TIMEOUT_NONE);
     }
     else
     {
       log_msg(LogInfo, 0, "Loader fall action start -- ");
-
-      _state  = fieldro_bot::UnitState::Busy;  
       _motor->control_move(_raise_position, _action_rpm, _action_check, _action_timeout);
     }
     return;

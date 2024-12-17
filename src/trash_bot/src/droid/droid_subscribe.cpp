@@ -20,13 +20,14 @@ namespace fieldro_bot
       if(msg.alive == 0x00)
       {
         log_msg(LogInfo, 0, "All Init - Next Step Process");
-        _state = fieldro_bot::UnitState::Active;
+        _state = fieldro_bot::UnitState::Created;
         delay_call(3000, std::bind(&Droid::create_unit_initialize_sequence, this));
       }
       break;
     case fieldro_bot::UnitState::Active:    break;
-    case fieldro_bot::UnitState::Idle:      break;
-    case fieldro_bot::UnitState::Busy:      break;
+    //case fieldro_bot::UnitState::Idle:      break;
+    //case fieldro_bot::UnitState::Busy:      break;
+    case fieldro_bot::UnitState::Normal:    break;
     case fieldro_bot::UnitState::Error:     break;
     case fieldro_bot::UnitState::End:       break;
     default:                                break;
@@ -84,7 +85,7 @@ namespace fieldro_bot
     // 모든 unit의 초기화가 완료되었을 경우
     if(_state == fieldro_bot::UnitState::Active && is_all_sequence_empty())
     {
-      _state = fieldro_bot::UnitState::Idle;
+      _state = fieldro_bot::UnitState::Normal;
       log_msg(LogInfo, 0, "All Unit Initialize Complete !!!");
     }
 

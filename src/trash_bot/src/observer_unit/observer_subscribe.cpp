@@ -34,7 +34,7 @@ namespace fieldro_bot
       break;
 
     case fieldro_bot::UnitAction::Init:
-      _state =  fieldro_bot::UnitState::Idle;
+      _state =  fieldro_bot::UnitState::Active;
       _unit_alive_info[static_cast<int>(fieldro_bot::UnitName::Observer)]->update(static_cast<int>(_state));
       publish_unit_action_complete(to_int(action), error_to_int(fieldro_bot::Error::None));
       break;

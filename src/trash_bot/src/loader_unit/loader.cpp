@@ -127,7 +127,7 @@ namespace fieldro_bot
     if(_fall_position != INT32_MAX && _raise_position != INT32_MAX)
     {
       _middle_position  = (_fall_position + _raise_position) / 2;     // 중간 위치 설정
-      _state = fieldro_bot::UnitState::Idle;                                       // loader 상태 변경
+      _state = fieldro_bot::UnitState::Normal;                        // loader 상태 변경
       return true;
     }
 

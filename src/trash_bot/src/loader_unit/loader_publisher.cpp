@@ -34,7 +34,6 @@ namespace fieldro_bot
 
       // action 초기화
       _action = fieldro_bot::UnitAction::None;
-      _state  = fieldro_bot::UnitState::Idle;
     }
     else
     {

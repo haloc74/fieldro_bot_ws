@@ -29,12 +29,16 @@
 . limit sensor 상태 체크
 . trash_bot_node, io_node, loader_node, observer_node 연동 체크
 
-. UnitState enum Refactoring
+
+. droid에서 Loader Stop 을 이용한 cmd 처리 구현
+
 . loader refactoring
 . loader 초기화 diagram 작성
-. droid에서 Loader Stop 을 이용한 cmd 처리 구현
-. droid에서 cmd를 이용한 loader raise 구현
 
+
+ID :  - JD 24.12.17
+1. UnitState enum Refactoring
+    Idle, Busy 삭제
 
 ID :  - JD 24.12.17
 1. loader 초기화 완료시 state 변경 확인
