@@ -15,18 +15,16 @@ namespace frb
   */
   enum class UnitName : int32_t
   {
-    // Absolute value
-    All = 0x00,         // 모든 유닛            Fix
-    System,             // main(droid) 시스템   Fix  
-    Observer,           // Observer 시스템      Fix
+    // Absolute
+    All = 0x00,       // 모든 유닛            Fix
+    System,           // main(droid) 시스템   Fix  
+    Observer,         // Observer 시스템      Fix
 
-    // Variable value
-    Signal,             // wago
-    Loader,          // 로더
-    // Gripper,         // 핸들러 포크
+    // Variable
+    Signal,           // wago
+    Loader,           // 로더
+    Driving,          // 주행
 
-    
-    // Absolute value
     End,
   };
 
@@ -44,6 +42,7 @@ namespace frb
       case UnitName::Observer:  return "Observer";
       case UnitName::Signal:    return "Signal";
       case UnitName::Loader:    return "Loader";
+      case UnitName::Driving:   return "Driving";
       // case UnitName::HandlerFork:return "HandlerFork";
       case UnitName::End:       return "End";
     }
@@ -61,10 +60,13 @@ namespace frb
     if(str == "All")        return UnitName::All;
     if(str == "System")     return UnitName::System;
     if(str == "Observer")   return UnitName::Observer;
+
     if(str == "Signal")     return UnitName::Signal;
     if(str == "Loader")     return UnitName::Loader;
-    // if(str == "HandlerFork")return UnitName::HandlerFork;
+    if(str == "Driving")    return UnitName::Driving;
+    
     if(str == "End")        return UnitName::End;
+
     return UnitName::End;
   }
 

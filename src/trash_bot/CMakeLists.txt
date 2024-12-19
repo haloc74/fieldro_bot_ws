@@ -238,10 +238,10 @@ message(STATUS "")
   ## 6-3. unit_observer_node 실행파일 생성 설정
   message(STATUS "   6-3. unit_observer_node executable generate")
 
-    ## 6-2-0 project name 설정
+    ## 6-3-0 project name 설정
     set(PROJECT_OBSERVER_NAME "observer_unit")
 
-    ## 6-2-1. source_dir/unit_observer 하위의 모든 cpp 파일을 찾아서 SRC_OBSERVER_FILES에 저장
+    ## 6-3-1. source_dir/unit_observer 하위의 모든 cpp 파일을 찾아서 SRC_OBSERVER_FILES에 저장
     file(GLOB_RECURSE SRC_OBSERVER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/observer_unit/*.cpp")
 
     ## 6-3-2. SRC_OBSERVER_FILES의 모든 파일과 
@@ -271,7 +271,7 @@ message(STATUS "")
 
   ############################################################
   ## 6-4. loader_node 실행파일 생성 설정
-  message(STATUS "   6-3. loader_node executable generate")
+  message(STATUS "   6-4. loader_node executable generate")
 
     ## 6-4-0 project name 설정
     set(PROJECT_LOADER_NAME "loader_unit")
@@ -294,9 +294,43 @@ message(STATUS "")
       ${catkin_EXPORTED_TARGETS}           # catkin 빌드 시스템에서 정의한 빌드 대상
     )
 
-    ## 6-3-4. 빌드시 필요한 Lib 링크 설정
+    ## 6-4-4. 빌드시 필요한 Lib 링크 설정
     target_link_libraries(
       ${PROJECT_LOADER_NAME}               # 빌드 대상
+      ${catkin_LIBRARIES}                  # catkin 빌드 시스템에서 정의한 라이브러리
+      ${YAML_CPP_LIBRARIES}                # yaml-cpp 라이브러리
+      ${MODBUS_LIBRARIES}                  # libmodbus 라이브러리
+      fieldro_lib                          # fieldro   라이브러리
+    )
+    
+  ############################################################
+  ## 6-5. driving_node 실행파일 생성 설정
+  message(STATUS "   6-5. driving_node executable generate")
+
+    ## 6-5-0 project name 설정
+    set(PROJECT_DRIVING_NAME "driving_unit")
+
+    ## 6-5-1. source_dir/driving_unit 하위의 모든 cpp 파일을 찾아서 SRC_DRIVING_FILES에 저장
+    file(GLOB_RECURSE SRC_DRIVING_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/driving_unit/*.cpp")
+
+    ## 6-5-2. SRC_DRIVING_FILES의 모든 파일과 
+    ## driving_node.cpp을 컴파일하고 링크하여 실행 파일 생성
+    add_executable(
+      ${PROJECT_DRIVING_NAME}
+      ${SRC_DRIVING_FILES}
+      "${CMAKE_CURRENT_SOURCE_DIR}/src/_node/driving_node.cpp"
+    )
+
+    ## 6-5-3. 빌드 순서를 정의 (의존성)
+    add_dependencies(
+      ${PROJECT_DRIVING_NAME}              # 빌드 대상
+      ${${PROJECT_NAME}_EXPORTED_TARGETS}  # package 내부의 다른 빌드 대상
+      ${catkin_EXPORTED_TARGETS}           # catkin 빌드 시스템에서 정의한 빌드 대상
+    )
+
+    ## 6-5-4. 빌드시 필요한 Lib 링크 설정
+    target_link_libraries(
+      ${PROJECT_DRIVING_NAME}              # 빌드 대상
       ${catkin_LIBRARIES}                  # catkin 빌드 시스템에서 정의한 라이브러리
       ${YAML_CPP_LIBRARIES}                # yaml-cpp 라이브러리
       ${MODBUS_LIBRARIES}                  # libmodbus 라이브러리

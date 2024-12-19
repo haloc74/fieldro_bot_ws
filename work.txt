@@ -27,6 +27,14 @@
   기존 action 종료시까지 대기 했다가 신규로 들어온 action 처리를 해야 할까 ???
 . 구동모터 추가
 
+
+ID :  - JD 24.12.19
+1. Driving class 추가
+2. Driving node 추가
+3. Driving node에 Driving Class 연결
+4. driving.yaml 파일 추가
+5. driving compile 정보 추가 (CMakeLists.txt)
+
 ID :  - JD 24.12.19
 1. dirving_unit directory 추가
 2. namespace fieldro_bot -> frb로 변경
