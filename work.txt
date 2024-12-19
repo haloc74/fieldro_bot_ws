@@ -25,16 +25,20 @@
 . UnitState Define에 Sleep 상태를 추가하고 MainController에서 Activate 메세지 전송 하는 방안 ?
 . 기존 action 수행중 다른 action 요청이 들어왔을 경우 error 통보 후 어떻게 처리를 해야 할까 ???
   기존 action 종료시까지 대기 했다가 신규로 들어온 action 처리를 해야 할까 ???
+
+
 . object 초기화 작업
-. limit sensor 상태 체크
-. trash_bot_node, io_node, loader_node, observer_node 연동 체크
 
-. droid에서 Loader Stop 을 이용한 cmd 처리 구현
+ID :  - JD 24.12.19
+1. trash_bot_node, io_node, loader_node, observer_node 연동 체크
+2. droid에서 Loader Stop 을 이용한 cmd 처리 구현  
   다른 동작중에도 명령이 전달 되어야 한다.
+3. enum class to_string(), to_enum<type, std::string>() 함수 
+   refactoring 상호 변환시 속도를 위해 기존 if 문 구조에서 map data 비교로 변경
+   
 
-. loader refactoring
 
-ID :  - JD 24.12.17
+ID : 0fa3492 - JD 24.12.17
 1. middle action 추가 
 2. Loader::int8_t _sensor[(int)DISignal::END];  변수 삭제
 3. Loader::void initialize_signal_data(); 함수 삭제

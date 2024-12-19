@@ -21,15 +21,6 @@ namespace fieldro_bot
     _name   = UnitName::System;
     _action = UnitAction::None;
     _state  = UnitState::Created;
-    
-
-//    _node_handle = new ros::NodeHandle();       // node handler 생성
-
-    // for(int i=0; i<(int)DISignal::END; i++)  
-    // {
-    //   _sensor[i] = __INT8_MAX__;
-    // }
-    // _signal_bit = __INT64_MAX__;
 
     _subscribe_switch_report =
     _node_handle->subscribe("twinny_robot/SwitchReport", 10, &Droid::subscribe_switch_report, this);
@@ -37,48 +28,26 @@ namespace fieldro_bot
     _subscribe_velocity_control =
     _node_handle->subscribe("twinny_robot/VelControl", 100, &Droid::subscribe_velocity_control, this);
 
-    //_subscribe_io_signal = _node_handle->subscribe("trash_bot/io_signal", 100, &Droid::subscribe_io_signal, this);
-
     _subscribe_action_complete = 
     _node_handle->subscribe("trash_bot/action_complete", 10, &Droid::subscribe_action_complete, this);
 
-    _subscribe_unit_state = _node_handle->subscribe("trash_bot/UnitStateMsg", 100, &Droid::subscribe_unit_state, this);
+    _subscribe_unit_state = 
+    _node_handle->subscribe("trash_bot/UnitStateMsg", 100, &Droid::subscribe_unit_state, this);
 
     _publish_unit_control = 
     _node_handle->advertise<trash_bot::UnitControl>("trash_bot/unit_control", 10);
 
-    // _publish_unit_alive =
-    // _node_handle->advertise<trash_bot::UnitAliveMsg>("trash_bot/UnitAliveMsg", 100);
-
     _control_sequence.clear();
     _pending_sequence.clear();
     _command_map.clear();
-
-    //_spinner = new ros::AsyncSpinner(5);        // spinner 생성
 
     // spinner 시작
     _spinner->start();
 
     // thread
     _update_thread  = new ThreadActionInfo("config/droid.yaml", "main");
-    _update_thread->_active = true;
     _update_thread->_thread = std::thread(std::bind(&Droid::update, this));  
-
-    // 변수 초기화
-//    _last_io_update_time = ros::TIME_MAX;
-
-    // 각 unit 상태 초기화
-    // for(int i=0; i<(int)UnitName::End; i++)
-    // {
-    //   _state[i] = UnitState::End;
-    // }
-
-
-    //*_action = fieldro_bot::UnitState::Created;
-    //_state[to_int(UnitName::System)] = UnitState::Created;
-
-    // 마지막 상태 보고 시간
-    //_last_alive_publish_time = ros::Time::now();
+    _update_thread->_active = true;
   }
 
   /**
@@ -109,18 +78,7 @@ namespace fieldro_bot
     {
       _pending_sequence.pop_front();
     }
-
-    // // ros 해제
-    // ros::shutdown();
-    // ros::waitForShutdown();
-    // safe_delete(_node_handle);
   }
-
-  // void Droid::system_finish()
-  // {
-  //   ros::shutdown();
-  //   ros::waitForShutdown();
-  // }
 
   void Droid::update()
   {
@@ -129,28 +87,10 @@ namespace fieldro_bot
       // topic message 발송
       message_publish();
 
-      // // unit의 상태를 publish
-      // publish_unit_alive();
-
       // thread Hz 싱크 및 독점 방지를 위한 sleep
       std::this_thread::sleep_for(std::chrono::milliseconds(_update_thread->_sleep));
     }  
   }
-
-
-  /**
-  * @brief      log기록 하기위한 wrapper 함수
-  * @param[in]  LogLevel level      : log level
-  * @param[in]  int32_t error_code  : error code
-  * @param[in]  std::string log     : log message
-  * @return     
-  * @note       
-  */
-  // void Droid::log_msg(LogLevel level, int32_t error_code, std::string log)
-  // {
-  //   LOG->add_log(fieldro_bot::UnitName::System, level, error_code, log);
-  //   return;
-  // }
 
 
   /**
@@ -207,28 +147,19 @@ namespace fieldro_bot
     if(std::get<1>(cmd_data) == to_int(fieldro_bot::UnitName::End))     return false;
     if(std::get<2>(cmd_data) == to_int(fieldro_bot::UnitAction::None))  return false;
 
-    // 요청 list에 등록
-    add_sequence(std::get<1>(cmd_data), std::get<2>(cmd_data), std::get<3>(cmd_data));
+    if(std::get<2>(cmd_data) == to_int(fieldro_bot::UnitAction::EStop))
+    {
+      // EStop일 경우 unit에 즉시 EStop 전송
+      publish_unit_control(std::get<1>(cmd_data), std::get<2>(cmd_data), std::get<3>(cmd_data));
+    }
+    else
+    {
+      // 요청 list에 등록
+      add_sequence(std::get<1>(cmd_data), std::get<2>(cmd_data), std::get<3>(cmd_data));
+    }
 
     return true;
   }
-
-  /**
-  * @brief      sensor data가 update 되었는지 확인 (기존과 달라졌는지)
-  * @param[in]  sensor      : sensor index
-  * @param[in]  signal_bit  : topic으로 전달 된 sensor data
-  * @return     
-  * @note       
-  */
-  // bool Droid::update_sensor_data(DISignal sensor, int64_t signal_bit)
-  // {
-  //   if(check_io_sensor((int)sensor, signal_bit) != _sensor[(int)sensor])
-  //     {
-  //       _sensor[(int)sensor] = check_io_sensor((int)sensor, signal_bit);       
-  //       return true;
-  //     }
-  //     return false;
-  // }  
 
   /**
   * @brief      Droid 관련 option 로드
