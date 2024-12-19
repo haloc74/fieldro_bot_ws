@@ -12,7 +12,7 @@
 #include <trash_bot/UnitActionComplete.h>
 
 
-namespace fieldro_bot
+namespace frb
 {
   Wago::Wago(std::string config_file, std::string session)
        : Unit(config_file, session) 
@@ -21,7 +21,7 @@ namespace fieldro_bot
 
     _name   = UnitName::Signal;
     _action = UnitAction::None;
-    _state  = fieldro_bot::UnitState::Created;
+    _state  = frb::UnitState::Created;
     
     // unit action message 수신을 위한 subscriber 생성 및 link
     _subscribe_unit_action = 
@@ -48,7 +48,7 @@ namespace fieldro_bot
 
     _last_publish_time = ros::Time::now();
 
-    _state = fieldro_bot::UnitState::Created;
+    _state = frb::UnitState::Created;
 
     // io signal map 생성
     create_io_map();
@@ -107,19 +107,19 @@ namespace fieldro_bot
   {
     std::lock_guard<std::mutex> lock(_lock);
 
-    int32_t read_len = to_int(fieldro_bot::DISignal::END) - 1;
+    int32_t read_len = to_int(frb::DISignal::END) - 1;
     uint8_t signal[IO_MAX_COUNT];  // 읽은 data를 저장할 변수
     memset(signal, 0x00, IO_MAX_COUNT);
 
     // 실제 index 0 data의 값을 signal[1]에 저장
     //size_t read_bits = _modbus->read_data(0, read_len, signal+1);
-    fieldro_bot::Error error = _modbus->read_data_bits(0, read_len, signal+1);
+    frb::Error error = _modbus->read_data_bits(0, read_len, signal+1);
 
-    if(error != fieldro_bot::Error::None)
+    if(error != frb::Error::None)
     {
-      LOG->add_log(fieldro_bot::UnitName::Signal, 
-                    fieldro_bot::LogLevel::Error, 
-                    fieldro_bot::to_int(error), 
+      LOG->add_log(frb::UnitName::Signal, 
+                    frb::LogLevel::Error, 
+                    frb::to_int(error), 
                     "Read DI Signal Error");
       return;
     }
@@ -145,14 +145,14 @@ namespace fieldro_bot
     int64_t     signal_bit  = 0;
 
 
-    for(int i=0; i<to_int(fieldro_bot::DISignal::COUNT); ++i)
+    for(int i=0; i<to_int(frb::DISignal::COUNT); ++i)
     {
       if(_signal[i] == nullptr)   continue;
 
       if(_signal[i]->update_value(signal[i], log_string, on))
       {
         // 변경 로그 남기기
-        LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Info, 0, log_string+std::string(" : ")+std::to_string(on)); 
+        LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Info, 0, log_string+std::string(" : ")+std::to_string(on)); 
         
         update = true;
       }

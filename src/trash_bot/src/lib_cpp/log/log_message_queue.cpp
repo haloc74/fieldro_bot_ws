@@ -3,7 +3,7 @@
 #include <mutex>
 #include <thread>
 
-namespace fieldro_bot
+namespace frb
 {
   void LogMessageQueue::push(std::unique_ptr<LogMessage> msg)
   {

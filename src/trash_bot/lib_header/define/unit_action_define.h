@@ -3,7 +3,7 @@
 #include <unordered_map> // 추가된 부분
 #include "helper/enum_template.h"
 
-namespace fieldro_bot
+namespace frb
 {
   enum class UnitAction
   {

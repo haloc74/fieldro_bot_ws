@@ -4,7 +4,7 @@
 #include "yaml-cpp/yaml.h"
 
 
-namespace fieldro_bot
+namespace frb
 {
   /**
   * @brief      modbus 485 연결 시도
@@ -23,8 +23,8 @@ namespace fieldro_bot
 
   //   if(connect_modbus_485() == false)
   //   {
-  //     LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Error, 0, "modbus_connect fail !!!");
-  //     LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Error, 0, std::string("Error Number : ") + modbus_strerror(errno));
+  //     LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, "modbus_connect fail !!!");
+  //     LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, std::string("Error Number : ") + modbus_strerror(errno));
 
   //     _is_connected = false;
 
@@ -32,7 +32,7 @@ namespace fieldro_bot
   //   }
   //   else
   //   {
-  //     LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Info, 0, "try_connect_modbus_485 success !!!");
+  //     LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Info, 0, "try_connect_modbus_485 success !!!");
       
   //     // 연결이 되었으므로 retry count 초기화
   //     _retry_count  = 0;
@@ -61,12 +61,12 @@ namespace fieldro_bot
     _modbus = modbus_new_rtu(_device.c_str(), _baud, 'N', 8, 1);
     if(_modbus == nullptr)
     {
-      LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Error, 0, "modbus_new_rtu context fail !!!");
+      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, "modbus_new_rtu context fail !!!");
       return false;
     }
     else
     {
-      LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Info, 0, "modbus contex success !!!");
+      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Info, 0, "modbus contex success !!!");
     }
 
     // 2. modbus rtu mode 설정
@@ -78,19 +78,19 @@ namespace fieldro_bot
     // 4. modbus slave 번호 설정
     if(modbus_set_slave(_modbus, _slave_id) == -1)
     {
-      LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Error, 0, "modbus_set_slave fail !!!");
+      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, "modbus_set_slave fail !!!");
       return false;
     }
     else
     {
-      LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Info, 0, "modbus_set_slave success !!!");
+      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Info, 0, "modbus_set_slave success !!!");
     }
 
     // 5. modbus 연결
     if(modbus_connect(_modbus) == -1)
     {
-      LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Error, 0, "modbus_connect fail !!!");
-      LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Error, 0, std::string("Error Number : ") + modbus_strerror(errno));
+      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, "modbus_connect fail !!!");
+      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, std::string("Error Number : ") + modbus_strerror(errno));
 
       modbus_free(_modbus);
       _modbus       = nullptr;
@@ -98,7 +98,7 @@ namespace fieldro_bot
     }
     else
     {
-      LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Info, 0, "modbus_connect success !!!");
+      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Info, 0, "modbus_connect success !!!");
     }
 
 
@@ -145,8 +145,8 @@ namespace fieldro_bot
 
     if(connect_modbus_485() == false)
     {
-      LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Error, 0, "modbus_connect fail !!!");
-      LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Error, 0, std::string("Error Number : ") + modbus_strerror(errno));
+      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, "modbus_connect fail !!!");
+      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, std::string("Error Number : ") + modbus_strerror(errno));
 
       if( _remaining_retry_count <= 0)   _status = CommStatus::Error;
       else                    _status = CommStatus::Reconnect;
@@ -156,7 +156,7 @@ namespace fieldro_bot
     }
     else
     {
-      LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Info, 0, "try_connect_modbus_485 success !!!");
+      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Info, 0, "try_connect_modbus_485 success !!!");
       
       // 연결이 되었으므로 retry count 초기화
        _remaining_retry_count = _retry_count;
@@ -182,7 +182,7 @@ namespace fieldro_bot
       if(!yaml_file.is_open()) 
       {
         // todo : error log 추가      
-        LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Error, 0, "Unable to open the YAML file");
+        LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, "Unable to open the YAML file");
         return; 
       }
 
@@ -204,30 +204,30 @@ namespace fieldro_bot
     catch(YAML::Exception& e)
     {
       std::string error_msg = "YAML Exception : " + _session_name + "    " + e.what();
-      LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Error, 0, error_msg);
+      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, error_msg);
     }
     catch(std::exception& e)
     {
       std::string error_msg = "Exception : " + _session_name + "    " + e.what();
-      LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Error, 0, error_msg);
+      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, error_msg);
     }
     catch(...)
     {
       std::string error_msg = "Unknown Exception : " + _session_name;
-      LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Error, 0, error_msg);
+      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, error_msg);
     }
 
     // todo : option을 log file로 저장 (Debugging 용도) 
     if(debug != 0)
     {
-      LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Info, 0, "ModbusWrapper::load_option_485() : ");
-      LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Info, 0, "  session     : " + _session_name);
-      LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Info, 0, "  device      : " + _device);
-      LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Info, 0, "  baud        : " + std::to_string(_baud)); 
-      LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Info, 0, "  port        : " + std::to_string(_port));
-      LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Info, 0, "  slave_id    : " + std::to_string(_slave_id));
-      LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Info, 0, "  retry_count : " + std::to_string(_retry_count));
-      LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Info, 0, "  retry_turm  : " + std::to_string(_retry_turm));
+      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Info, 0, "ModbusWrapper::load_option_485() : ");
+      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Info, 0, "  session     : " + _session_name);
+      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Info, 0, "  device      : " + _device);
+      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Info, 0, "  baud        : " + std::to_string(_baud)); 
+      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Info, 0, "  port        : " + std::to_string(_port));
+      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Info, 0, "  slave_id    : " + std::to_string(_slave_id));
+      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Info, 0, "  retry_count : " + std::to_string(_retry_count));
+      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Info, 0, "  retry_turm  : " + std::to_string(_retry_turm));
     }    
   }
 }

@@ -2,7 +2,7 @@
 #pragma once
 #include <cstdint>
 
-namespace fieldro_bot
+namespace frb
 {
   class MotionInfo
   {

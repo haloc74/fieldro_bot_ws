@@ -10,7 +10,7 @@
 
 #include "define/unit_define.h"
 
-namespace fieldro_bot
+namespace frb
 {
   enum class LogLevel
   {

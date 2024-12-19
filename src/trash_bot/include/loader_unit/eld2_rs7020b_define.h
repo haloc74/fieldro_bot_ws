@@ -1,7 +1,7 @@
 
 #pragma once
 
-namespace fieldro_bot
+namespace frb
 {
   //모션 기동 명령 주소-------------------------------------------------
   // #define Function_Trigger_ADDR  0x6002 //기동명령 주소

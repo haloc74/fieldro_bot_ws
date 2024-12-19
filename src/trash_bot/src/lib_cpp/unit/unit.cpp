@@ -4,7 +4,7 @@
 #include <trash_bot/UnitAliveMsg.h>
 
 
-namespace fieldro_bot
+namespace frb
 {
   Unit::Unit(std::string config_file, std::string session)
   {
@@ -96,7 +96,7 @@ namespace fieldro_bot
   {
     trash_bot::UnitActionComplete msg;
     msg.time_stamp      = ros::Time::now();
-    msg.receive_object  = to_int(fieldro_bot::UnitName::System);
+    msg.receive_object  = to_int(frb::UnitName::System);
     msg.action_object   = to_int(_name);
     msg.complete_action = action;
     msg.error_code      = error_code;

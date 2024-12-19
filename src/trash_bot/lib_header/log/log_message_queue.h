@@ -6,7 +6,7 @@
 
 #include "log/log_message.h"
 
-namespace fieldro_bot
+namespace frb
 {
   class LogMessageQueue
   {

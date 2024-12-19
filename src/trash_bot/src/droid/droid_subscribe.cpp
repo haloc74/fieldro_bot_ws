@@ -4,7 +4,7 @@
 #include "helper/helper.h"
 #include "log/log.h"
 
-namespace fieldro_bot
+namespace frb
 {
   /**
   * @brief      unit의 상태를 subscribe하는 함수
@@ -16,20 +16,20 @@ namespace fieldro_bot
   {
     switch(_state)
     {
-    case fieldro_bot::UnitState::Created:
+    case frb::UnitState::Created:
       if(msg.alive == 0x00)
       {
         log_msg(LogInfo, 0, "All Init - Next Step Process");
-        _state = fieldro_bot::UnitState::Created;
+        _state = frb::UnitState::Created;
         delay_call(3000, std::bind(&Droid::create_unit_initialize_sequence, this));
       }
       break;
-    case fieldro_bot::UnitState::Active:    break;
-    //case fieldro_bot::UnitState::Idle:      break;
-    //case fieldro_bot::UnitState::Busy:      break;
-    case fieldro_bot::UnitState::Normal:    break;
-    case fieldro_bot::UnitState::Error:     break;
-    case fieldro_bot::UnitState::End:       break;
+    case frb::UnitState::Active:    break;
+    //case frb::UnitState::Idle:      break;
+    //case frb::UnitState::Busy:      break;
+    case frb::UnitState::Normal:    break;
+    case frb::UnitState::Error:     break;
+    case frb::UnitState::End:       break;
     default:                                break;
     }
 
@@ -51,9 +51,9 @@ namespace fieldro_bot
     if(_pending_sequence.empty())    
     {
         log_msg(LogInfo, 0, "action_complete (extend) :" 
-                + to_string(to_enum<fieldro_bot::UnitName>(action_complete_msg.action_object)) 
+                + to_string(to_enum<frb::UnitName>(action_complete_msg.action_object)) 
                 + " - "
-                + to_string<fieldro_bot::UnitAction>(action_complete_msg.complete_action));
+                + to_string<frb::UnitAction>(action_complete_msg.complete_action));
       return;
     }
 
@@ -63,18 +63,18 @@ namespace fieldro_bot
       if((*it)->action != action_complete_msg.complete_action)        continue;
 
       // todo : action fail 처리
-      if(action_complete_msg.error_code != fieldro_bot::to_int(Error::None))
+      if(action_complete_msg.error_code != frb::to_int(Error::None))
       {
         log_msg(LogError, action_complete_msg.error_code, "action_fail : "+ 
-        to_string(to_enum<fieldro_bot::UnitName>((*it)->target_object)) + " - " +
-        to_string<fieldro_bot::UnitAction>((*it)->action));
-        //unit_action_to_string(to_enum<fieldro_bot::UnitAction>((*it)->action)));
+        to_string(to_enum<frb::UnitName>((*it)->target_object)) + " - " +
+        to_string<frb::UnitAction>((*it)->action));
+        //unit_action_to_string(to_enum<frb::UnitAction>((*it)->action)));
       }
       else
       {
         log_msg(LogInfo, 0, "action_complete : "+
-        to_string<fieldro_bot::UnitName>((*it)->target_object) + " - " +
-        to_string<fieldro_bot::UnitAction>((*it)->action));
+        to_string<frb::UnitName>((*it)->target_object) + " - " +
+        to_string<frb::UnitAction>((*it)->action));
         //unit_action_to_string(int_to_unit_action((*it)->action)));
       }
       _pending_sequence.erase(it);
@@ -83,9 +83,9 @@ namespace fieldro_bot
     }
 
     // 모든 unit의 초기화가 완료되었을 경우
-    if(_state == fieldro_bot::UnitState::Active && is_all_sequence_empty())
+    if(_state == frb::UnitState::Active && is_all_sequence_empty())
     {
-      _state = fieldro_bot::UnitState::Normal;
+      _state = frb::UnitState::Normal;
       log_msg(LogInfo, 0, "All Unit Initialize Complete !!!");
     }
 

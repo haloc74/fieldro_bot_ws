@@ -2,7 +2,7 @@
 #include "loader.h"
 #include "unit/unit.h"
 
-namespace fieldro_bot
+namespace frb
 {
   /**
   * @brief      limit sensor가 on 상태인지 확인
@@ -56,7 +56,7 @@ namespace fieldro_bot
 
     _action = UnitAction::Fall;
     
-    if(_fall_position == INT32_MAX ||_state == fieldro_bot::UnitState::Created)
+    if(_fall_position == INT32_MAX ||_state == frb::UnitState::Created)
     {
       log_msg(LogInfo, 0, "Loader initialize fall action start -- ");
       _motor->control_move(0, _action_rpm/3*2, CHECK_NONE, TIMEOUT_NONE);
@@ -96,7 +96,7 @@ namespace fieldro_bot
 
     _action = UnitAction::Raise;
     
-    if(_raise_position == INT32_MAX || _state == fieldro_bot::UnitState::Created)
+    if(_raise_position == INT32_MAX || _state == frb::UnitState::Created)
     {
       log_msg(LogInfo, 0, "Loader initialize raise action start -- ");
       _motor->control_move(INT32_MAX, _action_rpm/3*2, CHECK_NONE, TIMEOUT_NONE);
@@ -118,7 +118,7 @@ namespace fieldro_bot
   */
   void Loader::execute_middle_action()
   {
-    if(_state != fieldro_bot::UnitState::Normal)  
+    if(_state != frb::UnitState::Normal)  
     {
       log_msg(LogError, 0, "Error : loader is not initialized");
       return;

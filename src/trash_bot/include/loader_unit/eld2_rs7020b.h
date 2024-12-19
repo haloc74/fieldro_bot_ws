@@ -9,20 +9,20 @@
 #include "helper/thread_action_info.h"
 
 
-namespace fieldro_bot
+namespace frb
 {
   class ELD2_RS7020B
   {
   public:
-    ELD2_RS7020B(std::function<void(fieldro_bot::Error)> action_result_callback, 
-                 std::function<void(fieldro_bot::LogLevel, int32_t, const std::string&)> log_callback,
+    ELD2_RS7020B(std::function<void(frb::Error)> action_result_callback, 
+                 std::function<void(frb::LogLevel, int32_t, const std::string&)> log_callback,
                  std::string config_file);
     ~ELD2_RS7020B();
 
     void    update();
 
-    fieldro_bot::Error control_move(int32_t abs_pos, int16_t rpm, int32_t check_interval, int32_t timeout_millisec);
-    fieldro_bot::Error get_motor_status();
+    frb::Error control_move(int32_t abs_pos, int16_t rpm, int32_t check_interval, int32_t timeout_millisec);
+    frb::Error get_motor_status();
     int32_t get_motor_position();
 
     CommStatus  get_comm_state()  { return _comm_state; }
@@ -36,12 +36,12 @@ namespace fieldro_bot
     CommStatus          _comm_state;          // motor 연결 상태
     bool                _servo_power;         // 서보 전원 상태
 
-    std::function<void(fieldro_bot::Error)>  action_result_notify;  // 동작 완료 통보 (상위 : callback)
-    std::function<void(fieldro_bot::LogLevel, int32_t, const std::string&)> log_msg_notify;  // 로그 통보 (상위 : callback)
+    std::function<void(frb::Error)>  action_result_notify;  // 동작 완료 통보 (상위 : callback)
+    std::function<void(frb::LogLevel, int32_t, const std::string&)> log_msg_notify;  // 로그 통보 (상위 : callback)
     void modbus_state_receive(const CommStatus notify);              // modbus 상태 변경 통보 (하위 : callback)
     
     bool _error;
-    fieldro_bot::Error control_power(bool on);                      // 서보 전원 제어 
+    frb::Error control_power(bool on);                      // 서보 전원 제어 
     
     
     // Motor Data
@@ -62,9 +62,9 @@ namespace fieldro_bot
 
     bool is_simillar_position(int32_t position);
 
-    fieldro_bot::Error control_pr0(int16_t mode, int32_t position, int16_t rpm, int16_t acc, int16_t dec);
+    frb::Error control_pr0(int16_t mode, int32_t position, int16_t rpm, int16_t acc, int16_t dec);
 
-    void log_msg(fieldro_bot::LogLevel level, int32_t error_code, std::string log);
+    void log_msg(frb::LogLevel level, int32_t error_code, std::string log);
   };
 }
 

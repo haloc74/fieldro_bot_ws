@@ -8,7 +8,7 @@
 #include <trash_bot/UnitAliveMsg.h>
 #include <trash_bot/UnitActionComplete.h>
 
-namespace fieldro_bot
+namespace frb
 {
   /**
   * @brief      unit control message를 수신하는 callback 함수
@@ -20,34 +20,34 @@ namespace fieldro_bot
   void Wago::subscribe_unit_action(const trash_bot::UnitControl& unit_control_msg)
   {
     // target이 signal이 아닌 메세지는 무시한다. 
-    fieldro_bot::UnitName unit = to_enum<fieldro_bot::UnitName>(unit_control_msg.target_object);
+    frb::UnitName unit = to_enum<frb::UnitName>(unit_control_msg.target_object);
 
-    if(unit != fieldro_bot::UnitName::Signal && 
-       unit != fieldro_bot::UnitName::All)      return;
+    if(unit != frb::UnitName::Signal && 
+       unit != frb::UnitName::All)      return;
 
     // 요청된 action에 따른 처리
-    fieldro_bot::UnitAction action = to_enum<fieldro_bot::UnitAction>(unit_control_msg.action);
+    frb::UnitAction action = to_enum<frb::UnitAction>(unit_control_msg.action);
 
     log_msg(LogInfo, 0, "Action Sub : " + to_string(unit) + " - " + to_string(action));
 
     switch(action)
     {       
-    case fieldro_bot::UnitAction::None:
-      LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Error, 0, "UnitName Action None");
+    case frb::UnitAction::None:
+      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, "UnitName Action None");
       break;
 
-    case fieldro_bot::UnitAction::Init:
-      //_state =  static_cast<int>(fieldro_bot::UnitState::Idle);
-      _state = fieldro_bot::UnitState::Normal;
-      publish_unit_action_complete(to_int<fieldro_bot::UnitAction>(action), fieldro_bot::to_int(fieldro_bot::Error::None));
+    case frb::UnitAction::Init:
+      //_state =  static_cast<int>(frb::UnitState::Idle);
+      _state = frb::UnitState::Normal;
+      publish_unit_action_complete(to_int<frb::UnitAction>(action), frb::to_int(frb::Error::None));
       break;
 
-    case fieldro_bot::UnitAction::Finish:  
+    case frb::UnitAction::Finish:  
       log_msg(LogInfo, 0, "REQ : Finish");
       destroy();
       break;
 
-    case fieldro_bot::UnitAction::End:        
+    case frb::UnitAction::End:        
       break;
 
     default:                                  
@@ -72,8 +72,8 @@ namespace fieldro_bot
     // 변경사항이 있을 때만 로그를 남긴다.
     if(update_flag)
     {
-      LOG->add_log(fieldro_bot::UnitName::Signal, 
-                    fieldro_bot::LogLevel::Info, 
+      LOG->add_log(frb::UnitName::Signal, 
+                    frb::LogLevel::Info, 
                     0, std::string("Update IO Signal : ")+std::to_string(signal_bit));
     }
 

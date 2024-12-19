@@ -5,21 +5,21 @@
 #include <trash_bot/UnitActionComplete.h>
 #include <trash_bot/UnitStateMsg.h>
 
-namespace fieldro_bot
+namespace frb
 {
   Observer::Observer(std::string config_file, std::string session)
            : Unit(config_file, session)
   {
-    _name               = fieldro_bot::UnitName::Observer;     // unit 이름
-    _action             = fieldro_bot::UnitAction::None;       // unit action
-    _state              = fieldro_bot::UnitState::Created;    // unit 현재 상태  
+    _name               = frb::UnitName::Observer;     // unit 이름
+    _action             = frb::UnitAction::None;       // unit action
+    _state              = frb::UnitState::Created;    // unit 현재 상태  
     _last_publish_time  = ros::Time::now();                   // 마지막 업데이트 시간
     load_option(config_file);                                 // 옵션 로드
 
     // unit_alive_info 초기화 
     _unit_alive_info = std::vector<AliveInfo*>();
     _unit_alive_info.clear();
-    for(int i = 0; i < static_cast<int>(fieldro_bot::UnitName::End); i++)
+    for(int i = 0; i < static_cast<int>(frb::UnitName::End); i++)
     {
       _unit_alive_info.push_back(new AliveInfo(i));
     }
@@ -100,7 +100,7 @@ namespace fieldro_bot
     {
       _unit_alive = new_alive_state;
 
-      LOG->add_log(fieldro_bot::UnitName::Observer, LogInfo, 0, "UnitName Alive State Update : " + std::to_string(_unit_alive));
+      LOG->add_log(frb::UnitName::Observer, LogInfo, 0, "UnitName Alive State Update : " + std::to_string(_unit_alive));
 
       return true;
     }

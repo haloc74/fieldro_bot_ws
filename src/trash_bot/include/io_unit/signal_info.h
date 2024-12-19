@@ -5,7 +5,7 @@
 #include <string>
 #include "io_define.h"
 
-namespace fieldro_bot
+namespace frb
 {
   class SignalInfo
   {

@@ -1,7 +1,7 @@
 
 #pragma once
 
-namespace fieldro_bot
+namespace frb
 {
   enum class LoaderInit
   {

@@ -27,7 +27,7 @@
 
 
 
-namespace fieldro_bot
+namespace frb
 {
   // Safe Delete Macro 
   template <typename T> 

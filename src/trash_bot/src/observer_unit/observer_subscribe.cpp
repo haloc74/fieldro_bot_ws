@@ -4,7 +4,7 @@
 #include "log/log.h"
 #include <trash_bot/UnitActionComplete.h>
 
-namespace fieldro_bot
+namespace frb
 {
   /**
   * @brief      unit control message를 수신하는 callback 함수
@@ -16,34 +16,34 @@ namespace fieldro_bot
   void Observer::subscribe_unit_action(const trash_bot::UnitControl& unit_control_msg)
   {
     // target의 signal이 아닌 메세지는 무시한다. 
-    fieldro_bot::UnitName unit = to_enum<fieldro_bot::UnitName>(unit_control_msg.target_object);
-    log_msg(LogInfo, 0, "Action Sub : "+ fieldro_bot::to_string(unit));
+    frb::UnitName unit = to_enum<frb::UnitName>(unit_control_msg.target_object);
+    log_msg(LogInfo, 0, "Action Sub : "+ frb::to_string(unit));
 
-    if(unit != fieldro_bot::UnitName::Observer && 
-       unit != fieldro_bot::UnitName::All)      return;
+    if(unit != frb::UnitName::Observer && 
+       unit != frb::UnitName::All)      return;
 
     // 요청된 action에 따른 처리
 
-    fieldro_bot::UnitAction action = to_enum<fieldro_bot::UnitAction>(unit_control_msg.action);
+    frb::UnitAction action = to_enum<frb::UnitAction>(unit_control_msg.action);
 
     log_msg(LogInfo, 0, "Action Sub : " + to_string(unit) + " - " + to_string(action));
 
     switch(action)
     {       
-    case fieldro_bot::UnitAction::None:
+    case frb::UnitAction::None:
       break;
 
-    case fieldro_bot::UnitAction::Init:
-      _state =  fieldro_bot::UnitState::Active;
-      _unit_alive_info[static_cast<int>(fieldro_bot::UnitName::Observer)]->update(static_cast<int>(_state));
-      publish_unit_action_complete(to_int(action), fieldro_bot::to_int(fieldro_bot::Error::None));
+    case frb::UnitAction::Init:
+      _state =  frb::UnitState::Active;
+      _unit_alive_info[static_cast<int>(frb::UnitName::Observer)]->update(static_cast<int>(_state));
+      publish_unit_action_complete(to_int(action), frb::to_int(frb::Error::None));
       break;
 
-    case fieldro_bot::UnitAction::Finish:  
+    case frb::UnitAction::Finish:  
       destroy();
       break;
 
-    case fieldro_bot::UnitAction::End:        
+    case frb::UnitAction::End:        
       break;
 
     default:                                  

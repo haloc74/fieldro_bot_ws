@@ -6,7 +6,7 @@
 #include <netinet/tcp.h> // TCP 관련 정의
 
 
-namespace fieldro_bot
+namespace frb
 {
 
   /**
@@ -19,7 +19,7 @@ namespace fieldro_bot
   ModbusWrapper::ModbusWrapper(ModbusType type, 
                                std::string config_file,
                                std::string session_name,
-                               std::function<void(fieldro_bot::CommStatus)> notify_callback)
+                               std::function<void(frb::CommStatus)> notify_callback)
   {
     state_notify           = notify_callback;
     _type                   = type;
@@ -39,7 +39,7 @@ namespace fieldro_bot
     case ModbusType::RS232:     break;
     case ModbusType::RS485:     load_option_485();  break;
     default:
-      LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Error, 0, "Invalid ModbusType");
+      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, "Invalid ModbusType");
       break;
     }      
   }
@@ -60,7 +60,7 @@ namespace fieldro_bot
     case ModbusType::RS485:     disconnect_modbus_485();      break;
 
     default:                    
-      LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Error, 0, "Invalid ModbusType");
+      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, "Invalid ModbusType");
       break;
     }      
   }
@@ -80,7 +80,7 @@ namespace fieldro_bot
     case ModbusType::RS485:     return connect_check_modbus_485();
 
     default:    
-      LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Error, 0, "Invalid ModbusType");
+      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, "Invalid ModbusType");
       break;
     }
     return CommStatus::Error;
@@ -94,7 +94,7 @@ namespace fieldro_bot
     case ModbusType::RS485:     return disconnect_modbus_485();
 
     default:    
-      LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Error, 0, "Invalid ModbusType");
+      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, "Invalid ModbusType");
       break;
     }    
   }
@@ -119,41 +119,41 @@ namespace fieldro_bot
   * @note       read fail시 기존 modbus 연결을 끊기.
   * @todo       log 기록을 session_name으로 구분을 해서 처리 해보도록 하자
   */    
-  fieldro_bot::Error ModbusWrapper::read_data_bits(int32_t address, int32_t read_len, uint8_t* dest)
+  frb::Error ModbusWrapper::read_data_bits(int32_t address, int32_t read_len, uint8_t* dest)
   {
     std::lock_guard<std::mutex> lock(_lock);
     ros::Time current_time = ros::Time::now();
 
     if(!_modbus)
     {
-      LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Error, 0, "modbus_connect fail !!!");
+      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, "modbus_connect fail !!!");
       disconnect_modbus_tcp();
-      return fieldro_bot::Error::UnConnect;
+      return frb::Error::UnConnect;
     }
 
     int32_t socket = modbus_get_socket(_modbus);
     if(socket == -1)
     {
-      LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Error, 0, "modbus_connect fail !!!");
+      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, "modbus_connect fail !!!");
       disconnect_modbus_tcp();
-      return fieldro_bot::Error::UnConnect;
+      return frb::Error::UnConnect;
     }
 
     // modbus 연결 되어있지 않으면 return
     if(is_connect() != CommStatus::Connect)
     {
-      LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Error, 0, "modbus_connect fail !!!");
+      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, "modbus_connect fail !!!");
       disconnect_modbus_tcp();
-      return fieldro_bot::Error::UnConnect;
+      return frb::Error::UnConnect;
     }
 
     int32_t error = 0;
     socklen_t addrlen = sizeof(error);
     if(getsockopt(socket, SOL_SOCKET, SO_ERROR, &error, &addrlen) != 0)
     {
-      LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Error, 0, "getsockopt fail !!!");
+      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, "getsockopt fail !!!");
       disconnect_modbus_tcp();
-      return fieldro_bot::Error::UnConnect;
+      return frb::Error::UnConnect;
     }
       
 
@@ -167,43 +167,43 @@ namespace fieldro_bot
       std::string error_msg = modbus_strerror(errno);
       ros::Duration duration = ros::Time::now() - current_time;
         
-      LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Error, 0, 
+      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, 
                   "modbus_read_bits fail: " + error_msg + " (took " + 
                   std::to_string(duration.toSec()) + "s)");
         
       disconnect_modbus_tcp();
-      return fieldro_bot::Error::ReadFail;
+      return frb::Error::ReadFail;
     }
 
     if(result != read_len)
     {
-      LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Error, 0, 
+      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, 
                     "Incomplete read: got " + std::to_string(result) + 
                     " bits, expected " + std::to_string(read_len));
         
         disconnect_modbus_tcp();
-        return fieldro_bot::Error::ReadFail;
+        return frb::Error::ReadFail;
     }
 
     // // 읽어들인 Data 길이 확인
     // if(read_bits != read_len)
     // {
-    //   LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Error, 0, "modbus_read_bits fail !!!");
+    //   LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, "modbus_read_bits fail !!!");
 
     //   disconnect_modbus_tcp();
 
     //   // error 내용 및 경과시간 log 기록
     //   std::string str = modbus_strerror(errno);
     //   ros::Duration duration = ros::Time::now() - current_time;
-    //   LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Error, 0, "Error : "+ str + "   " + std::to_string(duration.toSec()));
+    //   LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, "Error : "+ str + "   " + std::to_string(duration.toSec()));
       
-    //   return fieldro_bot::Error::ReadFail;
+    //   return frb::Error::ReadFail;
     // }
 
-    return fieldro_bot::Error::None;
+    return frb::Error::None;
   }
 
-  // fieldro_bot::Error ModbusWrapper::read_data_bits(int32_t address, int32_t read_len, uint8_t* dest)
+  // frb::Error ModbusWrapper::read_data_bits(int32_t address, int32_t read_len, uint8_t* dest)
   // {
   //   std::lock_guard<std::mutex> lock(_lock);
 
@@ -212,18 +212,18 @@ namespace fieldro_bot
   //   // modbus 연결 되어있지 않으면 return
   //   if(is_connect() != CommStatus::Connect || modbus_get_socket(_modbus) == -1)
   //   {
-  //     LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Error, 0, "modbus_connect fail !!!");
+  //     LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, "modbus_connect fail !!!");
   //     disconnect_modbus_tcp();
-  //     return fieldro_bot::Error::UnConnect;
+  //     return frb::Error::UnConnect;
   //   }
 
   //   int32_t error = 0;
   //   socklen_t addrlen = sizeof(error);
   //   if(getsockopt(modbus_get_socket(_modbus), SOL_SOCKET, SO_ERROR, &error, &addrlen) != 0)
   //   {
-  //     LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Error, 0, "getsockopt fail !!!");
+  //     LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, "getsockopt fail !!!");
   //     disconnect_modbus_tcp();
-  //     return fieldro_bot::Error::UnConnect;
+  //     return frb::Error::UnConnect;
   //   }
       
 
@@ -233,19 +233,19 @@ namespace fieldro_bot
   //   // 읽어들인 Data 길이 확인
   //   if(read_bits != read_len)
   //   {
-  //     LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Error, 0, "modbus_read_bits fail !!!");
+  //     LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, "modbus_read_bits fail !!!");
 
   //     disconnect_modbus_tcp();
 
   //     // error 내용 및 경과시간 log 기록
   //     std::string str = modbus_strerror(errno);
   //     ros::Duration duration = ros::Time::now() - current_time;
-  //     LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Error, 0, "Error : "+ str + "   " + std::to_string(duration.toSec()));
+  //     LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, "Error : "+ str + "   " + std::to_string(duration.toSec()));
       
-  //     return fieldro_bot::Error::ReadFail;
+  //     return frb::Error::ReadFail;
   //   }
 
-  //   return fieldro_bot::Error::None;
+  //   return frb::Error::None;
   // }
 
   /**
@@ -256,14 +256,14 @@ namespace fieldro_bot
   * @note       쓰기 실패시 기존 modbus 연결을 끊기
   * @todo       log 기록을 session_name으로 구분을 해서 처리 해보도록 하자
   */
-  fieldro_bot::Error ModbusWrapper::write_data_bits(int32_t address, int32_t status)
+  frb::Error ModbusWrapper::write_data_bits(int32_t address, int32_t status)
   {
     std::lock_guard<std::mutex> lock(_lock);
 
     // modbus 연결 되어있지 않으면 return
-    //if(!_is_connected) return fieldro_bot::Error::UnConnect;
+    //if(!_is_connected) return frb::Error::UnConnect;
     if(is_connect() != CommStatus::Connect)
-      return fieldro_bot::Error::UnConnect;
+      return frb::Error::UnConnect;
 
     // 실제 wago data 쓰기
     size_t write_bits = modbus_write_bit(_modbus, address, status);
@@ -271,12 +271,12 @@ namespace fieldro_bot
     // 쓰기 성공 여부 확인
     if(write_bits != 1)
     {
-      LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Error, 0, "modbus_write_bit fail !!!");
+      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, "modbus_write_bit fail !!!");
       disconnect_modbus_tcp();
-      return fieldro_bot::Error::WriteFail;
+      return frb::Error::WriteFail;
     }
 
-    return fieldro_bot::Error::None;
+    return frb::Error::None;
   }
 
   /**
@@ -302,7 +302,7 @@ namespace fieldro_bot
     return true;
   }
 
-  fieldro_bot::Error ModbusWrapper::read_data_registers(int32_t address, int32_t read_len, uint16_t* dest)
+  frb::Error ModbusWrapper::read_data_registers(int32_t address, int32_t read_len, uint16_t* dest)
   {
     std::lock_guard<std::mutex> lock(_lock);
 
@@ -311,15 +311,15 @@ namespace fieldro_bot
     if(ret == -1)
     {
       std::string str = modbus_strerror(errno);
-      LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Error, 0, "modbus_read_registers fail : " + str);
+      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, "modbus_read_registers fail : " + str);
       disconnect();
-      return fieldro_bot::Error::ReadFail;
+      return frb::Error::ReadFail;
     }
 
-    return fieldro_bot::Error::None;
+    return frb::Error::None;
   }
 
-  fieldro_bot::Error ModbusWrapper::write_data_register(int32_t address, int16_t len, uint16_t* value)
+  frb::Error ModbusWrapper::write_data_register(int32_t address, int16_t len, uint16_t* value)
   {
     std::lock_guard<std::mutex> lock(_lock);
     
@@ -328,9 +328,9 @@ namespace fieldro_bot
     if(len != ret)
     {
       disconnect();
-      return fieldro_bot::Error::WriteFail;
+      return frb::Error::WriteFail;
     }
 
-    return fieldro_bot::Error::None;
+    return frb::Error::None;
   }
 }

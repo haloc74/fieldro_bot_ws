@@ -6,7 +6,7 @@
 #include <sys/stat.h>
 #include <yaml-cpp/yaml.h>
 
-namespace fieldro_bot
+namespace frb
 {
   void Log::initialize(std::string config_name, std::string session_name)
   {

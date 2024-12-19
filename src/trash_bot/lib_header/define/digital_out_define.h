@@ -4,7 +4,7 @@
 #include <cstdint>
 #include <string>
 
-namespace fieldro_bot
+namespace frb
 {
   enum class DOSignal
   {

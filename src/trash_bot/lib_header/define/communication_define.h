@@ -3,7 +3,7 @@
 
 #include "helper/enum_template.h"
 
-namespace fieldro_bot
+namespace frb
 {
   enum class CommStatus
   {

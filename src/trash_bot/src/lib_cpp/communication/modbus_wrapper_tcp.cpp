@@ -6,7 +6,7 @@
 #include <netinet/tcp.h>
 #include <arpa/inet.h>
 
-namespace fieldro_bot
+namespace frb
 {
   /**
   * @brief      modbus 연결 옵션 Load
@@ -26,7 +26,7 @@ namespace fieldro_bot
       if(!yaml_file.is_open()) 
       {
         // todo : error log 추가      
-        LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Error, 0, "Unable to open the YAML file");
+        LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, "Unable to open the YAML file");
         return; 
       }
 
@@ -44,27 +44,27 @@ namespace fieldro_bot
     catch(YAML::Exception& e)
     {
       std::string error_msg = "YAML Exception : " + _session_name + "    " + e.what();
-      LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Error, 0, error_msg);
+      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, error_msg);
     }
     catch(std::exception& e)
     {
       std::string error_msg = "Exception : " + _session_name + "    " + e.what();
-      LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Error, 0, error_msg);
+      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, error_msg);
     }
     catch(...)
     {
       std::string error_msg = "Unknown Exception : " + _session_name;
-      LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Error, 0, error_msg);
+      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, error_msg);
     }
 
     // todo : option을 log file로 저장 (Debugging 용도) 
     if(debug != 0)
     {
-      LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Info, 0, "ModbusWrapper::load_option_tcp() : ");
-      LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Info, 0, "  ip          : " + _ip);
-      LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Info, 0, "  port        : " + std::to_string(_port));
-      LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Info, 0, "  retry_count : " + std::to_string(_retry_count));
-      LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Info, 0, "  retry_turm  : " + std::to_string(_retry_turm));
+      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Info, 0, "ModbusWrapper::load_option_tcp() : ");
+      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Info, 0, "  ip          : " + _ip);
+      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Info, 0, "  port        : " + std::to_string(_port));
+      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Info, 0, "  retry_count : " + std::to_string(_retry_count));
+      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Info, 0, "  retry_turm  : " + std::to_string(_retry_turm));
     }
   }
 
@@ -79,13 +79,13 @@ namespace fieldro_bot
     _modbus = modbus_new_tcp(_ip.c_str(), _port);
     if(_modbus == nullptr)
     {
-      LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Error, 0, "modbus_new_tcp context fail !!!");
+      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, "modbus_new_tcp context fail !!!");
       _status = CommStatus::Disconnect;
       return false;
     }
     else
     {
-      LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Info, 0, "context success");
+      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Info, 0, "context success");
     }
 
     // 2. modbus slave 번호 설정
@@ -93,22 +93,22 @@ namespace fieldro_bot
     // TCP 통신의 경우 slave 번호를 설정하지 않아도 된다.
     if(-1 == modbus_set_slave(_modbus, 0))
     {
-      LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Error, 0, "modbus_set_slave fail !!!");
-      LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Error, 0, std::string("Error Number : ") + modbus_strerror(errno));
+      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, "modbus_set_slave fail !!!");
+      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, std::string("Error Number : ") + modbus_strerror(errno));
 
       disconnect_modbus_tcp();
       return false;
     }
     else
     {
-      LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Info, 0, "modbus_set_slave success !!!");
+      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Info, 0, "modbus_set_slave success !!!");
     }
 
     // 3. modbus 연결
     if(modbus_connect(_modbus) == -1)
     {
-      LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Error, 0, "modbus_connect fail !!!");
-      LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Error, 0, std::string("Error Number : ") + modbus_strerror(errno));
+      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, "modbus_connect fail !!!");
+      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, std::string("Error Number : ") + modbus_strerror(errno));
 
       disconnect_modbus_tcp();
 
@@ -119,7 +119,7 @@ namespace fieldro_bot
       modbus_set_response_timeout(_modbus, 0, 500000);
       //modbus_set_debug(_modbus, ON); // 디버그 모드 활성화
 
-      LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Info, 0, "connect success");
+      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Info, 0, "connect success");
       _status = CommStatus::Connect;
     }
 
@@ -128,7 +128,7 @@ namespace fieldro_bot
     int socket = modbus_get_socket(_modbus);
     if(-1 == socket)
     {
-      LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Error, 0, "socket set fail !!!");
+      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, "socket set fail !!!");
       disconnect_modbus_tcp();
       return false;
     }
@@ -183,8 +183,8 @@ namespace fieldro_bot
 
     if(connect_modbus_tcp() == false)
     {
-      LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Error, 0, "modbus_connect fail !!!");
-      LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Error, 0, std::string("Error Number : ") + modbus_strerror(errno));
+      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, "modbus_connect fail !!!");
+      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, std::string("Error Number : ") + modbus_strerror(errno));
 
       if( _remaining_retry_count <= 0)  _status = CommStatus::Error;
       else                              _status = CommStatus::Reconnect;
@@ -193,7 +193,7 @@ namespace fieldro_bot
     }
     else
     {
-      LOG->add_log(fieldro_bot::UnitName::Signal, fieldro_bot::LogLevel::Info, 0, "try_connect_modbus_tcp success !!! \n");
+      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Info, 0, "try_connect_modbus_tcp success !!! \n");
       
       // 연결이 되었으므로 retry count 초기화
        _remaining_retry_count = _retry_count;

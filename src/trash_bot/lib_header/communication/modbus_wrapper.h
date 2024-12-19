@@ -10,7 +10,7 @@
 #include "define/communication_define.h"
 #include "log/log.h"
 
-namespace fieldro_bot
+namespace frb
 {
   enum class ModbusType
   {
@@ -35,7 +35,7 @@ namespace fieldro_bot
     ModbusWrapper(ModbusType type, 
                   std::string config_file,
                   std::string session_name,
-                  std::function<void(fieldro_bot::CommStatus)> notify_callback);
+                  std::function<void(frb::CommStatus)> notify_callback);
     ~ModbusWrapper();
 
   private:
@@ -45,16 +45,16 @@ namespace fieldro_bot
     CommStatus connect_check();
     void disconnect();
     
-    fieldro_bot::Error read_data_bits(int32_t address, int32_t read_len, uint8_t* dest);
-    fieldro_bot::Error write_data_bits(int32_t address, int32_t status);
+    frb::Error read_data_bits(int32_t address, int32_t read_len, uint8_t* dest);
+    frb::Error write_data_bits(int32_t address, int32_t status);
 
-    fieldro_bot::Error read_data_registers(int32_t address, int32_t read_len, uint16_t* dest);
-    fieldro_bot::Error write_data_register(int32_t address, int16_t len, uint16_t* value);
+    frb::Error read_data_registers(int32_t address, int32_t read_len, uint16_t* dest);
+    frb::Error write_data_register(int32_t address, int16_t len, uint16_t* value);
 
   protected:
     std::string _config_file;
     std::string _session_name;
-    std::function<void(fieldro_bot::CommStatus)>   state_notify;
+    std::function<void(frb::CommStatus)>   state_notify;
     modbus_t*   _modbus;
     std::mutex  _lock;
     
@@ -93,4 +93,4 @@ namespace fieldro_bot
     void disconnect_modbus_485();
     
   };
-} // namespace fieldro_bot
+} // namespace frb

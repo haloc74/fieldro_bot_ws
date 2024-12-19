@@ -1,7 +1,7 @@
 
 #include "log/log_message.h"
 
-namespace fieldro_bot
+namespace frb
 {
   LogMessage::LogMessage(LogLevel level, UnitName unit, int32_t error, std::string msg)
               :_error(error), _msg(std::move(msg))

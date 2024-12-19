@@ -13,12 +13,12 @@
 #include <iostream>               
 #include <vector>                 
 
-namespace fieldro_bot
+namespace frb
 {
-  #define LOG         fieldro_bot::Log::get()
-  #define LogInfo     fieldro_bot::LogLevel::Info
-  #define LogError    fieldro_bot::LogLevel::Error
-  #define LogWarning  fieldro_bot::LogLevel::Warning
+  #define LOG         frb::Log::get()
+  #define LogInfo     frb::LogLevel::Info
+  #define LogError    frb::LogLevel::Error
+  #define LogWarning  frb::LogLevel::Warning
   
   /**
   * @class      Logger

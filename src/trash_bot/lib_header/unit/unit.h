@@ -13,7 +13,7 @@
 
 #include "trash_bot/UnitControl.h"
    
-namespace fieldro_bot
+namespace frb
 {
   class Unit
   {

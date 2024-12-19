@@ -9,7 +9,7 @@
 #include <string>
 #include <sstream>
 
-namespace fieldro_bot
+namespace frb
 {
   /**
   * @brief      실행 파일 경로로 현재 디렉토리 설정
@@ -108,8 +108,8 @@ namespace fieldro_bot
   std::tuple<int32_t, int32_t, int32_t, std::string> interpret_command(std::vector<std::string> command_list)
   {
     int32_t     size    = command_list.size();
-    int32_t     unit    = fieldro_bot::to_int(fieldro_bot::Error::ParseFail);
-    int32_t     action  = fieldro_bot::to_int(fieldro_bot::Error::ParseFail);
+    int32_t     unit    = frb::to_int(frb::Error::ParseFail);
+    int32_t     action  = frb::to_int(frb::Error::ParseFail);
     std::string cmd     = "";
 
     for(int i = 0; i < command_list.size(); i++)

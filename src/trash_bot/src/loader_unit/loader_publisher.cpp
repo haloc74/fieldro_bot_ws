@@ -10,7 +10,7 @@
 */
 
 
-namespace fieldro_bot
+namespace frb
 {
   /**
   * @brief      모터에 지령된 Action 완료 후 호출되는 콜백 함수
@@ -21,9 +21,9 @@ namespace fieldro_bot
   void Loader::action_complete_notify(const Error error)
   {
     log_msg(LogInfo, 0, std::string("action complete notify : ") + 
-                        fieldro_bot::to_string(_action) + 
+                        frb::to_string(_action) + 
                         std::string(" - error code : ") + 
-                        std::to_string(fieldro_bot::to_int(error)));
+                        std::to_string(frb::to_int(error)));
 
      if(error == Error::None)
     {
@@ -35,21 +35,21 @@ namespace fieldro_bot
       }
 
       // 동작 완료 보고 (정상 완료)
-      Unit::publish_unit_action_complete(to_int(_action), fieldro_bot::to_int(Error::None));
+      Unit::publish_unit_action_complete(to_int(_action), frb::to_int(Error::None));
 
       // action 초기화
-      _action = fieldro_bot::UnitAction::None;
+      _action = frb::UnitAction::None;
     }
     else
     {
       // 동작 완료 보고 (Error)
-      Unit::publish_unit_action_complete(to_int(_action), fieldro_bot::to_int(error));
+      Unit::publish_unit_action_complete(to_int(_action), frb::to_int(error));
 
       // error log 표기 
       log_msg(LogError, to_int(error), "Error : error code - " + std::to_string(to_int(error)));      
 
       // state 변경
-      _state  = fieldro_bot::UnitState::Error;
+      _state  = frb::UnitState::Error;
     }
     return;
   }

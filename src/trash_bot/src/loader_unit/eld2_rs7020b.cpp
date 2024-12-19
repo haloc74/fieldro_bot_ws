@@ -6,10 +6,10 @@
 #include "helper/helper.h"
 
 
-namespace fieldro_bot
+namespace frb
 {
-  ELD2_RS7020B::ELD2_RS7020B(std::function<void(fieldro_bot::Error)> action_result_callback, 
-                             std::function<void(fieldro_bot::LogLevel, int32_t, const std::string&)> log_callback,
+  ELD2_RS7020B::ELD2_RS7020B(std::function<void(frb::Error)> action_result_callback, 
+                             std::function<void(frb::LogLevel, int32_t, const std::string&)> log_callback,
                              std::string config_file)
   {
     // callback 함수 등록 
@@ -71,24 +71,24 @@ namespace fieldro_bot
   * @return     
   * @note       
   */
-  fieldro_bot::Error ELD2_RS7020B::control_power(bool on)
+  frb::Error ELD2_RS7020B::control_power(bool on)
   {
-    if(_comm_state != fieldro_bot::CommStatus::Connect)
+    if(_comm_state != frb::CommStatus::Connect)
     {
       log_msg(LogError, 0, "control_power - motor is not connected");              
-      return fieldro_bot::Error::UnConnect;
+      return frb::Error::UnConnect;
     }
 
     uint16_t value = on ? (int16_t)SERVO_VALUE::POWER_ON : (int16_t)SERVO_VALUE::POWER_OFF;
 
-    fieldro_bot::Error ret = _comm->write_data_register((int)SERVO_ADDRESS::CTRL_POWER, 1, &value);
+    frb::Error ret = _comm->write_data_register((int)SERVO_ADDRESS::CTRL_POWER, 1, &value);
 
-    if(ret != fieldro_bot::Error::None)
+    if(ret != frb::Error::None)
     {
       std::string str = modbus_strerror(errno);
       log_msg(LogError, 0, "motor power control fail : value[" + 
                            std::to_string(value) +std::string("] : ") + str);
-      return fieldro_bot::Error::WriteFail;
+      return frb::Error::WriteFail;
     }
     else
     {
@@ -96,24 +96,24 @@ namespace fieldro_bot
       else                                        _servo_power = false;
     }
 
-    return fieldro_bot::Error::None;
+    return frb::Error::None;
   }
 
-  fieldro_bot::Error ELD2_RS7020B::control_move(int32_t abs_pos, int16_t rpm, int32_t check_interval, int32_t timeout_millisec)
+  frb::Error ELD2_RS7020B::control_move(int32_t abs_pos, int16_t rpm, int32_t check_interval, int32_t timeout_millisec)
   {
-    if(_comm_state != fieldro_bot::CommStatus::Connect) return fieldro_bot::Error::UnConnect;
-    if(!_servo_power)                                   return fieldro_bot::Error::PowerOff;
+    if(_comm_state != frb::CommStatus::Connect) return frb::Error::UnConnect;
+    if(!_servo_power)                                   return frb::Error::PowerOff;
 
     uint16_t status = 0x0000;
 
     // // TEST Code =========================
     // int32_t target_pos = get_motor_position();
     // target_pos += abs_pos;
-    // fieldro_bot::Error ret = control_pr0((int16_t)SERVO_VALUE::ABS_POSITION, target_pos, 20, 20, 20);
+    // frb::Error ret = control_pr0((int16_t)SERVO_VALUE::ABS_POSITION, target_pos, 20, 20, 20);
     // // TEST Code End =====================
 
     // 실제 구동 코드
-    fieldro_bot::Error ret = control_pr0((int16_t)SERVO_VALUE::ABS_POSITION, abs_pos, rpm, 20, 20);
+    frb::Error ret = control_pr0((int16_t)SERVO_VALUE::ABS_POSITION, abs_pos, rpm, 20, 20);
 
     // 동작 완료 및 timeout 체크 위한 로직
     // limit sensor을 이용한 종료을 해야 할 경우에는 timeout을 설정하지 않는다.
@@ -141,7 +141,7 @@ namespace fieldro_bot
 
   bool ELD2_RS7020B::stop_motor()
   {
-    if(control_pr0((int16_t)SERVO_VALUE::STOP, 0, 0, 0, 0) == fieldro_bot::Error::None)
+    if(control_pr0((int16_t)SERVO_VALUE::STOP, 0, 0, 0, 0) == frb::Error::None)
     {
       // 이전 action이 종료 되었으므로 timeout_sequence 증가
       increase_timeout_sequence();
@@ -150,7 +150,7 @@ namespace fieldro_bot
     return false;
   }
 
-  fieldro_bot::Error ELD2_RS7020B::control_pr0(int16_t mode, int32_t position, int16_t rpm, int16_t acc, int16_t dec)
+  frb::Error ELD2_RS7020B::control_pr0(int16_t mode, int32_t position, int16_t rpm, int16_t acc, int16_t dec)
   {
     uint16_t status = 0x0000;
     uint16_t value[8];
@@ -167,14 +167,14 @@ namespace fieldro_bot
     value[6] = 0x00;                           // delay time ms
     value[7] = 0x10;                           // Path Number
 
-    fieldro_bot::Error error = _comm->write_data_register((int)SERVO_ADDRESS::CTRL_PR0, sizeof(value), value);
+    frb::Error error = _comm->write_data_register((int)SERVO_ADDRESS::CTRL_PR0, sizeof(value), value);
 
-    if(error != fieldro_bot::Error::None)
+    if(error != frb::Error::None)
     {
       std::string str = modbus_strerror(errno);
       //log_msg(LogError, 0, std::string("ELD2 : Error (" + str + ")"));
       log_msg(LogError, 0, "ELD2 : Error (" + str + ")");
-      return fieldro_bot::Error::WriteFail;
+      return frb::Error::WriteFail;
     }
     else
     {
@@ -182,7 +182,7 @@ namespace fieldro_bot
       log_msg(LogInfo, 0, "ELD2 : control PR0 - position = "+std::to_string(position));
     }
 
-    return fieldro_bot::Error::None;
+    return frb::Error::None;
   }
 
   /**
@@ -197,8 +197,8 @@ namespace fieldro_bot
     uint16_t position[2];
     memset(position, 0x00, sizeof(uint16_t)*2);
 
-    fieldro_bot::Error error = _comm->read_data_registers((int)SERVO_ADDRESS::GET_POSITION, 2, position);
-    if(error != fieldro_bot::Error::None)
+    frb::Error error = _comm->read_data_registers((int)SERVO_ADDRESS::GET_POSITION, 2, position);
+    if(error != frb::Error::None)
     {
       log_msg(LogError, 0, "ELD2 : read fail");
       log_msg(LogError, 0, std::string("ELD2 : ") + modbus_strerror(errno));
@@ -222,14 +222,14 @@ namespace fieldro_bot
   * @return     
   * @note       
   */
-  fieldro_bot::Error ELD2_RS7020B::get_motor_status()
+  frb::Error ELD2_RS7020B::get_motor_status()
   {
-    fieldro_bot::Error error = _comm->read_data_registers((int)SERVO_ADDRESS::GET_STATUS, 1, &_motor_status);
+    frb::Error error = _comm->read_data_registers((int)SERVO_ADDRESS::GET_STATUS, 1, &_motor_status);
 
-    if(error != fieldro_bot::Error::None)
+    if(error != frb::Error::None)
     {
       log_msg(LogError, 0, "get_motor_status fail");                    
-      return fieldro_bot::Error::ReadFail;
+      return frb::Error::ReadFail;
     }
 
     std::string status_str = ""; 
@@ -253,7 +253,7 @@ namespace fieldro_bot
     if(_motor_status & 0x0020)  log_msg(LogInfo, 0, "Loader : status AT-SPEED = O");         // 목표 속도 도달
     else                        log_msg(LogInfo, 0, "Loader : status AT-SPEED = X");
 
-    return fieldro_bot::Error::None;
+    return frb::Error::None;
   }
 
   /**
@@ -284,7 +284,7 @@ namespace fieldro_bot
   */
   bool ELD2_RS7020B::is_controllable()
   {
-    if(_comm_state != fieldro_bot::CommStatus::Connect) 
+    if(_comm_state != frb::CommStatus::Connect) 
     {
       log_msg(LogError, 0, "motor is not connected");
       return false;
@@ -323,7 +323,7 @@ namespace fieldro_bot
     }
 
     // callback을 통해 동작 완료 전달
-    std::async(std::launch::async, action_result_notify, fieldro_bot::Error::None);
+    std::async(std::launch::async, action_result_notify, frb::Error::None);
 
     // 이전 action이 종료 되었으므로 timeout_sequence 증가
     increase_timeout_sequence();
@@ -340,7 +340,7 @@ namespace fieldro_bot
     if(_timeout_sequence != sequence)  return;
 
     // callback을 통해 timeout 전달
-    std::async(std::launch::async, action_result_notify, fieldro_bot::Error::TimeOut);
+    std::async(std::launch::async, action_result_notify, frb::Error::TimeOut);
 
     // motor 정지
     control_pr0((int16_t)SERVO_VALUE::STOP, 0, 0, 0, 0);
@@ -362,7 +362,7 @@ namespace fieldro_bot
     else                                        return false;
   }
 
-  void ELD2_RS7020B::log_msg(fieldro_bot::LogLevel level, int32_t error_code, std::string log)
+  void ELD2_RS7020B::log_msg(frb::LogLevel level, int32_t error_code, std::string log)
   {
     if(log_msg_notify == nullptr)   return;
 

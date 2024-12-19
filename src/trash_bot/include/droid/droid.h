@@ -41,7 +41,7 @@
 * 6.  
 */ 
 
-namespace fieldro_bot
+namespace frb
 { 
   class Droid : public Unit
   { 

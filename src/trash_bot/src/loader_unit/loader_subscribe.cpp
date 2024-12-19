@@ -5,7 +5,7 @@
 #include "define/unit_state.h"
 
 
-namespace fieldro_bot
+namespace frb
 {
   /**
   * @brief      unit action message를 수신하는 callback 함수
@@ -16,41 +16,41 @@ namespace fieldro_bot
   */
   void Loader::subscribe_unit_action(const trash_bot::UnitControl& msg)
   {
-    fieldro_bot::UnitName unit = to_enum<fieldro_bot::UnitName>(msg.target_object);
+    frb::UnitName unit = to_enum<frb::UnitName>(msg.target_object);
     
-    if(unit != fieldro_bot::UnitName::Loader && 
-       unit != fieldro_bot::UnitName::All)      return;
+    if(unit != frb::UnitName::Loader && 
+       unit != frb::UnitName::All)      return;
 
-    fieldro_bot::UnitAction action = to_enum<fieldro_bot::UnitAction>(msg.action);
+    frb::UnitAction action = to_enum<frb::UnitAction>(msg.action);
 
     log_msg(LogInfo, 0, "UnitName Action Sub : " + to_string(unit) + " - " + to_string(action));
 
     switch(action)
     {
-    case fieldro_bot::UnitAction::None:
-      LOG->add_log(fieldro_bot::UnitName::Loader, fieldro_bot::LogLevel::Error, 0, "UnitName Action None");
+    case frb::UnitAction::None:
+      LOG->add_log(frb::UnitName::Loader, frb::LogLevel::Error, 0, "UnitName Action None");
       break;
 
-    case fieldro_bot::UnitAction::Init:
+    case frb::UnitAction::Init:
       break;
 
-    case fieldro_bot::UnitAction::Fall:
+    case frb::UnitAction::Fall:
       std::async(std::launch::async, [this] { execute_fall_action(); });
       break;
 
-    case fieldro_bot::UnitAction::Middle:
+    case frb::UnitAction::Middle:
       std::async(std::launch::async, [this] { execute_middle_action(); });
       break;
 
-    case fieldro_bot::UnitAction::Raise:
+    case frb::UnitAction::Raise:
       std::async(std::launch::async, [this] { execute_raise_action(); });
       break;
 
-    case fieldro_bot::UnitAction::Stop:
+    case frb::UnitAction::Stop:
       _motor->stop_motor();
       break;
 
-    case fieldro_bot::UnitAction::Finish:
+    case frb::UnitAction::Finish:
       log_msg(LogInfo, 0, "REQ : Finish");
       destroy();
       break;
@@ -93,7 +93,7 @@ namespace fieldro_bot
                           "  " + 
                           std::to_string(__LINE__));
 
-      _state = fieldro_bot::UnitState::Error;
+      _state = frb::UnitState::Error;
     }
 
     _prev_sensor_data = current_bits;     // prev sensor data update

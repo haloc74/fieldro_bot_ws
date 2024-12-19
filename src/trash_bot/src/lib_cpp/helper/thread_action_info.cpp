@@ -1,7 +1,7 @@
 
 #include "helper/thread_action_info.h"
 
-namespace fieldro_bot
+namespace frb
 {
   ThreadActionInfo::ThreadActionInfo(std::string file_name, std::string session_name)
   {

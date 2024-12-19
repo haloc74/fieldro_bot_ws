@@ -5,7 +5,7 @@
 #include <cstdint>
 #include <type_traits>
 
-namespace fieldro_bot
+namespace frb
 {
   /**
   * @brief      enum => int로 변환

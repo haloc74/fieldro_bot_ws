@@ -2,7 +2,7 @@
 
 #include "helper/enum_template.h"
 
-namespace fieldro_bot
+namespace frb
 {
   /**
   * @author		  Fieldro : haloc@fieldro.tech

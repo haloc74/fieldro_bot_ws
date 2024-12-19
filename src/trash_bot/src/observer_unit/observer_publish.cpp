@@ -6,7 +6,7 @@
 #include <trash_bot/UnitStateMsg.h>
 #include <trash_bot/UnitActionComplete.h>
 
-namespace fieldro_bot
+namespace frb
 {
   /**
   * @brief      unit의 상태를 publishing 하는 함수
@@ -35,7 +35,7 @@ namespace fieldro_bot
     _publish_units_state.publish(msg);
     _last_publish_time = ros::Time::now();
 
-    //log_msg(fieldro_bot::LogLevel::Info, 0, "state_pub : " + std::to_string(_unit_alive));
+    //log_msg(frb::LogLevel::Info, 0, "state_pub : " + std::to_string(_unit_alive));
     
     return;
   }

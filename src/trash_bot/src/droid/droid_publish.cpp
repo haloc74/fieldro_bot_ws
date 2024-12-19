@@ -4,7 +4,7 @@
 #include "log/log.h"
 #include <trash_bot/UnitAliveMsg.h>
 
-namespace fieldro_bot
+namespace frb
 {
   /**
   * @brief      message 발송 여건을 확인하고 message 발송
@@ -40,9 +40,9 @@ namespace fieldro_bot
     log_msg(LogInfo, 
             0, 
             "unit control Pub (Command Req) : " + 
-            to_string(to_enum<fieldro_bot::UnitName>(unit)) + 
+            to_string(to_enum<frb::UnitName>(unit)) + 
             " - " + 
-            to_string<fieldro_bot::UnitAction>(action));
+            to_string<frb::UnitAction>(action));
     return;
   }  
 
@@ -62,9 +62,9 @@ namespace fieldro_bot
     log_msg(LogInfo, 
             0, 
             "unit control Pub : " + 
-            to_string(to_enum<fieldro_bot::UnitName>(unit_control_msg->target_object)) + 
+            to_string(to_enum<frb::UnitName>(unit_control_msg->target_object)) + 
             " - " + 
-            to_string<fieldro_bot::UnitAction>(unit_control_msg->action));
+            to_string<frb::UnitAction>(unit_control_msg->action));
 
 
     // time_stamp를 발송 시간으로 변경

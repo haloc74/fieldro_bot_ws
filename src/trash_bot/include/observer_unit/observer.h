@@ -10,7 +10,7 @@
 #include "observer_unit/alive_info.h"
 
  
-namespace fieldro_bot
+namespace frb
 {
   /**
   * @author		Fieldro : haloc@fieldro.tech

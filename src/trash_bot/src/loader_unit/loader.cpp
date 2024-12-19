@@ -6,7 +6,7 @@
 #include <trash_bot/UnitActionComplete.h>
 
 
-namespace fieldro_bot
+namespace frb
 {
   Loader::Loader(std::string config_file, std::string session) 
           : Unit(config_file, session)
@@ -28,7 +28,7 @@ namespace fieldro_bot
 
     _name   = UnitName::Loader;
     _action = UnitAction::None;
-    _state  = fieldro_bot::UnitState::Created;
+    _state  = frb::UnitState::Created;
 
     // unit action message 수신을 위한 subscriber 생성 및 link
     _subscribe_unit_action =
@@ -112,7 +112,7 @@ namespace fieldro_bot
     if(_fall_position != INT32_MAX && _raise_position != INT32_MAX)
     {
       _middle_position  = (_fall_position + _raise_position) / 2;     // 중간 위치 설정
-      _state = fieldro_bot::UnitState::Normal;                        // loader 상태 변경
+      _state = frb::UnitState::Normal;                        // loader 상태 변경
       return true;
     }
     return false;
@@ -142,7 +142,7 @@ namespace fieldro_bot
       if(_state != UnitState::Created)
       {
         log_msg(LogError, 0, "Error : fall limit sensor on" + std::to_string(__LINE__));
-        _state = fieldro_bot::UnitState::Error;
+        _state = frb::UnitState::Error;
       }      
     }
     return;
@@ -165,14 +165,14 @@ namespace fieldro_bot
     {
       Unit::publish_unit_action_complete(to_int(_action), 0); // 동작 완료 보고
       confirm_active_position();                              // 위치 설정 보고 
-      _action = fieldro_bot::UnitAction::None;                // action release         
+      _action = frb::UnitAction::None;                // action release         
     }
     else
     {
       if(_state != UnitState::Created)
       {
         log_msg(LogError, 0, "Error : raise limit sensor on" + std::to_string(__LINE__));
-        _state = fieldro_bot::UnitState::Error;
+        _state = frb::UnitState::Error;
       }
     }
     return;
@@ -202,14 +202,14 @@ namespace fieldro_bot
   {
     bool ret = true;
     
-    if(_action != fieldro_bot::UnitAction::None)  ret = false;  // 동작 상태
-    if(_state == fieldro_bot::UnitState::Error)   ret = false;  // 에러 상태
+    if(_action != frb::UnitAction::None)  ret = false;  // 동작 상태
+    if(_state == frb::UnitState::Error)   ret = false;  // 에러 상태
 
     if(!ret)
     {
       log_msg(LogInfo, 0, std::string("Loader is not controlable : ") + 
-                          std::string("state : ") + fieldro_bot::to_string(_state) + 
-                          std::string("action :") + fieldro_bot::to_string(_action) +
+                          std::string("state : ") + frb::to_string(_state) + 
+                          std::string("action :") + frb::to_string(_action) +
                           std::string("code line : ") + std::to_string(__LINE__));      
     }
 

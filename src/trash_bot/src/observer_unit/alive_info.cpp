@@ -1,7 +1,7 @@
 #include "observer_unit/alive_info.h"
 #include "define/unit_define.h"
 
-namespace fieldro_bot
+namespace frb
 {
   /**
   * @brief      생성자
@@ -14,8 +14,8 @@ namespace fieldro_bot
     _unit_index       = unit_index;
     _state            = -1;
 
-    if(_unit_index == to_int(fieldro_bot::UnitName::All) ||
-       _unit_index == to_int(fieldro_bot::UnitName::Observer))
+    if(_unit_index == to_int(frb::UnitName::All) ||
+       _unit_index == to_int(frb::UnitName::Observer))
     {
       _alive_check_func = []() { return true; };
     }

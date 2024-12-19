@@ -9,7 +9,7 @@
 #include "define/unit_action_define.h"
 #include "define/error_code.h"
  
-namespace fieldro_bot
+namespace frb
 {
   Droid::Droid(std::string config_file, std::string session) 
         : Unit(config_file, session)
@@ -107,8 +107,8 @@ namespace fieldro_bot
   {
     std::lock_guard<std::mutex> lock(_lock);
 
-    if(unit == to_int(fieldro_bot::UnitName::All) && 
-      action == to_int(fieldro_bot::UnitAction::Finish))
+    if(unit == to_int(frb::UnitName::All) && 
+      action == to_int(frb::UnitAction::Finish))
     {
       publish_unit_control(unit, action, "");
       delay_call(3000, std::bind(&Droid::destroy, this));
@@ -144,10 +144,10 @@ namespace fieldro_bot
     // command 분석
     std::tuple<int32_t, int32_t, int32_t, std::string> cmd_data = interpret_command(command_list);
 
-    if(std::get<1>(cmd_data) == to_int(fieldro_bot::UnitName::End))     return false;
-    if(std::get<2>(cmd_data) == to_int(fieldro_bot::UnitAction::None))  return false;
+    if(std::get<1>(cmd_data) == to_int(frb::UnitName::End))     return false;
+    if(std::get<2>(cmd_data) == to_int(frb::UnitAction::None))  return false;
 
-    if(std::get<2>(cmd_data) == to_int(fieldro_bot::UnitAction::EStop))
+    if(std::get<2>(cmd_data) == to_int(frb::UnitAction::EStop))
     {
       // EStop일 경우 unit에 즉시 EStop 전송
       publish_unit_control(std::get<1>(cmd_data), std::get<2>(cmd_data), std::get<3>(cmd_data));

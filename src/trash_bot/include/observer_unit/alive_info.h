@@ -2,7 +2,7 @@
 
 #include <ros/ros.h>
 
-namespace fieldro_bot
+namespace frb
 {
   
   /**

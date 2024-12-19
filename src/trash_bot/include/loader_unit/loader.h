@@ -11,7 +11,7 @@
 #include "motion_info.h"
 #include "eld2_rs7020b.h"
 
-namespace fieldro_bot
+namespace frb
 {
   #define CHECK_NONE    0
   #define TIMEOUT_NONE  0

@@ -2,7 +2,7 @@
 
 #include "helper/enum_template.h"
 
-namespace fieldro_bot
+namespace frb
 {
   // Active, Idle, Busy 삭제
   // Normal 추가 
