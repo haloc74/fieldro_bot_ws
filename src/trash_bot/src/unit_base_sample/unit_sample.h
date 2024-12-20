@@ -2,14 +2,14 @@
 #pragma once
 
 #include "unit/unit.h"
- 
+
 namespace frb
 {
-  class Driving : public Unit
+  class UnitSample : public Unit
   {
   public:
-    Driving(std::string config_file, std::string session);
-    virtual ~Driving();
+    UnitSample(std::string config_file, std::string session);
+    virtual ~UnitSample();
 
   protected:
     virtual void update();                                                  // object main loop

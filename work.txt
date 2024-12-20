@@ -16,19 +16,21 @@
 
 4. node name과 node cpp name launch에서 실행시키는 name 명명 규칙
 
-
-//=========================================================
-//=========================================================
-
 . req message 수신응답이 필요할까 ???
-
 . UnitState Define에 Sleep 상태를 추가하고 MainController에서 Activate 메세지 전송 하는 방안 ?
 . 기존 action 수행중 다른 action 요청이 들어왔을 경우 error 통보 후 어떻게 처리를 해야 할까 ???
   기존 action 종료시까지 대기 했다가 신규로 들어온 action 처리를 해야 할까 ???
+
+//=========================================================
+//=========================================================
+
 . 구동모터 추가
 
+ID :  - JD 24.12.20
+1. launch file에 driving node 실행 추가
 
-ID :  - JD 24.12.19
+
+ID : f60788c - JD 24.12.19
 1. Driving class 추가
 2. Driving node 추가
 3. Driving node에 Driving Class 연결

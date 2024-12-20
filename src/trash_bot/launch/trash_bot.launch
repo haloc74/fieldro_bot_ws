@@ -20,4 +20,8 @@
   <node name="trash_bot" pkg="trash_bot" type="trash_bot" output="screen"/>
     <param name="command_use" value="true"/>    
 
+  // driving 노드 실행
+  <node name="driving_unit" pkg="trash_bot" type="driving_unit" output="screen"/>
+    <param name="command_use" value="true"/>    
+
 </launch>
