@@ -15,9 +15,6 @@ namespace frb
   *                 WheelValue<int16_t> rpm(0, 0);
   *             1. 2개의 구동 wheel로 동작 하기위한 AGV에 적용
   *             2. 향후 4개의 wheel로 확장시키기 위하여 class로 분리 
-  *             3. Class Name을 EncoderValue로 변경하는 방안을 고려 : 
-  *             4. rpm 데이터도 이 class로 사용하고 있는바 다른 이름이 필요 할듯..
-  *             5. rpm의 경우 double type로 표현해야 오차가 그나마 적지 않을까 ??
   * 
   */
 

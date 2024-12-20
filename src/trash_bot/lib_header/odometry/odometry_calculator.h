@@ -25,6 +25,7 @@ namespace frb
   *             Ackerman Model에 계산에 필요한 변수 추가 필요
   *             - 각 Wheel의 각도 
   *             - enum Class WEEL에 LEFT_REAR, RIGHT_REAR 추가 ...
+  *             상속을 통한 Differantial Model, Ackerman Model을 분리 시켜야 할 것으로 보임.
   * @see			
   */
   class OdometryCalculator
@@ -33,11 +34,16 @@ namespace frb
     OdometryCalculator(double gear_ratio, double wheel_distance, double wheel_radius, double pulse_per_degree, int32_t max_rpm);
     ~OdometryCalculator();
 
-    /// 선속도와 각속도를 agv 환경에 따른 휠 rpm으로 변환
+    // // Differential Model 
+    // 선속도와 각속도를 agv 환경에 따른 휠 rpm으로 변환
     int16_t twist_to_wheel_rpm(double linear, double angular, WheelPos wheel);
 
-    /// Encoder 변화량을 Twist로 변환
+    // Encoder 변화량을 Twist로 변환
     geometry_msgs::Twist encoder_delta_to_twist(MotorMetrics<int32_t>* delta, double interval);
+
+    // Ackerman Model
+    // todo : 선속도, 각속도 -> 환경에 따른 휠 rpm으로 변환
+    // todo : Encoder 변화량을 Twist로 변환
 
   protected:
     OdometryCalculator() {}
