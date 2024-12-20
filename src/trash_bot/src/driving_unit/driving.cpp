@@ -22,6 +22,14 @@ namespace frb
     _publish_unit_action_complete =
     _node_handle->advertise<trash_bot::UnitActionComplete>("trash_bot/action_complete", 10);
 
+    // 속도제어 subscriber 생성 및 link
+    _subscribe_velocity_control =
+    _node_handle->subscribe("twinny_robot/VelControl", 100, &Driving::subscribe_velocity_control, this);
+
+    // 속도제어 publisher 생성 및 link
+    _publish_act_velocity =
+    _node_handle->advertise<geometry_msgs::Twist>("twinny_robot/ActVel", 100);
+
     // spinn 구동 (생성은 Unit Class 담당)
     _spinner->start();
 

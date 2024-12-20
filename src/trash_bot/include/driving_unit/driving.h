@@ -2,6 +2,7 @@
 #pragma once
 
 #include "unit/unit.h"
+#include <geometry_msgs/Twist.h>
  
 namespace frb
 {
@@ -15,5 +16,12 @@ namespace frb
     virtual void update();                                                  // object main loop
     virtual void load_option(std::string config_file);                      // option load
     virtual void subscribe_unit_action(const trash_bot::UnitControl& msg);  // unit action subscribe
+
+  protected:
+    ros::Subscriber _subscribe_velocity_control;                            // 속도 제어 subscriber
+    void subscribe_velocity_control(const geometry_msgs::Twist &twist_msg); // 속도 제어 subscribe callback
+
+    ros::Publisher _publish_act_velocity;                                   // 실제 속도 및 좌표 publisher
+    void publish_act_velocity(geometry_msgs::Twist twist);                  // 실제 속도 및 좌표 publish 함수
   };
 }

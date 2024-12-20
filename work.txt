@@ -26,7 +26,21 @@
 
 . 구동모터 추가
 
+. Driving : 주행 subscribe 추가
+. Driving : act_velocity 추가
+
+
 ID :  - JD 24.12.20
+1. lib : odometry_calculator 추가
+2. odometry_calculator 추가에 따른 CMakeLists 수정
+3. wheel_value class 추가 (추후 class name refactoring 필요)
+4. WheelValue Class 변수를 Template화
+5. WheelValueFilter Class 변수를 Template화
+6. WheelValue class name -> MotorMetrics 로 변경
+7. WheelValueFilter Class name -> MotorMetricsFielter로 변경
+
+
+ID : bbd153a - JD 24.12.20
 1. launch file에 driving node 실행 추가
 
 

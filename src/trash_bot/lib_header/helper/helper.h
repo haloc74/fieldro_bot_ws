@@ -39,6 +39,21 @@ namespace frb
   }
 
   /**
+  * @brief      인자로 주어진 값은 최대 최소값 사이의 값으로 제한
+  * @param[in]  T value : 제한할 값
+  * @param[in]  T min : 최소값
+  * @param[in]  T max : 최대값
+  * @return     T : 제한된 값 (범위 만족값)
+  */
+  template <typename T>
+  inline T limit_value(T value, T min, T max)
+  {
+    if(value < min)  return min;
+    if(value > max)  return max;
+    return value;
+  }
+
+  /**
   * @brief      실행 파일 경로로 현재 디렉토리 설정
   * @note       
   */
