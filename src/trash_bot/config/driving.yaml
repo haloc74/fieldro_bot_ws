@@ -8,7 +8,7 @@ alive:
 motor:
   hz          : 50                    ## motor thread 동작 속도 
   comm_type   : "Modbus485"           ## 통신 방식 (ModbusTCP, RTU(232, 485))
-  device      : "/dev/ttyModbus_ELD2" ## device name
+  device      : "/dev/ttyModbus_ZLB"  ## device name
   port        : 0                     ## port number
   baud        : 57600                 ## baudrate
   slave_id    : 1                     ## slave id

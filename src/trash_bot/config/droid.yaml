@@ -1,6 +1,6 @@
 main:
   hz                    : 50 
-  spinner_count         : 5
+  spinner_count         : 3
 
 alive:
   hz                   : 20          ## heartbeat 보고 주기

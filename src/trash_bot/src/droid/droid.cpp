@@ -110,7 +110,8 @@ namespace frb
     if(unit == to_int(frb::UnitName::All) && 
       action == to_int(frb::UnitAction::Finish))
     {
-      publish_unit_control(unit, action, "");
+      //publish_unit_control(unit, action, "");
+      publish_all_destroy();
       delay_call(3000, std::bind(&Droid::destroy, this));
     }
     else
@@ -150,7 +151,7 @@ namespace frb
     if(std::get<2>(cmd_data) == to_int(frb::UnitAction::EStop))
     {
       // EStop일 경우 unit에 즉시 EStop 전송
-      publish_unit_control(std::get<1>(cmd_data), std::get<2>(cmd_data), std::get<3>(cmd_data));
+      //publish_unit_control(std::get<1>(cmd_data), std::get<2>(cmd_data), std::get<3>(cmd_data));
     }
     else
     {

@@ -75,7 +75,8 @@ namespace frb
     void add_sequence(int32_t unit, int32_t action, std::string command="");
     void message_publish();
 
-    void publish_unit_control(int32_t unit, int32_t action, std::string command="");
+    //void publish_unit_control(int32_t unit, int32_t action, std::string command="");
+    void publish_all_destroy();
     void publish_unit_control(std::unique_ptr<trash_bot::UnitControl> unit_control_msg);
 
     // user command control

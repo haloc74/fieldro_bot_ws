@@ -3,7 +3,7 @@
 #include "helper/helper.h"
 #include <trash_bot/UnitActionComplete.h>
  
-namespace frb
+namespace frb 
 {
   Driving::Driving(std::string config_file, std::string session) 
           : Unit(config_file, session)

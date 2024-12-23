@@ -20,7 +20,7 @@ namespace frb
       if(msg.alive == 0x00)
       {
         log_msg(LogInfo, 0, "All Init - Next Step Process");
-        _state = frb::UnitState::Created;
+        _state = frb::UnitState::Normal;
         delay_call(3000, std::bind(&Droid::create_unit_initialize_sequence, this));
       }
       break;

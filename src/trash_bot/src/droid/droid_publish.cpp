@@ -12,11 +12,15 @@ namespace frb
   */
   void Droid::message_publish()
   {
+  //  std::lock_guard<std::mutex> lock(_lock);
+
     if(!_pending_sequence.empty())    return;  // 응답 대기중인 요청이 없을 경우에만 신규 요청 발송
     if(_control_sequence.empty())    return;   // control_sequence에 요소가 있을 경우 발송
 
     // 실제 메세지 발송      
     publish_unit_control(std::move(_control_sequence.front()));
+
+    log_msg(LogInfo, 0, "message_publish !!!");
   }
 
   /**
@@ -28,21 +32,21 @@ namespace frb
   * @see        global/define/unit_define.h UnitName 참조
   * @see        global/define/unit_action_define.h UnitAction 참조
   */
-  void Droid::publish_unit_control(int32_t unit, int32_t action, std::string command)
+  void Droid::publish_all_destroy()
   {
     trash_bot::UnitControl unit_control_msg;
     unit_control_msg.time_stamp     = ros::Time::now();
-    unit_control_msg.target_object  = unit;
-    unit_control_msg.action         = action;
-    unit_control_msg.command        = command;
+    unit_control_msg.target_object  = to_int(frb::UnitName::All);
+    unit_control_msg.action         = to_int(frb::UnitAction::Finish);
+    unit_control_msg.command        = "";
     _publish_unit_control.publish(unit_control_msg);
 
-    log_msg(LogInfo, 
-            0, 
-            "unit control Pub (Command Req) : " + 
-            to_string(to_enum<frb::UnitName>(unit)) + 
-            " - " + 
-            to_string<frb::UnitAction>(action));
+    // log_msg(LogInfo, 
+    //         0, 
+    //         "unit control Pub (Command Req) : " + 
+    //         to_string(to_enum<frb::UnitName>(unit)) + 
+    //         " - " + 
+    //         to_string<frb::UnitAction>(action));
     return;
   }  
 

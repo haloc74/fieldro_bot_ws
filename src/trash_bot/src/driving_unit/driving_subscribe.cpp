@@ -1,4 +1,3 @@
-
 #include "driving.h"
 
 namespace frb
@@ -33,6 +32,10 @@ namespace frb
       break;
 
     case frb::UnitAction::Init:
+      _state = frb::UnitState::Normal;
+      _action = frb::UnitAction::Init;
+      Unit::publish_unit_action_complete(to_int(frb::UnitName::Driving), to_int(frb::Error::None));
+      _action = frb::UnitAction::None;
       break;
 
     case frb::UnitAction::Move:
@@ -41,6 +44,11 @@ namespace frb
 
     case frb::UnitAction::Stop:
       _drive->test_stop();
+      break;
+
+    case frb::UnitAction::Finish:
+      destroy();
+      ros::shutdown(); // ROS 노드 종료 추가
       break;
     }    
   }

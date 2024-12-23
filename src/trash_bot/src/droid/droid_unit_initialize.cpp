@@ -7,10 +7,14 @@ namespace frb
  {  
     add_sequence(to_int(frb::UnitName::Observer), to_int(frb::UnitAction::Init));
     add_sequence(to_int(frb::UnitName::Signal), to_int(frb::UnitAction::Init));  
+    //add_sequence(to_int(frb::UnitName::Loader), to_int(frb::UnitAction::Init));
+    add_sequence(to_int(frb::UnitName::Driving), to_int(frb::UnitAction::Init));
 
      // Loader 
    // add_sequence(to_int(frb::UnitName::Loader), to_int(frb::UnitAction::Fall));
    //  add_sequence(to_int(frb::UnitName::Loader), to_int(frb::UnitAction::Raise));
+
+   log_msg(LogInfo, 0, "create_unit_initialize_sequence !!!");
  }
 
 }

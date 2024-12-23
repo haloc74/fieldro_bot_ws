@@ -45,8 +45,17 @@
 . 일단 traction 하나만을 drive class에 연결하여 node -> driving -> drive -> modbus 
   연결되는 pipeline이 정상 동작 하는지 체크. 
 
+. zlb drive 생성자 호출 확인
+. zlb drive 옵션 전달 확인
+. zlb motor 옵션 전달 확인
+
+. dead lock 상황 해결하기
 
 ID :  - JD 24.12.23
+1. driving unit "All Finish" command 처리 추가 
+
+
+ID : 66821ee - JD 24.12.23
 1. 기존 만들었던 ZlbTraction ZlbSteer 등을 모두 무시하고 
   diriving, ZlbDrive 클래스만 가지고 구동 테스트 준비 완료
 
