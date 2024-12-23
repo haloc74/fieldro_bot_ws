@@ -15,4 +15,33 @@ namespace frb
     // Motor 객체에 전달
     // todo : motor 객체 쪽에 속도값 전달
   }
+
+  void Driving::subscribe_unit_action(const trash_bot::UnitControl& msg)
+  {
+    frb::UnitName unit = to_enum<frb::UnitName>(msg.target_object);
+
+    if(unit != frb::UnitName::Driving && unit != frb::UnitName::All)      return;
+
+    frb::UnitAction action = to_enum<frb::UnitAction>(msg.action);
+
+    log_msg(LogInfo, 0, "UnitName Action Sub : " + to_string(unit) + " - " + to_string(action));
+
+    switch(action)
+    {
+    case frb::UnitAction::None:
+      LOG->add_log(frb::UnitName::Driving, frb::LogLevel::Error, 0, "UnitName Action None");
+      break;
+
+    case frb::UnitAction::Init:
+      break;
+
+    case frb::UnitAction::Move:
+      _drive->test_run();
+      break;
+
+    case frb::UnitAction::Stop:
+      _drive->test_stop();
+      break;
+    }    
+  }
 }

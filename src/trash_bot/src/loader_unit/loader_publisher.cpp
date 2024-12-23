@@ -25,7 +25,7 @@ namespace frb
                         std::string(" - error code : ") + 
                         std::to_string(frb::to_int(error)));
 
-     if(error == Error::None)
+    if(error == Error::None)
     {
       if(_action == UnitAction::None)   
       {

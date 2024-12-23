@@ -67,9 +67,9 @@ namespace frb
   * @see        enum_template.h 참조              
   */
   template<>
-  inline Direction to_int<Direction, std::string>(const std::string& value)
+  inline int32_t to_int<Direction, std::string>(const std::string& value)
   {
-    return to_int<Direction>(to_enum<Direction>(value));
+    return static_cast<int32_t>(to_enum<Direction>(value));
   }
 
 }

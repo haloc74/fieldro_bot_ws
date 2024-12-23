@@ -30,6 +30,16 @@ namespace frb
     _publish_act_velocity =
     _node_handle->advertise<geometry_msgs::Twist>("twinny_robot/ActVel", 100);
 
+    _drive = new ZlbDrive(std::bind(&Driving::action_complete_notify, 
+                                    this, 
+                                    std::placeholders::_1),
+                          std::bind(&Unit::log_msg, 
+                                    this, 
+                                    std::placeholders::_1, 
+                                    std::placeholders::_2, 
+                                    std::placeholders::_3),
+                          config_file);
+
     // spinn 구동 (생성은 Unit Class 담당)
     _spinner->start();
 
@@ -86,9 +96,39 @@ namespace frb
     return;
   }
 
-  void Driving::subscribe_unit_action(const trash_bot::UnitControl& msg)
+  void Driving::action_complete_notify(const Error error)
   {
-    // todo : 
-  }
+    log_msg(LogInfo, 0, std::string("action complete notify : ") + 
+                        frb::to_string(_action) + 
+                        std::string(" - error code : ") + 
+                        std::to_string(frb::to_int(error)));
 
+    if(error == Error::None)
+    {
+      if(_action == UnitAction::None)   
+      {
+        // todo : action이 없는데 동작 완료가 되는 상황은 에러이다 !!!!!.
+        log_msg(LogInfo, 0, "Loader : action is None !!! - What is this ???");
+        return;
+      }
+
+      // 동작 완료 보고 (정상 완료)
+      publish_unit_action_complete(to_int(_action), frb::to_int(Error::None));
+
+      // action 초기화
+      _action = frb::UnitAction::None;
+    }
+    else
+    {
+      // 동작 완료 보고 (Error)
+      publish_unit_action_complete(to_int(_action), frb::to_int(error));
+
+      // error log 표기 
+      log_msg(LogError, to_int(error), "Error : error code - " + std::to_string(to_int(error)));      
+
+      // state 변경
+      _state  = frb::UnitState::Error;
+    }    
+
+  }
 }

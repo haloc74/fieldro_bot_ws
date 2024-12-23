@@ -28,13 +28,10 @@
 
 . modbus_wrapper class 현재 option으로 slaveid 지정되던것을 
   read, write 할때 id 전달하는 방향으로 수정
+
 . modbus_wrapper class에 _last_slave_id 변수 만들어서 
   _last_slave_id와 read, write 할 때 요청되는 slave id가 다를 경우에만
   set_slave_id() 함수 호출 되도록 하기 
-
-  . 일단 traction 하나만을 drive class에 연결하여 node -> driving -> drive -> modbus 
-    연결되는 pipeline이 정상 동작 하는지 체크. 
-
 
 . 구동모터 추가
 . Differancial Model로 일단 프로그래밍 하기 
@@ -45,8 +42,15 @@
 . zlb motor command를 통한 traction 테스트
 . zlb motor command를 통한 steer 테스트
 
+. 일단 traction 하나만을 drive class에 연결하여 node -> driving -> drive -> modbus 
+  연결되는 pipeline이 정상 동작 하는지 체크. 
 
-ID :  - JD 24.12.21
+
+ID :  - JD 24.12.23
+1. 기존 만들었던 ZlbTraction ZlbSteer 등을 모두 무시하고 
+  diriving, ZlbDrive 클래스만 가지고 구동 테스트 준비 완료
+
+ID : dbf8fba - JD 24.12.21
 1. define/direction_define.h 추가
 2. Driving Class 추가
 

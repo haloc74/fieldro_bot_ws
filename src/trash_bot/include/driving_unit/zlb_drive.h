@@ -4,13 +4,17 @@
 #include <functional>
 #include <cstdint>
 #include <mutex>
+#include <deque>
 
-#include "zlb_resisters.h"
+#include "zlb_packet.h"
 #include "zlb_traction.h"
 #include "zlb_steer.h"
 
+#include "motor_runtime_state.h"
+
 #include "define/direction_define.h"
 #include "communication/modbus_wrapper.h"
+#include "helper/thread_action_info.h"
 
 
 namespace frb
@@ -21,6 +25,8 @@ namespace frb
     Steer,
     End,
   };
+
+
 
   /*
     속도값이 0 이면 position 무시 (정지)
@@ -37,31 +43,39 @@ namespace frb
   public:
     ZlbDrive(std::function<void(frb::Error)> action_result_callback, 
                  std::function<void(frb::LogLevel, int32_t, const std::string&)> log_callback,
-                 std::string config_file) {}
+                 std::string config_file);
 
-    virtual ~ZlbDrive() {}
+    virtual ~ZlbDrive();
 
-    void update() {}
+    
 
     frb::Error control_move(frb::Direction direction, int32_t position, int32_t velocity,
                             int32_t check_interval, int32_t timeout_millisec);
 
-    frb::Error get_motor_status()     { return _error; }
-
-    int32_t get_position(SlaveID id)  {}
-    Comstatus get_comm_state()        { return _comm_state; }
+    CommStatus get_comm_state()        { return _comm_state; }
     bool get_servo_power()            { return _servo_power; } 
-    bool is_controllable()            {}
-    bool stop_motor()                 {}
 
+    void test_run();
+    void test_stop();                    // break on
 
   protected:
-    ThreadActionInfo* _thread;            // 객체 main thread
-    ModubsWrapper*    _modbus;            // modbus 통신 객체
-    CommStatus        _comm_state;        // modbus 연결 상태
-    MotorRuntimeState _motor_status;      // motor 상태
-    bool              _servo_power;       // 서보 전원 상태
+    void update();
+    void modbus_state_receive(const CommStatus notify);  // modbus 상태 변경 통보 (하위 : callback)
 
+    ThreadActionInfo* _thread;            // 객체 main thread
+    ModbusWrapper*    _modbus;            // modbus 통신 객체
+    CommStatus        _comm_state;        // modbus 연결 상태
+    //MotorRuntimeState _motor_status;      // motor 상태
+    bool              _servo_power;       // servo power 상태
+
+    std::deque<ZlbPacket*> _packets;      // motor 제어 패킷 리스트
+    std::mutex            _lock_packets;  // thread lock
+    void add_packet(int32_t address, int32_t value, MODBUS_FUNC_CODE code);
+    void packet_process();                // motor 제어 패킷 전송
+    void clear_packets();                 // motor 제어 패킷 리스트 초기화
+    
+    std::function<void(frb::Error)>  action_result_notify;  // 동작 완료 통보 (상위 : callback)
+    std::function<void(frb::LogLevel, int32_t, const std::string&)> log_msg_notify;  // 로그 통보 (상위 : callback)    
   };
 
 
