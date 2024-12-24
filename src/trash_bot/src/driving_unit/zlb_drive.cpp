@@ -104,6 +104,8 @@ namespace frb
       std::deque<ZlbPacket*>::iterator it = _packets.begin();
       frb::Error ret = frb::Error::None;
 
+      (*it)->_sended = true;
+
       if((*it)->_code == MODBUS_FUNC_CODE::READ_HOLDING_REGISTERS)
       {
         // todo : read holding registers
@@ -121,7 +123,11 @@ namespace frb
                                             reinterpret_cast<uint16_t*>(&((*it)->_value)));
       }
 
-      (*it)->_sended = true;
+      if(ret != frb::Error::None)
+      {
+        log_msg_notify(frb::LogLevel::Error, 0, "ZlbDrive::packet_process : modbus write error");
+        return;
+      }
 
       usleep(1000);
     }
@@ -130,7 +136,7 @@ namespace frb
   void ZlbDrive::test_run()
   {
     add_packet(ServoFD1X5::OPMODE_REGISTER, ServoFD1X5::OPMODE_VALUES::VELOCITY, MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER);
-    add_packet(ServoFD1X5::VELOCITY_COMMAND_REGISTER, 100, MODBUS_FUNC_CODE::WRITE_MULTIPLE_REGISTERS);
+    add_packet(ServoFD1X5::VELOCITY_COMMAND_REGISTER, 500, MODBUS_FUNC_CODE::WRITE_MULTIPLE_REGISTERS);
     add_packet(ServoFD1X5::CONTROL_REGISTER, ServoFD1X5::CONTROL_VALUES::START, MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER);
     return;
   }

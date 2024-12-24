@@ -5,7 +5,7 @@ namespace frb
 {
   ThreadActionInfo::ThreadActionInfo(std::string file_name, std::string session_name)
   {
-    _active = false;
+    _active = true;
     _hz     = 10;
     _sleep  = 0;
     

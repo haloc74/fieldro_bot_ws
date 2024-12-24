@@ -45,13 +45,22 @@
 . 일단 traction 하나만을 drive class에 연결하여 node -> driving -> drive -> modbus 
   연결되는 pipeline이 정상 동작 하는지 체크. 
 
-. zlb drive 생성자 호출 확인
 . zlb drive 옵션 전달 확인
 . zlb motor 옵션 전달 확인
 
-. dead lock 상황 해결하기
 
-ID :  - JD 24.12.23
+
+
+ID :  - JD 24.12.24
+1. dead lock 상황 해결하기
+2. zlb drive 생성자 호출 확인
+3. 가끔씩 droid에서 create init scenario 이후에 멈추는건 왜 그런거지 ?????
+   thread 생성시 thread bind 한 이후에 active 플래그를 true로 바꿔 주게 되면
+   binding 된 update 함수가 호출 되고 내부의 while문 플래그가 false이기 때문에
+   수행행을 건너뛰고 함수가 종료 되어 버린다.
+
+
+ID : 6a5d411 - JD 24.12.23
 1. driving unit "All Finish" command 처리 추가 
 
 

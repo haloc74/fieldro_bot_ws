@@ -1,8 +1,0 @@
-Header header
-
-uint8 RESET_COMMAND_NO=0
-uint8 RESET_COMMAND_MASTER_MCU=1
-uint8 RESET_COMMAND_SLAVE_MCU=2
-uint8 RESET_COMMAND_ALL_MCU=3
-
-uint8 command

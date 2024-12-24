@@ -47,7 +47,6 @@ namespace frb
     // thread
     _update_thread  = new ThreadActionInfo("config/droid.yaml", "main");
     _update_thread->_thread = std::thread(std::bind(&Droid::update, this));  
-    _update_thread->_active = true;
   }
 
   /**
@@ -85,6 +84,7 @@ namespace frb
     while(_update_thread->_active)
     {
       // topic message 발송
+      //log_msg(LogInfo, 0, "message_publish !!!");
       message_publish();
 
       // thread Hz 싱크 및 독점 방지를 위한 sleep
@@ -105,7 +105,14 @@ namespace frb
   */
   void Droid::add_sequence(int32_t unit, int32_t action, std::string command)
   {
+    auto start = std::chrono::steady_clock::now();
     std::lock_guard<std::mutex> lock(_lock);
+    auto end = std::chrono::steady_clock::now();
+    auto diff = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+    if(diff.count() > 100) 
+    { // 락 획득이 100ms 이상 걸린 경우
+        log_msg(LogInfo, 0, "Lock acquisition took " + std::to_string(diff.count()) + "ms");
+    }
 
     if(unit == to_int(frb::UnitName::All) && 
       action == to_int(frb::UnitAction::Finish))

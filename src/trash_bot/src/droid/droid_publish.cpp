@@ -12,10 +12,11 @@ namespace frb
   */
   void Droid::message_publish()
   {
-  //  std::lock_guard<std::mutex> lock(_lock);
-
+    std::lock_guard<std::mutex> lock(_lock);
+    
     if(!_pending_sequence.empty())    return;  // 응답 대기중인 요청이 없을 경우에만 신규 요청 발송
     if(_control_sequence.empty())    return;   // control_sequence에 요소가 있을 경우 발송
+
 
     // 실제 메세지 발송      
     publish_unit_control(std::move(_control_sequence.front()));
@@ -61,8 +62,6 @@ namespace frb
   */
   void Droid::publish_unit_control(std::unique_ptr<trash_bot::UnitControl> unit_control_msg)
   {
-    std::lock_guard<std::mutex> lock(_lock);
-
     log_msg(LogInfo, 
             0, 
             "unit control Pub : " + 

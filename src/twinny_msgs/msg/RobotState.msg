@@ -1,2 +1,0 @@
-twinny_msgs/Pose3D pose
-twinny_msgs/Pose3D velocity
