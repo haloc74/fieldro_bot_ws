@@ -58,7 +58,6 @@ namespace frb
 
     // main update thread
     _update_thread = new ThreadActionInfo("config/io.yaml", "main");
-    _update_thread->_active = true;
     _update_thread->_thread = std::thread(std::bind(&Wago::update, this));
   }
 

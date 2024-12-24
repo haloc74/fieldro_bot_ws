@@ -48,7 +48,11 @@
 . zlb drive 옵션 전달 확인
 . zlb motor 옵션 전달 확인
 
-
+ID :  - JD 24.12.24
+1. ThreadActionInfo 생성자에서 
+  _action 플래그를 true로 하여 binding 되자 마자 thread가 동작 되도록 변경
+  binding 먼저되고 action이 나중에 true로 되게 되면 update() 함수 내의 while 문을
+  지나쳐서 함수가 종료되는 경우가 발생한다.
 
 
 ID :  - JD 24.12.24

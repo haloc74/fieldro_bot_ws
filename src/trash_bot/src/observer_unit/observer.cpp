@@ -38,7 +38,6 @@ namespace frb
 
     // main thread
     _update_thread = new ThreadActionInfo("config/observer.yaml", "main");
-    _update_thread->_active = true;
     _update_thread->_thread = std::thread(std::bind(&Observer::update, this));    
   }
 
