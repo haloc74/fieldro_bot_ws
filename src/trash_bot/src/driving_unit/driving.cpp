@@ -51,6 +51,8 @@ namespace frb
   Driving::~Driving()
   {
     // 객체 소멸 topic 메세지 전송을 위한 약간의 시간 대기
+    safe_delete(_drive);
+
     _update_thread->_active = false;
     safe_delete(_update_thread);
   }

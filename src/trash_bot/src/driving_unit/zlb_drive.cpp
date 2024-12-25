@@ -4,6 +4,11 @@
 
 namespace frb
 {
+  #define RESOLUTION 65536
+  #define FACTOR 1875.0
+  #define RATIO_MOTOR 35
+  #define RATIO_STEER 5.5
+
   ZlbDrive::ZlbDrive(std::function<void(frb::Error)> action_result_callback, 
                  std::function<void(frb::LogLevel, int32_t, const std::string&)> log_callback,
                  std::string config_file)
@@ -29,6 +34,9 @@ namespace frb
   ZlbDrive::~ZlbDrive()
   {
     // todo : servor power off
+    test_stop();
+    usleep(5000000);
+
     std::this_thread::sleep_for(std::chrono::seconds(1));
 
     safe_delete(_modbus);
@@ -113,12 +121,14 @@ namespace frb
       else if((*it)->_code == MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER)
       {
         // todo : write single register
-        ret = _modbus->write_data_bits((*it)->_address, (*it)->_value);
+        log_msg_notify(LogInfo, 0, "ZlbDrive::packet_process : write single register");
+        ret = _modbus->write_data_register((*it)->_address, (*it)->_value);
       }
       else if((*it)->_code == MODBUS_FUNC_CODE::WRITE_MULTIPLE_REGISTERS)
       {
+        log_msg_notify(LogInfo, 0, "ZlbDrive::packet_process : write multiple registers");
         // todo : write multiple registers
-        ret = _modbus->write_data_register((*it)->_address, 
+        ret = _modbus->write_data_registers((*it)->_address, 
                                             2, 
                                             reinterpret_cast<uint16_t*>(&((*it)->_value)));
       }
@@ -129,15 +139,33 @@ namespace frb
         return;
       }
 
-      usleep(1000);
+      usleep(100000);
     }
   }
 
   void ZlbDrive::test_run()
   {
+    log_msg_notify(LogInfo, 0, "ZlbDrive::test_run function");
+
+    log_msg_notify(LogInfo, 0, "ZlbDrive::test_run : set stop");
+    add_packet(ServoFD1X5::CONTROL_REGISTER, ServoFD1X5::CONTROL_VALUES::STOP, MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER);
+
+    log_msg_notify(LogInfo, 0, "ZlbDrive::test_run : set velocity mode");
     add_packet(ServoFD1X5::OPMODE_REGISTER, ServoFD1X5::OPMODE_VALUES::VELOCITY, MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER);
-    add_packet(ServoFD1X5::VELOCITY_COMMAND_REGISTER, 500, MODBUS_FUNC_CODE::WRITE_MULTIPLE_REGISTERS);
+
+    log_msg_notify(LogInfo, 0, "ZlbDrive::test_run : set direction");
+    add_packet(ServoFD1X5::VELOCITY_DIRECTION_REGISTER, 0, MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER);
+
+    log_msg_notify(LogInfo, 0, "ZlbDrive::test_run : set velocity value");
+
+    double   exact     = (static_cast<double>(500) * 512 * RESOLUTION) / FACTOR;
+    uint32_t converted = static_cast<uint32_t>(exact + 0.5);
+
+    add_packet(ServoFD1X5::VELOCITY_COMMAND_REGISTER, converted, MODBUS_FUNC_CODE::WRITE_MULTIPLE_REGISTERS);
+
+    log_msg_notify(LogInfo, 0, "ZlbDrive::test_run : start");
     add_packet(ServoFD1X5::CONTROL_REGISTER, ServoFD1X5::CONTROL_VALUES::START, MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER);
+
     return;
   }
 
@@ -160,7 +188,6 @@ namespace frb
   void ZlbDrive::add_packet(int32_t address, int32_t value, MODBUS_FUNC_CODE code)
   {
     std::lock_guard<std::mutex> lock(_lock_packets);
-
     _packets.push_back(new ZlbPacket(address, value, code));
   }
 

@@ -81,7 +81,7 @@ namespace frb
 
     uint16_t value = on ? (int16_t)SERVO_VALUE::POWER_ON : (int16_t)SERVO_VALUE::POWER_OFF;
 
-    frb::Error ret = _comm->write_data_register((int)SERVO_ADDRESS::CTRL_POWER, 1, &value);
+    frb::Error ret = _comm->write_data_registers((int)SERVO_ADDRESS::CTRL_POWER, 1, &value);
 
     if(ret != frb::Error::None)
     {
@@ -167,7 +167,7 @@ namespace frb
     value[6] = 0x00;                           // delay time ms
     value[7] = 0x10;                           // Path Number
 
-    frb::Error error = _comm->write_data_register((int)SERVO_ADDRESS::CTRL_PR0, sizeof(value), value);
+    frb::Error error = _comm->write_data_registers((int)SERVO_ADDRESS::CTRL_PR0, sizeof(value), value);
 
     if(error != frb::Error::None)
     {

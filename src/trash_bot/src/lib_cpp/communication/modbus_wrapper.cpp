@@ -272,6 +272,7 @@ namespace frb
     if(write_bits != 1)
     {
       LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, "modbus_write_bit fail !!!");
+      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, std::string("Error Number : ") + modbus_strerror(errno));
       disconnect_modbus_tcp();
       return frb::Error::WriteFail;
     }
@@ -319,18 +320,27 @@ namespace frb
     return frb::Error::None;
   }
 
-  frb::Error ModbusWrapper::write_data_register(int32_t address, int16_t len, uint16_t* value)
+  frb::Error ModbusWrapper::write_data_registers(int32_t address, int16_t len, uint16_t* value)
   {
     std::lock_guard<std::mutex> lock(_lock);
-    
     int32_t ret = modbus_write_registers(_modbus, address, len, value);
-
     if(len != ret)
     {
       disconnect();
       return frb::Error::WriteFail;
     }
+    return frb::Error::None;
+  }
 
+  frb::Error ModbusWrapper::write_data_register(int32_t address, uint16_t value)
+  {
+    std::lock_guard<std::mutex> lock(_lock);
+    int32_t ret = modbus_write_register(_modbus, address, value);
+    if(ret == -1)
+    {
+      disconnect();
+      return frb::Error::WriteFail;
+    }
     return frb::Error::None;
   }
 }
