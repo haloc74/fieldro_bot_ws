@@ -1,6 +1,7 @@
 
 #include "zlb_drive.h"
 #include "helper/helper.h"
+#include <bitset>
 
 namespace frb
 {
@@ -18,7 +19,8 @@ namespace frb
     log_msg_notify        = log_callback;
 
     _comm_state   = CommStatus::Disconnect;
-    //_motor_status = MotorRuntimeState::None;
+    _motor_status = ZlbStatus::Fault;
+
     _servo_power  = false;
 
     _modbus = new ModbusWrapper(ModbusType::RS485,
@@ -43,6 +45,40 @@ namespace frb
 
     _thread->_active = false;
     safe_delete(_thread);
+  }
+
+  /**
+  * @brief      motor 상태를 확인한다.
+  * @return     ZlbStatus : motor 상태
+  * @note       zlb_status.h 참조
+  */
+  ZlbStatus ZlbDrive::get_motor_status()
+  {
+    std::lock_guard<std::mutex> lock(_lock_packets);
+    frb::Error ret = frb::Error::None;
+    uint16_t status[2] = { 0, 0 };
+
+    //ret = _modbus->read_data_registers(ServoFD1X5::STATUSWORD_REGISTER, 2, reinterpret_cast<uint16_t*>(&status));
+    ret = _modbus->read_data_registers(ServoFD1X5::STATUSWORD_REGISTER, 1, status);
+    
+    if(ret != frb::Error::None)
+    {
+      log_msg_notify(frb::LogLevel::Error, 0, "ZlbDrive::get_motor_status : modbus read error");
+      _motor_status = ZlbStatus::Fault;
+    }
+    else
+    {
+      _motor_status = to_enum<ZlbStatus>(int32_t(status[0]));
+
+      std::bitset<16> status_bit(status[0]);
+      log_msg_notify(frb::LogLevel::Info, 
+                      0, 
+                      "ZlbDrive::get_motor_status : motor status - " + 
+                      status_bit.to_string());
+
+      action_result_notify(ret);
+    }
+    return _motor_status;
   }
 
   void ZlbDrive::update()
@@ -117,6 +153,7 @@ namespace frb
       if((*it)->_code == MODBUS_FUNC_CODE::READ_HOLDING_REGISTERS)
       {
         // todo : read holding registers
+        ret = _modbus->read_data_registers((*it)->_address, 2, reinterpret_cast<uint16_t*>(&((*it)->_value)));
       }
       else if((*it)->_code == MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER)
       {
@@ -138,40 +175,67 @@ namespace frb
         log_msg_notify(frb::LogLevel::Error, 0, "ZlbDrive::packet_process : modbus write error");
         return;
       }
+      else if((*it)->_action != -1)
+      {
+        action_result_notify(ret);
+      }
 
       usleep(100000);
     }
+  }
+
+  /**
+  * @brief      rpm 값을 zlb rpm으로 변환
+  * @param[in]  uint32_t rpm  : 변환할 rpm 값
+  * @return     uint32_t      : 변환된 zlb rpm 값
+  * @note       
+  *   #define RESOLUTION 65536
+  *   #define FACTOR 1875.0         // 이 값이 어떻게 나온값인가 ?
+  *                                 // 아래 계산에서 512 값은 또 어디에서 온것인가 ?
+  *   #define RATIO_MOTOR 35
+  *   #define RATIO_STEER 5.5
+  */
+  uint32_t ZlbDrive::convert_rpm_to_zlb_rpm(uint32_t rpm)
+  {
+    double   exact     = (static_cast<double>(rpm) * 512 * RESOLUTION) / FACTOR;
+    uint32_t converted = static_cast<uint32_t>(exact + 0.5);
+
+    return converted;
   }
 
   void ZlbDrive::test_run()
   {
     log_msg_notify(LogInfo, 0, "ZlbDrive::test_run function");
 
-    log_msg_notify(LogInfo, 0, "ZlbDrive::test_run : set stop");
-    add_packet(ServoFD1X5::CONTROL_REGISTER, ServoFD1X5::CONTROL_VALUES::STOP, MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER);
+    // motor 멈춤
+    //add_packet(ServoFD1X5::CONTROL_REGISTER, ServoFD1X5::CONTROL_VALUES::STOP, MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER);
 
-    log_msg_notify(LogInfo, 0, "ZlbDrive::test_run : set velocity mode");
+    // 속도 모드로 전환 (direction의 경우 한번만 해주면 된다)
     add_packet(ServoFD1X5::OPMODE_REGISTER, ServoFD1X5::OPMODE_VALUES::VELOCITY, MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER);
+    
+    // 방향값 설정하는 부분 (한번만 해주면 된다)
+    //add_packet(ServoFD1X5::VELOCITY_DIRECTION_REGISTER, 0, MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER);
 
-    log_msg_notify(LogInfo, 0, "ZlbDrive::test_run : set direction");
-    add_packet(ServoFD1X5::VELOCITY_DIRECTION_REGISTER, 0, MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER);
+    // 속도값 설정
+    // question : rpm 값이 250이면 어떻게 변환되는지 확인 필요
+    uint32_t rpm = convert_rpm_to_zlb_rpm(250);  
+    add_packet(ServoFD1X5::VELOCITY_COMMAND_REGISTER, rpm, MODBUS_FUNC_CODE::WRITE_MULTIPLE_REGISTERS);
 
-    log_msg_notify(LogInfo, 0, "ZlbDrive::test_run : set velocity value");
-
-    double   exact     = (static_cast<double>(500) * 512 * RESOLUTION) / FACTOR;
-    uint32_t converted = static_cast<uint32_t>(exact + 0.5);
-
-    add_packet(ServoFD1X5::VELOCITY_COMMAND_REGISTER, converted, MODBUS_FUNC_CODE::WRITE_MULTIPLE_REGISTERS);
-
-    log_msg_notify(LogInfo, 0, "ZlbDrive::test_run : start");
-    add_packet(ServoFD1X5::CONTROL_REGISTER, ServoFD1X5::CONTROL_VALUES::START, MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER);
+    // motor 구동
+    add_packet(ServoFD1X5::CONTROL_REGISTER, 
+                ServoFD1X5::CONTROL_VALUES::START, 
+                MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER,
+                to_int(frb::UnitAction::Move));
 
     return;
   }
 
   void ZlbDrive::test_stop()
   {
-    add_packet(ServoFD1X5::CONTROL_REGISTER, ServoFD1X5::CONTROL_VALUES::STOP, MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER);
+    add_packet(ServoFD1X5::CONTROL_REGISTER, 
+                ServoFD1X5::CONTROL_VALUES::STOP, 
+                MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER,
+                to_int(frb::UnitAction::Stop));
     return;
   }
 
@@ -185,10 +249,10 @@ namespace frb
     return frb::Error::None;
   }
 
-  void ZlbDrive::add_packet(int32_t address, int32_t value, MODBUS_FUNC_CODE code)
+  void ZlbDrive::add_packet(int32_t address, int32_t value, MODBUS_FUNC_CODE code, int32_t action)
   {
     std::lock_guard<std::mutex> lock(_lock_packets);
-    _packets.push_back(new ZlbPacket(address, value, code));
+    _packets.push_back(new ZlbPacket(address, value, code, action));
   }
 
   void ZlbDrive::clear_packets()

@@ -39,11 +39,18 @@ namespace frb
       break;
 
     case frb::UnitAction::Move:
+      _action = frb::UnitAction::Move;
       _drive->test_run();
       break;
 
     case frb::UnitAction::Stop:
+      _action = frb::UnitAction::Stop;
       _drive->test_stop();
+      break;
+
+    case frb::UnitAction::GetStatus:
+      _action = frb::UnitAction::GetStatus;
+      _drive->get_motor_status();
       break;
 
     case frb::UnitAction::Finish:

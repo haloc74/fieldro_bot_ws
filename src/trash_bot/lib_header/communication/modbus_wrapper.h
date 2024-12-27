@@ -46,11 +46,10 @@ namespace frb
     void disconnect();
     
     frb::Error read_data_bits(int32_t address, int32_t read_len, uint8_t* dest);
-    frb::Error write_data_bits(int32_t address, int32_t status);
-
-    frb::Error write_data_register(int32_t address, uint16_t value);
-
     frb::Error read_data_registers(int32_t address, int32_t read_len, uint16_t* dest);
+
+    frb::Error write_data_bits(int32_t address, int32_t status);
+    frb::Error write_data_register(int32_t address, uint16_t value);
     frb::Error write_data_registers(int32_t address, int16_t len, uint16_t* value);
 
   protected:

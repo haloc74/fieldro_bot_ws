@@ -36,10 +36,24 @@
 . Driving : 주행 subscribe 추가
 . Driving : act_velocity 추가
 
+. zlb_drive.cpp에 선언및 정의된
+    #define RESOLUTION 65536
+    #define FACTOR 1875.0
+    #define RATIO_MOTOR 35
+    #define RATIO_STEER 5.5
+  이상의 값이 옵션 값인지 고정 값인지 확인해서 옵션으로 설정 할 수 있으면 설정하자.
+
+
+. get_motor_state() 함수 동작 방법 고민
+
+
+ID :  - JD 24.12.27
+1. motor state 값 획득하는 함수 추가하기
+
 //=========================================================
 //=========================================================  
 
-ID :  - JD 24.12.25
+ID : d02cc4f - JD 24.12.25
 1. zlb drive 옵션 전달 확인
 2. zlb motor 옵션 전달 확인
 3. modbus_wrapper class

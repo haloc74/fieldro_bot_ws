@@ -14,15 +14,17 @@ namespace frb
       _sended   = false;
       _address  = 0;
       _value    = 0;
-      _code = MODBUS_FUNC_CODE::READ_HOLDING_REGISTERS;
+      _code     = MODBUS_FUNC_CODE::READ_HOLDING_REGISTERS;
+      _action   = -1;
     }
     
-    ZlbPacket(int32_t address, int32_t value, MODBUS_FUNC_CODE code)
+    ZlbPacket(int32_t address, int32_t value, MODBUS_FUNC_CODE code, int32_t action)
     {
       _address  = address;
       _value    = value;
       _code     = code;
       _sended   = false;
+      _action   = action;
     }
 
     // 복사 생성자
@@ -61,9 +63,10 @@ namespace frb
 
     ~ZlbPacket()    {    }
 
-    int32_t           _address;     // 주소값
-    int32_t           _value;       // 값  (single : opmode value, multiple : position, velocity)
-    MODBUS_FUNC_CODE  _code;        // function code
-    bool              _sended;      // 전송 여부
+    int32_t           _address; // 주소값
+    int32_t           _value;   // 값  (single : opmode value, multiple : position, velocity)
+    MODBUS_FUNC_CODE  _code;    // function code
+    bool              _sended;  // 전송 여부
+    int32_t           _action;  // 동작 완료 여부
   };  
 }

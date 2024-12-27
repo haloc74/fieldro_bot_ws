@@ -9,6 +9,7 @@
 #include "zlb_packet.h"
 #include "zlb_traction.h"
 #include "zlb_steer.h"
+#include "zlb_status.h"
 
 #include "motor_runtime_state.h"
 
@@ -52,8 +53,9 @@ namespace frb
     frb::Error control_move(frb::Direction direction, int32_t position, int32_t velocity,
                             int32_t check_interval, int32_t timeout_millisec);
 
-    CommStatus get_comm_state()        { return _comm_state; }
-    bool get_servo_power()            { return _servo_power; } 
+    CommStatus  get_comm_state()        { return _comm_state;   }
+    ZlbStatus   get_motor_status();//      { return _motor_status; }
+    bool        get_servo_power()       { return _servo_power; } 
 
     void test_run();
     void test_stop();                    // break on
@@ -65,17 +67,20 @@ namespace frb
     ThreadActionInfo* _thread;            // 객체 main thread
     ModbusWrapper*    _modbus;            // modbus 통신 객체
     CommStatus        _comm_state;        // modbus 연결 상태
+    ZlbStatus         _motor_status;      // motor 상태
     //MotorRuntimeState _motor_status;      // motor 상태
     bool              _servo_power;       // servo power 상태
 
     std::deque<ZlbPacket*> _packets;      // motor 제어 패킷 리스트
     std::mutex            _lock_packets;  // thread lock
-    void add_packet(int32_t address, int32_t value, MODBUS_FUNC_CODE code);
+    void add_packet(int32_t address, int32_t value, MODBUS_FUNC_CODE code, int32_t action = -1);
     void packet_process();                // motor 제어 패킷 전송
     void clear_packets();                 // motor 제어 패킷 리스트 초기화
     
     std::function<void(frb::Error)>  action_result_notify;  // 동작 완료 통보 (상위 : callback)
     std::function<void(frb::LogLevel, int32_t, const std::string&)> log_msg_notify;  // 로그 통보 (상위 : callback)    
+
+    uint32_t convert_rpm_to_zlb_rpm(uint32_t rpm);  // rpm -> zlb rpm 변환
   };
 
 
