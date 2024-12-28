@@ -15,8 +15,8 @@ namespace frb
                  std::string config_file)
   {
     // callback 함수 등록 
-    action_result_notify  = action_result_callback;
-    log_msg_notify        = log_callback;
+    notify_action_result  = action_result_callback;
+    notify_log_msg        = log_callback;
 
     _comm_state   = CommStatus::Disconnect;
     _motor_status = to_int(ZlbStatus::Fault);
@@ -26,7 +26,7 @@ namespace frb
     _modbus = new ModbusWrapper(ModbusType::RS485,
                               config_file, 
                               "motor",
-                              std::bind(&ZlbDrive::modbus_state_receive, this, std::placeholders::_1));
+                              std::bind(&ZlbDrive::receive_modbus_state, this, std::placeholders::_1));
 
     _thread = new ThreadActionInfo(config_file, "motor");
     _thread->_active = true;
@@ -62,7 +62,7 @@ namespace frb
     
     if(ret != frb::Error::None)
     {
-      log_msg_notify(frb::LogLevel::Error, 0, "ZlbDrive::get_motor_status : modbus read error");
+      notify_log_msg(frb::LogLevel::Error, 0, "ZlbDrive::get_motor_status : modbus read error");
       _motor_status = to_int(ZlbStatus::Fault);
     }
     else
@@ -70,7 +70,7 @@ namespace frb
       _motor_status = static_cast<int32_t>(status);
 
       std::bitset<16> status_bit(status);
-      log_msg_notify(frb::LogLevel::Info, 
+      notify_log_msg(frb::LogLevel::Info, 
                       0, 
                       "ZlbDrive::get_motor_status : motor status - " + 
                       status_bit.to_string());
@@ -101,7 +101,7 @@ namespace frb
   * @param[in]  const CommStatus notify : 변경된 상태
   * @note       
   */
-  void ZlbDrive::modbus_state_receive(const CommStatus notify)
+  void ZlbDrive::receive_modbus_state(const CommStatus notify)
   {
     if(notify == _comm_state)     return;
 
@@ -110,7 +110,7 @@ namespace frb
     switch(_comm_state)
     {
     case CommStatus::Connect:
-      log_msg_notify(frb::LogLevel::Info, 0, "ZlbDrive::modbus_state_receive : modbus connect");
+      notify_log_msg(frb::LogLevel::Info, 0, "ZlbDrive::modbus_state_receive : modbus connect");
       confirm_motor_connection();
       break;
     }
@@ -178,12 +178,12 @@ namespace frb
       else if((*it)->_code == MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER)
       {
         // todo : write single register
-        log_msg_notify(LogInfo, 0, "ZlbDrive::packet_process : write single register");
+        notify_log_msg(LogInfo, 0, "ZlbDrive::packet_process : write single register");
         ret = _modbus->write_data_register((*it)->_address, (*it)->_value);
       }
       else if((*it)->_code == MODBUS_FUNC_CODE::WRITE_MULTIPLE_REGISTERS)
       {
-        log_msg_notify(LogInfo, 0, "ZlbDrive::packet_process : write multiple registers");
+        notify_log_msg(LogInfo, 0, "ZlbDrive::packet_process : write multiple registers");
         // todo : write multiple registers
         ret = _modbus->write_data_registers((*it)->_address, 
                                             2, 
@@ -192,12 +192,12 @@ namespace frb
 
       if(ret != frb::Error::None)
       {
-        log_msg_notify(frb::LogLevel::Error, 0, "ZlbDrive::packet_process : modbus write error");
+        notify_log_msg(frb::LogLevel::Error, 0, "ZlbDrive::packet_process : modbus write error");
         return;
       }
       else if((*it)->_action != -1)
       {
-        action_result_notify(ret);
+        notify_action_result(ret);
       }
 
       usleep(10000);

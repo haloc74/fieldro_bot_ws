@@ -6,7 +6,7 @@ namespace frb
 {
   void ZlbDrive::test_run()
   {
-    log_msg_notify(LogInfo, 0, "ZlbDrive::test_run function");
+    notify_log_msg(LogInfo, 0, "ZlbDrive::test_run function");
 
     // motor 멈춤
     //add_packet(ServoFD1X5::CONTROL_REGISTER, ServoFD1X5::CONTROL_VALUES::STOP, MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER);

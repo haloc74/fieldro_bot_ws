@@ -82,12 +82,12 @@ namespace frb
 
   protected:
     // 동작 완료 통보 (상위 : callback)
-    std::function<void(frb::Error)> action_result_notify;  
+    std::function<void(frb::Error)> notify_action_result;  
 
     // 로그 통보 (상위 : callback)    
-    std::function<void(frb::LogLevel, int32_t, const std::string&)> log_msg_notify;    
+    std::function<void(frb::LogLevel, int32_t, const std::string&)> notify_log_msg;    
 
     // modbus 상태 변경 통보 (하위 : callback)
-    void modbus_state_receive(const CommStatus notify);  
+    void receive_modbus_state(const CommStatus notify);  
   };
 }
