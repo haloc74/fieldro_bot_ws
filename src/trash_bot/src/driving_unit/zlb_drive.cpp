@@ -57,14 +57,23 @@ namespace frb
   */
   int32_t ZlbDrive::get_motor_status()
   {
+    int32_t traction_ret = get_motor_status(_slave_id[to_int(SlaveId::Traction)]);
+    int32_t steering_ret = get_motor_status(_slave_id[to_int(SlaveId::Steering)]);
+
+    return 0;
+  }
+
+  int32_t ZlbDrive::get_motor_status(int32_t slave_id)
+  {
     std::lock_guard<std::mutex> lock(_lock_packets);
    
     uint16_t  status  = 0;
-    frb::Error ret    = _modbus->read_data_registers(ServoFD1X5::STATUSWORD_REGISTER, 1, &status);
-    
-    if(ret != frb::Error::None)
+    frb::Error ret    = _modbus->read_data_registers(slave_id, ServoFD1X5::STATUSWORD_REGISTER, 1, &status);
+     if(ret != frb::Error::None)
     {
-      notify_log_msg(frb::LogLevel::Error, 0, "ZlbDrive::get_motor_status : modbus read error");
+      notify_log_msg(frb::LogLevel::Error, 0, 
+                     std::string("ZlbDrive::get_motor_status : modbus read error") + 
+                     std::to_string(slave_id));
       _motor_status = to_int(ZlbStatus::Fault);
     }
     else
@@ -74,7 +83,10 @@ namespace frb
       std::bitset<16> status_bit(status);
       notify_log_msg(frb::LogLevel::Info, 
                       0, 
-                      "ZlbDrive::get_motor_status : motor status - " + 
+                      std::string("ZlbDrive::get_motor_status [ ") +
+                      std::to_string(slave_id) +
+                      std::string(" ]") +
+                      std::string(": motor status - ") + 
                       status_bit.to_string());
     }
 
@@ -127,7 +139,7 @@ namespace frb
   */
   void ZlbDrive::confirm_motor_connection()
   {
-    int32_t status = get_motor_status();
+    int32_t status = get_motor_status(to_int(frb::SlaveId::Traction));
 
     if(!_servo_power)
     {
@@ -177,21 +189,21 @@ namespace frb
       if((*it)->_code == MODBUS_FUNC_CODE::READ_HOLDING_REGISTERS)
       {
         // todo : read holding registers
-        ret = _modbus->read_data_registers((*it)->_address, 2, reinterpret_cast<uint16_t*>(&((*it)->_value)));
+        ret = _modbus->read_data_registers((*it)->_slave_id, (*it)->_address, 
+                                            2, reinterpret_cast<uint16_t*>(&((*it)->_value)));
       }
       else if((*it)->_code == MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER)
       {
         // todo : write single register
         notify_log_msg(LogInfo, 0, "ZlbDrive::packet_process : write single register");
-        ret = _modbus->write_data_register((*it)->_address, (*it)->_value);
+        ret = _modbus->write_data_register((*it)->_slave_id, (*it)->_address, (*it)->_value);
       }
       else if((*it)->_code == MODBUS_FUNC_CODE::WRITE_MULTIPLE_REGISTERS)
       {
         notify_log_msg(LogInfo, 0, "ZlbDrive::packet_process : write multiple registers");
         // todo : write multiple registers
-        ret = _modbus->write_data_registers((*it)->_address, 
-                                            2, 
-                                            reinterpret_cast<uint16_t*>(&((*it)->_value)));
+        ret = _modbus->write_data_registers((*it)->_slave_id, (*it)->_address, 
+                                            2, reinterpret_cast<uint16_t*>(&((*it)->_value)));
       }
 
       if(ret != frb::Error::None)
@@ -236,10 +248,10 @@ namespace frb
     return frb::Error::None;
   }
 
-  void ZlbDrive::add_packet(int32_t address, int32_t value, MODBUS_FUNC_CODE code, int32_t action/*=-1*/)
+  void ZlbDrive::add_packet(int32_t slave_id, int32_t address, int32_t value, MODBUS_FUNC_CODE code, int32_t action/*=-1*/)
   {
     std::lock_guard<std::mutex> lock(_lock_packets);
-    _packets.push_back(new ZlbPacket(address, value, code, action));
+    _packets.push_back(new ZlbPacket(slave_id, address, value, code, action));
   }
 
   void ZlbDrive::clear_packets()
@@ -260,27 +272,38 @@ namespace frb
   */
   void ZlbDrive::setup_motor_configurations()
   {
-    add_packet(ServoFD1X5::OPMODE_REGISTER, ServoFD1X5::OPMODE_VALUES::VELOCITY, MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER);
-    add_packet(ServoFD1X5::VELOCITY_DIRECTION_REGISTER, 0, MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER);  
+    // traction motor
+    add_packet(_slave_id[int32_t(SlaveId::Traction)], ServoFD1X5::OPMODE_REGISTER, 
+               ServoFD1X5::OPMODE_VALUES::VELOCITY, MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER);
+    add_packet(_slave_id[int32_t(SlaveId::Traction)], ServoFD1X5::VELOCITY_DIRECTION_REGISTER, 
+               0, MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER);  
+
+    // steering motor
+    add_packet(_slave_id[int32_t(SlaveId::Steering)], ServoFD1X5::OPMODE_REGISTER, 
+               ServoFD1X5::OPMODE_VALUES::VELOCITY, MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER);
+    add_packet(_slave_id[int32_t(SlaveId::Steering)], ServoFD1X5::VELOCITY_DIRECTION_REGISTER,
+                0, MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER);               
+
     return;
   }
 
   /**
   * @brief      motor break 해제
   * @attention  실제 브레이크를 해제하는것이 아닌 속도를 0으로 만들어서 break를 해제하는것       
+  *             속도 0으로 만든 다음에 인가를 해줘야 한다.
   */
   void ZlbDrive::release_break()
   {
-    add_packet(ServoFD1X5::VELOCITY_COMMAND_REGISTER, 0, MODBUS_FUNC_CODE::WRITE_MULTIPLE_REGISTERS);
-    add_packet(ServoFD1X5::CONTROL_REGISTER, 
-               ServoFD1X5::CONTROL_VALUES::START, 
-               MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER);    
+    add_packet(_slave_id[int32_t(SlaveId::Traction)], ServoFD1X5::VELOCITY_COMMAND_REGISTER, 
+               0, MODBUS_FUNC_CODE::WRITE_MULTIPLE_REGISTERS);
+
+    add_packet(_slave_id[int32_t(SlaveId::Traction)], ServoFD1X5::CONTROL_REGISTER, 
+               ServoFD1X5::CONTROL_VALUES::START, MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER);    
   }
   void ZlbDrive::engage_break()
   {
-    add_packet(ServoFD1X5::CONTROL_REGISTER, 
-                ServoFD1X5::CONTROL_VALUES::STOP, 
-                MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER,
+    add_packet(_slave_id[int32_t(SlaveId::Traction)], ServoFD1X5::CONTROL_REGISTER, 
+                ServoFD1X5::CONTROL_VALUES::STOP, MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER,
                 to_int(frb::UnitAction::Stop));    
   }
 
@@ -293,8 +316,8 @@ namespace frb
       YAML::Node yaml = YAML::Load(yaml_file);
       yaml_file.close();
 
-      _slave_id[static_cast<int32_t>(frb::SlaveId::Traction)] = yaml["motor"]["traction_id"].as<int32_t>();
-      _slave_id[static_cast<int32_t>(frb::SlaveId::Steer)]    = yaml["motor"]["Steering_id"].as<int32_t>();
+      _slave_id[to_int(frb::SlaveId::Traction)] = yaml["motor"]["traction_id"].as<int32_t>();
+      _slave_id[to_int(frb::SlaveId::Steering)] = yaml["motor"]["Steering_id"].as<int32_t>();
 
       // todo 
       //int32_t     value = yaml["session"]["key"].as<int32_t>();

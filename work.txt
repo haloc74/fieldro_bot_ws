@@ -51,13 +51,20 @@
 
 . steer 동작 (각도, 속도)
 . steer 동작 범위 확인하기
-
 . trash_bot에서 이동, 멈춤 관련 packet은 응답을 받지 않도록 하기...
+. main node에서 control_move를 통하여 회전, 진행을 처리
 
-. steer 추가를 생각하며 refactoring 하기
-. 명령을 내릴때 slave id 값도 추가 하도록 설정
 
-. modbus_wrapper class slave_id 값 반영하는 방향으로 refactoring
+. steering 동작 추가
+. steering 이동 (move 속도값 고정)
+. steering 이동 제한관련 처리
+
+
+ID :  - JD 24.12.28
+0. steer 추가를 생각하며 refactoring 하기
+1. modbus_wrapper class slave_id 값 반영하는 방향으로 refactoring
+2. 명령을 내릴때 slave id 값도 추가 하도록 설정
+3. zlb_drive 기존 값들 traction id를 통해 동작되도록 수정
 
 
 ID :  - JD 24.12.28

@@ -374,9 +374,9 @@ namespace frb
   */
   bool ModbusWrapper::set_slave_id(int32_t slave_id)
   {
-    if(slave_id == SlaveId::None)           return true;
-    if(_last_slave_id == slave_id)          return true;
-    if(_modbus == nullptr)                  return false;
+    if(slave_id == 0)               return true;
+    if(_last_slave_id == slave_id)  return true;
+    if(_modbus == nullptr)          return false;
     
     if(modbus_set_slave(_modbus, slave_id) == -1)
     {

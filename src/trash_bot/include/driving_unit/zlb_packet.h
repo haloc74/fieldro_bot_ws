@@ -12,15 +12,17 @@ namespace frb
     ZlbPacket()
     {
       _sended   = false;
+      _slave_id = 1;
       _address  = 0;
       _value    = 0;
       _code     = MODBUS_FUNC_CODE::READ_HOLDING_REGISTERS;
       _action   = -1;
     }
     
-    ZlbPacket(int32_t address, int32_t value, MODBUS_FUNC_CODE code, int32_t action)
+    ZlbPacket(int32_t slave_id, int32_t address, int32_t value, MODBUS_FUNC_CODE code, int32_t action)
     {
       _address  = address;
+      _slave_id = slave_id;
       _value    = value;
       _code     = code;
       _sended   = false;
@@ -31,6 +33,7 @@ namespace frb
     ZlbPacket(const ZlbPacket& protocol)
     {
       _address  = protocol._address;
+      _slave_id = protocol._slave_id;
       _value    = protocol._value;
       _code     = protocol._code;
       _sended  = protocol._sended;
@@ -38,6 +41,7 @@ namespace frb
     ZlbPacket(const ZlbPacket* protocol)
     {
       _address  = protocol->_address;
+      _slave_id = protocol->_slave_id;
       _value    = protocol->_value;
       _code = protocol->_code;
       _sended = protocol->_sended;
@@ -47,6 +51,7 @@ namespace frb
     ZlbPacket& operator=(const ZlbPacket& protocol)
     {
       _address  = protocol._address;
+      _slave_id = protocol._slave_id;
       _value    = protocol._value;
       _code = protocol._code;
       _sended = protocol._sended;
@@ -55,6 +60,7 @@ namespace frb
     ZlbPacket& operator=(const ZlbPacket* protocol)
     {
       _address  = protocol->_address;
+      _slave_id = protocol->_slave_id;
       _value    = protocol->_value;
       _code     = protocol->_code;
       _sended   = protocol->_sended;
@@ -63,6 +69,7 @@ namespace frb
 
     ~ZlbPacket()    {    }
 
+    int32_t           _slave_id; // slave id
     int32_t           _address; // 주소값
     int32_t           _value;   // 값  (single : opmode value, multiple : position, velocity)
     MODBUS_FUNC_CODE  _code;    // function code

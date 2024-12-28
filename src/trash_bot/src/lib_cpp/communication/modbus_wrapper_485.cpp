@@ -76,20 +76,20 @@ namespace frb
     modbus_rtu_set_rts(_modbus, MODBUS_RTU_RTS_UP);
 
     // 4. modbus slave 번호 설정
-    if(!set_slave_id(_last_slave_id))
-    {
-      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, "modbus_set_slave fail !!!");
-      return false;
-    }
-    // if(modbus_set_slave(_modbus, _slave_id) == -1)
+    // if(!set_slave_id(_last_slave_id))
     // {
     //   LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, "modbus_set_slave fail !!!");
     //   return false;
     // }
-    // else
-    // {
-    //   LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Info, 0, "modbus_set_slave success !!!");
-    // }
+    if(modbus_set_slave(_modbus, _last_slave_id) == -1)
+    {
+      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, "modbus_set_slave fail !!!");
+      return false;
+    }
+    else
+    {
+      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Info, 0, "modbus_set_slave success !!!");
+    }
 
     // 5. modbus 연결
     if(modbus_connect(_modbus) == -1)

@@ -8,6 +8,7 @@
 
 #include "zlb_packet.h"
 #include "zlb_status.h"
+#include "zlb_id_define.h"
 
 #include "motor_runtime_state.h"
 
@@ -74,7 +75,7 @@ namespace frb
     void clear_packets();                   // motor 제어 패킷 리스트 초기화
 
     // 전송 할 패킷 추가
-    void add_packet(int32_t address, int32_t value, MODBUS_FUNC_CODE code, int32_t action=-1);
+    void add_packet(int32_t slave_id, int32_t address, int32_t value, MODBUS_FUNC_CODE code, int32_t action=-1);
     
     uint32_t convert_rpm_to_zlb_rpm(uint32_t rpm);  // rpm -> zlb rpm 변환
 
@@ -82,7 +83,7 @@ namespace frb
 
     void setup_motor_configurations();              // motor 초기값 설정
   
-    int32_t _slave_id[static_cast<int32_t>(frb::SlaveId::End)];  // slave id 설정
+    int32_t _slave_id[to_int(frb::SlaveId::End)];  // slave id 설정
 
   protected:
     // 동작 완료 통보 (상위 : callback)
@@ -95,5 +96,7 @@ namespace frb
     void receive_modbus_state(const CommStatus notify);  
 
     void load_option(std::string config_file);
+
+    int32_t get_motor_status(int32_t slave_id);
   };
 }

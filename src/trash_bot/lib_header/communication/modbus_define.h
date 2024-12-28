@@ -11,12 +11,12 @@ namespace frb
     END,
   };
 
-  //enum class SlaveId
-  enum SlaveId
-  {
-    None    = 0,
-    Traction,
-    Steer,
-    End,
-  };
+  // //enum class SlaveId
+  // enum SlaveId
+  // {
+  //   None    = 0,
+  //   Traction,
+  //   Steer,
+  //   End,
+  // };
 }
