@@ -51,11 +51,15 @@
 . steer 동작 범위 확인하기
 
 . zlb_drive class Refactoring
-. zlb_drive 생성자에서 break 풀기
-. zlb_drive 생성자에서 traction 쪽 속도제어로 control_mode 설정하기
 . trash_bot에서 이동, 멈춤 관련 packet은 응답을 받지 않도록 하기...
 
+
 ID :  - JD 24.12.28
+1. zlb_drive 생성자에서 break 풀기
+2. zlb_drive 생성자에서 traction 쪽 속도제어로 control_mode 설정하기
+
+
+ID : 46e29c9 - JD 24.12.28
 1. action_result_notify 함수명 변경
 2. log_msg_notify 함수명 변경
 3. modbus_state_receive 함수명 변경

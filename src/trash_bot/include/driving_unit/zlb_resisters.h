@@ -20,31 +20,36 @@ enum MODBUS_FUNC_CODE
   WRITE_MULTIPLE_REGISTERS = 0x10,
 };
 
-namespace ServoFD1X5 {
+namespace ServoFD1X5 
+{
+  // Controlword register value
+  constexpr int CONTROL_REGISTER = 0x3100;
+  namespace CONTROL_VALUES 
+  {
+    constexpr int STOP       = 0x0006;
+    constexpr int START      = 0x000F;
+    constexpr int RESET      = 0x0086;
+    constexpr int QUICK_STOP = 0x000B;
 
-    // Controlword register value
-    constexpr int CONTROL_REGISTER = 0x3100;
-    namespace CONTROL_VALUES {
-        constexpr int STOP       = 0x0006;
-        constexpr int START      = 0x000F;
-        constexpr int RESET      = 0x0086;
-        constexpr int QUICK_STOP = 0x000B;
-
-    namespace ABSOLUTE_POSITION{
-        constexpr int SET1 = 0x002F;
-        constexpr int SET2 = 0x003F;
+    namespace ABSOLUTE_POSITION
+    {
+      constexpr int SET1 = 0x002F;
+      constexpr int SET2 = 0x003F;
     }
 
-        namespace INCREMENT_POSITION {
-            constexpr int SET1 = 0x004F;
-            constexpr int SET2 = 0x005F;
-        }
-        
-        namespace HOMING {
-            constexpr int SET1 = 0x000F;
-            constexpr int SET2 = 0x001F;
-        }
+    namespace INCREMENT_POSITION 
+    {
+      constexpr int SET1 = 0x004F;
+      constexpr int SET2 = 0x005F;
     }
+
+    namespace HOMING 
+    {
+      constexpr int SET1 = 0x000F;
+      constexpr int SET2 = 0x001F;
+    }
+  }
+
     constexpr int STATUSWORD_REGISTER = 0x3200; // statusword 레지스터 주소
 
     namespace STATUSWORD_BITS {
@@ -155,11 +160,12 @@ namespace ServoFD1X5 {
 
     // Operation Mode 레지스터
     constexpr int OPMODE_REGISTER = 0x3500;
-    namespace OPMODE_VALUES {
-        constexpr int POSITION = 1;
-        constexpr int VELOCITY = 3;
-        constexpr int TORQUE   = 4;
-        constexpr int HOME     = 6;
+    namespace OPMODE_VALUES 
+    {
+      constexpr int POSITION = 1;
+      constexpr int VELOCITY = 3;
+      constexpr int TORQUE   = 4;
+      constexpr int HOME     = 6;
     }
 
     // Velocity 레지스터

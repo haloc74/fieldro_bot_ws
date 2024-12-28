@@ -45,7 +45,8 @@ namespace frb
 
     case frb::UnitAction::Stop:
       _action = frb::UnitAction::Stop;
-      _drive->test_stop();
+      //_drive->test_stop();
+      _drive->engage_break();
       break;
 
     case frb::UnitAction::GetStatus:

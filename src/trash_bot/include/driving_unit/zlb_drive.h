@@ -57,6 +57,8 @@ namespace frb
 
     void test_run();
     void test_stop();                       // break on
+    void engage_break();
+    void release_break();
 
   protected:
     void update();
@@ -79,6 +81,9 @@ namespace frb
     uint32_t convert_rpm_to_zlb_rpm(uint32_t rpm);  // rpm -> zlb rpm 변환
 
     void confirm_motor_connection();                // motor 통신 연결됨
+
+    void setup_motor_configurations();              // motor 초기값 설정
+  
 
   protected:
     // 동작 완료 통보 (상위 : callback)

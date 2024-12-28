@@ -35,8 +35,7 @@ namespace frb
 
   ZlbDrive::~ZlbDrive()
   {
-    // todo : servor power off
-    test_stop();
+    engage_break();
 
     usleep(5000000);
 
@@ -132,6 +131,8 @@ namespace frb
       if(frb::is_on_signal(ZlbStatus::Voltage_enable, status))
       {
         _servo_power = true;
+        setup_motor_configurations();
+        release_break();
       }
       else
       {
@@ -245,5 +246,38 @@ namespace frb
       safe_delete(packet);
     }
     _packets.clear();
+  }
+
+  /**
+  * @brief      motor 초기 설정값 설정
+  * @param[in]  
+  * @return     void
+  * @note       1. OPMODE_REGISTER : 속도 모드로 설정
+  *             2. VELOCITY_DIRECTION_REGISTER : 방향 설정
+  */
+  void ZlbDrive::setup_motor_configurations()
+  {
+    add_packet(ServoFD1X5::OPMODE_REGISTER, ServoFD1X5::OPMODE_VALUES::VELOCITY, MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER);
+    add_packet(ServoFD1X5::VELOCITY_DIRECTION_REGISTER, 0, MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER);  
+    return;
+  }
+
+  /**
+  * @brief      motor break 해제
+  * @attention  실제 브레이크를 해제하는것이 아닌 속도를 0으로 만들어서 break를 해제하는것       
+  */
+  void ZlbDrive::release_break()
+  {
+    add_packet(ServoFD1X5::VELOCITY_COMMAND_REGISTER, 0, MODBUS_FUNC_CODE::WRITE_MULTIPLE_REGISTERS);
+    add_packet(ServoFD1X5::CONTROL_REGISTER, 
+               ServoFD1X5::CONTROL_VALUES::START, 
+               MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER);    
+  }
+  void ZlbDrive::engage_break()
+  {
+    add_packet(ServoFD1X5::CONTROL_REGISTER, 
+                ServoFD1X5::CONTROL_VALUES::STOP, 
+                MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER,
+                to_int(frb::UnitAction::Stop));    
   }
 }
