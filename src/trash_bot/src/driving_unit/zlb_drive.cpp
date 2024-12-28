@@ -19,7 +19,7 @@ namespace frb
     log_msg_notify        = log_callback;
 
     _comm_state   = CommStatus::Disconnect;
-    _motor_status = ZlbStatus::Fault;
+    _motor_status = to_int(ZlbStatus::Fault);
 
     _servo_power  = false;
 
@@ -37,6 +37,7 @@ namespace frb
   {
     // todo : servor power off
     test_stop();
+
     usleep(5000000);
 
     std::this_thread::sleep_for(std::chrono::seconds(1));
@@ -52,44 +53,41 @@ namespace frb
   * @return     ZlbStatus : motor 상태
   * @note       zlb_status.h 참조
   */
-  ZlbStatus ZlbDrive::get_motor_status()
+  int32_t ZlbDrive::get_motor_status()
   {
     std::lock_guard<std::mutex> lock(_lock_packets);
-    frb::Error ret = frb::Error::None;
-    uint16_t status[2] = { 0, 0 };
-
-    //ret = _modbus->read_data_registers(ServoFD1X5::STATUSWORD_REGISTER, 2, reinterpret_cast<uint16_t*>(&status));
-    ret = _modbus->read_data_registers(ServoFD1X5::STATUSWORD_REGISTER, 1, status);
+   
+    uint16_t  status  = 0;
+    frb::Error ret    = _modbus->read_data_registers(ServoFD1X5::STATUSWORD_REGISTER, 1, &status);
     
     if(ret != frb::Error::None)
     {
       log_msg_notify(frb::LogLevel::Error, 0, "ZlbDrive::get_motor_status : modbus read error");
-      _motor_status = ZlbStatus::Fault;
+      _motor_status = to_int(ZlbStatus::Fault);
     }
     else
     {
-      _motor_status = to_enum<ZlbStatus>(int32_t(status[0]));
+      _motor_status = static_cast<int32_t>(status);
 
-      std::bitset<16> status_bit(status[0]);
+      std::bitset<16> status_bit(status);
       log_msg_notify(frb::LogLevel::Info, 
                       0, 
                       "ZlbDrive::get_motor_status : motor status - " + 
                       status_bit.to_string());
-
-      action_result_notify(ret);
     }
+
     return _motor_status;
   }
 
+  /**
+  * @brief      ZlbDrive 객체의 main thread
+  * @note       
+  */
   void ZlbDrive::update()
   {
     while(_thread->_active)
     {
       if(_modbus->connect_check() != CommStatus::Connect)   continue;
-
-      // todo : motor에 대한 상태를 확인하고 처리하는 로직을 작성하자
-      // 1. traction motor status check
-      // 2. steer motor status check
 
       packet_process();
 
@@ -98,32 +96,54 @@ namespace frb
     }
   }
 
+  /**
+  * @brief      modbus 객체에서 상태변경시 callback으로 호출되는 함수
+  * @param[in]  const CommStatus notify : 변경된 상태
+  * @note       
+  */
   void ZlbDrive::modbus_state_receive(const CommStatus notify)
   {
     if(notify == _comm_state)     return;
 
     _comm_state = notify;
 
-    if(_comm_state == CommStatus::Connect && !_servo_power)
+    switch(_comm_state)
     {
-      // todo : 연결 되었다 motor에 대한 적절한 처리 하자
-
-      // 1. servo motor power on
-      // test_servor_power(true);
-
-      // 2. traction motor init
-      // 3. steer motor init
+    case CommStatus::Connect:
+      log_msg_notify(frb::LogLevel::Info, 0, "ZlbDrive::modbus_state_receive : modbus connect");
+      confirm_motor_connection();
+      break;
     }
+
     return;
   }
 
-  // void ZlbDrive::test_servor_power(bool on)
-  // {
-  //   if(_comm_state != frb::CommStatus::Connect) 
-  //   {
-  //     return;
-  //   }
-  // }
+  /**
+  * @brief      motor 연결 확인시 처리 해야 할 사항
+  * @return     
+  * @attention  motor 연결 확인시 servo power on flag를 true로 변경      
+  */
+  void ZlbDrive::confirm_motor_connection()
+  {
+    int32_t status = get_motor_status();
+
+    if(!_servo_power)
+    {
+      if(frb::is_on_signal(ZlbStatus::Voltage_enable, status))
+      {
+        _servo_power = true;
+      }
+      else
+      {
+        // todo : motor power off
+        // test_servor_power(false);
+      }
+    }
+    else
+    {
+      // todo : 동작중 꺼졌다가 켜졌다 ??
+    }
+  }
 
   /**
   * @brief      _packets에서 첫번째 패킷이 전송되지 않았다면 전송을 시도한다.
@@ -180,7 +200,7 @@ namespace frb
         action_result_notify(ret);
       }
 
-      usleep(100000);
+      usleep(10000);
     }
   }
 
@@ -203,43 +223,6 @@ namespace frb
     return converted;
   }
 
-  void ZlbDrive::test_run()
-  {
-    log_msg_notify(LogInfo, 0, "ZlbDrive::test_run function");
-
-    // motor 멈춤
-    //add_packet(ServoFD1X5::CONTROL_REGISTER, ServoFD1X5::CONTROL_VALUES::STOP, MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER);
-
-    // 속도 모드로 전환 (direction의 경우 한번만 해주면 된다)
-    add_packet(ServoFD1X5::OPMODE_REGISTER, ServoFD1X5::OPMODE_VALUES::VELOCITY, MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER);
-    
-    // 방향값 설정하는 부분 (한번만 해주면 된다)
-    //add_packet(ServoFD1X5::VELOCITY_DIRECTION_REGISTER, 0, MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER);
-
-    // 속도값 설정
-    // question : rpm 값이 250이면 어떻게 변환되는지 확인 필요
-    uint32_t rpm = convert_rpm_to_zlb_rpm(250);  
-    add_packet(ServoFD1X5::VELOCITY_COMMAND_REGISTER, rpm, MODBUS_FUNC_CODE::WRITE_MULTIPLE_REGISTERS);
-
-    // motor 구동
-    add_packet(ServoFD1X5::CONTROL_REGISTER, 
-                ServoFD1X5::CONTROL_VALUES::START, 
-                MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER,
-                to_int(frb::UnitAction::Move));
-
-    return;
-  }
-
-  void ZlbDrive::test_stop()
-  {
-    add_packet(ServoFD1X5::CONTROL_REGISTER, 
-                ServoFD1X5::CONTROL_VALUES::STOP, 
-                MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER,
-                to_int(frb::UnitAction::Stop));
-    return;
-  }
-
-
   frb::Error ZlbDrive::control_move(frb::Direction direction, int32_t position, int32_t velocity, int32_t check_interval, int32_t timeout_millisec)
   {
     // 1. traction 속도 모드로 전환
@@ -249,7 +232,7 @@ namespace frb
     return frb::Error::None;
   }
 
-  void ZlbDrive::add_packet(int32_t address, int32_t value, MODBUS_FUNC_CODE code, int32_t action)
+  void ZlbDrive::add_packet(int32_t address, int32_t value, MODBUS_FUNC_CODE code, int32_t action/*=-1*/)
   {
     std::lock_guard<std::mutex> lock(_lock_packets);
     _packets.push_back(new ZlbPacket(address, value, code, action));
@@ -264,84 +247,3 @@ namespace frb
     _packets.clear();
   }
 }
-
- 
-
-
-
-
-
-
-// #include "zlb_drive.h"
-// namespace frb
-// {
-
-//   ZlbDrive::ZlbDrive(std::string config_file)
-//   {
-//     // _modbus = new ModbusWrapper(ModbusType::RTU, "/home/fieldro/Dev/zlb_drive/src/zlb_drive/config/zlb_drive.yaml");
-//     // _modbus->connect_check();
-
-//     _sorvo_power = false;
-//     _modbus = new ModbusWrapper(ModbusType::RTU, 
-//                                 config_file, 
-//                                 "drive", 
-//                                 std::bind(&ZlbDrive::modbus_state_receive, this, std::placeholders::_1));
-
-//     _traction = new ZlbTraction(std::bind(&ZlbDrive::traction_callback, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
-
-//     _steer = new ZlbSteer(std::bind(&ZlbDrive::steer_callback, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3), "/home/fieldro/Dev/zlb_drive/src/zlb_drive/config/zlb_steer.yaml");
-
-//     _thread = new ThreadActionInfo(config_file, "motor");
-//     _thread->_thread = std::thread(std::bind(&ZlbDrive::update, this));  
-//     _thread->_active = true;
-//   }
-
-//   ZlbDrive::~ZlbDrive()
-//   {
-//     stop();
-
-//     safe_delete(_traction);
-//     safe_delete(_steer);
-//     safe_delete(_modbus);
-
-//     _thread->_active = false;
-//     safe_delete(_thread);
-//   }
-
-//   /**
-//   * @brief      modbus 연결 상태 통보 callback
-//   * @param[in]  const CommStatus notify : modbus 상태
-//   * @return     void
-//   * @note       이전과 동일한 상태일 경우에는 처리를 할 필요가 없다.
-//   */
-//   void ZlbDrive::modbus_state_receive(const CommStatus notify)
-//   {
-//     if(notify == _modbus_state)     return;
-
-//     _modbus_state = notify;
-
-//     if(_modbus_state == CommStatus::Connect && !_sorvo_power)
-//     {
-//       // todo : 연결 되었다 motor에 대한 적절한 처리 하자
-//       // 1. servo motor power on
-//       // 2. traction motor init
-//       // 3. steer motor init
-//     }
-//     return;
-//   }
-
-//   void ZlbDrive::update()
-//   {
-//     while(_thread->_active)
-//     {
-//       if(_modbus->connect_check() != CommStatus::Connect)   continue;
-
-//       // todo : motor에 대한 상태를 확인하고 처리하는 로직을 작성하자
-//       // 1. traction motor status check
-//       // 2. steer motor status check
-
-//       // thread Hz 싱크 및 독점 방지를 위한 sleep
-//       std::this_thread::sleep_for(std::chrono::milliseconds(_thread->_sleep));
-//     }
-//   }
-//}

@@ -24,14 +24,6 @@
 //=========================================================
 //=========================================================
 
-. 이거 steer과 traction 구분이 필요하나 ???
-
-. modbus_wrapper class 현재 option으로 slaveid 지정되던것을 
-  read, write 할때 id 전달하는 방향으로 수정
-
-. modbus_wrapper class에 _last_slave_id 변수 만들어서 
-  _last_slave_id와 read, write 할 때 요청되는 slave id가 다를 경우에만
-  set_slave_id() 함수 호출 되도록 하기 
 . Differancial Model로 일단 프로그래밍 하기 
 . Driving : 주행 subscribe 추가
 . Driving : act_velocity 추가
@@ -47,7 +39,34 @@
 . get_motor_state() 함수 동작 방법 고민
 
 
-ID :  - JD 24.12.27
+. modbus_wrapper class 현재 option으로 slaveid 지정되던것을 
+  read, write 할때 id 전달하는 방향으로 수정
+. modbus_wrapper class에 _last_slave_id 변수 만들어서 
+  _last_slave_id와 read, write 할 때 요청되는 slave id가 다를 경우에만
+  set_slave_id() 함수 호출 되도록 하기   
+. zlb drive에 steer 적용을 어떻게 할 것인지 고민하기.
+. zlb drive에 steer 구동과 관련된 option 추가하기.
+. last communication slave id 저장해서 set_slave_id() 호출 최소화 하기.
+. steer 동작 (각도, 속도)
+. steer 동작 범위 확인하기
+
+. zlb_drive class Refactoring
+. zlb_drive 생성자에서 break 풀기
+. zlb_drive 생성자에서 traction 쪽 속도제어로 control_mode 설정하기
+. trash_bot에서 이동, 멈춤 관련 packet은 응답을 받지 않도록 하기...
+
+. action_result_notify 함수명 변경
+. log_msg_notify 함수명 변경
+. modbus_state_receive 함수명 변경
+
+ID :  - JD 24.12.28
+1. zlib_drive class 주석 추가
+2. zlb_drive_test.cpp 파일 추가
+3. get_motor_status() refactoring
+4. confirm_motor_connection() 추가
+
+
+ID : 789ccb3 - JD 24.12.27
 1. motor state 값 획득하는 함수 추가하기
 
 //=========================================================

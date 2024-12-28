@@ -9,18 +9,10 @@
 #include "define/error_code.h"
 #include "define/communication_define.h"
 #include "log/log.h"
+#include "comm_define.h"
 
 namespace frb
 {
-  enum class ModbusType
-  {
-    RS232,
-    RS485,
-    TCP,
-    END,
-  };
-
-
   /**
   * @author		  FieldRo
   * @date				2024.07.22

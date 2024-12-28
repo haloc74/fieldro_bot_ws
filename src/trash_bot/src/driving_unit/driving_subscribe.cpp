@@ -51,6 +51,7 @@ namespace frb
     case frb::UnitAction::GetStatus:
       _action = frb::UnitAction::GetStatus;
       _drive->get_motor_status();
+      action_complete_notify(frb::Error::None);
       break;
 
     case frb::UnitAction::Finish:

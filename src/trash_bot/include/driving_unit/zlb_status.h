@@ -29,34 +29,52 @@ namespace frb
     Reference_Found           = 15  // Reference found
   };
 
-    /**
-  * @brief      enum => string 변환
-  * @see        enum_template.h 참조 
-  */  
-  template<>
-  inline std::string to_string<ZlbStatus>(ZlbStatus value)
+  /**
+  * @brief      status 값이 on인지 확인
+  * @param[in]  ZlbStatus status : 확인할 status
+  * @param[in]  int32_t value    : 확인할 값
+  * @return     bool             : on이면 true, off이면 false
+  */
+  inline bool is_on_signal(ZlbStatus status, int32_t value)
   {
-    switch(value)
+    int32_t mask = 1 << to_int(status);
+
+    if((value & mask) == mask)    
     {
-      case ZlbStatus::Ready_on:                  return "Ready_on";
-      case ZlbStatus::Switched_on:               return "Switched_on";
-      case ZlbStatus::Operation_enable:          return "Operation_enable";
-      case ZlbStatus::Fault:                     return "Fault";
-      case ZlbStatus::Voltage_enable:            return "Voltage_enable";
-      case ZlbStatus::Quick_stop:                return "Quick_stop";
-      case ZlbStatus::Switchon_disabled:         return "Switchon_disabled";
-      case ZlbStatus::Warning:                   return "Warning";
-      case ZlbStatus::Internal_retention:        return "Internal_retention";
-      case ZlbStatus::Remote:                    return "Remote";
-      case ZlbStatus::Target_reached:            return "Target_reached";
-      case ZlbStatus::Internal_limit_activation: return "Internal_limit_activation";
-      case ZlbStatus::Pulse_response:            return "Pulse_response";
-      case ZlbStatus::Following_Error:           return "Following_Error";
-      case ZlbStatus::Commutation_Found:         return "Commutation_Found";
-      case ZlbStatus::Reference_Found:           return "Reference_Found";
+      return true;
     }
-    return "UnKnown";
+
+    return false;
   }
+
+  //   /**
+  // * @brief      enum => string 변환
+  // * @see        enum_template.h 참조 
+  // */  
+  // template<>
+  // inline std::string to_string<ZlbStatus>(ZlbStatus value)
+  // {
+  //   switch(value)
+  //   {
+  //     case ZlbStatus::Ready_on:                  return "Ready_on";
+  //     case ZlbStatus::Switched_on:               return "Switched_on";
+  //     case ZlbStatus::Operation_enable:          return "Operation_enable";
+  //     case ZlbStatus::Fault:                     return "Fault";
+  //     case ZlbStatus::Voltage_enable:            return "Voltage_enable";
+  //     case ZlbStatus::Quick_stop:                return "Quick_stop";
+  //     case ZlbStatus::Switchon_disabled:         return "Switchon_disabled";
+  //     case ZlbStatus::Warning:                   return "Warning";
+  //     case ZlbStatus::Internal_retention:        return "Internal_retention";
+  //     case ZlbStatus::Remote:                    return "Remote";
+  //     case ZlbStatus::Target_reached:            return "Target_reached";
+  //     case ZlbStatus::Internal_limit_activation: return "Internal_limit_activation";
+  //     case ZlbStatus::Pulse_response:            return "Pulse_response";
+  //     case ZlbStatus::Following_Error:           return "Following_Error";
+  //     case ZlbStatus::Commutation_Found:         return "Commutation_Found";
+  //     case ZlbStatus::Reference_Found:           return "Reference_Found";
+  //   }
+  //   return "UnKnown";
+  // }
 
   // /**
   // * @brief      int => string 변환
