@@ -223,60 +223,6 @@ namespace frb
 
 
   /**
-  * @brief      modbus data 쓰기
-  * @param[in]  address 쓰기 시작하는 주소
-  * @param[in]  status  쓰기할 데이터
-  * @return     error code
-  * @note       쓰기 실패시 기존 modbus 연결을 끊기
-  * @todo       log 기록을 session_name으로 구분을 해서 처리 해보도록 하자
-  */
-  frb::Error ModbusWrapper::write_data_bits(int32_t address, int32_t status)
-  {
-    std::lock_guard<std::mutex> lock(_lock);
-
-    // modbus 연결 되어있지 않으면 return
-    //if(!_is_connected) return frb::Error::UnConnect;
-    if(is_connect() != CommStatus::Connect)
-      return frb::Error::UnConnect;
-
-    // 실제 wago data 쓰기
-    size_t write_bits = modbus_write_bit(_modbus, address, status);
-
-    // 쓰기 성공 여부 확인
-    if(write_bits != 1)
-    {
-      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, "modbus_write_bit fail !!!");
-      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, std::string("Error Number : ") + modbus_strerror(errno));
-      disconnect_modbus_tcp();
-      return frb::Error::WriteFail;
-    }
-    return frb::Error::None;
-  }
-
-  /**
-  * @brief      연결 시도 시 turm을 지났는지 여부 체크
-  * @return     연결 시도 turm을 지났는지 여부 
-  * @note       _retry_count 변수 까지 포함하여 재연결 가능 여부를 판단하는
-  *            함수로 Refactoring 필요
-  *             reconnect_possible() 함수로 변경을 하자 
-  */
-  bool ModbusWrapper::is_reconnect_possible()
-  {
-    if(_last_try_connect_time + _retry_turm > std::time(nullptr)) 
-    {   
-      return false;
-    }
-    
-    if(_retry_count <= 0)  
-    {
-      _status = CommStatus::Error;
-      return false;
-    }
-
-    return true;
-  }
-
-  /**
   * @brief      modbus data read
   * @param[in]  int32_t id : slave id
   * @param[in]  int32_t address : read start address
@@ -313,6 +259,68 @@ namespace frb
   }
 
 
+  /**
+  * @brief      modbus data write 
+  * @param[in]  address 쓰기 시작하는 주소
+  * @param[in]  status  쓰기할 데이터
+  * @return     error code
+  * @note       쓰기 실패시 기존 modbus 연결을 끊기
+  * @todo       log 기록을 session_name으로 구분을 해서 처리 해보도록 하자
+  */
+  frb::Error ModbusWrapper::write_data_bits(int32_t id, int32_t address, int32_t status)
+  {
+    if(!set_slave_id(id))
+    {
+      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, "modbus_set_slave fail !!!");
+      disconnect_modbus_tcp();
+      return frb::Error::UnConnect;
+    }
+    return write_data_bits(address, status);
+  }
+  frb::Error ModbusWrapper::write_data_bits(int32_t address, int32_t status)
+  {
+    std::lock_guard<std::mutex> lock(_lock);
+
+    // modbus 연결 되어있지 않으면 return
+    //if(!_is_connected) return frb::Error::UnConnect;
+    if(is_connect() != CommStatus::Connect)
+      return frb::Error::UnConnect;
+
+    // 실제 wago data 쓰기
+    size_t write_bits = modbus_write_bit(_modbus, address, status);
+
+    // 쓰기 성공 여부 확인
+    if(write_bits != 1)
+    {
+      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, "modbus_write_bit fail !!!");
+      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, std::string("Error Number : ") + modbus_strerror(errno));
+      disconnect_modbus_tcp();
+      return frb::Error::WriteFail;
+    }
+    return frb::Error::None;
+  }
+
+
+  /**
+  * @brief      modbus data write
+  * @param[in]  int32_t id : slave id
+  * @param[in]  int32_t address : write start address
+  * @param[in]  int16_t len : write data length
+  * @param[in]  uint16_t* value : write data buffer
+  * @return     frb::Error : error code
+  * @note       slave id를 기준으로 2개의 함수로 overload
+  * @attention  16Bit 데이터 여러개를 쓰는 함수이다 write_data_register()와 구분
+  */
+  frb::Error ModbusWrapper::write_data_registers(int32_t id, int32_t address, int16_t len, uint16_t* value)
+  {
+    if(!set_slave_id(id))
+    {
+      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, "modbus_set_slave fail !!!");
+      disconnect_modbus_tcp();
+      return frb::Error::UnConnect;
+    }
+    return write_data_registers(address, len, value);
+  }
   frb::Error ModbusWrapper::write_data_registers(int32_t address, int16_t len, uint16_t* value)
   {
     std::lock_guard<std::mutex> lock(_lock);
@@ -325,6 +333,26 @@ namespace frb
     return frb::Error::None;
   }
 
+  /**
+  * @brief      modbus data write 16bit 데이터 한개를 쓰는 함수
+  * @param[in]  int32_t id : slave id
+  * @param[in]  int32_t address : write start address
+  * @param[in]  uint16_t value : write data
+  * @return     frb::Error : error code
+  * @note       slave id를 기준으로 2개의 함수로 overload
+  * @attention  16Bit 데이터 한개를 쓰는 함수이다 write_data_register()와 구분
+  * @see        write_data_register()
+  */
+  frb::Error ModbusWrapper::write_data_register(int32_t id, int32_t address, uint16_t value)
+  {
+    if(!set_slave_id(id))
+    {
+      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, "modbus_set_slave fail !!!");
+      disconnect_modbus_tcp();
+      return frb::Error::UnConnect;
+    }
+    return write_data_register(address, value);
+  }
   frb::Error ModbusWrapper::write_data_register(int32_t address, uint16_t value)
   {
     std::lock_guard<std::mutex> lock(_lock);
@@ -337,12 +365,18 @@ namespace frb
     return frb::Error::None;
   }
 
+
+  /**
+  * @brief      modbus slave id 설정함수
+  * @param[in]  int32_t slave_id : slave id
+  * @return     bool : 설정 성공 여부
+  * @attention  register 조작 전에 slave id를 설정해야 한다.
+  */
   bool ModbusWrapper::set_slave_id(int32_t slave_id)
   {
     if(slave_id == SlaveId::None)           return true;
     if(_last_slave_id == slave_id)          return true;
     if(_modbus == nullptr)                  return false;
-    //if(is_connect() == CommStatus::Connect) return false;
     
     if(modbus_set_slave(_modbus, slave_id) == -1)
     {
@@ -353,5 +387,28 @@ namespace frb
 
     return true;
   }
+
+  /**
+  * @brief      연결 시도 시 turm을 지났는지 여부 체크
+  * @return     연결 시도 turm을 지났는지 여부 
+  * @note       _retry_count 변수 까지 포함하여 재연결 가능 여부를 판단하는
+  *            함수로 Refactoring 필요
+  *             reconnect_possible() 함수로 변경을 하자 
+  */
+  bool ModbusWrapper::is_reconnect_possible()
+  {
+    if(_last_try_connect_time + _retry_turm > std::time(nullptr)) 
+    {   
+      return false;
+    }
+    
+    if(_retry_count <= 0)  
+    {
+      _status = CommStatus::Error;
+      return false;
+    }
+
+    return true;
+  }  
 
 }

@@ -60,12 +60,13 @@
 . modbus_wrapper class slave_id 값 반영하는 방향으로 refactoring
 
 
-. modbus_wrapper::write_data_bits() 함수 overload (slave id 입력 받는 함수 추가)
-. modbus_wrapper::write_data_register() 함수 overload (slave id 입력 받는 함수 추가)
-. modbus_wrapper::write_data_registers() 함수 overload (slave id 입력 받는 함수 추가)
-
-
 ID :  - JD 24.12.28
+1. modbus_wrapper::write_data_bits() 함수 overload (slave id 입력 받는 함수 추가)
+2. modbus_wrapper::write_data_register() 함수 overload (slave id 입력 받는 함수 추가)
+3. modbus_wrapper::write_data_registers() 함수 overload (slave id 입력 받는 함수 추가)
+
+
+ID : 5a41012 - JD 24.12.28
 1. modbus_wrapper::read_data_registers() 함수 overload (slave id 입력 받는 함수 추가)
 
 ID : 8189193 - JD 24.12.28
