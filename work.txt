@@ -44,17 +44,30 @@
 . modbus_wrapper class에 _last_slave_id 변수 만들어서 
   _last_slave_id와 read, write 할 때 요청되는 slave id가 다를 경우에만
   set_slave_id() 함수 호출 되도록 하기   
+
 . zlb drive에 steer 적용을 어떻게 할 것인지 고민하기.
 . zlb drive에 steer 구동과 관련된 option 추가하기.
 . last communication slave id 저장해서 set_slave_id() 호출 최소화 하기.
+
 . steer 동작 (각도, 속도)
 . steer 동작 범위 확인하기
 
-. zlb_drive class Refactoring
 . trash_bot에서 이동, 멈춤 관련 packet은 응답을 받지 않도록 하기...
+
+. steer 추가를 생각하며 refactoring 하기
+. 명령을 내릴때 slave id 값도 추가 하도록 설정
+
 
 
 ID :  - JD 24.12.28
+1. zlb_traction 삭제
+2. zlb_steer 삭제
+3. driving.yaml motor session에 traction_id, steering_id 추가
+4. zlb_drive class에 slave_id[2] 값 추가
+5. _slave_id 변수값 옵션에서 읽어 오도록 설정
+
+
+ID : 4242f6c - JD 24.12.28
 1. zlb_drive 생성자에서 break 풀기
 2. zlb_drive 생성자에서 traction 쪽 속도제어로 control_mode 설정하기
 

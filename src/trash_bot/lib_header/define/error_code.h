@@ -50,6 +50,7 @@ namespace frb
     // ConnectFail = 100,
     // ConnectSuccess,
     // Disconnect,
+    SetSlaveFail = 110,
 
     FileDoseNotExist = 2000,
 

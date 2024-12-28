@@ -9,7 +9,7 @@
 #include "define/error_code.h"
 #include "define/communication_define.h"
 #include "log/log.h"
-#include "comm_define.h"
+#include "modbus_define.h"
 
 namespace frb
 {

@@ -11,9 +11,11 @@ namespace frb
     END,
   };
 
-  enum class SlaveId
+  //enum class SlaveId
+  enum SlaveId
   {
-    Traction = 1,
+    None    = 0,
+    Traction,
     Steer,
     End,
   };

@@ -18,6 +18,9 @@ namespace frb
     notify_action_result  = action_result_callback;
     notify_log_msg        = log_callback;
 
+    // config 파일에서 설정값 로드
+    load_option(config_file);
+
     _comm_state   = CommStatus::Disconnect;
     _motor_status = to_int(ZlbStatus::Fault);
 
@@ -279,5 +282,37 @@ namespace frb
                 ServoFD1X5::CONTROL_VALUES::STOP, 
                 MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER,
                 to_int(frb::UnitAction::Stop));    
+  }
+
+  void ZlbDrive::load_option(std::string config_file)
+  {
+    try
+    {
+      // file open
+      std::ifstream yaml_file(config_file);
+      YAML::Node yaml = YAML::Load(yaml_file);
+      yaml_file.close();
+
+      _slave_id[static_cast<int32_t>(frb::SlaveId::Traction)] = yaml["motor"]["traction_id"].as<int32_t>();
+      _slave_id[static_cast<int32_t>(frb::SlaveId::Steer)]    = yaml["motor"]["Steering_id"].as<int32_t>();
+
+      // todo 
+      //int32_t     value = yaml["session"]["key"].as<int32_t>();
+      //std::string value = yaml["session"]["key"].as<std::string>();
+    }
+    catch(YAML::Exception& e)
+    {
+      std::cout << "YAML Exception : " << e.what() << std::endl;
+    }
+    catch(std::exception& e)
+    {
+      std::cout << "Exception : " << e.what() << std::endl;
+    }
+    catch(...)
+    {
+      std::cout << "Unknown Exception" << std::endl;
+    }  
+
+    return;
   }
 }

@@ -15,7 +15,7 @@ motor:
   device      : "/dev/ttyModbus_ELD2" ## device name
   port        : 0                     ## port number
   baud        : 57600                 ## baudrate
-  slave_id    : 1                     ## slave id
+  //slave_id    : 1                     ## slave id
   retry_count : 3                     ## 통신 연결 시도 횟수
   retry_turm  : 2                     ## 통신 연결 시도 간격
   debug       : 1                     ## debug 옵션 (0: off, 그외 : on)

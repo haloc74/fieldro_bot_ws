@@ -7,8 +7,6 @@
 #include <deque>
 
 #include "zlb_packet.h"
-#include "zlb_traction.h"
-#include "zlb_steer.h"
 #include "zlb_status.h"
 
 #include "motor_runtime_state.h"
@@ -84,6 +82,7 @@ namespace frb
 
     void setup_motor_configurations();              // motor 초기값 설정
   
+    int32_t _slave_id[static_cast<int32_t>(frb::SlaveId::End)];  // slave id 설정
 
   protected:
     // 동작 완료 통보 (상위 : callback)
@@ -94,5 +93,7 @@ namespace frb
 
     // modbus 상태 변경 통보 (하위 : callback)
     void receive_modbus_state(const CommStatus notify);  
+
+    void load_option(std::string config_file);
   };
 }

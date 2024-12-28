@@ -16,6 +16,9 @@ motor:
   retry_turm  : 2                     ## 통신 연결 시도 간격
   debug       : 1                     ## debug 옵션 (0: off, 그외 : on)
 
+  traction_id : 1                     ## traction motor id
+  steering_id : 2                     ## steering motor id
+
 logger:
   debug               : 1             ## debug 옵션 (0: off, 그외 : on)
   hz                  : 50            ## thread 동작 속도
