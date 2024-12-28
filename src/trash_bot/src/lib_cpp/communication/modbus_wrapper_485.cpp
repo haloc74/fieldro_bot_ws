@@ -76,13 +76,10 @@ namespace frb
     modbus_rtu_set_rts(_modbus, MODBUS_RTU_RTS_UP);
 
     // 4. modbus slave 번호 설정
-    if(_last_slave_id != 0)
+    if(!set_slave_id(_last_slave_id))
     {
-      if(!set_slave_id(_last_slave_id))
-      {
-        LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, "modbus_set_slave fail !!!");
-        return false;
-      }
+      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, "modbus_set_slave fail !!!");
+      return false;
     }
     // if(modbus_set_slave(_modbus, _slave_id) == -1)
     // {
@@ -233,7 +230,7 @@ namespace frb
       LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Info, 0, "  device      : " + _device);
       LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Info, 0, "  baud        : " + std::to_string(_baud)); 
       LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Info, 0, "  port        : " + std::to_string(_port));
-      //LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Info, 0, "  slave_id    : " + std::to_string(_slave_id));
+      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Info, 0, "  slave_id    : " + std::to_string(_last_slave_id));
       LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Info, 0, "  retry_count : " + std::to_string(_retry_count));
       LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Info, 0, "  retry_turm  : " + std::to_string(_retry_turm));
     }    

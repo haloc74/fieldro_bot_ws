@@ -221,50 +221,6 @@ namespace frb
     return frb::Error::None;
   }
 
-  // frb::Error ModbusWrapper::read_data_bits(int32_t address, int32_t read_len, uint8_t* dest)
-  // {
-  //   std::lock_guard<std::mutex> lock(_lock);
-
-  //   ros::Time current_time = ros::Time::now();
-
-  //   // modbus 연결 되어있지 않으면 return
-  //   if(is_connect() != CommStatus::Connect || modbus_get_socket(_modbus) == -1)
-  //   {
-  //     LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, "modbus_connect fail !!!");
-  //     disconnect_modbus_tcp();
-  //     return frb::Error::UnConnect;
-  //   }
-
-  //   int32_t error = 0;
-  //   socklen_t addrlen = sizeof(error);
-  //   if(getsockopt(modbus_get_socket(_modbus), SOL_SOCKET, SO_ERROR, &error, &addrlen) != 0)
-  //   {
-  //     LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, "getsockopt fail !!!");
-  //     disconnect_modbus_tcp();
-  //     return frb::Error::UnConnect;
-  //   }
-      
-
-  //   // 실제 wago data 읽기
-  //   size_t read_bits = modbus_read_bits(_modbus, 0, read_len, dest);
-
-  //   // 읽어들인 Data 길이 확인
-  //   if(read_bits != read_len)
-  //   {
-  //     LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, "modbus_read_bits fail !!!");
-
-  //     disconnect_modbus_tcp();
-
-  //     // error 내용 및 경과시간 log 기록
-  //     std::string str = modbus_strerror(errno);
-  //     ros::Duration duration = ros::Time::now() - current_time;
-  //     LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, "Error : "+ str + "   " + std::to_string(duration.toSec()));
-      
-  //     return frb::Error::ReadFail;
-  //   }
-
-  //   return frb::Error::None;
-  // }
 
   /**
   * @brief      modbus data 쓰기
@@ -320,6 +276,25 @@ namespace frb
     return true;
   }
 
+  /**
+  * @brief      modbus data read
+  * @param[in]  int32_t id : slave id
+  * @param[in]  int32_t address : read start address
+  * @param[in]  int32_t read_len : read data length
+  * @param[out] uint16_t* dest : read data buffer
+  * @return     frb::Error : error code
+  * @note       slave id를 기준으로 2개의 함수로 overload
+  */
+  frb::Error ModbusWrapper::read_data_registers(int32_t id, int32_t address, int32_t read_len, uint16_t* dest)
+  {
+    if(!set_slave_id(id))
+    {
+      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, "modbus_set_slave fail !!!");
+      disconnect_modbus_tcp();
+      return frb::Error::UnConnect;
+    }
+    return read_data_registers(address, read_len, dest);
+  }
   frb::Error ModbusWrapper::read_data_registers(int32_t address, int32_t read_len, uint16_t* dest)
   {
     std::lock_guard<std::mutex> lock(_lock);
@@ -336,6 +311,7 @@ namespace frb
 
     return frb::Error::None;
   }
+
 
   frb::Error ModbusWrapper::write_data_registers(int32_t address, int16_t len, uint16_t* value)
   {
