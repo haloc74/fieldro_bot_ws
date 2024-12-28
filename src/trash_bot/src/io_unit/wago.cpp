@@ -112,7 +112,7 @@ namespace frb
 
     // 실제 index 0 data의 값을 signal[1]에 저장
     //size_t read_bits = _modbus->read_data(0, read_len, signal+1);
-    frb::Error error = _modbus->read_data_bits(0, read_len, signal+1);
+    frb::Error error = _modbus->read_data_bits(frb::SlaveId::None, 0, read_len, signal+1);
 
     if(error != frb::Error::None)
     {

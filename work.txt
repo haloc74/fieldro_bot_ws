@@ -57,9 +57,12 @@
 . steer 추가를 생각하며 refactoring 하기
 . 명령을 내릴때 slave id 값도 추가 하도록 설정
 
-
+. modbus_wrapper class slave_id 값 반영하는 방향으로 refactoring
 
 ID :  - JD 24.12.28
+1. modbus_wrapper::read_data_bits() 함수 overload (slave id 입력 받는 함수 추가)
+
+ID : 44d29ae - JD 24.12.28
 1. zlb_traction 삭제
 2. zlb_steer 삭제
 3. driving.yaml motor session에 traction_id, steering_id 추가

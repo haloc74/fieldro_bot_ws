@@ -27,11 +27,12 @@ namespace frb
     _last_try_connect_time  = 0;
     _status                 = CommStatus::None;
 
-    _retry_count  = 0;
-    _retry_turm   = 3;
+    _retry_count    = 0;
+    _retry_turm     = 3;
 
-    _config_file = config_file;
-    _session_name = session_name;
+    _config_file    = config_file;
+    _session_name   = session_name;
+    _last_slave_id  = 0;
 
     switch (_type)
     {
@@ -119,6 +120,16 @@ namespace frb
   * @note       read fail시 기존 modbus 연결을 끊기.
   * @todo       log 기록을 session_name으로 구분을 해서 처리 해보도록 하자
   */    
+  frb::Error ModbusWrapper::read_data_bits(int32_t id, int32_t address, int32_t read_len, uint8_t* dest)
+  {
+    if(!set_slave_id(id))
+    {
+      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, "modbus_set_slave fail !!!");
+      disconnect_modbus_tcp();
+      return frb::Error::UnConnect;
+    }
+    return read_data_bits(address, read_len, dest);
+  }
   frb::Error ModbusWrapper::read_data_bits(int32_t address, int32_t read_len, uint8_t* dest)
   {
     std::lock_guard<std::mutex> lock(_lock);
@@ -146,6 +157,13 @@ namespace frb
       disconnect_modbus_tcp();
       return frb::Error::UnConnect;
     }
+
+    // if(!set_slave_id(id))
+    // {
+    //   LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, "modbus_set_slave fail !!!");
+    //   disconnect_modbus_tcp();
+    //   return frb::Error::UnConnect;
+    // }
 
     int32_t error = 0;
     socklen_t addrlen = sizeof(error);
@@ -276,7 +294,6 @@ namespace frb
       disconnect_modbus_tcp();
       return frb::Error::WriteFail;
     }
-
     return frb::Error::None;
   }
 
@@ -342,6 +359,23 @@ namespace frb
       return frb::Error::WriteFail;
     }
     return frb::Error::None;
+  }
+
+  bool ModbusWrapper::set_slave_id(int32_t slave_id)
+  {
+    if(slave_id == SlaveId::None)           return true;
+    if(_last_slave_id == slave_id)          return true;
+    if(_modbus == nullptr)                  return false;
+    //if(is_connect() == CommStatus::Connect) return false;
+    
+    if(modbus_set_slave(_modbus, slave_id) == -1)
+    {
+      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, "modbus_set_slave fail !!!");
+      return false;
+    }
+    _last_slave_id = slave_id;
+
+    return true;
   }
 
 }

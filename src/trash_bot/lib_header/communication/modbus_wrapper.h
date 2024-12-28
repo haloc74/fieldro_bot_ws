@@ -38,6 +38,8 @@ namespace frb
     void disconnect();
     
     frb::Error read_data_bits(int32_t address, int32_t read_len, uint8_t* dest);
+    frb::Error read_data_bits(int32_t id, int32_t address, int32_t read_len, uint8_t* dest);
+
     frb::Error read_data_registers(int32_t address, int32_t read_len, uint16_t* dest);
 
     frb::Error write_data_bits(int32_t address, int32_t status);
@@ -55,7 +57,7 @@ namespace frb
     std::string _device;
     int32_t     _port;
     int32_t     _baud;
-    int32_t     _slave_id;
+    int32_t     _last_slave_id;
     ModbusType  _type;
 
     CommStatus _status;
@@ -69,19 +71,17 @@ namespace frb
     bool is_reconnect_possible();
 
   protected:
+    bool set_slave_id(int32_t slave_id);
+
     // Modbus TCP : modbus_wrapper_tcp.cpp
     void load_option_tcp();
     CommStatus connect_check_modbus_tcp();
-    //bool try_connect_modbus_tcp();
     bool connect_modbus_tcp();
     void disconnect_modbus_tcp();
-    
 
     // Modbus RTU (485) : modbus_wrapper_485.cpp
     void load_option_485();
     CommStatus connect_check_modbus_485();    
-
-    //bool try_connect_modbus_485();
     bool connect_modbus_485();
     void disconnect_modbus_485();
     

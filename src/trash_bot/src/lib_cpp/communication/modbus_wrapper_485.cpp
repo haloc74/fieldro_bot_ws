@@ -76,15 +76,23 @@ namespace frb
     modbus_rtu_set_rts(_modbus, MODBUS_RTU_RTS_UP);
 
     // 4. modbus slave 번호 설정
-    if(modbus_set_slave(_modbus, _slave_id) == -1)
+    if(_last_slave_id != 0)
     {
-      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, "modbus_set_slave fail !!!");
-      return false;
+      if(!set_slave_id(_last_slave_id))
+      {
+        LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, "modbus_set_slave fail !!!");
+        return false;
+      }
     }
-    else
-    {
-      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Info, 0, "modbus_set_slave success !!!");
-    }
+    // if(modbus_set_slave(_modbus, _slave_id) == -1)
+    // {
+    //   LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, "modbus_set_slave fail !!!");
+    //   return false;
+    // }
+    // else
+    // {
+    //   LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Info, 0, "modbus_set_slave success !!!");
+    // }
 
     // 5. modbus 연결
     if(modbus_connect(_modbus) == -1)
@@ -190,10 +198,10 @@ namespace frb
       yaml_file.close();
 
       // modbus tcp ip, port 정보
-      _device      = yaml[_session_name]["device"].as<std::string>();
-      _port        = yaml[_session_name]["port"].as<int32_t>();
-      _baud        = yaml[_session_name]["baud"].as<int32_t>();
-      _slave_id    = yaml[_session_name]["slave_id"].as<int32_t>();
+      _device         = yaml[_session_name]["device"].as<std::string>();
+      _port           = yaml[_session_name]["port"].as<int32_t>();
+      _baud           = yaml[_session_name]["baud"].as<int32_t>();
+      _last_slave_id  = yaml[_session_name]["slave_id"].as<int32_t>();
 
       _retry_count = yaml[_session_name]["retry_count"].as<int32_t>();
       _retry_turm  = yaml[_session_name]["retry_turm"].as<int32_t>();
@@ -225,7 +233,7 @@ namespace frb
       LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Info, 0, "  device      : " + _device);
       LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Info, 0, "  baud        : " + std::to_string(_baud)); 
       LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Info, 0, "  port        : " + std::to_string(_port));
-      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Info, 0, "  slave_id    : " + std::to_string(_slave_id));
+      //LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Info, 0, "  slave_id    : " + std::to_string(_slave_id));
       LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Info, 0, "  retry_count : " + std::to_string(_retry_count));
       LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Info, 0, "  retry_turm  : " + std::to_string(_retry_turm));
     }    
