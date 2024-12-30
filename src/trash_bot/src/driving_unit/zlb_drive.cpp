@@ -18,12 +18,19 @@ namespace frb
     notify_action_result  = action_result_callback;
     notify_log_msg        = log_callback;
 
+    _slave_id[0] = 0;
+    _slave_id[1] = 1;
+    _slave_id[2] = 2;
+
+    _left_limit = 0;
+    _right_limit = 0;
+    _home_position = 0;
+
     // config 파일에서 설정값 로드
     load_option(config_file);
 
     _comm_state   = CommStatus::Disconnect;
     _motor_status = to_int(ZlbStatus::Fault);
-
     _servo_power  = false;
 
     _modbus = new ModbusWrapper(ModbusType::RS485,
@@ -248,6 +255,16 @@ namespace frb
     return frb::Error::None;
   }
 
+  /**
+  * @brief      motor 제어 패킷 추가
+  * @param[in]  int32_t slave_id      : motor slave id
+  * @param[in]  int32_t address       : motor control address
+  * @param[in]  int32_t value         : motor control value
+  * @param[in]  MODBUS_FUNC_CODE code : modbus function code
+  * @param[in]  int32_t action        : 동작 완료시 callback action
+  * @return     void 
+  * @note       
+  */
   void ZlbDrive::add_packet(int32_t slave_id, int32_t address, int32_t value, MODBUS_FUNC_CODE code, int32_t action/*=-1*/)
   {
     std::lock_guard<std::mutex> lock(_lock_packets);
@@ -272,18 +289,33 @@ namespace frb
   */
   void ZlbDrive::setup_motor_configurations()
   {
-    // traction motor
+    // traction motor (속도모드, 방향설정)
     add_packet(_slave_id[int32_t(SlaveId::Traction)], ServoFD1X5::OPMODE_REGISTER, 
                ServoFD1X5::OPMODE_VALUES::VELOCITY, MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER);
     add_packet(_slave_id[int32_t(SlaveId::Traction)], ServoFD1X5::VELOCITY_DIRECTION_REGISTER, 
                0, MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER);  
 
-    // steering motor
-    add_packet(_slave_id[int32_t(SlaveId::Steering)], ServoFD1X5::OPMODE_REGISTER, 
-               ServoFD1X5::OPMODE_VALUES::VELOCITY, MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER);
-    add_packet(_slave_id[int32_t(SlaveId::Steering)], ServoFD1X5::VELOCITY_DIRECTION_REGISTER,
-                0, MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER);               
+    // steering motor (좌우 limit 설정, 위치모드, 방향설정)
+    add_packet(_slave_id[int32_t(SlaveId::Steering)], 
+               ServoFD1X5::DIN1_REGISTER, 
+               ServoFD1X5::LIMIT_MODE::POSITIVE, 
+               MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER);
+    add_packet(_slave_id[int32_t(SlaveId::Steering)], 
+               ServoFD1X5::DIN3_REGISTER, 
+               ServoFD1X5::LIMIT_MODE::NEGATIVE, 
+               MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER);               
 
+    // position mode set
+    add_packet(_slave_id[int32_t(SlaveId::Steering)], 
+               ServoFD1X5::OPMODE_REGISTER, 
+               ServoFD1X5::OPMODE_VALUES::POSITION, 
+               MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER);
+
+    // // direction set
+    // add_packet(_slave_id[int32_t(SlaveId::Steering)], 
+    //             ServoFD1X5::VELOCITY_DIRECTION_REGISTER,
+    //             0, 
+    //             MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER);               
     return;
   }
 
@@ -317,7 +349,11 @@ namespace frb
       yaml_file.close();
 
       _slave_id[to_int(frb::SlaveId::Traction)] = yaml["motor"]["traction_id"].as<int32_t>();
-      _slave_id[to_int(frb::SlaveId::Steering)] = yaml["motor"]["Steering_id"].as<int32_t>();
+      _slave_id[to_int(frb::SlaveId::Steering)] = yaml["motor"]["steering_id"].as<int32_t>();
+
+      _left_limit   = yaml["motor"]["left_limit"].as<int32_t>();
+      _right_limit  = yaml["motor"]["right_limit"].as<int32_t>();
+      _home_position= yaml["motor"]["home_position"].as<int32_t>();
 
       // todo 
       //int32_t     value = yaml["session"]["key"].as<int32_t>();

@@ -9,10 +9,10 @@ namespace frb
   //enum class SlaveId
   enum class SlaveId
   {
-    None    = 0,
-    Traction,
-    Steering,
-    End,
+    None      = 0,
+    Traction  = 1,
+    Steering  = 2,
+    End       = 3,
   };
 
   /**

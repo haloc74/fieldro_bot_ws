@@ -49,6 +49,11 @@ namespace frb
       _drive->engage_break();
       break;
 
+    case frb::UnitAction::Turn:
+      _action = frb::UnitAction::Turn;
+      _drive->test_turn();
+      break;
+
     case frb::UnitAction::GetStatus:
       _action = frb::UnitAction::GetStatus;
       _drive->get_motor_status();

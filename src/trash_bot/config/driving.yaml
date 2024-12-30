@@ -19,6 +19,11 @@ motor:
   traction_id : 1                     ## traction motor id
   steering_id : 2                     ## steering motor id
 
+  home_position : 63000               # mechanical origin
+  left_limit    : 4048000             ## positive_sensor_limit - 12000(homing mode default offset value)
+  right_limit   : -419800             ## negative_sensor_limit + 12000(homing mode default offset value)
+
+
 logger:
   debug               : 1             ## debug 옵션 (0: off, 그외 : on)
   hz                  : 50            ## thread 동작 속도

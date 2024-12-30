@@ -56,6 +56,9 @@ namespace frb
 
     void test_run();
     void test_stop();                       // break on
+    void test_turn();
+
+
     void engage_break();
     void release_break();
 
@@ -84,6 +87,9 @@ namespace frb
     void setup_motor_configurations();              // motor 초기값 설정
   
     int32_t _slave_id[to_int(frb::SlaveId::End)];  // slave id 설정
+    int32_t _left_limit;
+    int32_t _right_limit;
+    int32_t _home_position;
 
   protected:
     // 동작 완료 통보 (상위 : callback)

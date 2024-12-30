@@ -28,26 +28,8 @@
 . Driving : 주행 subscribe 추가
 . Driving : act_velocity 추가
 
-. zlb_drive.cpp에 선언및 정의된
-    #define RESOLUTION 65536
-    #define FACTOR 1875.0
-    #define RATIO_MOTOR 35
-    #define RATIO_STEER 5.5
-  이상의 값이 옵션 값인지 고정 값인지 확인해서 옵션으로 설정 할 수 있으면 설정하자.
-
-
 . get_motor_state() 함수 동작 방법 고민
 
-
-. modbus_wrapper class 현재 option으로 slaveid 지정되던것을 
-  read, write 할때 id 전달하는 방향으로 수정
-. modbus_wrapper class에 _last_slave_id 변수 만들어서 
-  _last_slave_id와 read, write 할 때 요청되는 slave id가 다를 경우에만
-  set_slave_id() 함수 호출 되도록 하기   
-
-. zlb drive에 steer 적용을 어떻게 할 것인지 고민하기.
-. zlb drive에 steer 구동과 관련된 option 추가하기.
-. last communication slave id 저장해서 set_slave_id() 호출 최소화 하기.
 
 . steer 동작 (각도, 속도)
 . steer 동작 범위 확인하기
@@ -55,19 +37,23 @@
 . main node에서 control_move를 통하여 회전, 진행을 처리
 
 
-. steering 동작 추가
-. steering 이동 (move 속도값 고정)
-. steering 이동 제한관련 처리
+ID :  - JD 24.12.30
+1. steering 동작 추가
+2. steering 이동 (move 속도값 고정)
+3. steering 이동 제한관련 처리
+4. last communication slave id 저장해서 set_slave_id() 호출 최소화 하기.
 
+//=========================================================
+//=========================================================  
 
-ID :  - JD 24.12.28
+ID : 5b1b5f1 - JD 24.12.28
 0. steer 추가를 생각하며 refactoring 하기
 1. modbus_wrapper class slave_id 값 반영하는 방향으로 refactoring
 2. 명령을 내릴때 slave id 값도 추가 하도록 설정
 3. zlb_drive 기존 값들 traction id를 통해 동작되도록 수정
 
 
-ID :  - JD 24.12.28
+ID : f1120ee:1 - JD 24.12.28
 1. modbus_wrapper::write_data_bits() 함수 overload (slave id 입력 받는 함수 추가)
 2. modbus_wrapper::write_data_register() 함수 overload (slave id 입력 받는 함수 추가)
 3. modbus_wrapper::write_data_registers() 함수 overload (slave id 입력 받는 함수 추가)
@@ -108,8 +94,6 @@ ID : e7535ab - JD 24.12.28
 ID : 789ccb3 - JD 24.12.27
 1. motor state 값 획득하는 함수 추가하기
 
-//=========================================================
-//=========================================================  
 
 ID : d02cc4f - JD 24.12.25
 1. zlb drive 옵션 전달 확인

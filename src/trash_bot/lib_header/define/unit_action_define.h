@@ -31,6 +31,7 @@ namespace frb
 
     Move    = 0x00C0,   Moving,       Moved,             // 이동      (AGV)
     Stop    = 0x00D0,   Stopping,     Stopped,           // 정지      (AGV)   
+    Turn    = 0x00E0,   Turning,      Turned,            // 회전      (AGV)
 
     MoveToLowLimit = 0x00E0,                             // Limit 위치로 이동 (Motor)
     MoveToHighLimit,         
@@ -70,6 +71,7 @@ namespace frb
     {UnitAction::Release, "Release"},   {UnitAction::Releasing, "Releasing"},     {UnitAction::Released, "Released"},
     {UnitAction::Move, "Move"},         {UnitAction::Moving, "Moving"},           {UnitAction::Moved, "Moved"},
     {UnitAction::Stop, "Stop"},         {UnitAction::Stopping, "Stopping"},       {UnitAction::Stopped, "Stopped"},
+    {UnitAction::Turn, "Turn"},         {UnitAction::Turning, "Turning"},         {UnitAction::Turned, "Turned"},
 
     {UnitAction::MoveToLowLimit,  "MoveToLowLimit"},
     {UnitAction::MoveToHighLimit, "MoveToHighLimit"},

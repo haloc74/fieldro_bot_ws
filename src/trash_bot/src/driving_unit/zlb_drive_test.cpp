@@ -5,6 +5,37 @@
 namespace frb
 {
 
+  void ZlbDrive::test_turn()
+  {
+    int32_t position = -2000000;
+    int16_t* p = (int16_t*)&position;
+
+    uint32_t rpm = convert_rpm_to_zlb_rpm(100);  
+
+    add_packet(_slave_id[int32_t(SlaveId::Steering)], 
+               ServoFD1X5::POSITION_COMMAND_REGISTER, 
+               position, 
+               MODBUS_FUNC_CODE::WRITE_MULTIPLE_REGISTERS);
+
+    add_packet(_slave_id[int32_t(SlaveId::Steering)],
+                ServoFD1X5::POSITION_SPEED_COMMAND_REGISTER, 
+                rpm, 
+                MODBUS_FUNC_CODE::WRITE_MULTIPLE_REGISTERS);//, 
+                //to_int(frb::UnitAction::Turn));
+
+    // ebsolute position set enable
+    add_packet(_slave_id[int32_t(SlaveId::Steering)], 
+                ServoFD1X5::CONTROL_REGISTER,
+                ServoFD1X5::CONTROL_VALUES::ABSOLUTE_POSITION::SET1, 
+                MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER);
+
+    add_packet(_slave_id[int32_t(SlaveId::Steering)], 
+                ServoFD1X5::CONTROL_REGISTER,
+                ServoFD1X5::CONTROL_VALUES::ABSOLUTE_POSITION::SET2, 
+                MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER,
+                to_int(frb::UnitAction::Turn));                                
+  }
+
   /**
   * @brief      motor 구동 테스트
   * @attention  속도모드 설정, 방향값 설정, 모터구동 설정 된 상태에서 속도값만 설정하면 구동 된다.
