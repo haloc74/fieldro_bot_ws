@@ -137,7 +137,7 @@ message(STATUS "")
   ## 5-1. lib_cpp 하위의 모든 cpp 파일을 찾아서 LIB_SRC_FILES에 저장
   file(GLOB_RECURSE LIB_SRC_FILES 
     ##"${CMAKE_CURRENT_SOURCE_DIR}/src/lib_cpp/log/*.cpp"  
-    "${CMAKE_CURRENT_SOURCE_DIR}/src/lib_cpp/communication/*.cpp"
+    ##"${CMAKE_CURRENT_SOURCE_DIR}/src/lib_cpp/communication/*.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/lib_cpp/unit/*.cpp"
     ##"${CMAKE_CURRENT_SOURCE_DIR}/src/lib_cpp/helper/*.cpp"
     ##"${CMAKE_CURRENT_SOURCE_DIR}/src/lib_cpp/odometry/*.cpp"

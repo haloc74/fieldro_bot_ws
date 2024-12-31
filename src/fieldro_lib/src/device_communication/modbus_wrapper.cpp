@@ -1,5 +1,6 @@
 
-#include "communication/modbus_wrapper.h"
+//#include "communication/modbus_wrapper.h"
+#include <fieldro_lib/device_communication/modbus_wrapper.h>
 #include "ros/ros.h"
 #include <sys/socket.h>  // SOL_SOCKET 정의를 위한 헤더
 #include <netinet/in.h>  // 네트워크 관련 정의

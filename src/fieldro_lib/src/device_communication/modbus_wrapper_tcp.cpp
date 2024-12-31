@@ -1,4 +1,5 @@
-#include "communication/modbus_wrapper.h"
+//#include "communication/modbus_wrapper.h"
+#include <fieldro_lib/device_communication/modbus_wrapper.h>
 #include <fstream>
 #include "yaml-cpp/yaml.h"
 #include <sys/socket.h>
