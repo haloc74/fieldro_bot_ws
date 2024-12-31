@@ -4,7 +4,8 @@
 #include <atomic>
 #include <memory>
 
-#include "log/log_message.h"
+//#include "log/log_message.h"
+#include <fieldro_lib/log/log_message.h>
 
 namespace frb
 {

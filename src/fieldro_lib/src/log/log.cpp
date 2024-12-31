@@ -1,5 +1,6 @@
 
-#include "log/log.h"
+//#include "log/log.h"
+#include <fieldro_lib/log/log.h>
 
 #include <queue>
 #include <boost/filesystem.hpp>
