@@ -43,13 +43,15 @@
 . src/lib_cpp/communication dir 이전 -> fieldro_lib/src/communication dir
 . communication dir 이전으로 인한 include 경로 수정
 
-. lib_header/log dir 삭제
-. lib_header/odometry dir 이전 -> fieldro_lib/include/odometry dir
-. src/lib_cpp/odometry dir 이전 -> fieldro_lib/src/odometry dir
-. odometry dir 이전으로 인한 include 경로 수정
+
+ID :  - JD 24.12.32
+1. lib_header/log dir 삭제
+2. lib_header/odometry dir 이전 -> fieldro_lib/include/odometry dir
+3. src/lib_cpp/odometry dir 이전 -> fieldro_lib/src/odometry dir
+4. odometry dir 이전으로 인한 include 경로 수정
 
 
-ID :  - JD 24.12.31
+ID : 82e429d - JD 24.12.31
 1. lib_header/helper dir 삭제
 2. lib_header/log dir 이전 -> fieldro_lib/include/log dir
 3. src/lib_cpp/log dir 이전 -> fieldro_lib/src/log dir
