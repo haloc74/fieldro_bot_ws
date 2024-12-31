@@ -31,9 +31,9 @@
 . trash_bot에서 이동, 멈춤 관련 packet은 응답을 받지 않도록 하기...
 . main node에서 control_move를 통하여 회전, 진행을 처리
 
-. fieldro_msg package 추가
 
-
+ID :  - JD 24.12.31
+1. fieldro_msgs package 추가
 
 ID :  - JD 24.12.32
 1. lib_header/communication dir 삭제

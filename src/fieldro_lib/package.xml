@@ -27,6 +27,7 @@
   <build_depend>serial</build_depend>
   <build_depend>std_msgs</build_depend>
   <build_depend>tf</build_depend>
+  <build_depend>fieldro_msg</build_depend>
 
   <build_depend>UnitActionComplete</build_depend>
   <build_depend>UnitControl</build_depend>  
@@ -47,6 +48,7 @@
   <build_export_depend>UnitActionComplete</build_export_depend>
   <build_export_depend>UnitControl</build_export_depend>
   <build_export_depend>UnitAliveMsg</build_export_depend>
+  <build_export_depend>fieldro_msg</build_export_depend>
 
 
   <exec_depend>message_runtime</exec_depend>

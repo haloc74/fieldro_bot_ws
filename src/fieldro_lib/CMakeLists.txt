@@ -73,6 +73,7 @@ message(STATUS "")
     geometry_msgs
     sensor_msgs   
     std_msgs   
+    fieldro_msgs
     # twinny_msgs
   )
 

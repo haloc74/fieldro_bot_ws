@@ -95,6 +95,7 @@ catkin_package(
       serial 
       std_msgs 
       tf 
+      fieldro_msgs
       twinny_msgs
   )
 
