@@ -31,14 +31,23 @@
 . trash_bot에서 이동, 멈춤 관련 packet은 응답을 받지 않도록 하기...
 . main node에서 control_move를 통하여 회전, 진행을 처리
 
-
-. lib_header/communication dir 삭제
-. lib_header/unit dir 이전 -> fieldro_lib/include/unit dir
-. src/lib_cpp/unit dir 이전 -> fieldro_lib/src/unit dir
-. unit dir 이전으로 인한 include 경로 수정
+. fieldro_msg package 추가
 
 
-ID :  - JD 24.12.31
+
+ID :  - JD 24.12.32
+1. lib_header/communication dir 삭제
+2. lib_header/unit dir 이전 -> fieldro_lib/include/unit dir
+3. src/lib_cpp/unit dir 이전 -> fieldro_lib/src/unit dir
+4. unit dir 이전으로 인한 include 경로 수정
+5. trash_bot CMakeLists.txt 에서 fieldro_lib_temp 부분 삭제
+6. UnitControl msg 이전
+7. UnitActionComplete msg 이전
+8. UnitAliveMsg 이전
+9. lib_header/unit dir 삭제
+
+
+ID : a12a7ef - JD 24.12.31
 1. lib_header/odometry dir 삭제
 2. lib_header/communication dir 이전 -> fieldro_lib/include/communication dir
 3. src/lib_cpp/communication dir 이전 -> fieldro_lib/src/communication dir

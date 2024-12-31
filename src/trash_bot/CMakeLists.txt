@@ -48,9 +48,9 @@ message(STATUS "")
     FILES
     Pose.msg
     IOSignal.msg
-    UnitActionComplete.msg
-    UnitAliveMsg.msg
-    UnitControl.msg
+    # UnitActionComplete.msg
+    # UnitAliveMsg.msg
+    # UnitControl.msg
     UnitStateMsg.msg 
   )
 
@@ -84,7 +84,7 @@ message(STATUS "")
 catkin_package(
   ## INCLUDE_DIRS include    # package root/include 폴더 : 삭제 가능
   ## DEPENDS system_lib      # system lib 의존성이 없으므로 삭제 가능
-  LIBRARIES fieldro_lib_temp    # fieldro_lib 라이브러리를 다른 ros package에서 사용할 수 있도록 설정
+  ## LIBRARIES fieldro_lib_temp    # fieldro_lib 라이브러리를 다른 ros package에서 사용할 수 있도록 설정
   CATKIN_DEPENDS           # 현재 package를 빌드하기 위해 필요한 다른 catkin package
       message_runtime
       geometry_msgs 
@@ -134,38 +134,38 @@ message(STATUS "")
 message(STATUS "5. fieldro_lib_temp Lib generate")
 message(STATUS "")
 
-  ## 5-1. lib_cpp 하위의 모든 cpp 파일을 찾아서 LIB_SRC_FILES에 저장
-  file(GLOB_RECURSE LIB_SRC_FILES 
-    ##"${CMAKE_CURRENT_SOURCE_DIR}/src/lib_cpp/log/*.cpp"  
-    ##"${CMAKE_CURRENT_SOURCE_DIR}/src/lib_cpp/communication/*.cpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/src/lib_cpp/unit/*.cpp"
-    ##"${CMAKE_CURRENT_SOURCE_DIR}/src/lib_cpp/helper/*.cpp"
-    ##"${CMAKE_CURRENT_SOURCE_DIR}/src/lib_cpp/odometry/*.cpp"
-  )
+  # ## 5-1. lib_cpp 하위의 모든 cpp 파일을 찾아서 LIB_SRC_FILES에 저장
+  # file(GLOB_RECURSE LIB_SRC_FILES 
+  #   ##"${CMAKE_CURRENT_SOURCE_DIR}/src/lib_cpp/log/*.cpp"  
+  #   ##"${CMAKE_CURRENT_SOURCE_DIR}/src/lib_cpp/communication/*.cpp"
+  #   ##"${CMAKE_CURRENT_SOURCE_DIR}/src/lib_cpp/unit/*.cpp"
+  #   ##"${CMAKE_CURRENT_SOURCE_DIR}/src/lib_cpp/helper/*.cpp"
+  #   ##"${CMAKE_CURRENT_SOURCE_DIR}/src/lib_cpp/odometry/*.cpp"
+  # )
 
-  ## 5-2. LIB_SRC_FILES의 모든 파일을 컴파일하고 링크하여 실행 파일 생성 하도록 설정
-  add_library(fieldro_lib_temp SHARED ${LIB_SRC_FILES})
+  # ## 5-2. LIB_SRC_FILES의 모든 파일을 컴파일하고 링크하여 실행 파일 생성 하도록 설정
+  # add_library(fieldro_lib_temp SHARED ${LIB_SRC_FILES})
 
-  ## 5-2. fieldro_lib_temp 빌드 시 메시지 생성 의존성 추가
-  add_dependencies(fieldro_lib_temp
-    ${${PROJECT_NAME}_EXPORTED_TARGETS}  # 메시지 생성 타겟 의존성 추가
-    ${catkin_EXPORTED_TARGETS}
-    fieldro_lib
-  )  
+  # ## 5-2. fieldro_lib_temp 빌드 시 메시지 생성 의존성 추가
+  # add_dependencies(fieldro_lib_temp
+  #   ${${PROJECT_NAME}_EXPORTED_TARGETS}  # 메시지 생성 타겟 의존성 추가
+  #   ${catkin_EXPORTED_TARGETS}
+  #   fieldro_lib
+  # )  
 
-  ## 5-3. 빌드 순서를 정의 (의존성)
-  target_link_libraries(fieldro_lib_temp
-    ${catkin_LIBRARIES}
-    ${MODBUS_LIBRARIES}
-    ${YAML_CPP_LIBRARIES}
-    fieldro_lib
-  )
+  # ## 5-3. 빌드 순서를 정의 (의존성)
+  # target_link_libraries(fieldro_lib_temp
+  #   ${catkin_LIBRARIES}
+  #   ${MODBUS_LIBRARIES}
+  #   ${YAML_CPP_LIBRARIES}
+  #   fieldro_lib
+  # )
 
-  ## 5-4. 빌드시 필요한 include 경로 설정
-  target_include_directories(fieldro_lib_temp PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}/include
-    ${CMAKE_CURRENT_SOURCE_DIR}/lib_header
-  )
+  # ## 5-4. 빌드시 필요한 include 경로 설정
+  # target_include_directories(fieldro_lib_temp PUBLIC
+  #   ${CMAKE_CURRENT_SOURCE_DIR}/include
+  #   ${CMAKE_CURRENT_SOURCE_DIR}/lib_header
+  # )
 
 ##-----------------------------------------------------------------------------
 ##            각 노드별로 설정이 되어야 하는 부분 시작
@@ -203,7 +203,7 @@ message(STATUS "")
       ${catkin_LIBRARIES}                 # catkin 빌드 시스템에서 정의한 라이브러리
       ${YAML_CPP_LIBRARIES}               # yaml-cpp 라이브러리
       fieldro_lib
-      fieldro_lib_temp                         # 
+      ## fieldro_lib_temp                         # 
     )
     message(STATUS "   6-1-4-1")
 
@@ -237,7 +237,7 @@ message(STATUS "")
       ${YAML_CPP_LIBRARIES}                # yaml-cpp 라이브러리
       ${MODBUS_LIBRARIES}                  # libmodbus 라이브러리
       fieldro_lib
-      fieldro_lib_temp                          # fieldro   라이브러리
+      ## fieldro_lib_temp                          # fieldro   라이브러리
     )
 
   ############################################################
@@ -272,7 +272,7 @@ message(STATUS "")
       ${YAML_CPP_LIBRARIES}                # yaml-cpp 라이브러리
       ${MODBUS_LIBRARIES}                  # libmodbus 라이브러리
       fieldro_lib
-      fieldro_lib_temp                          # fieldro   라이브러리
+      ## fieldro_lib_temp                          # fieldro   라이브러리
     )    
 
 
@@ -308,7 +308,7 @@ message(STATUS "")
       ${YAML_CPP_LIBRARIES}                # yaml-cpp 라이브러리
       ${MODBUS_LIBRARIES}                  # libmodbus 라이브러리
       fieldro_lib
-      fieldro_lib_temp                          # fieldro   라이브러리
+      ## fieldro_lib_temp                          # fieldro   라이브러리
     )
     
   ############################################################
@@ -343,7 +343,7 @@ message(STATUS "")
       ${YAML_CPP_LIBRARIES}                # yaml-cpp 라이브러리
       ${MODBUS_LIBRARIES}                  # libmodbus 라이브러리
       fieldro_lib
-      fieldro_lib_temp                          # fieldro   라이브러리
+      ## fieldro_lib_temp                          # fieldro   라이브러리
     )    
 
 

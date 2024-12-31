@@ -47,9 +47,9 @@ message(STATUS "")
     FILES
     # Pose.msg
     # IOSignal.msg
-    # UnitActionComplete.msg
-    # UnitAliveMsg.msg
-    # UnitControl.msg
+    UnitActionComplete.msg
+    UnitAliveMsg.msg
+    UnitControl.msg
     # UnitStateMsg.msg 
   )
 
