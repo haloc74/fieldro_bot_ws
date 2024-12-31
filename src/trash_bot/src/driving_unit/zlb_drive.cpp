@@ -339,6 +339,43 @@ namespace frb
                 to_int(frb::UnitAction::Stop));    
   }
 
+  /**
+  * @brief      steering motor status 확인
+  * @param[in]  void
+  * @return     void
+  * @note       callback으로 동작 
+  */
+ void ZlbDrive::check_steer_motor_status()
+ {
+    int32_t status = get_motor_status(_slave_id[to_int(SlaveId::Steering)]);
+    if(frb::is_on_signal(ZlbStatus::Target_reached, status))
+    {
+      notify_log_msg(frb::LogLevel::Info, 0, "ZlbDrive::check_steer_motor_status : target reached");
+      
+      // 상위 Object에 동작 완료 통보
+      notify_action_result(frb::Error::None);  
+    }
+    else
+    {
+      // 아직 동작중이면 1초후에 다시 확인
+      delay_call(1000, std::bind(&ZlbDrive::check_steer_motor_status, this));
+    }
+    return;
+ }
+
+  /**
+  * @brief      degree 값을 position 값으로 변환
+  * @param[in]  const double degree : 변환할 degree 값
+  * @return     int32_t             : 변환된 position 값
+  * @note       
+  */
+  int32_t ZlbDrive::degree_to_position(const double degree)
+  {
+    int32_t position = static_cast<int32_t>(degree * (RESOLUTION * RATIO_MOTOR * RATIO_STEER) / 360.0);
+
+    return position;
+  }
+
   void ZlbDrive::load_option(std::string config_file)
   {
     try

@@ -56,7 +56,7 @@ namespace frb
 
     void test_run();
     void test_stop();                       // break on
-    void test_turn();
+    void test_turn(double degree);         // steering motor turn 
 
 
     void engage_break();
@@ -104,5 +104,14 @@ namespace frb
     void load_option(std::string config_file);
 
     int32_t get_motor_status(int32_t slave_id);
+
+    // steering motor status 확인
+    void check_steer_motor_status();
+
+    int32_t degree_to_position(const double degree);
+    // inline int32_t degree_to_position(const double degree)
+    // {
+    //     return static_cast<int32_t>(degree * (RESOLUTION * RATIO_MOTOR * RATIO_STEER) / 360.0);
+    // }    
   };
 }

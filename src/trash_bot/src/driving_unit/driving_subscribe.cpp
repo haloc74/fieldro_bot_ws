@@ -22,6 +22,7 @@ namespace frb
     if(unit != frb::UnitName::Driving && unit != frb::UnitName::All)      return;
 
     frb::UnitAction action = to_enum<frb::UnitAction>(msg.action);
+    double value = 0.0;
 
     log_msg(LogInfo, 0, "UnitName Action Sub : " + to_string(unit) + " - " + to_string(action));
 
@@ -51,7 +52,8 @@ namespace frb
 
     case frb::UnitAction::Turn:
       _action = frb::UnitAction::Turn;
-      _drive->test_turn();
+      value = std::stod(msg.command);
+      _drive->test_turn(value);
       break;
 
     case frb::UnitAction::GetStatus:
