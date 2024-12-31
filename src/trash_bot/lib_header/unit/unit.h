@@ -12,7 +12,8 @@
 
 //#include "define/unit_action_define.h"
 #include <fieldro_lib/define/unit_action_define.h>
-#include "helper/thread_action_info.h"
+//#include "helper/thread_action_info.h"
+#include <fieldro_lib/helper/thread_action_info.h>
 #include "log/log.h"
 
 #include "trash_bot/UnitControl.h"

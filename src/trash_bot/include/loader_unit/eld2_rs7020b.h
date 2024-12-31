@@ -7,7 +7,8 @@
 //#include "define/error_code.h"
 #include <fieldro_lib/define/error_code.h>
 #include "communication/modbus_wrapper.h"
-#include "helper/thread_action_info.h"
+//#include "helper/thread_action_info.h"
+#include <fieldro_lib/helper/thread_action_info.h>
 
 
 namespace frb

@@ -31,7 +31,15 @@
 . trash_bot에서 이동, 멈춤 관련 packet은 응답을 받지 않도록 하기...
 . main node에서 control_move를 통하여 회전, 진행을 처리
 
+
 ID :  - JD 24.12.31
+1. lib_header/define dir 삭제
+2. lib_header/helper dir 이전 -> fieldro_lib/include/helper dir
+3. src/lib_cpp/helper dir 이전 -> fieldro_lib/src/helper dir
+4. helper dir 이전으로 인한 include 경로 수정
+
+
+ID : d53cea0 - JD 24.12.31
 1. fieldro_lib package 추가
 2. fieldro_lib package로 trash_bot/lib_header/define 이하의 파일 이전
 3. 2번 항목의 이전에 따른 include 경로 변경

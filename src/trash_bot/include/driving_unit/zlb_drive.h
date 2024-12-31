@@ -16,7 +16,8 @@
 #include <fieldro_lib/define/direction_define.h>
 
 #include "communication/modbus_wrapper.h"
-#include "helper/thread_action_info.h"
+//#include "helper/thread_action_info.h"
+#include <fieldro_lib/helper/thread_action_info.h>
 
 
 namespace frb

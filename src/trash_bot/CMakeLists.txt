@@ -139,7 +139,7 @@ message(STATUS "")
     "${CMAKE_CURRENT_SOURCE_DIR}/src/lib_cpp/log/*.cpp"  
     "${CMAKE_CURRENT_SOURCE_DIR}/src/lib_cpp/communication/*.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/lib_cpp/unit/*.cpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/src/lib_cpp/helper/*.cpp"
+    ##"${CMAKE_CURRENT_SOURCE_DIR}/src/lib_cpp/helper/*.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/lib_cpp/odometry/*.cpp"
   )
 

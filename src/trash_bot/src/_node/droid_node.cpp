@@ -2,7 +2,8 @@
 
 #include "droid/droid.h"
 #include "log/log.h"
-#include "helper/helper.h"
+//#include "helper/helper.h"
+#include <fieldro_lib/helper/helper.h>
 
 frb::Log* frb::Log::_instance = nullptr;
 

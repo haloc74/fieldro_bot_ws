@@ -1,7 +1,8 @@
 #pragma once
 
 #include <unordered_map> // 추가된 부분
-#include "helper/enum_template.h"
+//#include "helper/enum_template.h"
+#include <fieldro_lib/helper/enum_template.h>
 
 namespace frb
 {
