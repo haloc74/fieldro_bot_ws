@@ -4,7 +4,8 @@
 #include <functional>
 
 #include "eld2_rs7020b_define.h"
-#include "define/error_code.h"
+//#include "define/error_code.h"
+#include <fieldro_lib/define/error_code.h>
 #include "communication/modbus_wrapper.h"
 #include "helper/thread_action_info.h"
 

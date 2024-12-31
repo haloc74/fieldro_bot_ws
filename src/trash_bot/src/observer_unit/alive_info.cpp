@@ -1,5 +1,6 @@
 #include "observer_unit/alive_info.h"
-#include "define/unit_define.h"
+//#include "define/unit_define.h"
+#include <fieldro_lib/define/unit_define.h>
 
 namespace frb
 {

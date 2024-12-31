@@ -6,8 +6,10 @@
 #include <ctime>
 #include <functional>
 #include <mutex>
-#include "define/error_code.h"
-#include "define/communication_define.h"
+//#include "define/error_code.h"
+#include <fieldro_lib/define/error_code.h>
+//#include "define/communication_define.h"
+#include <fieldro_lib/define/communication_define.h>
 #include "log/log.h"
 #include "modbus_define.h"
 

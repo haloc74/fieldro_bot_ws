@@ -2,7 +2,8 @@
 #include "loader.h"
 
 #include "helper/helper.h"
-#include "define/digital_in_define.h"
+//#include "define/digital_in_define.h"
+#include <fieldro_lib/define/digital_in_define.h>
 #include <trash_bot/UnitActionComplete.h>
 
 

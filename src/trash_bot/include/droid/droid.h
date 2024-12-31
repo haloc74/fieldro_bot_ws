@@ -14,7 +14,8 @@
 
 
 //#include "helper/thread_action_info.h"
-#include "define/digital_in_define.h"
+//#include "define/digital_in_define.h"
+#include <fieldro_lib/define/digital_in_define.h>
 //#include "define/unit_state.h"
 //#include "log/log_message.h"
 

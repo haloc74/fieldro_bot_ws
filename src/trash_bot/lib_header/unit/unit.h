@@ -5,9 +5,13 @@
 #include <map>
 
 
-#include "define/unit_define.h"
-#include "define/unit_state.h"
-#include "define/unit_action_define.h"
+//#include "define/unit_define.h"
+#include <fieldro_lib/define/unit_define.h>
+//#include "define/unit_state.h"
+#include <fieldro_lib/define/unit_state.h>
+
+//#include "define/unit_action_define.h"
+#include <fieldro_lib/define/unit_action_define.h>
 #include "helper/thread_action_info.h"
 #include "log/log.h"
 

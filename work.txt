@@ -28,11 +28,17 @@
 . Driving : 주행 subscribe 추가
 . Driving : act_velocity 추가
 
-. get_motor_state() 함수 동작 방법 고민
 . trash_bot에서 이동, 멈춤 관련 packet은 응답을 받지 않도록 하기...
 . main node에서 control_move를 통하여 회전, 진행을 처리
 
-ID :  - JD 24.12.
+ID :  - JD 24.12.31
+1. fieldro_lib package 추가
+2. fieldro_lib package로 trash_bot/lib_header/define 이하의 파일 이전
+3. 2번 항목의 이전에 따른 include 경로 변경
+4. 2번 항목의 이전에 따른 trash_bot 의존성 변경
+
+
+ID : 87132ca - JD 24.12.31
 1. steering 동작시 동작 완료시까지 다른 동작 하지 못하도록 하기.
 2. main node에서 command 값을 입력하여 steering 각도 입력 하도록 하기.
 3. degree_to_position 함수를 만들어서 abs_encoder value로 motor 동작 시키기

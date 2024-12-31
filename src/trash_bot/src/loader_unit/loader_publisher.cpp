@@ -1,6 +1,7 @@
 
 #include "loader.h"
-#include "define/unit_state.h"
+//#include "define/unit_state.h"
+#include <fieldro_lib/define/unit_state.h>
 
 /*
   1. loader 움직임시 초기화 움직임은 sensor의 입력으로 완료가 되기 때문에 

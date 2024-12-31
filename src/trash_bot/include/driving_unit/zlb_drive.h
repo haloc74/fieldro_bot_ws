@@ -12,7 +12,9 @@
 
 #include "motor_runtime_state.h"
 
-#include "define/direction_define.h"
+//#include "define/direction_define.h"
+#include <fieldro_lib/define/direction_define.h>
+
 #include "communication/modbus_wrapper.h"
 #include "helper/thread_action_info.h"
 
