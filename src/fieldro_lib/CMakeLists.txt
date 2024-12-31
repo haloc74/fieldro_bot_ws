@@ -26,6 +26,7 @@ message(STATUS "")
       serial
       std_msgs
       tf
+      fieldro_msgs
       # twinny_msgs
   )
 
@@ -43,15 +44,15 @@ message(STATUS "2. message, service, action add and generate")
 message(STATUS "")
 
   ## 2.1 msg 폴더로 부터 messages 생성
-  add_message_files(
-    FILES
-    # Pose.msg
-    # IOSignal.msg
-    UnitActionComplete.msg
-    UnitAliveMsg.msg
-    UnitControl.msg
-    # UnitStateMsg.msg 
-  )
+  # add_message_files(
+  #   FILES
+  #   # Pose.msg
+  #   # IOSignal.msg
+  #   # UnitActionComplete.msg
+  #   # UnitAliveMsg.msg
+  #   # UnitControl.msg
+  #   # UnitStateMsg.msg 
+  # )
 
   ## 2.2 srv 폴더로 부터 service 생성
   # add_service_files(
@@ -95,6 +96,7 @@ catkin_package(
       serial 
       std_msgs 
       tf 
+      fieldro_msgs
       # twinny_msgs
   )
 

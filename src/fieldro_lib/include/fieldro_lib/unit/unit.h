@@ -17,7 +17,8 @@
 //#include "log/log.h"
 #include <fieldro_lib/log/log.h>
 
-#include "trash_bot/UnitControl.h"
+//#include "trash_bot/UnitControl.h"
+#include <fieldro_msgs/UnitControl.h>
    
 namespace frb
 {
@@ -60,7 +61,7 @@ namespace frb
     
 
     virtual void publish_unit_action_complete(int32_t action, int32_t error_code);  // unit action complete publish
-    virtual void subscribe_unit_action(const trash_bot::UnitControl& msg) {}        // unit action subscribe
+    virtual void subscribe_unit_action(const fieldro_msgs::UnitControl& msg) {}        // unit action subscribe
     virtual void load_option(std::string config_file)                     {}        // unit child option load
   };
 

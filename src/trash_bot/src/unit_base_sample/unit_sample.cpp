@@ -2,7 +2,7 @@
 #include "unit_sample.h"
 //#include "helper/helper.h"
 #include <fieldro_lib/helper/helper.h>
-#include <trash_bot/UnitActionComplete.h>
+#include <fieldro_msgs/UnitActionComplete.h>
 
 namespace frb
 {
@@ -21,7 +21,7 @@ namespace frb
 
     // unit action message 처리 결과 발송을 위한 publisher 생성 및 link
     _publish_unit_action_complete =
-    _node_handle->advertise<trash_bot::UnitActionComplete>("trash_bot/action_complete", 10);
+    _node_handle->advertise<fieldro_msgs::UnitActionComplete>("trash_bot/action_complete", 10);
 
     // spinn 구동 (생성은 Unit Class 담당)
     _spinner->start();
@@ -78,7 +78,7 @@ namespace frb
     return;
   }
 
-  void UnitSample::subscribe_unit_action(const trash_bot::UnitControl& msg)
+  void UnitSample::subscribe_unit_action(const fieldro_msgs::UnitControl& msg)
   {
     // todo : 
   }

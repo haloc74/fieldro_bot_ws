@@ -46,7 +46,7 @@ namespace frb
   /*            2. action_complete_msg의 action과 pending_sequence의 action이 일치할 경우
   /*            두 조건이 모두 만족할 경우 pending_sequence에서 삭제한다.
   */
-  void Droid::subscribe_action_complete(const trash_bot::UnitActionComplete &action_complete_msg)
+  void Droid::subscribe_action_complete(const fieldro_msgs::UnitActionComplete &action_complete_msg)
   {
     std::lock_guard<std::mutex> lock(_lock);
     

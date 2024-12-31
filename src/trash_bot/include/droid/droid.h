@@ -20,9 +20,9 @@
 //#include "define/unit_state.h"
 //#include "log/log_message.h"
 
-#include <trash_bot/UnitActionComplete.h>
+#include <fieldro_msgs/UnitActionComplete.h>
 #include <trash_bot/IOSignal.h>
-#include <trash_bot/UnitControl.h>
+#include <fieldro_msgs/UnitControl.h>
 #include <trash_bot/UnitStateMsg.h>
 
 
@@ -67,20 +67,20 @@ namespace frb
 
     void subscribe_switch_report(const twinny_msgs::SwitchReport Switch_Check);    
     void subscribe_velocity_control(const geometry_msgs::Twist &twist_msg);
-    void subscribe_action_complete(const trash_bot::UnitActionComplete &action_complete_msg);
+    void subscribe_action_complete(const fieldro_msgs::UnitActionComplete &action_complete_msg);
     void subscribe_unit_state(const trash_bot::UnitStateMsg &msg);
 
 
   private:
-    std::list<std::unique_ptr<trash_bot::UnitControl>> _control_sequence;  // 동작 요청 list
-    std::list<std::unique_ptr<trash_bot::UnitControl>> _pending_sequence;  // 동작 요청된 list (완료시 까지 유지)
+    std::list<std::unique_ptr<fieldro_msgs::UnitControl>> _control_sequence;  // 동작 요청 list
+    std::list<std::unique_ptr<fieldro_msgs::UnitControl>> _pending_sequence;  // 동작 요청된 list (완료시 까지 유지)
 
     void add_sequence(int32_t unit, int32_t action, std::string command="");
     void message_publish();
 
     //void publish_unit_control(int32_t unit, int32_t action, std::string command="");
     void publish_all_destroy();
-    void publish_unit_control(std::unique_ptr<trash_bot::UnitControl> unit_control_msg);
+    void publish_unit_control(std::unique_ptr<fieldro_msgs::UnitControl> unit_control_msg);
 
     // user command control
     std::map<int32_t, int32_t, std::string> _command_map;

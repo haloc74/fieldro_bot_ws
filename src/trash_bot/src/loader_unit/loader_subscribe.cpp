@@ -14,7 +14,7 @@ namespace frb
   * @attention  target이 loader가 아닌 메세지는 무시한다.
   * @note       
   */
-  void Loader::subscribe_unit_action(const trash_bot::UnitControl& msg)
+  void Loader::subscribe_unit_action(const fieldro_msgs::UnitControl& msg)
   {
     frb::UnitName unit = to_enum<frb::UnitName>(msg.target_object);
     

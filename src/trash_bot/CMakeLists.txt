@@ -27,6 +27,7 @@ message(STATUS "")
       std_msgs
       tf
       fieldro_lib
+      fieldro_msgs
       twinny_msgs
   )
 
@@ -74,6 +75,7 @@ message(STATUS "")
     geometry_msgs
     sensor_msgs   
     std_msgs   
+    fieldro_msgs
     twinny_msgs
   )
 

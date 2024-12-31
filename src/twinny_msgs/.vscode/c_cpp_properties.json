@@ -1,0 +1,63 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "",
+        "limitSymbolsToIncludedHeaders": true
+      },
+      "includePath": [
+        "/home/twinny/pallent_ws/devel/include/**",
+        "/home/twinny/catkin_ws/devel/include/**",
+        "/opt/ros/melodic/include/**",
+        "/home/twinny/catkin_ws/src/twinny_costmap_2d/costmap_2d/include/**",
+        "/home/twinny/catkin_ws/src/twinny_common/json/include/**",
+        "/home/twinny/catkin_ws/src/ocam/include/**",
+        "/home/twinny/catkin_ws/src/twinny_pointcloud_merger/pointcloud_to_laserscan/include/**",
+        "/home/twinny/catkin_ws/src/test_deadreckoning/include/**",
+        "/home/twinny/catkin_ws/src/twinny_audio_driver/include/**",
+        "/home/twinny/catkin_ws/src/twinny_audio_engine/include/**",
+        "/home/twinny/catkin_ws/src/twinny_common/twinny_big_cell_grid_map/include/**",
+        "/home/twinny/catkin_ws/src/twinny_cliff_detector/include/**",
+        "/home/twinny/catkin_ws/src/twinny_common/twinny_color/include/**",
+        "/home/twinny/catkin_ws/src/twinny_costmap_2d/twinny_costmap_2d/include/**",
+        "/home/twinny/catkin_ws/src/twinny_DIO_module_driver/twinny_DIO_module_driver/include/**",
+        "/home/twinny/catkin_ws/src/twinny_distance_estimator/include/**",
+        "/home/twinny/catkin_ws/src/twinny_elevator_docking/include/**",
+        "/home/twinny/catkin_ws/src/twinny_emergency_detector/include/**",
+        "/home/twinny/catkin_ws/src/twinny_env_map_server/include/**",
+        "/home/twinny/catkin_ws/src/twinny_geometry/include/**",
+        "/home/twinny/catkin_ws/src/twinny_global_localizer_2/include/**",
+        "/home/twinny/catkin_ws/src/twinny_common/twinny_histogram/include/**",
+        "/home/twinny/catkin_ws/src/twinny_icpdas_usb_io/include/**",
+        "/home/twinny/catkin_ws/src/twinny_common/twinny_lidar/include/**",
+        "/home/twinny/catkin_ws/src/twinny_lidar_merger/include/**",
+        "/home/twinny/pallent_ws/src/twinny_lift_device/include/**",
+        "/home/twinny/catkin_ws/src/twinny_local_map_server/include/**",
+        "/home/twinny/catkin_ws/src/twinny_localizer/include/**",
+        "/home/twinny/catkin_ws/src/twinny_manual_controller/include/**",
+        "/home/twinny/catkin_ws/src/twinny_common/twinny_map/include/**",
+        "/home/twinny/catkin_ws/src/twinny_marker_pose_estimation/include/**",
+        "/home/twinny/catkin_ws/src/twinny_mobilebase_driver_INROS/include/**",
+        "/home/twinny/catkin_ws/src/twinny_nargo_leader_local_planner/include/**",
+        "/home/twinny/catkin_ws/src/twinny_parameter_loader/include/**",
+        "/home/twinny/catkin_ws/src/twinny_common/twinny_point_cloud/include/**",
+        "/home/twinny/catkin_ws/src/twinny_robot_docking/include/**",
+        "/home/twinny/catkin_ws/src/twinny_robot_model/include/**",
+        "/home/twinny/catkin_ws/src/twinny_robot_state_publisher/include/**",
+        "/home/twinny/catkin_ws/src/twinny_single_move_local_planner/include/**",
+        "/home/twinny/catkin_ws/src/twinny_target_pose_estimator/include/**",
+        "/home/twinny/catkin_ws/src/twinny_targo_local_planner/include/**",
+        "/home/twinny/catkin_ws/src/twinny_targo_sound/include/**",
+        "/home/twinny/catkin_ws/src/twinny_test_docking_collision/include/**",
+        "/home/twinny/catkin_ws/src/twinny_test_lidar_merger/include/**",
+        "/home/twinny/catkin_ws/src/twinny_trajectory_controller/include/**",
+        "/home/twinny/catkin_ws/src/twinny_trajectory_generator/include/**",
+        "/home/twinny/catkin_ws/src/twinny_util/include/**",
+        "/home/twinny/catkin_ws/src/user_interface_simulator/include/**",
+        "/usr/include/**"
+      ],
+      "name": "ROS"
+    }
+  ],
+  "version": 4
+}

@@ -4,7 +4,7 @@
 #include <fieldro_lib/helper/helper.h>
 //#include "log/log.h"
 #include <fieldro_lib/log/log.h>
-#include <trash_bot/UnitAliveMsg.h>
+#include <fieldro_msgs/UnitAliveMsg.h>
 
 namespace frb
 {
@@ -37,7 +37,7 @@ namespace frb
   */
   void Droid::publish_all_destroy()
   {
-    trash_bot::UnitControl unit_control_msg;
+    fieldro_msgs::UnitControl unit_control_msg;
     unit_control_msg.time_stamp     = ros::Time::now();
     unit_control_msg.target_object  = to_int(frb::UnitName::All);
     unit_control_msg.action         = to_int(frb::UnitAction::Finish);
@@ -62,7 +62,7 @@ namespace frb
   *             pending_sequence에 저장된 message는 action_complete message를 받아서 삭제된다.
   *             pending_sequence에 요소가 있을 경우 더이상 publish하지 않는다.
   */
-  void Droid::publish_unit_control(std::unique_ptr<trash_bot::UnitControl> unit_control_msg)
+  void Droid::publish_unit_control(std::unique_ptr<fieldro_msgs::UnitControl> unit_control_msg)
   {
     log_msg(LogInfo, 
             0, 

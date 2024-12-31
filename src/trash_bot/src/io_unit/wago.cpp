@@ -12,8 +12,8 @@
 
 
 #include <trash_bot/IOSignal.h>
-#include <trash_bot/UnitAliveMsg.h>
-#include <trash_bot/UnitActionComplete.h>
+#include <fieldro_msgs/UnitAliveMsg.h>
+#include <fieldro_msgs/UnitActionComplete.h>
 
 
 namespace frb
@@ -33,7 +33,7 @@ namespace frb
 
     // unit action message 처리 결과 발송을 위한 publisher 생성 및 link
     _publish_unit_action_complete = 
-    _node_handle->advertise<trash_bot::UnitActionComplete>("trash_bot/action_complete", 10);
+    _node_handle->advertise<fieldro_msgs::UnitActionComplete>("trash_bot/action_complete", 10);
 
     // publisher 생성 및 link
     // io message는 아주 중요한 정보이므로 latch를 true로 설정하여 

@@ -9,8 +9,8 @@
 #include <fieldro_lib/helper/helper.h>
 
 #include <trash_bot/IOSignal.h>
-#include <trash_bot/UnitAliveMsg.h>
-#include <trash_bot/UnitActionComplete.h>
+#include <fieldro_msgs/UnitAliveMsg.h>
+#include <fieldro_msgs/UnitActionComplete.h>
 
 namespace frb
 {
@@ -21,7 +21,7 @@ namespace frb
   * @attention  target이 signal이 아닌 메세지는 무시한다.
   * @note       
   */
-  void Wago::subscribe_unit_action(const trash_bot::UnitControl& unit_control_msg)
+  void Wago::subscribe_unit_action(const fieldro_msgs::UnitControl& unit_control_msg)
   {
     // target이 signal이 아닌 메세지는 무시한다. 
     frb::UnitName unit = to_enum<frb::UnitName>(unit_control_msg.target_object);

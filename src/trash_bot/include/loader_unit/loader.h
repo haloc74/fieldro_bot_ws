@@ -28,7 +28,7 @@ namespace frb
   protected:
     virtual void update();                                                  // object main loop
     virtual void load_option(std::string config_file);                      // option load
-    virtual void subscribe_unit_action(const trash_bot::UnitControl& msg);  // unit action subscribe
+    virtual void subscribe_unit_action(const fieldro_msgs::UnitControl& msg);  // unit action subscribe
 
     ELD2_RS7020B*       _motor;                                       // Motor 객체
     MotionInfo          _motion;                                      // 동작 정보 (범위, 시간, 속도, timeout 등 정보)

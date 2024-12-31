@@ -2,8 +2,8 @@
 #include <fieldro_lib/unit/unit.h>
 //#include "helper/helper.h"
 #include <fieldro_lib/helper/helper.h>
-#include <trash_bot/UnitActionComplete.h>
-#include <trash_bot/UnitAliveMsg.h>
+#include <fieldro_msgs/UnitActionComplete.h>
+#include <fieldro_msgs/UnitAliveMsg.h>
 
 
 namespace frb
@@ -26,11 +26,11 @@ namespace frb
 
     // action complete publish 생성
     _publish_unit_action_complete =
-    _node_handle->advertise<trash_bot::UnitActionComplete>("trash_bot/action_complete", 10);
+    _node_handle->advertise<fieldro_msgs::UnitActionComplete>("trash_bot/action_complete", 10);
   
     // alive publish 생성
     _publish_unit_alive =
-    _node_handle->advertise<trash_bot::UnitAliveMsg>("trash_bot/UnitAliveMsg", 10);
+    _node_handle->advertise<fieldro_msgs::UnitAliveMsg>("trash_bot/UnitAliveMsg", 10);
 
     // alive thread 정보 생성
     _alive_thread = new ThreadActionInfo(config_file, "alive");
@@ -96,7 +96,7 @@ namespace frb
   */
   void Unit::publish_unit_action_complete(int32_t action, int32_t error_code)
   {
-    trash_bot::UnitActionComplete msg;
+    fieldro_msgs::UnitActionComplete msg;
     msg.time_stamp      = ros::Time::now();
     msg.receive_object  = to_int(frb::UnitName::System);
     msg.action_object   = to_int(_name);
@@ -115,7 +115,7 @@ namespace frb
     while(_alive_thread->_active)
     {
       // unit alive publish
-      trash_bot::UnitAliveMsg msg;
+      fieldro_msgs::UnitAliveMsg msg;
       msg.index = to_int(_name);
       msg.state = to_int(_state);
       _publish_unit_alive.publish(msg);

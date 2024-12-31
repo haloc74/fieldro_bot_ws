@@ -5,7 +5,7 @@
 #include <fieldro_lib/helper/helper.h>
 //#include "log/log.h"
 #include <fieldro_lib/log/log.h>
-#include <trash_bot/UnitAliveMsg.h>
+#include <fieldro_msgs/UnitAliveMsg.h>
 
 //#include "define/unit_define.h"
 #include <fieldro_lib/define/unit_define.h>
@@ -40,7 +40,7 @@ namespace frb
     _node_handle->subscribe("trash_bot/UnitStateMsg", 100, &Droid::subscribe_unit_state, this);
 
     _publish_unit_control = 
-    _node_handle->advertise<trash_bot::UnitControl>("trash_bot/unit_control", 10);
+    _node_handle->advertise<fieldro_msgs::UnitControl>("trash_bot/unit_control", 10);
 
     _control_sequence.clear();
     _pending_sequence.clear();
@@ -128,8 +128,8 @@ namespace frb
     }
     else
     {
-      std::unique_ptr<trash_bot::UnitControl> 
-      unit_control_msg = std::make_unique<trash_bot::UnitControl>();
+      std::unique_ptr<fieldro_msgs::UnitControl> 
+      unit_control_msg = std::make_unique<fieldro_msgs::UnitControl>();
 
       unit_control_msg->time_stamp     = ros::Time(0);
       unit_control_msg->target_object  = unit;

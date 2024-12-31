@@ -32,6 +32,13 @@
 . main node에서 control_move를 통하여 회전, 진행을 처리
 
 
+ID :  - JD 24.12.32
+1. fieldro_lib, trash_bot 에 있는 msg중 선별하여 fieldro_msgs package로 이동
+  - UnitActionComplete
+  - UnitAliveMsg
+  - UnitControl
+
+
 ID :  - JD 24.12.31
 1. fieldro_msgs package 추가
 

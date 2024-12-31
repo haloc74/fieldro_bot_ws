@@ -6,7 +6,7 @@
 #include <fieldro_lib/log/log.h>
 
 #include <trash_bot/UnitStateMsg.h>
-#include <trash_bot/UnitActionComplete.h>
+#include <fieldro_msgs/UnitActionComplete.h>
 
 namespace frb
 {

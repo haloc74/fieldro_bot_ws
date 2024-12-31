@@ -1,0 +1,44 @@
+Header header
+string type
+
+uint8 LED_0=0
+uint8 LED_1=1
+uint8 LED_2=2
+uint8 LED_3=3 
+uint8 LED_4=4
+uint8 LED_5=5
+
+uint8 LED_6=6
+uint8 LED_7=7
+uint8 LED_8=8
+uint8 LED_9=9
+uint8 LED_10=10
+uint8 LED_11=11
+
+uint8 LED_BAR_OFF=100
+uint8 LED_BAR_RED=101
+uint8 LED_BAR_GREEN=102
+uint8 LED_BAR_YELLOW=103
+uint8 LED_BAR_BLUE=104
+uint8 LED_BAR_MAGENTA=105
+uint8 LED_BAR_CYAN=106
+uint8 LED_BAR_WHITE=107
+
+uint8 LED_BAR_OFF_2=200
+uint8 LED_BAR_RED_2=201
+uint8 LED_BAR_GREEN_2=202
+uint8 LED_BAR_YELLOW_2=203
+uint8 LED_BAR_BLUE_2=204
+uint8 LED_BAR_MAGENTA_2=205
+uint8 LED_BAR_CYAN_2=206
+uint8 LED_BAR_WHITE_2=207
+
+uint8 LED_ALL=255
+
+uint8 STATE_OFF=0
+uint8 STATE_ON=1
+uint8 STATE_BLINK=2
+uint8 STATE_KEEP=3
+
+uint8 ID
+uint8 STATE

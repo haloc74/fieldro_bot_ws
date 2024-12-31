@@ -1,0 +1,8 @@
+Header header
+
+uint16 CMD_LIDAR_ON=0
+uint16 CMD_LIDAR_OSSD_MUTE=1
+uint16 CMD_LIDAR_RESTART=2
+uint16 CMD_LIDAR_OFF=3
+
+uint16 command

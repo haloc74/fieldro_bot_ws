@@ -40,7 +40,7 @@ namespace frb
     virtual void load_option(std::string config_file);
 
     // control 지령을 받기 위한 subscriber
-    virtual void subscribe_unit_action(const trash_bot::UnitControl& msg);
+    virtual void subscribe_unit_action(const fieldro_msgs::UnitControl& msg);
 
     // io signal을 발송하기 위한 publisher
     ros::Time      _last_publish_time;               // 마지막 update 시간    

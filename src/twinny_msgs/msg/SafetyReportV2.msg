@@ -1,0 +1,70 @@
+Header header
+
+int8 MODE_NORMAL=0
+int8 MODE_OSSD_MUTE_MOVE=1
+int8 MODE_MANUAL_MOVE=2
+int8 MODE_EMERGENCY_STOP=-1
+int8 MODE_PROTECTIVE_STOP=-2
+int8 MODE_EXTERNAL_STOP=-3
+
+int8 mode
+
+bool estop_switch_status
+bool sto_status
+bool sto_feedback_status
+bool ossd_front_status
+bool ossd_rear_status
+bool external_stop_status
+
+bool reset_switch_usable_flag
+bool reset_switch_toggle
+bool manual_move_switch_usable_flag
+bool manual_move_switch_status
+bool lidar_front_warn
+bool lidar_rear_warn
+bool lidar_power_status
+
+uint8 MCU_WATCHDOG_NORMAL=0
+uint8 MCU_WATCHDOG_ALARM=1
+uint8 MCU_WATCHDOG_FAULT=2
+
+uint8 mcu_watchdog_status_master
+uint8 mcu_watchdog_status_slave
+
+bool fault_detected
+
+bool fault_inconsitent_sequence_two_mcu
+bool fault_different_data_two_mcu
+
+uint8 FAULT_EMERGENCY_SW_FAULT=1
+uint8 FAULT_STO_FAULT=2
+uint8 FAULT_OSSD_FRONT=3
+uint8 FAULT_OSSD_REAR=4
+uint8 FAULT_LIDAR_FRONT=5
+uint8 FAULT_LIDAR_REAR=6
+uint8 FAULT_EXTERNAL_STOP=7
+uint8 FAULT_PROGRAM_TIMING=8
+uint8 FAULT_PC_BOARD_CHECK=9
+uint16 fault_safety_function
+
+uint8 MCU_FAULT_NO_ERROR=0
+uint8 MCU_FAULT_CORE_TEST_FAIL=1
+uint8 MCU_FAULT_RAM_TEST_FAIL=2
+uint8 MCU_FAULT_FLASH_TEST_FAIL=3
+uint8 MCU_FAULT_PWR_SETTING_MISMATCH=4
+uint8 MCU_FAULT_RCC_SETTING_MISMATCH=5
+uint8 MCU_FAULT_GPIO_SETTING_MISMATCH=6
+uint8 MCU_FAULT_SYSCFG_SETTING_MISMATCH=7
+uint8 MCU_FAULT_DMA_SETTING_MISMATCH=8
+uint8 MCU_FAULT_NVIC_SETTING_MISMATCH=9
+uint8 MCU_FAULT_ADC_SETTING_MISMATCH=10
+uint8 MCU_FAULT_VREFBUF_SETTING_MISMATCH=11
+uint8 MCU_FAULT_WDG_SETTING_MISMATCH=12
+uint8 MCU_FAULT_SPI_SETTING_MISMATCH=13
+uint8 MCU_FAULT_CAN_SETTING_MISMATCH=14
+uint8 MCU_FAULT_POWERING_ERROR=15
+uint8 MCU_FAULT_CLOCKING_ERROR=16
+uint8 MCU_FAULT_DIAGNOSTIC_ERROR=17
+uint8 MCU_FAULT_CAN_ERROR=18
+uint8 MCU_FAULT_RESET_OCCURED=255
+uint8[2] fault_mcu

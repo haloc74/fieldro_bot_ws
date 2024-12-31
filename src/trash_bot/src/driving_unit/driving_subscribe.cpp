@@ -15,7 +15,7 @@ namespace frb
     // todo : motor 객체 쪽에 속도값 전달
   }
 
-  void Driving::subscribe_unit_action(const trash_bot::UnitControl& msg)
+  void Driving::subscribe_unit_action(const fieldro_msgs::UnitControl& msg)
   {
     frb::UnitName unit = to_enum<frb::UnitName>(msg.target_object);
 

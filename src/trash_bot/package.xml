@@ -47,6 +47,8 @@
   <build_export_depend>serial</build_export_depend>
   <build_export_depend>std_msgs</build_export_depend>
   <build_export_depend>tf</build_export_depend>
+  <build_export_depend>fieldro_lib</build_export_depend>
+  <build_export_depend>fieldro_msgs</build_export_depend>
   <build_export_depend>twinny_msgs</build_export_depend>
   <build_export_depend>IOSignal</build_export_depend>
   <!-- <build_export_depend>UnitActionComplete</build_export_depend> -->

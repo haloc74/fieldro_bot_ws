@@ -7,7 +7,7 @@
 
 //#include "unit/unit.h"
 #include <fieldro_lib/unit/unit.h>
-#include "trash_bot/UnitAliveMsg.h"
+#include <fieldro_msgs/UnitAliveMsg.h>
 #include "observer_unit/alive_info.h"
 
  
@@ -33,11 +33,11 @@ namespace frb
     virtual void load_option(std::string config_file);            // observer 옵션 로드
 
     // acation 지령을 받기위한 subscriber
-    virtual void subscribe_unit_action(const trash_bot::UnitControl& unit_control_msg);
+    virtual void subscribe_unit_action(const fieldro_msgs::UnitControl& unit_control_msg);
 
     // unit들의 heartbeat 상태를 수신하기 위한 subscriber
     ros::Subscriber _subscribe_unit_alive;	                        
-    void subscribe_unit_alive(const trash_bot::UnitAliveMsg &msg);	
+    void subscribe_unit_alive(const fieldro_msgs::UnitAliveMsg &msg);	
 
     // unit들의 상태를 발송하기 위한 publisher
     ros::Time       _last_publish_time;	            // 마지막 Pub 시간
