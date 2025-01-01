@@ -55,7 +55,7 @@ namespace frb
 
   /**
   * @brief      unit 상태를 수신하는 callback 함수
-  * @param[in]  const trash_bot::UnitStateMsg &msg : unit 상태 메시지
+  * @param[in]  const fieldro_msgs::UnitStateMsg &msg : unit 상태 메시지
   * @note       unit의 상태가 이전과 달라졌다면 즉시 update 한다.
   */
   void Observer::subscribe_unit_alive(const fieldro_msgs::UnitAliveMsg &msg)

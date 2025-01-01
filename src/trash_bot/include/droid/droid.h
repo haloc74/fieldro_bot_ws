@@ -21,9 +21,9 @@
 //#include "log/log_message.h"
 
 #include <fieldro_msgs/UnitActionComplete.h>
-#include <trash_bot/IOSignal.h>
+#include <fieldro_msgs/IOSignal.h>
 #include <fieldro_msgs/UnitControl.h>
-#include <trash_bot/UnitStateMsg.h>
+#include <fieldro_msgs/UnitStateMsg.h>
 
 
 
@@ -68,7 +68,7 @@ namespace frb
     void subscribe_switch_report(const twinny_msgs::SwitchReport Switch_Check);    
     void subscribe_velocity_control(const geometry_msgs::Twist &twist_msg);
     void subscribe_action_complete(const fieldro_msgs::UnitActionComplete &action_complete_msg);
-    void subscribe_unit_state(const trash_bot::UnitStateMsg &msg);
+    void subscribe_unit_state(const fieldro_msgs::UnitStateMsg &msg);
 
 
   private:

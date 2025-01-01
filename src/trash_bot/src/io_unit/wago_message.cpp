@@ -8,7 +8,7 @@
 //#include "helper/helper.h"
 #include <fieldro_lib/helper/helper.h>
 
-#include <trash_bot/IOSignal.h>
+#include <fieldro_msgs/IOSignal.h>
 #include <fieldro_msgs/UnitAliveMsg.h>
 #include <fieldro_msgs/UnitActionComplete.h>
 
@@ -82,7 +82,7 @@ namespace frb
     }
 
     // io signal 발송
-    trash_bot::IOSignal io_signal_msg;
+    fieldro_msgs::IOSignal io_signal_msg;
     io_signal_msg.time_stamp  = ros::Time::now();
     io_signal_msg.signal_bit  = signal_bit;
     _publish_io_signal.publish(io_signal_msg);

@@ -61,12 +61,12 @@ namespace frb
 
   /**
   * @brief      io signal topic을 수신하는 callback 함수
-  * @param[in]  const trash_bot::IOSignal& iosignal_msg : io signal message
+  * @param[in]  const fieldro_msgs::IOSignal& iosignal_msg : io signal message
   * @return     void
   * @attention  Loader와 관련된 sensor data만 처리하고 update.
   * @note       
   */
-  void Loader::subscribe_iosignal(const trash_bot::IOSignal& msg)
+  void Loader::subscribe_iosignal(const fieldro_msgs::IOSignal& msg)
   {
     // loader와 관련된 비트만 masking
     int64_t current_bits = msg.signal_bit & _sensor_data_update_mask;

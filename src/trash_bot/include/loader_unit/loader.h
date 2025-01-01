@@ -3,7 +3,7 @@
 #include <mutex>
 #include "ros/ros.h"
 
-#include <trash_bot/IOSignal.h>
+#include <fieldro_msgs/IOSignal.h>
 
 //#include "unit/unit.h"
 #include <fieldro_lib/unit/unit.h>
@@ -38,7 +38,7 @@ namespace frb
     int64_t _prev_sensor_data;                                        // 이전 센서 상태를 저장하기 위한 변수
   //  int8_t _sensor[(int)DISignal::END];                               // 센서 상태 정보
     ros::Subscriber _subscribe_iosignal;                              // IOSignal을 받기 위한 subscriber 
-    void subscribe_iosignal(const trash_bot::IOSignal& msg);          // IOSignal을 받기 위한 callback 함수
+    void subscribe_iosignal(const fieldro_msgs::IOSignal& msg);          // IOSignal을 받기 위한 callback 함수
     //void initialize_signal_data();                                    // signal data 초기화
     //bool update_sensor_data(DISignal sensor, int64_t signal_bit);     // sensor data 업데이트
 

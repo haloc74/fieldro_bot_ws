@@ -5,7 +5,7 @@
 //#include "log/log.h"
 #include <fieldro_lib/log/log.h>
 
-#include <trash_bot/UnitStateMsg.h>
+#include <fieldro_msgs/UnitStateMsg.h>
 #include <fieldro_msgs/UnitActionComplete.h>
 
 namespace frb
@@ -25,7 +25,7 @@ namespace frb
       return;
     }
 
-    trash_bot::UnitStateMsg msg;
+    fieldro_msgs::UnitStateMsg msg;
 
     msg.alive = _unit_alive;
     msg.states.clear();

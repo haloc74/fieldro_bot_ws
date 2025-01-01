@@ -47,12 +47,12 @@ message(STATUS "")
   ## 2.1 msg 폴더로 부터 messages 생성
   add_message_files(
     FILES
-    Pose.msg
-    IOSignal.msg
+    # Pose.msg
+    # IOSignal.msg
     # UnitActionComplete.msg
     # UnitAliveMsg.msg
     # UnitControl.msg
-    UnitStateMsg.msg 
+    # UnitStateMsg.msg 
   )
 
   ## 2.2 srv 폴더로 부터 service 생성

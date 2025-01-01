@@ -31,8 +31,16 @@
 . trash_bot에서 이동, 멈춤 관련 packet은 응답을 받지 않도록 하기...
 . main node에서 control_move를 통하여 회전, 진행을 처리
 
+1. trash_bot package msg를  fieldro_msgs로 이동
+  . UnitStateMsg.msg  -> fieldro_msgs package로 이동
+  . Pose.msg          -> fieldro_msgs package로 이동
+  . IOSignal.msg      -> fieldro_msgs package로 이동
 
-ID :  - JD 24.12.32
+//=========================================================
+//=========================================================  
+
+
+ID : faa69ed - JD 24.12.32
 1. fieldro_lib, trash_bot 에 있는 msg중 선별하여 fieldro_msgs package로 이동
   - UnitActionComplete
   - UnitAliveMsg
@@ -99,9 +107,6 @@ ID :  - JD 24.12.30
 2. steering 이동 (move 속도값 고정)
 3. steering 이동 제한관련 처리
 4. last communication slave id 저장해서 set_slave_id() 호출 최소화 하기.
-
-//=========================================================
-//=========================================================  
 
 ID : 5b1b5f1 - JD 24.12.28
 0. steer 추가를 생각하며 refactoring 하기

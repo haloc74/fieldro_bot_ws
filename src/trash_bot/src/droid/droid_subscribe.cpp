@@ -10,11 +10,11 @@ namespace frb
 {
   /**
   * @brief      unit의 상태를 subscribe하는 함수
-  * @param[in]  const trash_bot::UnitStateMsg &msg : unit의 상태 정보
+  * @param[in]  const fieldro_msgs::UnitStateMsg &msg : unit의 상태 정보
   * @return     void
   * @note       
   */
-  void Droid::subscribe_unit_state(const trash_bot::UnitStateMsg &msg)
+  void Droid::subscribe_unit_state(const fieldro_msgs::UnitStateMsg &msg)
   {
     switch(_state)
     {

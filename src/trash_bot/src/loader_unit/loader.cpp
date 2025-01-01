@@ -41,7 +41,7 @@ namespace frb
     _node_handle->advertise<fieldro_msgs::UnitActionComplete>("trash_bot/action_complete", 10);
 
     // io signal message 수신을 위한 subscriber 생성 및 link
-    // trash_bot::IOSignal
+    // fieldro_msgs::IOSignal
     _subscribe_iosignal =
     _node_handle->subscribe("trash_bot/io_signal", 10, &Loader::subscribe_iosignal, this);
 

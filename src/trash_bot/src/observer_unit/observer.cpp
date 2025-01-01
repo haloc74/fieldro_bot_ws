@@ -5,7 +5,7 @@
 //#include "log/log.h"
 #include <fieldro_lib/log/log.h>
 #include <fieldro_msgs/UnitActionComplete.h>
-#include <trash_bot/UnitStateMsg.h>
+#include <fieldro_msgs/UnitStateMsg.h>
 
 namespace frb
 {
@@ -33,7 +33,7 @@ namespace frb
     _subscribe_unit_action = _node_handle->subscribe("trash_bot/unit_control", 50, &Observer::subscribe_unit_action, this);    
 
     // unit state publishing
-    _publish_units_state = _node_handle->advertise<trash_bot::UnitStateMsg>("trash_bot/UnitStateMsg", 100);
+    _publish_units_state = _node_handle->advertise<fieldro_msgs::UnitStateMsg>("trash_bot/UnitStateMsg", 100);
 
     // spinner 구동
     _spinner->start();

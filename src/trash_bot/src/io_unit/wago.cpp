@@ -11,7 +11,7 @@
 #include <fieldro_lib/helper/helper.h>
 
 
-#include <trash_bot/IOSignal.h>
+#include <fieldro_msgs/IOSignal.h>
 #include <fieldro_msgs/UnitAliveMsg.h>
 #include <fieldro_msgs/UnitActionComplete.h>
 
@@ -39,7 +39,7 @@ namespace frb
     // io message는 아주 중요한 정보이므로 latch를 true로 설정하여 
     // 나중에 subscriber가 생성되는 node도 마지막(최신) 정보를 받을 수 있도록 한다.
     ros::AdvertiseOptions option = 
-      ros::AdvertiseOptions::create<trash_bot::IOSignal>("trash_bot/io_signal", 20,
+      ros::AdvertiseOptions::create<fieldro_msgs::IOSignal>("trash_bot/io_signal", 20,
                                                               ros::SubscriberStatusCallback(),
                                                               ros::SubscriberStatusCallback(),
                                                               ros::VoidPtr(),
