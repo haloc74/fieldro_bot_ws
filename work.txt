@@ -31,6 +31,12 @@
 . trash_bot에서 이동, 멈춤 관련 packet은 응답을 받지 않도록 하기...
 . main node에서 control_move를 통하여 회전, 진행을 처리
 
+
+ID [  ] : 2025-01-01
+1. fieldro_lib, fieldro_msgs package 추가 작업시 주석 처리된 부분들 삭제
+
+
+ID [ a704305 ] : 2025-01-01
 1. trash_bot package msg를  fieldro_msgs로 이동
   . UnitStateMsg.msg  -> fieldro_msgs package로 이동
   . Pose.msg          -> fieldro_msgs package로 이동

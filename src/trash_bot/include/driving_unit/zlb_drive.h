@@ -6,20 +6,14 @@
 #include <mutex>
 #include <deque>
 
+#include <fieldro_lib/define/direction_define.h>
+#include <fieldro_lib/device_communication/modbus_wrapper.h>
+#include <fieldro_lib/helper/thread_action_info.h>
+
 #include "zlb_packet.h"
 #include "zlb_status.h"
 #include "zlb_id_define.h"
-
 #include "motor_runtime_state.h"
-
-//#include "define/direction_define.h"
-#include <fieldro_lib/define/direction_define.h>
-
-//#include "communication/modbus_wrapper.h"
-#include <fieldro_lib/device_communication/modbus_wrapper.h>
-//#include "helper/thread_action_info.h"
-#include <fieldro_lib/helper/thread_action_info.h>
-
 
 namespace frb
 {

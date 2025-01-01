@@ -1,15 +1,10 @@
 
 #include "wago.h"
 
-//#include "define/unit_define.h"
 #include <fieldro_lib/define/unit_define.h>
-//#include "define/unit_action_define.h"
 #include <fieldro_lib/define/unit_action_define.h>
-//#include "define/unit_state.h"
 #include <fieldro_lib/define/unit_state.h>
-//#include "helper/helper.h"
 #include <fieldro_lib/helper/helper.h>
-
 
 #include <fieldro_msgs/IOSignal.h>
 #include <fieldro_msgs/UnitAliveMsg.h>

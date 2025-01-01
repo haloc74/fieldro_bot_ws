@@ -2,15 +2,11 @@
 #pragma once
 
 #include <mutex>
-
 #include "ros/ros.h"
-
-//#include "unit/unit.h"
 #include <fieldro_lib/unit/unit.h>
-//#include "define/digital_in_define.h"
 #include <fieldro_lib/define/digital_in_define.h>
-//#include "communication/modbus_wrapper.h"
 #include <fieldro_lib/device_communication/modbus_wrapper.h>
+
 #include "signal_info.h"
 
 

@@ -1,7 +1,6 @@
 
 #pragma once
 
-//#include "helper/enum_template.h"
 #include <fieldro_lib/helper/enum_template.h>
 
 

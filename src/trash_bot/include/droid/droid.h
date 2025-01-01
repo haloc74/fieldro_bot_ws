@@ -10,15 +10,8 @@
 #include "twinny_msgs/BatteryReport.h"
 #include "twinny_msgs/SwitchReport.h"
 
-//#include "unit/unit.h"
 #include <fieldro_lib/unit/unit.h>
-
-
-//#include "helper/thread_action_info.h"
-//#include "define/digital_in_define.h"
 #include <fieldro_lib/define/digital_in_define.h>
-//#include "define/unit_state.h"
-//#include "log/log_message.h"
 
 #include <fieldro_msgs/UnitActionComplete.h>
 #include <fieldro_msgs/IOSignal.h>

@@ -48,11 +48,6 @@ message(STATUS "")
   add_message_files(
     FILES
     # Pose.msg
-    # IOSignal.msg
-    # UnitActionComplete.msg
-    # UnitAliveMsg.msg
-    # UnitControl.msg
-    # UnitStateMsg.msg 
   )
 
   ## 2.2 srv 폴더로 부터 service 생성
@@ -133,9 +128,9 @@ message(STATUS "")
     ${MODBUS_INCLUDE_DIRS}
   )
 
-message(STATUS "")
-message(STATUS "5. fieldro_lib_temp Lib generate")
-message(STATUS "")
+# message(STATUS "")
+# message(STATUS "5. fieldro_lib_temp Lib generate")
+# message(STATUS "")
 
   # ## 5-1. lib_cpp 하위의 모든 cpp 파일을 찾아서 LIB_SRC_FILES에 저장
   # file(GLOB_RECURSE LIB_SRC_FILES 

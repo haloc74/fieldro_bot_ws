@@ -1,18 +1,13 @@
 
 
 #include "droid.h"
-//#include "helper/helper.h"
-#include <fieldro_lib/helper/helper.h>
-//#include "log/log.h"
-#include <fieldro_lib/log/log.h>
-#include <fieldro_msgs/UnitAliveMsg.h>
 
-//#include "define/unit_define.h"
+#include <fieldro_lib/helper/helper.h>
+#include <fieldro_lib/log/log.h>
 #include <fieldro_lib/define/unit_define.h>
-//#include "define/unit_action_define.h"
 #include <fieldro_lib/define/unit_action_define.h>
-//#include "define/error_code.h"
 #include <fieldro_lib/define/error_code.h>
+#include <fieldro_msgs/UnitAliveMsg.h>
  
 namespace frb
 {

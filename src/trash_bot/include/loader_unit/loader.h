@@ -3,14 +3,11 @@
 #include <mutex>
 #include "ros/ros.h"
 
+#include <fieldro_lib/unit/unit.h>
+#include <fieldro_lib/define/unit_define.h>
+#include <fieldro_lib/define/digital_in_define.h>
 #include <fieldro_msgs/IOSignal.h>
 
-//#include "unit/unit.h"
-#include <fieldro_lib/unit/unit.h>
-//#include "define/unit_define.h"
-#include <fieldro_lib/define/unit_define.h>
-//#include "define/digital_in_define.h"
-#include <fieldro_lib/define/digital_in_define.h>
 #include "motion_info.h"
 #include "eld2_rs7020b.h"
 
