@@ -28,11 +28,13 @@ namespace frb
     Transfer= 0x0090,   Transfering,  Transfered,        // 물체 이동 (Handler)
     
     Grip    = 0x00A0,   Gripping,     Gripped,           // 그립      (Gripper)
-    Release = 0x00B0,   Releasing,    Released,          // 릴리즈    (Gripper)
+    Release = 0x00B0,   Releasing,    Released,          // 릴리즈
 
     Move    = 0x00C0,   Moving,       Moved,             // 이동      (AGV)
     Stop    = 0x00D0,   Stopping,     Stopped,           // 정지      (AGV)   
     Turn    = 0x00E0,   Turning,      Turned,            // 회전      (AGV)
+    Break   = 0x00F0,   Breaking,     Breaked,           // 정지      (AGV)
+
 
     MoveToLowLimit = 0x00E0,                             // Limit 위치로 이동 (Motor)
     MoveToHighLimit,         
@@ -73,6 +75,7 @@ namespace frb
     {UnitAction::Move, "Move"},         {UnitAction::Moving, "Moving"},           {UnitAction::Moved, "Moved"},
     {UnitAction::Stop, "Stop"},         {UnitAction::Stopping, "Stopping"},       {UnitAction::Stopped, "Stopped"},
     {UnitAction::Turn, "Turn"},         {UnitAction::Turning, "Turning"},         {UnitAction::Turned, "Turned"},
+    {UnitAction::Break, "Break"},       {UnitAction::Breaking, "Breaking"},       {UnitAction::Breaked, "Breaked"},
 
     {UnitAction::MoveToLowLimit,  "MoveToLowLimit"},
     {UnitAction::MoveToHighLimit, "MoveToHighLimit"},

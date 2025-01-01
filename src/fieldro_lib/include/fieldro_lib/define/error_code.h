@@ -11,17 +11,21 @@ namespace frb
 {
   enum class Error
   {
-    ReadFail    = -1,
-    WriteFail   = -2,
-    TimeOut     = -3,         // 0x0001 시간 초과
-    UnConnect   = -4,
-    ParseFail   = -5,
-    PowerOff   = -6,
+    // ReadFail    = -1,
+    // WriteFail   = -2,
+    // TimeOut     = -3,         // 0x0001 시간 초과
+    // UnConnect   = -4,
+    // ParseFail   = -5,
+    // PowerOff   = -6,
 
-    SensorDetect= -10,    
+    // SensorDetect= -10,    
     
 
     None = 0,            // 없음
+
+    ParseFail = 100,  // 
+    PowerOff,
+
 
     Door,
     Close,
@@ -47,25 +51,31 @@ namespace frb
     BaseSensor,    
     Wago,
 
-    // // 통신 연결 100번대
-    // ConnectFail = 100,
+    // // 통신 연결   100번대
+    // ConnectFail = 1100,
     // ConnectSuccess,
     // Disconnect,
-    SetSlaveFail = 110,
+    UnConnect = 1100,
+    ReadFail,
+    WriteFail,
+    TimeOut,
+    SetSlaveFail,
 
-    FileDoseNotExist = 2000,
+    FileDoseNotExist = 1200,
 
-    SendFail = 3000, 
+    SendFail = 1300, 
 
-    IOError = 4000,
+    IOError = 1400,
     LimitSensorOn,
 
-    ExecuteError = 5000,
+    ExecuteError = 1500,
     ExecuteFail,
     NotReady,
     NotInitialized,
     InitializeFail,
     ProcedualError,
+
+    OutOfRange = 1600,
 
     Unknown,
     End,

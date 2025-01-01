@@ -1,14 +1,15 @@
 
 #include "zlb_drive.h"
+#include "zlb_resisters.h"
 #include <fieldro_lib/helper/helper.h>
 #include <bitset>
 
 namespace frb
 {
-  #define RESOLUTION 65536
-  #define FACTOR 1875.0
-  #define RATIO_MOTOR 35
-  #define RATIO_STEER 5.5
+  // #define RESOLUTION 65536
+  // #define FACTOR 1875.0
+  // #define RATIO_MOTOR 35
+  // #define RATIO_STEER 5.5
 
   ZlbDrive::ZlbDrive(std::function<void(frb::Error)> action_result_callback, 
                  std::function<void(frb::LogLevel, int32_t, const std::string&)> log_callback,
@@ -18,13 +19,7 @@ namespace frb
     notify_action_result  = action_result_callback;
     notify_log_msg        = log_callback;
 
-    _slave_id[0] = 0;
-    _slave_id[1] = 1;
-    _slave_id[2] = 2;
-
-    _left_limit = 0;
-    _right_limit = 0;
-    _home_position = 0;
+    _steer_position = new SteeringPosition();
 
     // config 파일에서 설정값 로드
     load_option(config_file);
@@ -52,22 +47,10 @@ namespace frb
     std::this_thread::sleep_for(std::chrono::seconds(1));
 
     safe_delete(_modbus);
+    safe_delete(_steer_position);
 
     _thread->_active = false;
     safe_delete(_thread);
-  }
-
-  /**
-  * @brief      motor 상태를 확인한다.
-  * @return     ZlbStatus : motor 상태
-  * @note       zlb_status.h 참조
-  */
-  int32_t ZlbDrive::get_motor_status()
-  {
-    int32_t traction_ret = get_motor_status(_slave_id[to_int(SlaveId::Traction)]);
-    int32_t steering_ret = get_motor_status(_slave_id[to_int(SlaveId::Steering)]);
-
-    return 0;
   }
 
   int32_t ZlbDrive::get_motor_status(int32_t slave_id)
@@ -240,7 +223,7 @@ namespace frb
   */
   uint32_t ZlbDrive::convert_rpm_to_zlb_rpm(uint32_t rpm)
   {
-    double   exact     = (static_cast<double>(rpm) * 512 * RESOLUTION) / FACTOR;
+    double   exact     = (static_cast<double>(rpm) * 512 * ZlbMotorParams::RESOLUTION) / ZlbMotorParams::FACTOR;
     uint32_t converted = static_cast<uint32_t>(exact + 0.5);
 
     return converted;
@@ -371,13 +354,20 @@ namespace frb
   */
   int32_t ZlbDrive::degree_to_position(const double degree)
   {
-    int32_t position = static_cast<int32_t>(degree * (RESOLUTION * RATIO_MOTOR * RATIO_STEER) / 360.0);
+    int32_t position = static_cast<int32_t>(degree * 
+                      (ZlbMotorParams::RESOLUTION * ZlbMotorParams::RATIO_MOTOR * ZlbMotorParams::RATIO_STEER) / 360.0);
 
     return position;
   }
 
   void ZlbDrive::load_option(std::string config_file)
   {
+    // slave id 초기화
+    for(int i=0; i<to_int(frb::SlaveId::End); i++)
+    {
+      _slave_id[i] = i;
+    }
+
     try
     {
       // file open
@@ -388,9 +378,9 @@ namespace frb
       _slave_id[to_int(frb::SlaveId::Traction)] = yaml["motor"]["traction_id"].as<int32_t>();
       _slave_id[to_int(frb::SlaveId::Steering)] = yaml["motor"]["steering_id"].as<int32_t>();
 
-      _left_limit   = yaml["motor"]["left_limit"].as<int32_t>();
-      _right_limit  = yaml["motor"]["right_limit"].as<int32_t>();
-      _home_position= yaml["motor"]["home_position"].as<int32_t>();
+      _steer_position->_left_limit  = yaml["motor"]["left_limit"].as<int32_t>();
+      _steer_position->_right_limit = yaml["motor"]["right_limit"].as<int32_t>();
+      _steer_position->_home        = yaml["motor"]["home_position"].as<int32_t>();
 
       // todo 
       //int32_t     value = yaml["session"]["key"].as<int32_t>();
@@ -399,16 +389,18 @@ namespace frb
     catch(YAML::Exception& e)
     {
       std::cout << "YAML Exception : " << e.what() << std::endl;
+      assert(false);
     }
     catch(std::exception& e)
     {
       std::cout << "Exception : " << e.what() << std::endl;
+      assert(false);
     }
     catch(...)
     {
       std::cout << "Unknown Exception" << std::endl;
+      assert(false);
     }  
-
     return;
   }
 }

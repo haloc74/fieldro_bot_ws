@@ -102,7 +102,7 @@ namespace frb
   frb::Error ELD2_RS7020B::control_move(int32_t abs_pos, int16_t rpm, int32_t check_interval, int32_t timeout_millisec)
   {
     if(_comm_state != frb::CommStatus::Connect) return frb::Error::UnConnect;
-    if(!_servo_power)                                   return frb::Error::PowerOff;
+    if(!_servo_power)                           return frb::Error::PowerOff;
 
     uint16_t status = 0x0000;
 

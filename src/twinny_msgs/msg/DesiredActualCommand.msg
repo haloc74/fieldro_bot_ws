@@ -1,7 +1,0 @@
-Header header
-geometry_msgs/Vector3 desiredPose
-geometry_msgs/Vector3 desiredVel
-geometry_msgs/Vector3 actualPose
-geometry_msgs/Vector3 actualVel
-geometry_msgs/Vector3 commandVel
-

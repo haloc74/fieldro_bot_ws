@@ -8,9 +8,15 @@ namespace frb
 
   void ZlbDrive::test_turn(double degree)
   {
-    int32_t position = degree_to_position(degree);
+    if(!_steer_position->is_valid_position(degree))
+    {
+      notify_log_msg(LogError, 0, "ZlbDrive::test_turn : invalid position");
+      notify_action_result(frb::Error::OutOfRange);  
+      return;
+    }
 
-    uint32_t rpm = convert_rpm_to_zlb_rpm(100);  
+    int32_t position  = degree_to_position(degree);
+    uint32_t rpm      = convert_rpm_to_zlb_rpm(100);  
 
     add_packet(_slave_id[int32_t(SlaveId::Steering)], 
                ServoFD1X5::POSITION_COMMAND_REGISTER, 

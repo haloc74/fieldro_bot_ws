@@ -39,6 +39,11 @@ namespace frb
       _action = frb::UnitAction::None;
       break;
 
+    case frb::UnitAction::Release:
+      _action = frb::UnitAction::Release;
+      _drive->release_break();
+      break;
+
     case frb::UnitAction::Move:
       _action = frb::UnitAction::Move;
       _drive->test_run();
@@ -58,7 +63,7 @@ namespace frb
 
     case frb::UnitAction::GetStatus:
       _action = frb::UnitAction::GetStatus;
-      _drive->get_motor_status();
+      //_drive->get_motor_status();
       action_complete_notify(frb::Error::None);
       break;
 

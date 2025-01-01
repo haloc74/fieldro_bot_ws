@@ -45,7 +45,7 @@ namespace frb
 
     // spinn 구동 (생성은 Unit Class 담당)
     _spinner->start();
-
+ 
     // motor 객체 생성
     _motor = new ELD2_RS7020B(std::bind(&Loader::action_complete_notify, 
                                         this, 
