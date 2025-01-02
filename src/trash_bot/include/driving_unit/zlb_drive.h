@@ -59,31 +59,36 @@ namespace frb
 
   protected:
     void update();
+    void load_option(std::string config_file);  // zlb drive 설정값 로드
 
-    ThreadActionInfo* _thread;              // 객체 main thread
-    ModbusWrapper*    _modbus;              // modbus 통신 객체
-    CommStatus        _comm_state;          // modbus 연결 상태
-    int32_t           _motor_status;        // motor 상태
-    bool              _servo_power;         // servo power 상태
+    ThreadActionInfo* _thread;                  // 객체 main thread
+    ModbusWrapper*    _modbus;                  // modbus 통신 객체
+    CommStatus        _comm_state;              // modbus 연결 상태
+    int32_t           _motor_status;            // motor 상태
+    bool              _servo_power;             // servo power 상태
 
-    std::deque<ZlbPacket*>  _packets;       // motor 제어 패킷 리스트
-    std::mutex              _lock_packets;  // thread lock
+  protected:                                    // _packet
+    std::deque<ZlbPacket*>  _packets;           // motor 제어 패킷 리스트
+    std::mutex              _lock_packets;      // thread lock
     
-    void packet_process();                  // motor 제어 패킷 전송
-    void clear_packets();                   // motor 제어 패킷 리스트 초기화
+    void packet_process();                      // motor 제어 패킷 전송
+    void clear_packets();                       // motor 제어 패킷 리스트 초기화
 
     // 전송 할 패킷 추가
     void add_packet(int32_t slave_id, int32_t address, int32_t value, 
                     MODBUS_FUNC_CODE code, int32_t action=-1);
     
-  protected:
+  protected:                                          // _motor
     int32_t _slave_id[to_int(frb::SlaveId::End)];     // slave id
     SteeringPosition* _steer_position;                // steering motor 위치객체
-
-    uint32_t  convert_rpm_to_zlb_rpm(uint32_t rpm);   // rpm -> zlb rpm 변환
+    
     void      confirm_motor_connection();             // motor 통신 연결 확인
     void      setup_motor_configurations();           // motor 초기값 설정
-    
+    int32_t   get_motor_status(int32_t slave_id);     // motor 상태 확인
+    void      is_steering_complete();                 // steering motor 동작 완료 확인             
+
+    int32_t   degree_to_position(const double degree);// degree -> position 변환    
+    uint32_t  convert_rpm_to_zlb_rpm(uint32_t rpm);   // rpm -> zlb rpm 변환
 
   protected:
     // 동작 완료 통보 (상위 : callback)
@@ -92,12 +97,7 @@ namespace frb
     // 로그 통보 (상위 : callback)    
     std::function<void(frb::LogLevel, int32_t, const std::string&)> notify_log_msg;    
 
-    void receive_modbus_state(const CommStatus notify);   // modbus 상태 변경 통보 (하위 : callback)
-
-  protected:
-    void load_option(std::string config_file);            // zlb drive 설정값 로드
-    int32_t get_motor_status(int32_t slave_id);           // motor 상태 확인
-    void check_steer_motor_status();                      // steering motor 상태 확인             
-    int32_t degree_to_position(const double degree);      // degree -> position 변환
+    // modbus 상태 변경 통보 (하위 : callback)
+    void receive_modbus_state(const CommStatus notify);   
   };
 }

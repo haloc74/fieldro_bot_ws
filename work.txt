@@ -6,17 +6,17 @@
 . Driving : act_velocity 추가
 . main node에서 control_move를 통하여 회전, 진행을 처리
 . zlb_drive refactoring
+                  
+ID [  ] : 2025-01-02                  
+1. zlb_drive::packet_process() packet 전송 이후 usleep(10000) 한던것 삭제
+2. zlb_drive_action.cpp 추가
+3. zlb_drive_motor.cpp 추가
+4. zlb_drive_packet.cpp 추가
+5. 함수별 파일 구분 및 주석 달기 완료
+6. ZlbDrive Class Refactoring 완료
 
 
-=== ZlbDrive Class Refactoring
-
-
-. 함수 및 변수에 주석달기
-. class file 구분 및 통합
-. 각 class cpp로 기능별 유사도에 따라 구분.
-
-
-ID [  ] : 2025-01-01
+ID [ 6c610c0 ] : 2025-01-01
 1. steering control시 limit 범위 넘어가는지 확인
   SteerPosition class 추가하여 left_limit, right_limit, home 위치 구조화
 2. define 되어있던 RESOLUTION 값등을 zlb_resister.h로 이동시켜 constexpr 
@@ -31,9 +31,9 @@ ID [ a704305 ] : 2025-01-01
   . Pose.msg          -> fieldro_msgs package로 이동
   . IOSignal.msg      -> fieldro_msgs package로 이동
 
+
 //=========================================================
 //=========================================================  
-
 
 ID : faa69ed - JD 24.12.32
 1. fieldro_lib, trash_bot 에 있는 msg중 선별하여 fieldro_msgs package로 이동

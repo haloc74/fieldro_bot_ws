@@ -6,6 +6,16 @@
 namespace frb
 {
 
+  /**
+  * @brief      steering motor turnning test
+  * @param[in]  double degree : turnning degree
+  * @return     void
+  * @note       
+  * @attention  제어 순서에 유념해야 한다.
+  *             1. position set
+  *             2. speed set
+  *             3. 
+  */
   void ZlbDrive::test_turn(double degree)
   {
     if(!_steer_position->is_valid_position(degree))
@@ -29,7 +39,7 @@ namespace frb
                 MODBUS_FUNC_CODE::WRITE_MULTIPLE_REGISTERS);//, 
                 //to_int(frb::UnitAction::Turn));
 
-    // ebsolute position set enable
+    // absolute position set enable
     add_packet(_slave_id[int32_t(SlaveId::Steering)], 
                 ServoFD1X5::CONTROL_REGISTER,
                 ServoFD1X5::CONTROL_VALUES::ABSOLUTE_POSITION::SET1, 
@@ -38,12 +48,14 @@ namespace frb
     add_packet(_slave_id[int32_t(SlaveId::Steering)], 
                 ServoFD1X5::CONTROL_REGISTER,
                 ServoFD1X5::CONTROL_VALUES::ABSOLUTE_POSITION::SET2, 
-                MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER);//,
-                //to_int(frb::UnitAction::Turn));                                
+                MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER);                        
 
-    // todo : 1초 마다 check_steer_motor_status() 함수 호출 하여
+    // steering motor 동작 완료 통보
+    // notify_action_result(frb::Error::None);
+
+    // todo : 1초 마다 is_steering_complete() 함수 호출 하여
     //        steering motor status 확인하여 동작이 종료 되었는지 확인
-    delay_call(1000, std::bind(&ZlbDrive::check_steer_motor_status, this));
+    delay_call(1000, std::bind(&ZlbDrive::is_steering_complete, this));
   }
 
   /**
