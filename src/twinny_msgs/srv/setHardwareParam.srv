@@ -1,5 +1,0 @@
-string data                    # json 포멧으로 셋업 결과를 report
----
-bool success_flag              # 셋업 성공시 success flag = true
-string data                    # 응답: 저장된 json 데이터
-

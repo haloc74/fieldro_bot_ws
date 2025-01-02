@@ -7,7 +7,14 @@
 . main node에서 control_move를 통하여 회전, 진행을 처리
 . zlb_drive refactoring
 
+
 ID [  ] : 2025-01-02
+1. twinny_msgs package 삭제 (code는 zip 파일로 보관)
+2. 4륜구도 조향 제어 클래스 만들기
+  fieldro_lib package에 driving_mode dir 추가하고 
+  ackermann_double 파일 및 class cnrk
+
+ID [ 6da92a8 ] : 2025-01-02
 1. droid에서 twinny_robot/VelControl subscribe시 바로 
   _publish_driving_control을 이용하여 publish 하도록 변경
 2. driving에서 _publish_driving_control subscribe 하도록 변경
