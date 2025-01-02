@@ -23,8 +23,8 @@ namespace frb
     _node_handle->advertise<fieldro_msgs::UnitActionComplete>("trash_bot/action_complete", 10);
 
     // 속도제어 subscriber 생성 및 link
-    _subscribe_velocity_control =
-    _node_handle->subscribe("twinny_robot/VelControl", 100, &Driving::subscribe_velocity_control, this);
+    _subscribe_driving_control =
+    _node_handle->subscribe("trash_bot/driving_control", 100, &Driving::subscribe_driving_control, this);
 
     // 속도제어 publisher 생성 및 link
     _publish_act_velocity =

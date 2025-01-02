@@ -84,4 +84,11 @@ namespace frb
 
     return;
   }
+
+  void Droid::publish_driving_control(const geometry_msgs::Twist &twist_msg)
+  {
+    _publish_driving_control.publish(twist_msg);
+    
+    return;
+  }
 }

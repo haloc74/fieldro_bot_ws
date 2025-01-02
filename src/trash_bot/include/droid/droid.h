@@ -52,6 +52,7 @@ namespace frb
 
   protected:
     ros::Publisher      _publish_unit_control;        // unit control을 발송하기 위한 publisher
+    ros::Publisher      _publish_driving_control;     // 주행 제어를 발송하기 위한 publisher 
 
     ros::Subscriber     _subscribe_switch_report;     // 스위치 상태를 받기 위한 subscriber
     ros::Subscriber     _subscribe_velocity_control;  // 속도 제어를 받기 위한 subscriber  
@@ -74,6 +75,7 @@ namespace frb
     //void publish_unit_control(int32_t unit, int32_t action, std::string command="");
     void publish_all_destroy();
     void publish_unit_control(std::unique_ptr<fieldro_msgs::UnitControl> unit_control_msg);
+    void publish_driving_control(const geometry_msgs::Twist &twist_msg);
 
     // user command control
     std::map<int32_t, int32_t, std::string> _command_map;

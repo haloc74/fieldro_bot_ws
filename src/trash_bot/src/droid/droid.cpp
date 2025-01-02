@@ -37,6 +37,9 @@ namespace frb
     _publish_unit_control = 
     _node_handle->advertise<fieldro_msgs::UnitControl>("trash_bot/unit_control", 10);
 
+    _publish_driving_control =
+    _node_handle->advertise<geometry_msgs::Twist>("trash_bot/driving_control", 100);    
+
     _control_sequence.clear();
     _pending_sequence.clear();
     _command_map.clear();

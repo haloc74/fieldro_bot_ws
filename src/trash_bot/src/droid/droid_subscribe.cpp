@@ -127,6 +127,8 @@ namespace frb
   */
   void Droid::subscribe_velocity_control(const geometry_msgs::Twist &twist_msg)
   {
+    publish_driving_control(twist_msg);
+    
     return;
   }  
 }

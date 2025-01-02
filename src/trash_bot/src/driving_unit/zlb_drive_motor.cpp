@@ -1,5 +1,7 @@
 
 #include "zlb_drive.h"
+#include <fieldro_lib/helper/helper.h>
+#include <bitset>
 
 namespace frb
 {
@@ -33,7 +35,7 @@ namespace frb
     else
     {
       // todo : 동작중 꺼졌다가 켜졌다 ??
-      log_msg(frb::LogLevel::Info, 0, "ZlbDrive::confirm_motor_connection : motor power on");
+      notify_log_msg(frb::LogLevel::Info, 0, "ZlbDrive::confirm_motor_connection : motor power on");
       assert(false);
     }
   }  
