@@ -4,25 +4,25 @@
 
 namespace frb
 {
-  /**
-  * @brief      traction 및 steering motor 제어
-  * @param[in]  frb::Direction direction : 제어 방향  (전, 후, 좌, 우)
-  * @param[in]  int32_t position         : 제어 위치  ()
-  * @param[in]  int32_t velocity         : 제어 속도
-  * @param[in]  int32_t check_interval   : 제어 완료 확인 주기
-  * @param[in]  int32_t timeout_millisec : 제어 timeout
-  * @return     frb::Error               : 제어 결과
-  * @note       
-  */
-  frb::Error ZlbDrive::control_move(frb::Direction direction, int32_t position, 
-                              int32_t velocity, int32_t check_interval, int32_t timeout_millisec)
-  {
-    // 1. traction 속도 모드로 전환
-    // 2. traction 속도값 설정
-    // 3. traction run_velocity
+  // /**
+  // * @brief      traction 및 steering motor 제어
+  // * @param[in]  frb::Direction direction : 제어 방향  (전, 후, 좌, 우)
+  // * @param[in]  int32_t position         : 제어 위치  ()
+  // * @param[in]  int32_t velocity         : 제어 속도
+  // * @param[in]  int32_t check_interval   : 제어 완료 확인 주기
+  // * @param[in]  int32_t timeout_millisec : 제어 timeout
+  // * @return     frb::Error               : 제어 결과
+  // * @note       
+  // */
+  // frb::Error ZlbDrive::control_move(frb::Direction direction, int32_t position, 
+  //                             int32_t velocity, int32_t check_interval, int32_t timeout_millisec)
+  // {
+  //   // 1. traction 속도 모드로 전환
+  //   // 2. traction 속도값 설정
+  //   // 3. traction run_velocity
     
-    return frb::Error::None;
-  }
+  //   return frb::Error::None;
+  // }
 
 
   /**

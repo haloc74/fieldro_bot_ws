@@ -52,6 +52,7 @@ namespace frb
   {
     // 객체 소멸 topic 메세지 전송을 위한 약간의 시간 대기
     safe_delete(_drive);
+    safe_delete(_driving_mode);
 
     _update_thread->_active = false;
     safe_delete(_update_thread);
@@ -76,6 +77,12 @@ namespace frb
       std::ifstream yaml_file(config_file);
       YAML::Node yaml = YAML::Load(yaml_file);
       yaml_file.close();
+
+      // 주행모드 객체 생성
+      int32_t wheel_base  = yaml["motor"]["wheel_base"].as<int32_t>();
+      int32_t track_width = yaml["motor"]["track_width"].as<int32_t>();
+
+      _driving_mode = new AckermannDouble(wheel_base, track_width);
 
       // todo 
       //int32_t     value = yaml["session"]["key"].as<int32_t>();
@@ -130,6 +137,5 @@ namespace frb
       // state 변경
       _state  = frb::UnitState::Error;
     }    
-
   }
 }

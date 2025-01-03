@@ -9,12 +9,14 @@
 #include <fieldro_lib/define/direction_define.h>
 #include <fieldro_lib/device_communication/modbus_wrapper.h>
 #include <fieldro_lib/helper/thread_action_info.h>
+#include <fieldro_lib/driving_mode/ackermann_double.h>
 
 #include "steering_position.h"
 #include "zlb_packet.h"
 #include "zlb_status.h"
 #include "zlb_id_define.h"
 #include "motor_runtime_state.h"
+
 
 namespace frb
 {
@@ -43,16 +45,11 @@ namespace frb
     ZlbDrive(std::function<void(frb::Error)> action_result_callback, 
                  std::function<void(frb::LogLevel, int32_t, const std::string&)> log_callback,
                  std::string config_file);
-
     virtual ~ZlbDrive();
- 
-    frb::Error control_move(frb::Direction direction, int32_t position, int32_t velocity,
-                            int32_t check_interval, int32_t timeout_millisec);
 
     void test_run();
     void test_stop();                       // break on
     void test_turn(double degree);          // steering motor turn 
-
 
     void engage_break();                    // break on
     void release_break();                   // break off

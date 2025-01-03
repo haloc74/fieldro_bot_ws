@@ -2,6 +2,7 @@
 #pragma once
 
 #include <fieldro_lib/unit/unit.h>
+#include <fieldro_lib/driving_mode/ackermann_double.h>
 #include <geometry_msgs/Twist.h>
 #include "zlb_drive.h"
  
@@ -17,6 +18,8 @@ namespace frb
     virtual void update();                                                  // object main loop
     virtual void load_option(std::string config_file);                      // option load
     virtual void subscribe_unit_action(const fieldro_msgs::UnitControl& msg);  // unit action subscribe
+
+    AckermannDouble* _driving_mode;                                         // 주행 모드 객체
 
   protected:
     ros::Subscriber _subscribe_driving_control;                            // 주행 제어 subscriber

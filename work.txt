@@ -5,10 +5,17 @@
 . Driving : 주행 subscribe 추가
 . Driving : act_velocity 추가
 . main node에서 control_move를 통하여 회전, 진행을 처리
+
 . zlb_drive refactoring
+. Driving Class에서 ZlbDrive object 4개를 가질 수 있도록 하기
 
+. ActVelocity 보고 처리하기.
 
-ID [  ] : 2025-01-02
+ID [  ] : 2025-01-03
+1. AckermannDouble mode 객체를 이용하여 Twisw 명령을 분해하기.
+  Driving Class에서 twist msg subscribe해서 처리 되는 구조
+
+ID [ 771d988 ] : 2025-01-02
 1. twinny_msgs package 삭제 (code는 zip 파일로 보관)
 2. 4륜구도 조향 제어 클래스 만들기
   fieldro_lib package에 driving_mode dir 추가하고 

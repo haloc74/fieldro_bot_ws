@@ -6,6 +6,12 @@
 
 namespace frb
 {
+  /**
+  * @brief      
+  * @param[in]  
+  * @return     
+  * @note       
+  */
   ZlbDrive::ZlbDrive(std::function<void(frb::Error)> action_result_callback, 
                  std::function<void(frb::LogLevel, int32_t, const std::string&)> log_callback,
                  std::string config_file)
@@ -93,7 +99,7 @@ namespace frb
   * @brief      zlb drive 설정값 로드
   * @param[in]  std::string config_file : 설정 파일
   * @return     void
-  * @note       
+  * @attention  주행모드 object가 이곳에서 생성이 되므로 주의해야 한다.       
   */
   void ZlbDrive::load_option(std::string config_file)
   {

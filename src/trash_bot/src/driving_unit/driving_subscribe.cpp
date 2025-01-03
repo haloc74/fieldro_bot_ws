@@ -6,13 +6,31 @@ namespace frb
   * @brief      속도 제어 subscriber callback
   * @param[in]  const geometry_msgs::Twist &twist_msg : 속도 제어 메세지
   * @return     void
-  * @note       Motor의 속도는 RPM으로 제어가 되므로 속도 -> RMP으로 변환하는
-  *             과정이 필요하다.
+  * @note       Motor의 속도는 RPM으로 제어가 되므로 속도 -> RMP으로 변환하는 과정이 필요하다.
   */
   void Driving::subscribe_driving_control(const geometry_msgs::Twist &twist_msg)
   {
-    // Motor 객체에 전달
-    // todo : motor 객체 쪽에 속도값 전달
+    WheelControlValue* value = _driving_mode->calculate_wheel_control(twist_msg);
+
+    // todo : 각각의 모터에 해당 데이터를 전달 해야 한다.
+
+    // Front Left
+    // (value+0)->_angle;
+    // (value+0)->_velocity;
+
+    // Front Right
+    // (value+1)->_angle;
+    // (value+1)->_velocity;
+
+    // Rear Left
+    // (value+2)->_angle;
+    // (value+2)->_velocity;
+
+    // Rear Right
+    // (value+3)->_angle;
+    // (value+3)->_velocity;
+
+    return;
   }
 
   void Driving::subscribe_unit_action(const fieldro_msgs::UnitControl& msg)
