@@ -10,8 +10,13 @@
 . Driving Class에서 ZlbDrive object 4개를 가질 수 있도록 하기
 
 . ActVelocity 보고 처리하기.
+. test.cpp를 보면서 act vel 계산하는 공식 만들기
 
 ID [  ] : 2025-01-03
+1. gemotry_msgs::Twist AckermannDouble::calculate_actual_twist(const WheelControlValue* value)
+   구조 적립
+
+ID [ 7221b51 ] : 2025-01-03
 1. AckermannDouble mode 객체를 이용하여 Twisw 명령을 분해하기.
   Driving Class에서 twist msg subscribe해서 처리 되는 구조
 
@@ -19,7 +24,7 @@ ID [ 771d988 ] : 2025-01-02
 1. twinny_msgs package 삭제 (code는 zip 파일로 보관)
 2. 4륜구도 조향 제어 클래스 만들기
   fieldro_lib package에 driving_mode dir 추가하고 
-  ackermann_double 파일 및 class cnrk
+  ackermann_double 파일 및 class 추가
 
 ID [ 6da92a8 ] : 2025-01-02
 1. droid에서 twinny_robot/VelControl subscribe시 바로 

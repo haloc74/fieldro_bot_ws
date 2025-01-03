@@ -131,6 +131,15 @@ namespace frb
     return angle;
   }
 
+  gemotry_msgs::Twist AckermannDouble::calculate_actual_twist(const WheelControlValue* value)
+  {
+    geometry_msgs::Twist actual_twist;
+
+    
+
+    return actual_twist;
+  }
+
   // // 최적화 이전
   // WheelControlValue* AckermannDouble::calculate_wheel_control(const geometry_msgs::Twist& twist)
   // {

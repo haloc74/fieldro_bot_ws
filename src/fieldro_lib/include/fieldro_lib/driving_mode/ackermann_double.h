@@ -16,6 +16,14 @@ namespace frb
     constexpr int32_t End        = 4;
   }
 
+  /**
+  * @author		Fieldro : haloc@fieldro.tech
+  * @date			25-01-03
+  * @brief		주행을 위해 각 바퀴의 조향 및 속도를 저장하는 구조체
+  * @note			
+  * @details	
+  * @see			
+  */
   class WheelControlValue
   {
   public:
@@ -23,14 +31,17 @@ namespace frb
     {
       _angle    = 0.0;
       _velocity = 0.0;
+      _time     = 0.0;
     }
     ~WheelControlValue()
     {
     }
     double _angle;    // 조향 (radian)
     double _velocity; // 속도 (m/s)
+    double _time;     // 경과 시간 (sec) - ActVelocity에서만 사용
   };
 
+  
   /**
   * @author		Fieldro : haloc@fieldro.tech
   * @date			25-01-02
@@ -49,6 +60,9 @@ namespace frb
 
     // Twist 메시지를 받아서 각 바퀴의 조향 및 속도를 계산
     WheelControlValue* calculate_wheel_control(const geometry_msgs::Twist& twist);
+
+    // 각 바퀴의 조향 및 속도를 받아서 Twist 메시지를 계산
+    geometry_msgs::Twist calculate_actual_twist(const WheelControlValue* value);
 
   protected:
     AckermannDouble() {}
