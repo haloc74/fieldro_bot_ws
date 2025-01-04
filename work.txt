@@ -3,12 +3,15 @@
 . Driving : 주행 subscribe 추가
 . Driving : act_velocity 추가
 . main node에서 control_move를 통하여 회전, 진행을 처리
-
 . zlb_drive refactoring
+
 . Driving Class에서 ZlbDrive object 4개를 가질 수 있도록 하기
 
-
 ID [  ] : 2025-01-04
+1. Wheel 배치 관련된 drawio 파일 추가
+2. fieldro_lib에서 임시로 만들었던 temp_main.cpp 파일 삭제
+
+ID [ 228e15e ] : 2025-01-04
 1. stock_bot package 추가
 2. stock_bot MakeFile 수정
 3. stock_bot package.xml 파일 수정
