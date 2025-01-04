@@ -10,7 +10,7 @@ message(STATUS "")
 ## catkin package를 찾고 찾지 못하면 에러를 발생.
 ## geometry_msgs, message_generation 등의 package를 찾지만 없어도 에러를 발생하지 않음.
 ## 개별 package가 catkin package로 만들어 졌다면 찾을 수 있다.
-## package.xml과 연동 되어야 하면 추가되는 항목에 대하여 xml 파일에
+## package.xml과 연동 되어야 하며 추가되는 항목에 대하여 xml 파일에
 ## <build_depend>name?</build_depend> 
 ## <exec_depend>name?</exec_depend>   두개의 항목을 추가해야 한다.
 
@@ -32,6 +32,8 @@ message(STATUS "")
   )
 
   find_package(yaml-cpp REQUIRED)
+  
+  # libmodbus가 find_package로 찾을 수 없어서 pkg-config로 찾는다.
   find_package(PkgConfig REQUIRED)
   pkg_check_modules(MODBUS REQUIRED libmodbus)
 

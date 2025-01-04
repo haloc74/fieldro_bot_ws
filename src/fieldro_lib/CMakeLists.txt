@@ -85,7 +85,7 @@ message(STATUS "")
 catkin_package(
   INCLUDE_DIRS include    # package root/include 폴더 : 삭제 가능
   ## DEPENDS system_lib      # system lib 의존성이 없으므로 삭제 가능
-  LIBRARIES fieldro_lib    # fieldro_lib 라이브러리를 다른 ros package에서 사용할 수 있도록 설정
+  LIBRARIES fieldro_lib    # fieldro_lib 라이브러리 빌드하겠다는 설정
   CATKIN_DEPENDS           # 현재 package를 빌드하기 위해 필요한 다른 catkin package
       message_runtime
       geometry_msgs 

@@ -7,10 +7,13 @@
 . zlb_drive refactoring
 . Driving Class에서 ZlbDrive object 4개를 가질 수 있도록 하기
 
-. ActVelocity 보고 처리하기.
-. test.cpp를 보면서 act vel 계산하는 공식 만들기
 
 ID [  ] : 2025-01-04
+1. stock_bot package 추가
+2. stock_bot MakeFile 수정
+3. stock_bot package.xml 파일 수정
+
+ID [ 63ddf43 ] : 2025-01-04
 1. AckermannDouble Classdp Actual Velocity를 계산하는 함수 추가
 
 

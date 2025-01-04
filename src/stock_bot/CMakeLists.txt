@@ -1,0 +1,218 @@
+cmake_minimum_required(VERSION 3.0.2)
+
+## 0. project(package) 정의
+project(stock_bot)
+
+
+message(STATUS "")
+message(STATUS "${PROJECT_NAME} : Start CMakeLists.txt")
+message(STATUS "${PROJECT_NAME} : Step 01.find_package")
+message(STATUS "")
+
+## catkin package를 찾고 찾지 못하면 에러를 발생.
+## geometry_msgs, message_generation 등의 package를 찾지만 없어도 에러를 발생하지 않음.
+## 개별 package가 catkin package로 만들어 졌다면 찾을 수 있다.
+## package.xml과 연동 되어야 하며 추가되는 항목에 대하여 xml 파일에
+## <build_depend>name?</build_depend> 
+## <exec_depend>name?</exec_depend>   두개의 항목을 추가해야 한다.
+find_package(catkin 
+  REQUIRED COMPONENTS
+    fieldro_lib
+    fieldro_msgs
+    roscpp
+    rospy
+    std_msgs
+    twinny_msgs
+)
+
+find_package(yaml-cpp REQUIRED)
+  
+# libmodbus가 find_package로 찾을 수 없어서 pkg-config로 찾는다.
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(MODBUS REQUIRED libmodbus)
+message(STATUS "${PROJECT_NAME} : End Step 01")
+
+message(STATUS " ")
+message(STATUS "${PROJECT_NAME} : Step 02.message, service, action add and generate")
+## Generate messages in the 'msg' folder
+# add_message_files(
+#   FILES
+#   Message.msg
+# )
+
+## Generate services in the 'srv' folder
+# add_service_files(
+#   FILES
+#   Service.srv
+# )
+
+## Generate actions in the 'action' folder
+# add_action_files(
+#   FILES
+#   Action1.action
+# )
+
+## 종석성을 가진 메세지 및 서비스 등록
+generate_messages(
+    DEPENDENCIES
+    std_msgs   
+    fieldro_msgs
+    twinny_msgs
+)
+message(STATUS "${PROJECT_NAME} : End Step 02")
+
+
+message(STATUS " ")
+message(STATUS "${PROJECT_NAME} : Step 03.catin_package 종속성 설정")
+
+  catkin_package(
+    # INCLUDE_DIRS include
+    CATKIN_DEPENDS              # catkin package 종속성 설정    
+      fieldro_lib
+      fieldro_msgs
+      roscpp
+      rospy
+      std_msgs
+      twinny_msgs
+    DEPENDS yaml-cpp            # yaml lib 의존성 설정
+    DEPENDS MODBUS              # libmodbus 의존성 설정
+  )
+
+message(STATUS "${PROJECT_NAME} : End Step 03")
+
+
+message(STATUS " ")
+message(STATUS "${PROJECT_NAME} : BUILD START")
+message(STATUS "${PROJECT_NAME} : Step 04.Include Directories")
+## include되는 순서 대로 header가 검색이 되므로 추가 순서에 주의 해야 한다.
+## 동일한 이름의 header file이 여러 곳에 존재할 경우, 먼저 설정된 경로에 있는 파일이 include된다.
+## 그러므로 package 내부의 header file을 먼저 include 하기 위해 package 내부의 경로를 먼저 설정한다
+
+  ## 4-1. package root include 폴더 추가
+  include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
+
+  ## 4-2. package root include 폴더의 모든 하위 폴더 추가
+  function(add_subdirectories_recursive)
+      file(GLOB_RECURSE CHILDREN LIST_DIRECTORIES TRUE ${CMAKE_CURRENT_SOURCE_DIR}/include/*)
+      foreach(CHILD ${CHILDREN})
+          if(IS_DIRECTORY ${CHILD})
+              message(STATUS "Adding directory: ${CHILD}")
+              include_directories(${CHILD})
+          endif()
+      endforeach()
+  endfunction()
+  add_subdirectories_recursive()
+
+  ## 4-3. 전역 include 폴더 추가
+  include_directories(
+    include
+    lib_header
+    ${catkin_INCLUDE_DIRS}    # catkin 빌드 시스템에서 정의한 include 경로
+    ${YAML_CPP_INCLUDE_DIRS}
+    ${MODBUS_INCLUDE_DIRS}
+  )
+message(STATUS "${PROJECT_NAME} : End Step 04")    
+
+##-----------------------------------------------------------------------------
+##            각 노드별로 설정이 되어야 하는 부분 시작
+##-----------------------------------------------------------------------------
+message(STATUS " ")
+message(STATUS "${PROJECT_NAME} : Step 05.node build")
+
+  # ## 5-1. droid node 실행파일 설정
+  # message(STATUS "${PROJECT_NAME} : Step 05-1. executable build")
+  #   ## 5-1-1. src/droid 하위의 모든 cpp 파일을 찾아서 SRC_DROID_FILES 저장
+  #   file(GLOB_RECURSE SRC_DROID_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/droid/*.cpp")
+
+  #   ## 5-1-2. SRC_DROID_FILES 모든 파일을 컴파일하고 링크하여 실행 파일 생성 하도록 설정
+  #   add_executable(
+  #     ${PROJECT_NAME}
+  #     ${SRC_DROID_FILES}
+  #     "${CMAKE_CURRENT_SOURCE_DIR}/src/_node/droid_node.cpp"
+  #   )
+
+  #   ## 5-1-3. 빌드 순서를 정의 (의존성)
+  #   ## 뒤쪽에 있는 package가 먼저 build 된다.
+  #   ## ${catkin_EXPORTED_TARGETS}->  ${${PROJECT_NAME}_EXPORTED_TARGETS}  -> ${PROJECT_NAME} 순으로 빌드
+  #   add_dependencies(
+  #     ${PROJECT_NAME}                      # 빌드 대상 (가장 최후에 빌드)
+  #     ${${PROJECT_NAME}_EXPORTED_TARGETS}  # package 내부의 다른 빌드 대상
+  #     ${catkin_EXPORTED_TARGETS}           # catkin 빌드 시스템에서 정의한 빌드 대상
+  #   )
+
+  #   ## 5-1-4. 빌드시 필요한 Lib 링크 설정
+  #   target_link_libraries(
+  #     ${PROJECT_NAME}                     # 빌드 대상
+  #     ${catkin_LIBRARIES}                 # catkin 빌드 시스템에서 정의한 라이브러리
+  #     ${YAML_CPP_LIBRARIES}               # yaml-cpp 라이브러리
+  #     fieldro_lib
+  #     fieldro_msgs
+  #   )
+  # message(STATUS "${PROJECT_NAME} : End Step 05-1")
+
+message(STATUS "${PROJECT_NAME} : End Step 05")
+
+##-----------------------------------------------------------------------------
+##            각 노드별로 설정이 되어야 하는 부분 종료
+##-----------------------------------------------------------------------------
+
+
+
+message(STATUS " ")
+message(STATUS "${PROJECT_NAME} : Step 06. Set Install ")
+## 빌드된 Target을 설치할 위치를 지정
+
+  # install(
+  #   TARGETS ${PROJECT_NAME}                               # 설치할 target 지정            
+
+  #   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION} # 정적 라이브러리 설치 위치 지정 (lib dir /.a 파일)
+  #   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION} # 동적 라이브러리 설치 위치 지정 (lib dir /.so 파일)
+  #   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION} # 실행파일 설치 위치 지정        (bin dir /실행파일)
+  # )
+message(STATUS "${PROJECT_NAME} : End Step 06")
+
+
+
+message(STATUS " ")
+message(STATUS "${PROJECT_NAME} : Step 07. Set Copy Include")
+## include 폴더에 있는 헤더파일을 찾아서 catkin_package()에서 지정한 위치에 설치(복사)
+
+  # install(DIRECTORY 
+  #         include/
+  #         lib_header/
+  #         DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}   # include 폴더에 복사
+  #         FILES_MATCHING PATTERN "*.h"                        # .h 파일만 복사
+  #         # USE_SOURCE_PERMISSIONS                            # 복사된 파일의 권한을 원본 파일의 권한으로 설정
+  #         )
+
+message(STATUS "${PROJECT_NAME} : End Step 07")
+
+
+message(STATUS " ")
+message(STATUS "${PROJECT_NAME} : Step 08. Set Etc Files Copy")
+  ## 8-1. config 폴더에 복사할 파일이 있는지 확인하고 CONFIG_FILES에 저장합니다.
+  file(GLOB_RECURSE COPY_FILES RELATIVE ${PROJECT_SOURCE_DIR} "config/*")
+
+  ## 8-2 config_files 타겟을 추가하고 config 파일들을 종속성으로 지정
+  # copy_files : 각 package 별로 이름을 다르게 해줘야 충돌이 발생하지 않음
+  add_custom_target(stock_bot_copy_files ALL DEPENDS ${COPY_FILES})
+
+  # 8-3 타겟 실행 시 파일들을 복사하는 명령어를 추가
+  add_custom_command(TARGET stock_bot_copy_files
+      POST_BUILD
+      COMMAND ${CMAKE_COMMAND} -E copy_directory
+      ${CMAKE_CURRENT_SOURCE_DIR}/config ${CATKIN_DEVEL_PREFIX}/lib/${PROJECT_NAME}/config
+  )
+message(STATUS "${PROJECT_NAME} : End Step 08")
+
+message(STATUS " ")
+message(STATUS " ${PROJECT_NAME} : BUILD END")
+message(STATUS " ")
+message(STATUS " ")
+
+
+# message(STATUS " ")
+# message(STATUS "${PROJECT_NAME} : Step ??. ")
+# message(STATUS "${PROJECT_NAME} : End Step ??")
+
+
