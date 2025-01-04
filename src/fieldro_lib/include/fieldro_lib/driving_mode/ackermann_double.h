@@ -31,14 +31,62 @@ namespace frb
     {
       _angle    = 0.0;
       _velocity = 0.0;
-      _time     = 0.0;
     }
+
+    WheelControlValue(double angle, double velocity)
+    {
+      _angle    = angle;
+      _velocity = velocity;
+    }
+
     ~WheelControlValue()
     {
     }
+
+    // 복사생성자
+    WheelControlValue(const WheelControlValue& value)
+    {
+      _angle    = value._angle;
+      _velocity = value._velocity;
+    }
+    WheelControlValue(const WheelControlValue* value)
+    {
+      _angle    = value->_angle;
+      _velocity = value->_velocity;
+    }
+
+    // 대입연산자
+    WheelControlValue& operator=(const WheelControlValue& value)
+    {
+      _angle    = value._angle;
+      _velocity = value._velocity;
+      return *this;
+    }
+    WheelControlValue& operator=(const WheelControlValue* value)
+    {
+      _angle    = value->_angle;
+      _velocity = value->_velocity;
+      return *this;
+    }
+
+    // - 연산자
+    WheelControlValue operator-(const WheelControlValue& value)
+    {
+      WheelControlValue result;
+      result._angle    = _angle   - value._angle;
+      result._velocity = _velocity- value._velocity;
+      return result;
+    }
+    WheelControlValue operator-(const WheelControlValue* value)
+    {
+      WheelControlValue result;
+      result._angle    = _angle   - value->_angle;
+      result._velocity = _velocity- value->_velocity;
+      return result;
+    }    
+
     double _angle;    // 조향 (radian)
     double _velocity; // 속도 (m/s)
-    double _time;     // 경과 시간 (sec) - ActVelocity에서만 사용
   };
 
   
@@ -62,7 +110,7 @@ namespace frb
     WheelControlValue* calculate_wheel_control(const geometry_msgs::Twist& twist);
 
     // 각 바퀴의 조향 및 속도를 받아서 Twist 메시지를 계산
-    geometry_msgs::Twist calculate_actual_twist(const WheelControlValue* value);
+    geometry_msgs::Twist calculate_actual_twist(const WheelControlValue* value, double delta_time);
 
   protected:
     AckermannDouble() {}

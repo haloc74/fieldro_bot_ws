@@ -1,5 +1,6 @@
 
 #include <cmath>
+#include <numeric>
 #include "ackermann_double.h"
 
 
@@ -124,18 +125,93 @@ namespace frb
     return _value;
   }  
 
+  /**
+  * @brief      각도를 -π에서 π 범위로 정규화하는 함수
+  * @param[in]  double angle : 정규화할 각도 (radian)
+  * @return     double       : -π에서 π 범위로 정규화된 각도 (radian)
+  * @note       fmod 함수를 사용하여 각도를 [-π, π] 범위로 변환
+  *             예시: 4.5rad -> 1.35841rad
+  */
   double AckermannDouble::normalize_angle(double angle)
   {
-    while(angle > M_PI)  angle -= 2*M_PI;
-    while(angle < -M_PI) angle += 2*M_PI;
+    angle = std::fmod(angle+M_PI, 2*M_PI);
+    if(angle < 0)  angle += 2*M_PI;
     return angle;
   }
 
-  gemotry_msgs::Twist AckermannDouble::calculate_actual_twist(const WheelControlValue* value)
+  /**
+  * @brief      각 wheel로 부터 전달된 encoder, angle 값의 변화량을 가지고 실제 Twist 계산
+  * @param[in]  const WheelControlValue* value : 각 바퀴의 조향 및 속도
+  * @return     gemotry_msgs::Twist            : 실제 선속도, 각속도
+  * @note       
+  * @attention  
+  */
+  geometry_msgs::Twist AckermannDouble::calculate_actual_twist(const WheelControlValue* value, double delta_time)
   {
     geometry_msgs::Twist actual_twist;
 
-    
+    // 1. 전륜과 후륜의 평균 각도 계산
+    double front_angle = (value[Wheel::FrontLeft]._angle + value[Wheel::FrontRight]._angle) / 2.0;
+    double rear_angle  = (value[Wheel::RearLeft]._angle + value[Wheel::RearRight]._angle) / 2.0;
+
+    // 2. 회전 운동 판단.
+    if(std::abs(front_angle - rear_angle) > ROTATION_THRESHOLD)
+    {
+      // 회전 중심 계산
+      double icr_x = (_wheel_base/std::tan(front_angle) + _wheel_base/std::tan(rear_angle)) / 2.0;
+      double icr_y = _wheel_base;
+
+      // 각 휠의 각속도 계산
+      double angular[4] = { 0.0, };
+      double radius     = 0.0;
+      for(int i=0; i<4; ++i)
+      {
+        // 회전 반경 계산
+        radius = std::hypot(_pos[i].x - icr_x, _pos[i].y - icr_y);
+
+        // 유효값일 경우에만 계산
+        if(radius > MOVEMENT_THRESHOLD)
+        {
+          angular[i] = value[i]._velocity / radius;
+        }
+      }
+
+      // 최종 각속도 계산 (4바퀴 평균)
+      actual_twist.angular.z = std::accumulate(angular, angular+4, 0.0)/4.0;
+
+      // 선속도 계산
+      // 각속도(ω)가 양수일 때(반시계 방향):
+      // ICR이 로봇의 오른쪽에 있다면(icr_x > 0):
+      // 로봇은 앞으로 움직여야 함(linear.x > 0)
+      // 따라서 linear.x = -ω × icr_y
+      // ICR이 로봇의 오른쪽에 있다면(icr_x > 0):
+      // 로봇은 왼쪽으로 움직여야 함(linear.y > 0)
+      // linear.y = ω × icr_x
+      actual_twist.linear.x = -actual_twist.angular.z * icr_y;
+      actual_twist.linear.y = actual_twist.angular.z * icr_x;
+    }
+    else
+    {
+      double vx_front = 0.0, vy_front = 0.0;
+      double vx_rear  = 0.0, vy_rear  = 0.0;
+
+      // 전륜 속도 계산
+      vx_front = (value[Wheel::FrontLeft]._velocity * std::cos(front_angle) +
+                  value[Wheel::FrontRight]._velocity * std::cos(front_angle)) / 2.0;
+      vy_front = (value[Wheel::FrontLeft]._velocity * std::sin(front_angle) +
+                  value[Wheel::FrontRight]._velocity * std::sin(front_angle)) / 2.0;
+
+      // 후륜 속도 계산
+      vx_rear = (value[Wheel::RearLeft]._velocity * std::cos(rear_angle) +
+                 value[Wheel::RearRight]._velocity * std::cos(rear_angle)) / 2.0;
+      vy_rear = (value[Wheel::RearLeft]._velocity * std::sin(rear_angle) +
+                  value[Wheel::RearRight]._velocity * std::sin(rear_angle)) / 2.0;
+
+      // 최종 선속도는 전륜과 후륜의 평균
+      actual_twist.linear.x = (vx_front + vx_rear) / 2.0;
+      actual_twist.linear.y = (vy_front + vy_rear) / 2.0;
+      actual_twist.angular.z = 0.0;                        
+    }
 
     return actual_twist;
   }

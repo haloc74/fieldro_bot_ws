@@ -1,6 +1,4 @@
 
-
-
 . Differancial Model로 일단 프로그래밍 하기 
 . Driving : 주행 subscribe 추가
 . Driving : act_velocity 추가
@@ -12,7 +10,11 @@
 . ActVelocity 보고 처리하기.
 . test.cpp를 보면서 act vel 계산하는 공식 만들기
 
-ID [  ] : 2025-01-03
+ID [  ] : 2025-01-04
+1. AckermannDouble Classdp Actual Velocity를 계산하는 함수 추가
+
+
+ID [ 935b31f ] : 2025-01-03
 1. gemotry_msgs::Twist AckermannDouble::calculate_actual_twist(const WheelControlValue* value)
    구조 적립
 
