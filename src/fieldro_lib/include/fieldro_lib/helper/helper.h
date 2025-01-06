@@ -41,6 +41,14 @@ namespace frb
       p = nullptr;  
   }
 
+  template <typename T>
+  inline void safe_delete_array(T*& arr) 
+  {
+    if (arr == nullptr) return;
+    delete[] arr;
+    arr = nullptr;
+  }  
+
   /**
   * @brief      인자로 주어진 값은 최대 최소값 사이의 값으로 제한
   * @param[in]  T value : 제한할 값

@@ -30,15 +30,19 @@ namespace frb
     _publish_act_velocity =
     _node_handle->advertise<geometry_msgs::Twist>("twinny_robot/ActVel", 100);
 
-    _drive = new ZlbDrive(std::bind(&Driving::action_complete_notify, 
-                                    this, 
-                                    std::placeholders::_1),
-                          std::bind(&Unit::log_msg, 
-                                    this, 
-                                    std::placeholders::_1, 
-                                    std::placeholders::_2, 
-                                    std::placeholders::_3),
-                          config_file);
+    for(int i = 0; i < Wheel::End; i++)
+    {
+      _drive[i] = new ZlbDrive(std::bind(&Driving::action_complete_notify, 
+                                          this, 
+                                          std::placeholders::_1),
+                                std::bind(&Unit::log_msg, 
+                                          this, 
+                                          std::placeholders::_1, 
+                                          std::placeholders::_2, 
+                                          std::placeholders::_3),
+                                config_file,
+                                i);      
+    }
 
     // spinn 구동 (생성은 Unit Class 담당)
     _spinner->start();
@@ -51,7 +55,11 @@ namespace frb
   Driving::~Driving()
   {
     // 객체 소멸 topic 메세지 전송을 위한 약간의 시간 대기
-    safe_delete(_drive);
+    
+    for(int i = 0; i < Wheel::End; i++)
+    {
+      safe_delete(_drive[i]);
+    }
     safe_delete(_driving_mode);
 
     _update_thread->_active = false;

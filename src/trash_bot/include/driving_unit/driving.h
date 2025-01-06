@@ -28,7 +28,7 @@ namespace frb
     ros::Publisher _publish_act_velocity;                                   // 실제 속도 및 좌표 publisher
     void publish_act_velocity(geometry_msgs::Twist twist);                  // 실제 속도 및 좌표 publish 함수
 
-    ZlbDrive* _drive;                                                       // drive 객체
+    ZlbDrive* _drive[Wheel::End];                                           // drive 객체
     void action_complete_notify(const Error error);                         // motor object로 부터 동작 완료 알림 콜백
     
   };

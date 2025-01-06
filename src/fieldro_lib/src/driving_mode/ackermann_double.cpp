@@ -6,6 +6,19 @@
 
 namespace frb
 {
+  std::string get_wheel_name(int32_t wheelIndex)
+  {
+    switch (wheelIndex) 
+    {
+      case Wheel::FrontLeft:  return "FrontLeft";
+      case Wheel::FrontRight: return "FrontRight";
+      case Wheel::RearLeft:   return "RearLeft";
+      case Wheel::RearRight:  return "RearRight";
+      default:                return "Unknown";
+    }
+    return "Unknown";
+  }  
+
   /**
   * @brief      Ackermann 조향 구조체 초기화
   * @param[in]  double wheel_base  : 바퀴 사이 거리

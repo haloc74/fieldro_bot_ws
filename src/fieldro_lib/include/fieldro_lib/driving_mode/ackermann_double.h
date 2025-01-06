@@ -16,6 +16,19 @@ namespace frb
     constexpr int32_t End        = 4;
   }
 
+  std::string get_wheel_name(int32_t wheelIndex); 
+  // {
+  //   switch (wheelIndex) 
+  //   {
+  //     case Wheel::FrontLeft:  return "FrontLeft";
+  //     case Wheel::FrontRight: return "FrontRight";
+  //     case Wheel::RearLeft:   return "RearLeft";
+  //     case Wheel::RearRight:  return "RearRight";
+  //     default:                return "Unknown";
+  //   }
+  //   return "Unknown";
+  // }  
+
   /**
   * @author		Fieldro : haloc@fieldro.tech
   * @date			25-01-03

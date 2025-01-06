@@ -44,7 +44,7 @@ namespace frb
   public:
     ZlbDrive(std::function<void(frb::Error)> action_result_callback, 
                  std::function<void(frb::LogLevel, int32_t, const std::string&)> log_callback,
-                 std::string config_file);
+                 std::string config_file, int32_t wheel_index);
     virtual ~ZlbDrive();
 
     void test_run();
@@ -56,7 +56,7 @@ namespace frb
 
   protected:
     void update();
-    void load_option(std::string config_file);  // zlb drive 설정값 로드
+    void load_option(std::string config_file, std::string session);  // zlb drive 설정값 로드
 
     ThreadActionInfo* _thread;                  // 객체 main thread
     ModbusWrapper*    _modbus;                  // modbus 통신 객체

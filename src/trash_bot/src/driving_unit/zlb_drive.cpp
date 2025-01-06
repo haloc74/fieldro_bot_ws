@@ -14,7 +14,7 @@ namespace frb
   */
   ZlbDrive::ZlbDrive(std::function<void(frb::Error)> action_result_callback, 
                  std::function<void(frb::LogLevel, int32_t, const std::string&)> log_callback,
-                 std::string config_file)
+                 std::string config_file, int32_t wheel)
   {
     // callback 함수 등록 
     notify_action_result  = action_result_callback;
@@ -23,8 +23,10 @@ namespace frb
     // steering position 객체 생성
     _steer_position = new SteeringPosition();
 
+    std::string session = get_wheel_name(wheel);
+
     // config 파일에서 설정값 로드
-    load_option(config_file);
+    load_option(config_file, session);
 
     _comm_state   = CommStatus::Disconnect;
     _motor_status = to_int(ZlbStatus::Fault);
@@ -33,11 +35,11 @@ namespace frb
     // modbus 통신 객체 생성
     _modbus = new ModbusWrapper(ModbusType::RS485,
                               config_file, 
-                              "motor",
+                              session,
                               std::bind(&ZlbDrive::receive_modbus_state, this, std::placeholders::_1));
 
     // object main thread 연결
-    _thread = new ThreadActionInfo(config_file, "motor");
+    _thread = new ThreadActionInfo(config_file, session);
     _thread->_thread = std::thread(std::bind(&ZlbDrive::update, this));
   }
 
@@ -101,7 +103,7 @@ namespace frb
   * @return     void
   * @attention  주행모드 object가 이곳에서 생성이 되므로 주의해야 한다.       
   */
-  void ZlbDrive::load_option(std::string config_file)
+  void ZlbDrive::load_option(std::string config_file, std::string session)
   {
     // slave id 초기화
     for(int i=0; i<to_int(frb::SlaveId::End); i++)
@@ -116,12 +118,12 @@ namespace frb
       YAML::Node yaml = YAML::Load(yaml_file);
       yaml_file.close();
 
-      _slave_id[to_int(frb::SlaveId::Traction)] = yaml["motor"]["traction_id"].as<int32_t>();
-      _slave_id[to_int(frb::SlaveId::Steering)] = yaml["motor"]["steering_id"].as<int32_t>();
+      _slave_id[to_int(frb::SlaveId::Traction)] = yaml[session]["traction_id"].as<int32_t>();
+      _slave_id[to_int(frb::SlaveId::Steering)] = yaml[session]["steering_id"].as<int32_t>();
 
-      _steer_position->_left_limit  = yaml["motor"]["left_limit"].as<int32_t>();
-      _steer_position->_right_limit = yaml["motor"]["right_limit"].as<int32_t>();
-      _steer_position->_home        = yaml["motor"]["home_position"].as<int32_t>();
+      _steer_position->_left_limit  = yaml[session]["left_limit"].as<int32_t>();
+      _steer_position->_right_limit = yaml[session]["right_limit"].as<int32_t>();
+      _steer_position->_home        = yaml[session]["home_position"].as<int32_t>();
 
       // todo 
       //int32_t     value = yaml["session"]["key"].as<int32_t>();

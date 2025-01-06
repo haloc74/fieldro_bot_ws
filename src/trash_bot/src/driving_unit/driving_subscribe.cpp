@@ -59,24 +59,23 @@ namespace frb
 
     case frb::UnitAction::Release:
       _action = frb::UnitAction::Release;
-      _drive->release_break();
+      _drive[Wheel::FrontLeft]->release_break();
       break;
 
     case frb::UnitAction::Move:
       _action = frb::UnitAction::Move;
-      _drive->test_run();
+      _drive[Wheel::FrontLeft]->test_run();
       break;
 
     case frb::UnitAction::Stop:
       _action = frb::UnitAction::Stop;
-      //_drive->test_stop();
-      _drive->engage_break();
+      _drive[Wheel::FrontLeft]->engage_break();
       break;
 
     case frb::UnitAction::Turn:
       _action = frb::UnitAction::Turn;
       value = std::stod(msg.command);
-      _drive->test_turn(value);
+      _drive[Wheel::FrontLeft]->test_turn(value);
       break;
 
     case frb::UnitAction::GetStatus:
