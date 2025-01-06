@@ -3,12 +3,16 @@
 . Driving : 주행 subscribe 추가
 . Driving : act_velocity 추가
 . main node에서 control_move를 통하여 회전, 진행을 처리
-. zlb_drive refactoring
 
+. zlb_drive refactoring
 . Driving Class에서 ZlbDrive object 4개를 가질 수 있도록 하기
 
+. ZlbDrive 주행 명령시 act_velocity topic publish 계산 시점 ...
 
 ID [  ] : 2025-01-06
+1. ZlbDrive 주행 명령시 topic으로 전달되어지는 twist 4개로 분해하여 전달
+
+ID [ e07fc02 ] : 2025-01-06
 1. Driving Class의 zlb_drive를 단일 객체에서 4개의 객체로 확장
 2. ZlbDrive Class 생성자에 wheel index 추가하여 독립적인 옵션로드 할 수 있도록 수정
 3. wheel index를 통한 get_wheel_name()으로 session 획득하도록 수정

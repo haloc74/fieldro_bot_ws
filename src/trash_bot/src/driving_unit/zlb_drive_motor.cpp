@@ -1,5 +1,7 @@
 
 #include "zlb_drive.h"
+#include "zlb_resisters.h"
+
 #include <fieldro_lib/helper/helper.h>
 #include <bitset>
 
@@ -169,5 +171,18 @@ namespace frb
     uint32_t converted = static_cast<uint32_t>(exact + 0.5);
 
     return converted;
+  }
+
+  /**
+  * @brief      velocity 값을 rpm으로 변환
+  * @param[in]  int32_t velocity  : 변환할 velocity 값 (m/s)
+  * @return     int32_t rpm       : 변환된 rpm 값
+  * @note       
+  */
+  int32_t ZlbDrive::convert_velocity_to_rpm(int32_t velocity)
+  {
+    double   rpm = (velocity * 60.0) / (2.0 * M_PI * ZlbMotorParams::WHEEL_RAIDOUS);
+
+    return static_cast<int32_t>(rpm);
   }        
 }

@@ -12,6 +12,7 @@ namespace frb
     constexpr double  FACTOR      = 1875.0;
     constexpr int     RATIO_MOTOR = 35;
     constexpr double  RATIO_STEER = 5.5;
+    constexpr double  WHEEL_RAIDOUS = 0.25;        // m 단위
   }
 
   // Modbus rtu protocol function code

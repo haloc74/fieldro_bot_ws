@@ -12,6 +12,11 @@ namespace frb
   {
     WheelControlValue* value = _driving_mode->calculate_wheel_control(twist_msg);
 
+    for(int i=0; i<Wheel::End; i++)
+    {
+      _drive[i]->move(value[i]._velocity, value[i]._angle);
+    }
+
     // todo : 각각의 모터에 해당 데이터를 전달 해야 한다.
 
     // Front Left
