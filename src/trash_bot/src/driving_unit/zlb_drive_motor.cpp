@@ -129,7 +129,7 @@ namespace frb
         notify_log_msg(frb::LogLevel::Info, 0, "ZlbDrive::check_steer_motor_status : target reached");
         
         // 상위 Object에 동작 완료 통보
-        notify_action_result(frb::Error::None);  
+        notify_action_result(_wheel_index, frb::Error::None);  
       }
       else
       {

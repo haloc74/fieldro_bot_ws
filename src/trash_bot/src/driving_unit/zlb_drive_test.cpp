@@ -20,6 +20,9 @@ namespace frb
   {
     notify_log_msg(LogInfo, 0, "ZlbDrive::test_turn function");
     turn(degree);
+
+    // 동작 완료 통보
+    notify_action_result(_wheel_index, frb::Error::None);
   }
 
   /**
@@ -31,6 +34,9 @@ namespace frb
   {
     notify_log_msg(LogInfo, 0, "ZlbDrive::test_run function");
     run(0.2);
+
+    // 동작 완료 통보
+    notify_action_result(_wheel_index, frb::Error::None);    
 
     return;
   }

@@ -6,6 +6,12 @@
 
 namespace frb
 {
+  namespace ZlbMotor
+  {
+    constexpr int32_t Traction = 0;
+    constexpr int32_t Steering = 1;
+    constexpr int32_t End      = 2;
+  }
   namespace ZlbMotorParams 
   {
     constexpr int     RESOLUTION  = 65536;

@@ -8,8 +8,22 @@
 . Driving Class에서 ZlbDrive object 4개를 가질 수 있도록 하기
 
 . ZlbDrive 주행 명령시 act_velocity topic publish 계산 시점 ...
+. act_velocity publish 방안 찾기.
 
-ID [  ] : 2025-01-06
+. dT의 측정을 어디에서 어떻게 할것인가 ?
+  - Driving, ZlbDrive ?
+  - 측정의 시작과 끝은 어떻게 ???
+    - 속도 측정은 각 ZlbDrive에서 해야 한다.
+    - Driving에서 할 경우 각 모터의 callback delay 때문에 dT를 통일 시킬수 없다.
+    - Driving에서는 별도의 dT를 계산해야 한다. (이전측정시간을 memory 해야 함)
+    - 
+
+. ZlbDrive::_prev_encoder[2] 변수 추가
+. ZlbDrive::get_encoder_position() 함수 추가.
+
+. DoubleEncoderTracker 구현
+
+ID [ 1e1c575 ] : 2025-01-06
 1. ZlbDrive 주행 명령시 topic으로 전달되어지는 twist 4개로 분해하여 전달
 
 ID [ e07fc02 ] : 2025-01-06

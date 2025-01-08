@@ -1,7 +1,9 @@
 
 #include "driving.h"
 #include <fieldro_lib/helper/helper.h>
+#include <fieldro_lib/define/driving_define.h>
 #include <fieldro_msgs/UnitActionComplete.h>
+
  
 namespace frb 
 {
@@ -34,7 +36,12 @@ namespace frb
     {
       _drive[i] = new ZlbDrive(std::bind(&Driving::action_complete_notify, 
                                           this, 
-                                          std::placeholders::_1),
+                                          std::placeholders::_1,
+                                          std::placeholders::_2),
+                                std::bind(&Driving::receive_actual_velocity,
+                                          this,
+                                          std::placeholders::_1,
+                                          std::placeholders::_2),
                                 std::bind(&Unit::log_msg, 
                                           this, 
                                           std::placeholders::_1, 
@@ -77,6 +84,25 @@ namespace frb
     }
   }
 
+  /**
+  * @brief      인자로 전달되는 Twist가 움직임이 있는지 없는지 확인하는 함수.
+  * @param[in]  const geometry_msgs::Twist& twist_msg : 속도 제어 메세지
+  * @return     bool : 움직임이 있는지 없는지 여부
+  * @note       
+  */
+  bool Driving::has_movement(const geometry_msgs::Twist& twist_msg)
+  {
+    if(twist_msg.linear.x < frb::ThresHold::Movement)   return false;
+    if(twist_msg.linear.y < frb::ThresHold::Movement)   return false;
+    if(twist_msg.linear.z < frb::ThresHold::Movement)   return false;
+
+    if(twist_msg.angular.x < frb::ThresHold::Rotation)  return false;
+    if(twist_msg.angular.y < frb::ThresHold::Rotation)  return false;
+    if(twist_msg.angular.z < frb::ThresHold::Rotation)  return false;
+
+    return false;
+  }
+
   void Driving::load_option(std::string config_file)
   {
     try
@@ -112,38 +138,66 @@ namespace frb
     return;
   }
 
-  void Driving::action_complete_notify(const Error error)
+  void Driving::action_complete_notify(int32_t wheel, const Error error)
   {
-    log_msg(LogInfo, 0, std::string("action complete notify : ") + 
-                        frb::to_string(_action) + 
-                        std::string(" - error code : ") + 
-                        std::to_string(frb::to_int(error)));
+    // wheel index에 해당하는 motor object로 부터 동작 완료 알림 콜백
 
-    if(error == Error::None)
-    {
-      if(_action == UnitAction::None)   
-      {
-        // todo : action이 없는데 동작 완료가 되는 상황은 에러이다 !!!!!.
-        log_msg(LogInfo, 0, "Loader : action is None !!! - What is this ???");
-        return;
-      }
+    // wheel index < 0 
+    // Driving 객체가 보내는것..
 
-      // 동작 완료 보고 (정상 완료)
-      publish_unit_action_complete(to_int(_action), frb::to_int(Error::None));
+    // log_msg(LogInfo, 0, std::string("action complete notify : ") + 
+    //                     frb::to_string(_action) + 
+    //                     std::string(" - error code : ") + 
+    //                     std::to_string(frb::to_int(error)));
 
-      // action 초기화
-      _action = frb::UnitAction::None;
-    }
-    else
-    {
-      // 동작 완료 보고 (Error)
-      publish_unit_action_complete(to_int(_action), frb::to_int(error));
+    // if(error == Error::None)
+    // {
+    //   if(_action == UnitAction::None)   
+    //   {
+    //     // todo : action이 없는데 동작 완료가 되는 상황은 에러이다 !!!!!.
+    //     log_msg(LogInfo, 0, "Loader : action is None !!! - What is this ???");
+    //     return;
+    //   }
 
-      // error log 표기 
-      log_msg(LogError, to_int(error), "Error : error code - " + std::to_string(to_int(error)));      
+    //   // 동작 완료 보고 (정상 완료)
+    //   publish_unit_action_complete(to_int(_action), frb::to_int(Error::None));
 
-      // state 변경
-      _state  = frb::UnitState::Error;
-    }    
+    //   // action 초기화
+    //   _action = frb::UnitAction::None;
+    // }
+    // else
+    // {
+    //   // 동작 완료 보고 (Error)
+    //   publish_unit_action_complete(to_int(_action), frb::to_int(error));
+
+    //   // error log 표기 
+    //   log_msg(LogError, to_int(error), "Error : error code - " + std::to_string(to_int(error)));      
+
+    //   // state 변경
+    //   _state  = frb::UnitState::Error;
+    // }    
+  }
+
+  /**
+  * @brief      motor object로 부터 실제 속도 알림 콜백
+  * @param[in]  int32_t wheel           : wheel index
+  * @param[in]  WheelControlValue value : 실제 선속도, 각속도
+  * @return     void
+  * @note       
+  */
+  void Driving::receive_actual_velocity(int32_t wheel, WheelControlValue value)
+  {
+    // wheel index에 해당하는 motor object로 부터 제어 결과 알림 콜백
+    // wheel index < 0 : 에러
+    // wheel index >= Wheel::End : 
+
+    // 1. Buffer에 저장
+    // 2. 4개의 wheel에 모두 보고가 올라왔으면 
+    //    - AckermannDouble::calculate_actual_twist() 로 실제 속도 계산
+    //    - publish_act_velocity() 로 실제 속도 publish
+    //    - Buffer 초기화
+    // 3. 4개가 모두 수신되지 않았다면 대기
+
+    return;
   }
 }

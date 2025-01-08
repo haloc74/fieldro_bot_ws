@@ -1,6 +1,7 @@
 
 #include "zlb_drive.h"
 #include <fieldro_lib/define/unit_action_define.h>
+#include <fieldro_lib/driving_mode/ackermann_double.h>
 
 namespace frb
 {
@@ -24,14 +25,34 @@ namespace frb
   //   return frb::Error::None;
   // }
 
+  /**
+  * @brief      motor 구동
+  * @param[in]  double velocity : run velocity  (m/s)
+  * @param[in]  double degree   : turn degree
+  * @return     
+  * @note       
+  * @attention  
+  */
   void ZlbDrive::move(double velocity, double degree)
   {
     turn(degree);
-    
     run(velocity);
+
+    int32_t traction_pos = 0;
+    int32_t steering_pos = 0;
+
+    // actual velocity notify
+    //notify_action_result(_wheel_index, WheelControlValue(traction_pos, steering_pos));
 
     return;
   }
+  WheelControlValue ZlbDrive::get_actual_velocity()
+  {
+    
+
+    return WheelControlValue(0, 0);
+  }
+
 
   /**
   * @brief      steer motor turn action
@@ -49,7 +70,7 @@ namespace frb
     if(!_steer_position->is_valid_position(degree))
     {
       notify_log_msg(LogError, 0, "ZlbDrive::test_turn : invalid position");
-      notify_action_result(frb::Error::OutOfRange);  
+      notify_action_result(_wheel_index, frb::Error::OutOfRange);  
       return;
     }
 
@@ -77,9 +98,6 @@ namespace frb
                 ServoFD1X5::CONTROL_REGISTER,
                 ServoFD1X5::CONTROL_VALUES::ABSOLUTE_POSITION::SET2, 
                 MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER);                        
-
-    // steering motor 동작 완료 통보
-    notify_action_result(frb::Error::None);
 
     // todo : 1초 마다 is_steering_complete() 함수 호출 하여
     //        steering motor status 확인하여 동작이 종료 되었는지 확인

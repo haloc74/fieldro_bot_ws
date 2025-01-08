@@ -2,6 +2,7 @@
 #include <cmath>
 #include <numeric>
 #include "ackermann_double.h"
+#include <define/driving_define.h>
 
 
 namespace frb
@@ -84,7 +85,7 @@ namespace frb
 
     // 빠른 정지 상태 체크
     const double movement = std::abs(linear_x) + std::abs(linear_y);  // 근사값 사용
-    if(__builtin_expect(movement < MOVEMENT_THRESHOLD && std::abs(angular_z) < ROTATION_THRESHOLD, 0)) 
+    if(__builtin_expect(movement < frb::ThresHold::Movement && std::abs(angular_z) < frb::ThresHold::Rotation, 0)) 
     {
       for (int i = 0; i < 4; i++) 
       {
@@ -93,7 +94,7 @@ namespace frb
       return _value;
     }
 
-    if(__builtin_expect(std::abs(angular_z) > ROTATION_THRESHOLD, 0)) 
+    if(__builtin_expect(std::abs(angular_z) > frb::ThresHold::Rotation, 0)) 
     {
       // 회전 모드
       const double icr_x = -linear_y / angular_z;
@@ -168,7 +169,7 @@ namespace frb
     double rear_angle  = (value[Wheel::RearLeft]._angle + value[Wheel::RearRight]._angle) / 2.0;
 
     // 2. 회전 운동 판단.
-    if(std::abs(front_angle - rear_angle) > ROTATION_THRESHOLD)
+    if(std::abs(front_angle - rear_angle) > frb::ThresHold::Rotation)
     {
       // 회전 중심 계산
       double icr_x = (_wheel_base/std::tan(front_angle) + _wheel_base/std::tan(rear_angle)) / 2.0;
@@ -183,7 +184,7 @@ namespace frb
         radius = std::hypot(_pos[i].x - icr_x, _pos[i].y - icr_y);
 
         // 유효값일 경우에만 계산
-        if(radius > MOVEMENT_THRESHOLD)
+        if(radius > frb::ThresHold::Rotation)
         {
           angular[i] = value[i]._velocity / radius;
         }
@@ -237,7 +238,7 @@ namespace frb
   //   double angular_z  = twist.angular.z;    // 회전 속도
 
   //   // 정지 상태 체크
-  //   if(std::abs(linear_x) < MOVEMENT_THRESHOLD && std::abs(linear_y) < MOVEMENT_THRESHOLD && std::abs(angular_z) < ROTATION_THRESHOLD)
+  //   if(std::abs(linear_x) < MOVEMENT_THRESHOLD && std::abs(linear_y) < MOVEMENT_THRESHOLD && std::abs(angular_z) < frb::ThresHold::Rotation)
   //   {
   //     for (int i = 0; i < 4; i++) 
   //     {
@@ -252,14 +253,14 @@ namespace frb
   //   double icr_y = 0.0;
     
   //   // 회전이 있는 경우
-  //   if(std::abs(angular_z) > ROTATION_THRESHOLD) 
+  //   if(std::abs(angular_z) > frb::ThresHold::Rotation) 
   //   {  
   //     icr_x = -linear_y / angular_z;
   //     icr_y = linear_x / angular_z;
   //   }
 
   //   // 각 바퀴의 조향각 계산
-  //   if(std::abs(angular_z) > ROTATION_THRESHOLD) 
+  //   if(std::abs(angular_z) > frb::ThresHold::Rotation) 
   //   {
   //     // 전륜 조향각 계산
   //     _value[Wheel::FrontLeft]._angle  = std::atan2(_pos[Wheel::FrontLeft].y - icr_y, _pos[Wheel::FrontLeft].x - icr_x);
@@ -288,7 +289,7 @@ namespace frb
   //   }
 
   //   // 각 바퀴의 속도 계산
-  //   if (std::abs(angular_z) > ROTATION_THRESHOLD) 
+  //   if (std::abs(angular_z) > frb::ThresHold::Rotation) 
   //   {
   //     // 회전 반경에 따른 속도 계산
   //     double fl_radius = std::sqrt(std::pow(_pos[Wheel::FrontLeft].x - icr_x, 2)  + std::pow(_pos[Wheel::FrontLeft].y - icr_y, 2));

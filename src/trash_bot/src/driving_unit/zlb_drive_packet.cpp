@@ -65,6 +65,19 @@ namespace frb
       {
         ret = _modbus->read_data_registers((*it)->_slave_id, (*it)->_address, 
                                             2, reinterpret_cast<uint16_t*>(&((*it)->_value)));
+        
+        // 
+        if((*it)->_address == ServoFD1X5::POSITION_FEEDBACK_REGISTER)
+        {
+          if((*it)->_slave_id == _slave_id[to_int(SlaveId::Traction)])
+          {
+            //_encoder_value[0] = reinterpret_cast<int32_t*>(&((*it)->_value));
+          }
+          else if((*it)->_slave_id == _slave_id[to_int(SlaveId::Steering)])
+          {
+            //_encoder_value[0] = reinterpret_cast<int32_t*>(&((*it)->_value));
+          }
+        }
       }
       else if((*it)->_code == MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER)
       {
@@ -87,7 +100,12 @@ namespace frb
       }
       else if((*it)->_action != -1)
       {
-        notify_action_result(ret);
+        notify_action_result(_wheel_index, ret);
+      }
+
+      if((*it)->_callback != nullptr)
+      {
+        (*it)->_callback();
       }
     }
   }  

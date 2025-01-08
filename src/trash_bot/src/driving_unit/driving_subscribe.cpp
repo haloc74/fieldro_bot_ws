@@ -10,11 +10,26 @@ namespace frb
   */
   void Driving::subscribe_driving_control(const geometry_msgs::Twist &twist_msg)
   {
-    WheelControlValue* value = _driving_mode->calculate_wheel_control(twist_msg);
-
-    for(int i=0; i<Wheel::End; i++)
+    std::lock_guard<std::mutex> lock(_lock_twist);
+    
+    if(!has_movement(twist_msg))  
     {
-      _drive[i]->move(value[i]._velocity, value[i]._angle);
+      // Bug Fix !!!!!
+      // angle이 아니라 각속도로 전달이 되어야 한다.
+      for(int i=0; i<Wheel::End; i++)
+      {
+        _drive[i]->move(0.0, 0.0);
+      }
+    }
+    else
+    {
+      // Bug Fix !!!!!
+      // angle이 아니라 각속도로 전달이 되어야 한다.
+      WheelControlValue* value = _driving_mode->calculate_wheel_control(twist_msg);
+      for(int i=0; i<Wheel::End; i++)
+      {
+        //_drive[i]->move(value[i]._velocity, value[i]._angle);
+      }
     }
 
     // todo : 각각의 모터에 해당 데이터를 전달 해야 한다.
@@ -86,7 +101,7 @@ namespace frb
     case frb::UnitAction::GetStatus:
       _action = frb::UnitAction::GetStatus;
       //_drive->get_motor_status();
-      action_complete_notify(frb::Error::None);
+      action_complete_notify(-1, frb::Error::None);
       break;
 
     case frb::UnitAction::Finish:

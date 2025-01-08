@@ -12,13 +12,20 @@ namespace frb
   * @return     
   * @note       
   */
-  ZlbDrive::ZlbDrive(std::function<void(frb::Error)> action_result_callback, 
+  ZlbDrive::ZlbDrive(std::function<void(int32_t, frb::Error)> action_result_callback, 
+                 std::function<void(int32_t, frb::WheelControlValue)> actual_velocity_callback,
                  std::function<void(frb::LogLevel, int32_t, const std::string&)> log_callback,
                  std::string config_file, int32_t wheel)
   {
     // callback 함수 등록 
-    notify_action_result  = action_result_callback;
-    notify_log_msg        = log_callback;
+    notify_action_result    = action_result_callback;
+    notify_actual_velocity  = actual_velocity_callback;
+    notify_log_msg          = log_callback;
+    _wheel_index            = wheel;
+
+    // encoder 초기화
+    _prev_encoder[frb::ZlbMotor::Traction] = 0;
+    _prev_encoder[frb::ZlbMotor::Steering] = 0;
 
     // steering position 객체 생성
     _steer_position = new SteeringPosition();

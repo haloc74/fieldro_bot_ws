@@ -16,16 +16,18 @@ namespace frb
       _address  = 0;
       _value    = 0;
       _code     = MODBUS_FUNC_CODE::READ_HOLDING_REGISTERS;
+      _callback = nullptr;
       _action   = -1;
     }
     
-    ZlbPacket(int32_t slave_id, int32_t address, int32_t value, MODBUS_FUNC_CODE code, int32_t action)
+    ZlbPacket(int32_t slave_id, int32_t address, int32_t value, MODBUS_FUNC_CODE code, int32_t action, std::function<void()> callback = nullptr)
     {
-      _address  = address;
       _slave_id = slave_id;
+      _address  = address;
       _value    = value;
       _code     = code;
       _sended   = false;
+      _callback = callback;
       _action   = action;
     }
 
@@ -37,6 +39,7 @@ namespace frb
       _value    = protocol._value;
       _code     = protocol._code;
       _sended  = protocol._sended;
+      _callback = protocol._callback;
     }
     ZlbPacket(const ZlbPacket* protocol)
     {
@@ -45,6 +48,7 @@ namespace frb
       _value    = protocol->_value;
       _code = protocol->_code;
       _sended = protocol->_sended;
+      _callback = protocol->_callback;
     }
     
     // 대입연산자
@@ -55,6 +59,7 @@ namespace frb
       _value    = protocol._value;
       _code = protocol._code;
       _sended = protocol._sended;
+      _callback = protocol._callback;
       return *this;
     }
     ZlbPacket& operator=(const ZlbPacket* protocol)
@@ -64,6 +69,7 @@ namespace frb
       _value    = protocol->_value;
       _code     = protocol->_code;
       _sended   = protocol->_sended;
+      _callback = protocol->_callback;
       return *this;
     }
 
@@ -75,5 +81,7 @@ namespace frb
     MODBUS_FUNC_CODE  _code;    // function code
     bool              _sended;  // 전송 여부
     int32_t           _action;  // 동작 완료 여부
+
+    std::function<void()> _callback; // 동작 완료 callback
   };  
 }

@@ -42,9 +42,10 @@ namespace frb
   class ZlbDrive
   {
   public:
-    ZlbDrive(std::function<void(frb::Error)> action_result_callback, 
-                 std::function<void(frb::LogLevel, int32_t, const std::string&)> log_callback,
-                 std::string config_file, int32_t wheel_index);
+    ZlbDrive(std::function<void(int32_t, frb::Error)> action_result_callback, 
+             std::function<void(int32_t, frb::WheelControlValue)> actual_velocity_callback,
+             std::function<void(frb::LogLevel, int32_t, const std::string&)> log_callback,    
+             std::string config_file, int32_t wheel_index);
     virtual ~ZlbDrive();
 
     void test_run();
@@ -55,6 +56,7 @@ namespace frb
 
     void engage_break();                    // break on
     void release_break();                   // break off
+    WheelControlValue get_actual_velocity(); // get actual velocity
 
   protected:
     void update();
@@ -65,6 +67,10 @@ namespace frb
     CommStatus        _comm_state;              // modbus 연결 상태
     int32_t           _motor_status;            // motor 상태
     bool              _servo_power;             // servo power 상태
+    int32_t           _wheel_index;             // wheel index
+
+    int32_t _prev_timer;                        // 이전 timer 값
+    int32_t _prev_encoder[frb::ZlbMotor::End];  // 이전 encoder 값
 
   protected:                                    // _packet
     std::deque<ZlbPacket*>  _packets;           // motor 제어 패킷 리스트
@@ -95,7 +101,10 @@ namespace frb
 
   protected:
     // 동작 완료 통보 (상위 : callback)
-    std::function<void(frb::Error)> notify_action_result;  
+    std::function<void(int32_t, frb::Error)> notify_action_result;  
+
+    // 실제 속도 통보 (상위 : callback)
+    std::function<void(int32_t, frb::WheelControlValue)> notify_actual_velocity;
 
     // 로그 통보 (상위 : callback)    
     std::function<void(frb::LogLevel, int32_t, const std::string&)> notify_log_msg;    

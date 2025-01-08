@@ -5,6 +5,7 @@
 #include <geometry_msgs/Twist.h>
 #include <geometry_msgs/Point.h>
 
+
 namespace frb
 {
   namespace Wheel
@@ -127,8 +128,7 @@ namespace frb
 
   protected:
     AckermannDouble() {}
-    static constexpr double ROTATION_THRESHOLD = 1e-6;    // 회전 판단 임계값
-    static constexpr double MOVEMENT_THRESHOLD = 1e-6;    // 이동 판단 임계값
+
 
     double _wheel_base;   // wheel base   : 축간 거리 (전륜 - 후륜)
     double _track_width;  // track width  : 윤간 거리 (좌륜 - 우륜)
