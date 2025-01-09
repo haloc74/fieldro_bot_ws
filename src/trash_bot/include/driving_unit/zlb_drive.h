@@ -10,6 +10,7 @@
 #include <fieldro_lib/device_communication/modbus_wrapper.h>
 #include <fieldro_lib/helper/thread_action_info.h>
 #include <fieldro_lib/driving_mode/ackermann_double.h>
+#include <fieldro_lib/motor/double_encoder_tracker.h>
 
 #include "steering_position.h"
 #include "zlb_packet.h"
@@ -54,7 +55,8 @@ namespace frb
 
     void move(double velocity, double degree);  // move
 
-    void engage_break();                    // break on
+    void stop(bool break_flag);                  // stop  (일반적인 멈춤)
+    //void engage_break();                    // break on
     void release_break();                   // break off
     WheelControlValue get_actual_velocity(); // get actual velocity
 
@@ -69,8 +71,10 @@ namespace frb
     bool              _servo_power;             // servo power 상태
     int32_t           _wheel_index;             // wheel index
 
-    int32_t _prev_timer;                        // 이전 timer 값
-    int32_t _prev_encoder[frb::ZlbMotor::End];  // 이전 encoder 값
+    DoubleEncoderTracker* _encoder_tracker;     // encoder tracker
+
+    // int32_t _prev_timer;                        // 이전 timer 값
+    // int32_t _prev_encoder[frb::ZlbMotor::End];  // 이전 encoder 값
 
   protected:                                    // _packet
     std::deque<ZlbPacket*>  _packets;           // motor 제어 패킷 리스트

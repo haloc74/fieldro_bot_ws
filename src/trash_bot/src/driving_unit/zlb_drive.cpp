@@ -23,9 +23,8 @@ namespace frb
     notify_log_msg          = log_callback;
     _wheel_index            = wheel;
 
-    // encoder 초기화
-    _prev_encoder[frb::ZlbMotor::Traction] = 0;
-    _prev_encoder[frb::ZlbMotor::Steering] = 0;
+    // encoder tracker 객체 생성
+    _encoder_tracker = new DoubleEncoderTracker();
 
     // steering position 객체 생성
     _steer_position = new SteeringPosition();
@@ -52,7 +51,7 @@ namespace frb
 
   ZlbDrive::~ZlbDrive()
   {
-    engage_break();
+    stop(true);
 
     usleep(5000000);
 
@@ -60,6 +59,7 @@ namespace frb
 
     safe_delete(_modbus);
     safe_delete(_steer_position);
+    safe_delete(_encoder_tracker);
 
     _thread->_active = false;
     safe_delete(_thread);

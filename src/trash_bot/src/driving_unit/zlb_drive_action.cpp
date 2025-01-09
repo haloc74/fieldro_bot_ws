@@ -150,12 +150,21 @@ namespace frb
   * @param[in]  void
   * @return     void
   * @note       물리 break on 
+  * @attention  움직임이 멈추가 되면 무조건 _encoder_tracker 초기화 해줘야 한다.
   */
-  void ZlbDrive::engage_break()
+  void ZlbDrive::stop(bool break_flag)
   {
-    add_packet(_slave_id[int32_t(SlaveId::Traction)], ServoFD1X5::CONTROL_REGISTER, 
-                ServoFD1X5::CONTROL_VALUES::STOP, MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER,
-                to_int(frb::UnitAction::Stop));    
+    run(0.0);
+    turn(0.0);
+
+    if(break_flag)
+    {
+      add_packet(_slave_id[int32_t(SlaveId::Traction)], ServoFD1X5::CONTROL_REGISTER, 
+                  ServoFD1X5::CONTROL_VALUES::STOP, MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER,
+                  to_int(frb::UnitAction::Stop));    
+    }
+
+    _encoder_tracker->reset();
 
     return;
   }  

@@ -1,5 +1,6 @@
+
 #include "double_encoder_tracker.h"
-#include <float.h> // Include float.h for DBL_MAX
+#include <float.h>
 
 namespace frb
 {

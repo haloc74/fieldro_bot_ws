@@ -89,7 +89,7 @@ namespace frb
 
     case frb::UnitAction::Stop:
       _action = frb::UnitAction::Stop;
-      _drive[Wheel::FrontLeft]->engage_break();
+      _drive[Wheel::FrontLeft]->stop(true);
       break;
 
     case frb::UnitAction::Turn:
