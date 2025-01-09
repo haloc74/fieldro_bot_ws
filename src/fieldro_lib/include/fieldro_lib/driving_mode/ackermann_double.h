@@ -112,7 +112,7 @@ namespace frb
   *           - 좌우 바퀴는 같은 각도로 조향
   * @note			
   * @details	
-  * @see			Ackermann Mode.drawio 참조
+  * @see			Ackermann Mode.drawio, define/driving_define.h 참조
   */
   class AckermannDouble
   {
@@ -121,6 +121,7 @@ namespace frb
     ~AckermannDouble();
 
     // Twist 메시지를 받아서 각 바퀴의 조향 및 속도를 계산
+    WheelControlValue* calculate_wheel_control_degree(const geometry_msgs::Twist& twist);
     WheelControlValue* calculate_wheel_control(const geometry_msgs::Twist& twist);
 
     // 각 바퀴의 조향 및 속도를 받아서 Twist 메시지를 계산
@@ -137,7 +138,10 @@ namespace frb
     geometry_msgs::Point  _pos[Wheel::End];       // 각 바퀴의 위치
 
     void initialize_wheel();                      // 바퀴 데이터 초기화 및 설정
-    double normalize_angle(double angle);         // 각도 정규화 (0 ~ 2PI)
+    double normalize_angle(double angle);         // 각도 정규화 (-PI ~ PI)
 
+    void calculate_complex_control(const geometry_msgs::Twist& twist, double movement);
+    void calculate_linear_control(const geometry_msgs::Twist& twist, double movement);
+    void calculate_rotation_control(const geometry_msgs::Twist& twist, double movement);
   };
 }

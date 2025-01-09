@@ -18,12 +18,22 @@
     - Driving에서는 별도의 dT를 계산해야 한다. (이전측정시간을 memory 해야 함)
     - 
 
-. ZlbDrive::_prev_encoder[2] 변수 추가
 . ZlbDrive::get_encoder_position() 함수 추가.
-
-. DoubleEncoderTracker 객체 ZlbDrive가 포함 할 수 있도록 변경
+. 
 
 ID [  ] : 2025-01-09
+1. Drivinag::driving_control subscribe에서 이동,회전이 0일 경우 각 드라이버에 멈춤 요청
+2. calculate_wheel_control 분해시 각도가 아니라 각속도로 분해되도록 변경
+3. AckermannDouble:: 각각의 함수 추가
+
+
+ID [ 88f60d8 ] : 2025-01-09
+1. ZlbDrive::_prev_encoder[2] 변수 삭제
+2. DoubleEncoderTracker 객체 ZlbDrive가 포함 할 수 있도록 변경
+3. ZlbDrive::stop() 시 encoder_tracker 객체 초기화 
+
+
+ID [ 5bfcdcb ] : 2025-01-09
 1. DoubleEncoderTracker 구현
 
 ID [ 1e1c575 ] : 2025-01-06

@@ -1,105 +1,175 @@
-// Wheel의 현재 상태를 저장하는 구조체
-struct WheelState {
-    WheelControlValue control_value;  // 현재 각도와 속도
-    bool is_updated;                  // 업데이트 여부
-    
-    WheelState() : is_updated(false) {}
-};
+WheelControlValue* AckermannDouble::calculate_wheel_velocities(const geometry_msgs::Twist& twist)
+{
+    const double linear_x = twist.linear.x;    // 전진 속도
+    const double linear_y = twist.linear.y;    // 측방 속도
+    const double angular_z = twist.angular.z;  // 회전 속도
 
-// 특정 sequence에 대한 모든 wheel의 상태를 관리하는 클래스
-class SequenceWheelStates {
-public:
-    SequenceWheelStates() : is_complete(false) {
-        wheel_states.fill(WheelState());
-    }
-    
-    std::array<WheelState, 4> wheel_states;  // 4개 휠의 상태
-    bool is_complete;                        // 4개 휠 모두 업데이트 됐는지
-    std::chrono::system_clock::time_point timestamp;  // 데이터 생성 시간
-};
-
-// Driving 클래스에서 사용할 Wheel 상태 관리 클래스
-class WheelStateManager {
-public:
-    WheelStateManager(size_t max_sequence_buffer = 100) 
-        : current_sequence(0), max_buffer_size(max_sequence_buffer) {}
-    
-    // wheel로부터 callback 받을 때 호출
-    void updateWheelState(uint32_t sequence, int wheel_index, const WheelControlValue& value) {
-        std::lock_guard<std::mutex> lock(mutex_);
-        
-        // 해당 sequence의 상태 가져오기 or 생성
-        auto& seq_states = getOrCreateSequenceState(sequence);
-        
-        // wheel 상태 업데이트
-        seq_states.wheel_states[wheel_index].control_value = value;
-        seq_states.wheel_states[wheel_index].is_updated = true;
-        
-        // 모든 wheel이 업데이트 되었는지 확인
-        checkSequenceComplete(sequence);
-        
-        // 오래된 시퀀스 정리
-        cleanOldSequences();
-    }
-    
-    // 특정 sequence의 모든 wheel 데이터가 수집되었는지 확인
-    bool isSequenceComplete(uint32_t sequence) const {
-        std::lock_guard<std::mutex> lock(mutex_);
-        auto it = sequence_states.find(sequence);
-        return (it != sequence_states.end() && it->second.is_complete);
-    }
-    
-    // 완성된 sequence의 wheel 상태들 가져오기
-    std::optional<std::array<WheelControlValue, 4>> getCompleteWheelStates(uint32_t sequence) {
-        std::lock_guard<std::mutex> lock(mutex_);
-        auto it = sequence_states.find(sequence);
-        if (it != sequence_states.end() && it->second.is_complete) {
-            std::array<WheelControlValue, 4> result;
-            for (int i = 0; i < 4; ++i) {
-                result[i] = it->second.wheel_states[i].control_value;
-            }
-            return result;
+    // 정지 상태 체크
+    const double movement = std::abs(linear_x) + std::abs(linear_y);
+    if(std::abs(movement) < MOVEMENT_THRESHOLD && std::abs(angular_z) < ROTATION_THRESHOLD) 
+    {
+        for(int i = 0; i < 4; i++) 
+        {
+            _value[i]._velocity = 0.0;
+            _value[i]._angle = 0.0;
         }
-        return std::nullopt;
+        return _value;
     }
 
-private:
-    mutable std::mutex mutex_;
-    uint32_t current_sequence;
-    size_t max_buffer_size;
-    std::map<uint32_t, SequenceWheelStates> sequence_states;
-    
-    SequenceWheelStates& getOrCreateSequenceState(uint32_t sequence) {
-        auto it = sequence_states.find(sequence);
-        if (it == sequence_states.end()) {
-            auto [new_it, _] = sequence_states.emplace(sequence, SequenceWheelStates());
-            new_it->second.timestamp = std::chrono::system_clock::now();
-            return new_it->second;
-        }
-        return it->second;
-    }
-    
-    void checkSequenceComplete(uint32_t sequence) {
-        auto& states = sequence_states[sequence];
-        states.is_complete = std::all_of(states.wheel_states.begin(), 
-                                       states.wheel_states.end(),
-                                       [](const WheelState& state) { 
-                                           return state.is_updated; 
-                                       });
-    }
-    
-    void cleanOldSequences() {
-        auto now = std::chrono::system_clock::now();
-        auto it = sequence_states.begin();
-        while (it != sequence_states.end()) {
-            if (sequence_states.size() <= max_buffer_size) break;
+    // 선속도와 각속도 모두 존재하는 경우의 처리
+    if(movement > MOVEMENT_THRESHOLD && std::abs(angular_z) > ROTATION_THRESHOLD)
+    {
+        // 전체 움직임에서 선속도와 회전 성분의 비율 계산
+        const double linear_ratio = movement / (movement + std::abs(angular_z));
+        const double angular_ratio = std::abs(angular_z) / (movement + std::abs(angular_z));
+
+        for(int i = 0; i < 4; i++)
+        {
+            // 선속도 성분
+            double linear_velocity = std::hypot(linear_x, linear_y);
             
-            auto age = now - it->second.timestamp;
-            if (age > std::chrono::seconds(5) || sequence_states.size() > max_buffer_size) {
-                it = sequence_states.erase(it);
-            } else {
-                ++it;
+            // 회전 성분
+            double radius = std::hypot(_pos[i].x, _pos[i].y);  // 중심으로부터의 거리
+            double rotational_velocity = angular_z * radius;
+
+            // 선속도와 회전속도 합성
+            _value[i]._velocity = linear_velocity * linear_ratio + rotational_velocity * angular_ratio;
+
+            // 각속도 계산
+            double linear_angle_rate = std::atan2(linear_y, linear_x);
+            double rotational_angle_rate = angular_z;
+
+            // 전륜과 후륜의 각속도 방향이 반대
+            if(i >= 2)  // 후륜
+            {
+                _value[i]._angle = (-linear_angle_rate * linear_ratio + 
+                                  -rotational_angle_rate * angular_ratio);
+            }
+            else  // 전륜
+            {
+                _value[i]._angle = (linear_angle_rate * linear_ratio + 
+                                  rotational_angle_rate * angular_ratio);
             }
         }
     }
-};
+    else if(movement > MOVEMENT_THRESHOLD)  // 선속도만 있는 경우
+    {
+        const double velocity = std::hypot(linear_x, linear_y);
+        const double angle_rate = std::atan2(linear_y, linear_x);
+
+        // 전륜
+        _value[Wheel::FrontLeft]._angle = angle_rate;
+        _value[Wheel::FrontRight]._angle = angle_rate;
+        
+        // 후륜 (반대 방향)
+        _value[Wheel::RearLeft]._angle = -angle_rate;
+        _value[Wheel::RearRight]._angle = -angle_rate;
+
+        // 모든 바퀴 동일 선속도
+        for(int i = 0; i < 4; i++) 
+        {
+            _value[i]._velocity = velocity;
+        }
+    }
+    else  // 각속도만 있는 경우
+    {
+        // 전륜
+        _value[Wheel::FrontLeft]._angle = angular_z;
+        _value[Wheel::FrontRight]._angle = angular_z;
+        
+        // 후륜 (반대 방향)
+        _value[Wheel::RearLeft]._angle = -angular_z;
+        _value[Wheel::RearRight]._angle = -angular_z;
+
+        // 각 바퀴의 선속도 계산
+        for(int i = 0; i < 4; i++) 
+        {
+            double radius = std::hypot(_pos[i].x, _pos[i].y);
+            _value[i]._velocity = angular_z * radius;
+        }
+    }
+
+    return _value;
+}
+
+
+void AckermannDouble::calculate_complex_control(const geometry_msgs::Twist& twist, double movement)
+{
+    const double linear_ratio = movement / (movement + std::abs(twist.angular.z));
+    const double angular_ratio = std::abs(twist.angular.z) / (movement + std::abs(twist.angular.z));
+
+    // 이동 방향 계산
+    const double move_direction = std::atan2(twist.linear.y, twist.linear.x);
+
+    for(int i=0; i<4; ++i)
+    {
+        // 선속도 성분
+        double linear_velocity = std::hypot(twist.linear.x, twist.linear.y);
+        
+        // 회전 성분
+        double radius = std::hypot(_pos[i].x, _pos[i].y);
+        double rotational_velocity = twist.angular.z * radius;
+
+        // 선속도와 회전속도 합성
+        _value[i]._velocity = linear_velocity * linear_ratio + rotational_velocity * angular_ratio;
+
+        // 각속도 계산
+        if(i < 2)  // 전륜
+        {
+            // 선형 이동에 의한 각속도와 회전에 의한 각속도 합성
+            _value[i]._angle = twist.angular.z * angular_ratio;
+            if(std::abs(linear_velocity) > frb::ThresHold::Movement) {
+                _value[i]._angle += std::atan2(twist.linear.y, twist.linear.x) * linear_ratio;
+            }
+        }
+        else  // 후륜
+        {
+            // 전륜과 반대 방향
+            _value[i]._angle = -_value[i-2]._angle;
+        }
+    }
+}
+
+
+void AckermannDouble::calculate_complex_control(const geometry_msgs::Twist& twist, double movement)
+{
+    const double linear_ratio = movement / (movement + std::abs(twist.angular.z));
+    const double angular_ratio = std::abs(twist.angular.z) / (movement + std::abs(twist.angular.z));
+
+    for(int i=0; i<4; ++i)
+    {
+        // 선속도 성분
+        double linear_velocity = std::hypot(twist.linear.x, twist.linear.y);
+        
+        // 회전 성분
+        double radius = std::hypot(_pos[i].x, _pos[i].y);  // 중심으로부터의 거리
+        double rotational_velocity = twist.angular.z * radius;
+
+        // 선속도와 회전속도 합성
+        _value[i]._velocity = linear_velocity * linear_ratio + rotational_velocity * angular_ratio;
+
+        // 각속도 계산
+        if(i < 2)  // 전륜
+        {
+            // 회전 성분의 각속도
+            double rot_angular_vel = twist.angular.z;
+            
+            // 선형 이동에 의한 각속도 (선속도를 각속도로 변환)
+            double linear_angular_vel = 0.0;
+            if(std::abs(linear_velocity) > frb::ThresHold::Movement) 
+            {
+                // 선속도를 각속도로 변환 (v = ωr 관계 사용)
+                linear_angular_vel = linear_velocity / (_wheel_base/2);  // 휠베이스의 절반을 반지름으로 사용
+            }
+
+            // 각속도 합성
+            _value[i]._angle = rot_angular_vel * angular_ratio + linear_angular_vel * linear_ratio;
+        }
+        else  // 후륜
+        {
+            // 후륜은 전륜의 반대 방향
+            _value[i]._angle = -_value[i-2]._angle;
+        }
+    }
+    return;
+}

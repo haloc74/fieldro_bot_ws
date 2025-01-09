@@ -14,17 +14,18 @@ namespace frb
     
     if(!has_movement(twist_msg))  
     {
-      // Bug Fix !!!!!
-      // angle이 아니라 각속도로 전달이 되어야 한다.
       for(int i=0; i<Wheel::End; i++)
       {
-        _drive[i]->move(0.0, 0.0);
+        // 멈추고 자동으로 속도계산을 위한 timer를 초기화 시킨다.
+        // 매우 중요
+        _drive[Wheel::FrontLeft]->stop(false);
       }
     }
     else
     {
       // Bug Fix !!!!!
       // angle이 아니라 각속도로 전달이 되어야 한다.
+      // TODO : Programming 원점
       WheelControlValue* value = _driving_mode->calculate_wheel_control(twist_msg);
       for(int i=0; i<Wheel::End; i++)
       {

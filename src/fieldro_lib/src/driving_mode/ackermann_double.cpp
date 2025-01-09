@@ -72,12 +72,12 @@ namespace frb
   }
 
   /**
-  * @brief      Ackermann 조향 Value 계산
+  * @brief      Ackermann 조향 Value 계산 (각도 기준)
   * @param[in]  const geometry_msgs::Twist& twist : 선속도, 각속도
-  * @return     WheelControlValue*                : 각 바퀴의 조향 및 속도
-  * @note       
+  * @return     WheelControlValue*                : 각 바퀴의 선속도(m/s)와 조향각(degree)
+  * @note       각도 기준 조향 제어를 위한 함수
   */
-  WheelControlValue* AckermannDouble::calculate_wheel_control(const geometry_msgs::Twist& twist)
+  WheelControlValue* AckermannDouble::calculate_wheel_control_degree(const geometry_msgs::Twist& twist)
   {
     const double linear_x = twist.linear.x;
     const double linear_y = twist.linear.y;
@@ -87,9 +87,9 @@ namespace frb
     const double movement = std::abs(linear_x) + std::abs(linear_y);  // 근사값 사용
     if(__builtin_expect(movement < frb::ThresHold::Movement && std::abs(angular_z) < frb::ThresHold::Rotation, 0)) 
     {
-      for (int i = 0; i < 4; i++) 
+      for(int i=0; i<4; i++) 
       {
-          _value[i]._velocity = 0.0;
+        _value[i]._velocity = 0.0;
       }
       return _value;
     }
@@ -140,16 +140,162 @@ namespace frb
   }  
 
   /**
+  * @brief      Ackermann 조향 Value 계산 (각속도 기준)
+  * @param[in]  const geometry_msgs::Twist& twist : 선속도, 각속도
+  * @return     WheelControlValue*                : 각 바퀴의 선속도(m/s)와 각속도(rad/s)
+  * @note       각속도 기준 조향 제어를 위한 함수
+  */
+  WheelControlValue* AckermannDouble::calculate_wheel_control(const geometry_msgs::Twist& twist)
+  {
+    const double linear_x   = twist.linear.x;   // 전진 속도
+    const double linear_y   = twist.linear.y;   // 측방 속도
+    const double angular_z  = twist.angular.z;  // 회전 속도
+
+    // 빠른 정지 상태 체크
+    const double movement = std::abs(linear_x) + std::abs(linear_y);  // 근사값 사용
+    if(std::abs(movement) < frb::ThresHold::Movement && std::abs(angular_z) < frb::ThresHold::Rotation) 
+    {
+      for(int i=0; i<4; i++) 
+      {
+        _value[i]._velocity = 0.0;
+        _value[i]._angle    = 0.0;
+      }
+      return _value;
+    }
+
+    // 선속도와 각속도 모두 존재하는 경우의 처리
+    if(movement > frb::ThresHold::Movement && std::abs(angular_z) > frb::ThresHold::Rotation)
+    {
+      calculate_complex_control(twist, movement);
+    }
+    else if(movement > frb::ThresHold::Movement)      // 선속도만 있는 경우
+    {
+      calculate_linear_control(twist, movement);
+    }
+    else                                        // 각속도만 있는 경우
+    {
+      calculate_rotation_control(twist, movement);
+    }
+   
+    return _value;
+  }
+
+  /**
+  * @brief      선속도와 각속도 모두 존재하는 경우 처리
+  * @param[in]  const geometry_msgs::Twist& twist : 선속도, 각속도
+  * @return     void
+  * @note       ackermann 조향을 위한 복합 제어
+  */
+  void AckermannDouble::calculate_complex_control(const geometry_msgs::Twist& twist, double movement)
+  {
+    const double linear_ratio = movement / (movement + std::abs(twist.angular.z));
+    const double angular_ratio = std::abs(twist.angular.z) / (movement + std::abs(twist.angular.z));
+
+    for(int i=0; i<4; ++i)
+    {
+      // 선속도 성분
+      double linear_velocity = std::hypot(twist.linear.x, twist.linear.y);
+      
+      // 회전 성분
+      double radius = std::hypot(_pos[i].x, _pos[i].y);  // 중심으로부터의 거리
+      double rotational_velocity = twist.angular.z * radius;
+
+      // 선속도와 회전속도 합성
+      _value[i]._velocity = (linear_velocity*linear_ratio) + (rotational_velocity*angular_ratio);
+
+      // 각속도 계산
+      if(i < 2)  
+      {
+        // 회전 성분의 각속도
+        double rot_angular_vel = twist.angular.z;
+
+        // 선형 이동에 의한 각속도 (선속도를 각속도로 변환)
+        double linear_angular_vel = 0.0;
+        if(std::abs(linear_velocity) > frb::ThresHold::Movement) 
+        {
+          // 선속도를 각속도로 변환 (v = wr 관계 사용) 
+          // 휠베이스의 절반을 반지름으로 사용
+          linear_angular_vel = linear_velocity/(_wheel_base/2);  
+        }
+
+        // 각속도 합성
+        _value[i]._angle = (rot_angular_vel*angular_ratio) + (linear_angular_vel*linear_ratio);
+      }
+      else  
+      {
+        _value[i]._angle = -_value[i-2]._angle;
+      }
+    }
+    return;
+  }
+
+  /**
+  * @brief      선속도만 있는 경우 처리
+  * @param[in]  const geometry_msgs::Twist& twist : 선속도, 각속도
+  * @return     void
+  * @note       
+  */
+  void AckermannDouble::calculate_linear_control(const geometry_msgs::Twist& twist, double movement)
+  {
+    const double velocity = std::hypot(twist.linear.x, twist.linear.y);
+    const double angle_rate = std::atan2(twist.linear.y, twist.linear.x);
+
+    // 전륜
+    _value[Wheel::FrontLeft]._angle   = angle_rate;
+    _value[Wheel::FrontRight]._angle  = angle_rate;
+    
+    // 후륜 (반대 방향)
+    _value[Wheel::RearLeft]._angle    = -angle_rate;
+    _value[Wheel::RearRight]._angle   = -angle_rate;
+
+    // 모든 바퀴 동일 선속도
+    for(int i = 0; i < 4; i++) 
+    {
+      _value[i]._velocity = velocity;
+    }
+  }
+
+  /**
+  * @brief      각속도만 있는 경우 처리
+  * @param[in]  const geometry_msgs::Twist& twist : 선속도, 각속도
+  * @return     void
+  * @note       각속도만 있을 경우 처리
+  */
+  void AckermannDouble::calculate_rotation_control(const geometry_msgs::Twist& twist, double movement)
+  {
+    // 전륜
+    _value[Wheel::FrontLeft]._angle = twist.angular.z;
+    _value[Wheel::FrontRight]._angle= twist.angular.z;
+    
+    // 후륜 (반대 방향)
+    _value[Wheel::RearLeft]._angle  = -twist.angular.z;
+    _value[Wheel::RearRight]._angle = -twist.angular.z;
+
+    // 각 바퀴의 선속도 계산
+    for(int i = 0; i < 4; i++) 
+    {
+      double radius = std::hypot(_pos[i].x, _pos[i].y);
+      _value[i]._velocity = twist.angular.z * radius;
+    }    
+  }
+
+  /**
   * @brief      각도를 -π에서 π 범위로 정규화하는 함수
   * @param[in]  double angle : 정규화할 각도 (radian)
   * @return     double       : -π에서 π 범위로 정규화된 각도 (radian)
   * @note       fmod 함수를 사용하여 각도를 [-π, π] 범위로 변환
-  *             예시: 4.5rad -> 1.35841rad
+  *             예시: 4.5rad -> -1.783rad
   */
   double AckermannDouble::normalize_angle(double angle)
   {
-    angle = std::fmod(angle+M_PI, 2*M_PI);
-    if(angle < 0)  angle += 2*M_PI;
+    // angle = std::fmod(angle+M_PI, 2*M_PI);
+    // if(angle < 0)  angle += 2*M_PI;
+
+    angle = std::fmod(angle, 2*M_PI);
+    
+    if(angle > M_PI) angle -= 2*M_PI;
+    if(angle < -M_PI) angle += 2*M_PI;
+
     return angle;
   }
 
@@ -238,7 +384,7 @@ namespace frb
   //   double angular_z  = twist.angular.z;    // 회전 속도
 
   //   // 정지 상태 체크
-  //   if(std::abs(linear_x) < MOVEMENT_THRESHOLD && std::abs(linear_y) < MOVEMENT_THRESHOLD && std::abs(angular_z) < frb::ThresHold::Rotation)
+  //   if(std::abs(linear_x) < frb::ThresHold::Movement && std::abs(linear_y) < frb::ThresHold::Movement && std::abs(angular_z) < frb::ThresHold::Rotation)
   //   {
   //     for (int i = 0; i < 4; i++) 
   //     {
@@ -272,7 +418,7 @@ namespace frb
   //   } 
   //   else 
   //   {   // 직진 또는 측방 이동의 경우
-  //     if (std::abs(linear_x) < MOVEMENT_THRESHOLD && std::abs(linear_y) < MOVEMENT_THRESHOLD) 
+  //     if (std::abs(linear_x) < frb::ThresHold::Movement && std::abs(linear_y) < frb::ThresHold::Movement) 
   //     {
   //       return _value;  // 현재 각도 유지
   //     }
