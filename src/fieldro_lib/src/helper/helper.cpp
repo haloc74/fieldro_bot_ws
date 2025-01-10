@@ -180,4 +180,14 @@ namespace frb
     return 0x00;
   }
 
+  double get_current_micro_time()
+  {
+    double time = static_cast<double>(
+        std::chrono::duration_cast<std::chrono::microseconds>(
+            std::chrono::steady_clock::now().time_since_epoch()
+        ).count()
+    );
+    return time;
+  }
+
 }

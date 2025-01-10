@@ -27,30 +27,42 @@ namespace frb
 
   /**
   * @brief      motor 구동
-  * @param[in]  double velocity : run velocity  (m/s)
-  * @param[in]  double degree   : turn degree
-  * @return     
+  * @param[in]  double velocity : run velocity      (m/s)
+  * @param[in]  double angular  : angular velocity  (rad/s)
+  * @return     void
   * @note       
   * @attention  
   */
-  void ZlbDrive::move(double velocity, double degree)
+  void ZlbDrive::move(double velocity, double angular)
   {
-    turn(degree);
-    run(velocity);
+    // todo : angular 값에 따라서 steering motor 제어
+    // turn(degree);
 
-    int32_t traction_pos = 0;
-    int32_t steering_pos = 0;
-
-    // actual velocity notify
-    //notify_action_result(_wheel_index, WheelControlValue(traction_pos, steering_pos));
+    // todo : velocity 값에 따라서 traction motor 제어
+    // run(angular);
 
     return;
   }
-  WheelControlValue ZlbDrive::get_actual_velocity()
-  {
-    
 
-    return WheelControlValue(0, 0);
+  /**
+  * @brief      각 모터의 현재 encoder position 값을 요청
+  * @param[in]  void
+  * @return     void
+  * @attention  1. steering motor에 대한 position을 먼저하고 이후 traction motor에 대한 position을 요청한다.
+  *                - traction motor에 대한 요청을 나중에 하는 이유는 주로 주행위주의 action에서 최대한 주행쪽
+  *                  의 encoder 값을 최신 데이터로 받기를 위함이다.
+  *             2. 
+  */
+  void ZlbDrive::request_actual_velocity()
+  {
+    add_packet(_slave_id[int32_t(SlaveId::Steering)], 
+               ServoFD1X5::POSITION_FEEDBACK_REGISTER, 
+               0, MODBUS_FUNC_CODE::READ_HOLDING_REGISTERS);
+
+    add_packet(_slave_id[int32_t(SlaveId::Traction)], 
+               ServoFD1X5::POSITION_FEEDBACK_REGISTER, 
+               0, MODBUS_FUNC_CODE::READ_HOLDING_REGISTERS);
+    return;
   }
 
 

@@ -1,4 +1,5 @@
 #include "driving.h"
+#include <fieldro_lib/helper/helper.h>
 
 namespace frb
 {
@@ -7,6 +8,8 @@ namespace frb
   * @param[in]  const geometry_msgs::Twist &twist_msg : 속도 제어 메세지
   * @return     void
   * @note       Motor의 속도는 RPM으로 제어가 되므로 속도 -> RMP으로 변환하는 과정이 필요하다.
+  * @attention  매우중요 : 멈추고 자동으로 속도계산을 위한 timer를 초기화 시킨다.
+  * 
   */
   void Driving::subscribe_driving_control(const geometry_msgs::Twist &twist_msg)
   {
@@ -14,42 +17,39 @@ namespace frb
     
     if(!has_movement(twist_msg))  
     {
+      // 움직임을 멈춰야 하는경우는 최우선적용이다.
+      // _wait_actual_velocity 플래그와 상관없이 동작되어야 한다.
       for(int i=0; i<Wheel::End; i++)
       {
-        // 멈추고 자동으로 속도계산을 위한 timer를 초기화 시킨다.
-        // 매우 중요
         _drive[Wheel::FrontLeft]->stop(false);
+        _actual_velocity[i].release();
       }
+      _wait_actual_velocity     = false;
+      _prev_velocity_check_time = DBL_MAX;
     }
     else
     {
-      // Bug Fix !!!!!
-      // angle이 아니라 각속도로 전달이 되어야 한다.
-      // TODO : Programming 원점
+      // 움직여야 할 경우 이전 요청에 대한 응답이 완료되지 않은 상태에서는 보내지 않는다.
+      if(_wait_actual_velocity)   return;
+
       WheelControlValue* value = _driving_mode->calculate_wheel_control(twist_msg);
       for(int i=0; i<Wheel::End; i++)
       {
-        //_drive[i]->move(value[i]._velocity, value[i]._angle);
+        _drive[i]->move(value[i]._velocity, value[i]._angular);
+        _actual_velocity[i].release();
+      }
+
+      // 이전 속도 측정시간이 설정 되어있지 않은 경우 설정해준다.
+      // stedy clock을 사용하여 시간을 측정한다.
+      // 시간의 단위는 ns 이다.
+      if(_prev_velocity_check_time == DBL_MAX)
+      {
+        _prev_velocity_check_time = get_current_micro_time();
       }
     }
 
-    // todo : 각각의 모터에 해당 데이터를 전달 해야 한다.
-
-    // Front Left
-    // (value+0)->_angle;
-    // (value+0)->_velocity;
-
-    // Front Right
-    // (value+1)->_angle;
-    // (value+1)->_velocity;
-
-    // Rear Left
-    // (value+2)->_angle;
-    // (value+2)->_velocity;
-
-    // Rear Right
-    // (value+3)->_angle;
-    // (value+3)->_velocity;
+    // actual velocity 대기 플래그 설정해준다.
+    _wait_actual_velocity = true;
 
     return;
   }

@@ -32,6 +32,9 @@ namespace frb
     _publish_act_velocity =
     _node_handle->advertise<geometry_msgs::Twist>("twinny_robot/ActVel", 100);
 
+    _wait_actual_velocity = false;
+    _prev_velocity_check_time = DBL_MAX;
+
     for(int i = 0; i < Wheel::End; i++)
     {
       _drive[i] = new ZlbDrive(std::bind(&Driving::action_complete_notify, 
@@ -48,7 +51,9 @@ namespace frb
                                           std::placeholders::_2, 
                                           std::placeholders::_3),
                                 config_file,
-                                i);      
+                                i);
+
+      _actual_velocity[i].release();
     }
 
     // spinn 구동 (생성은 Unit Class 담당)
@@ -187,16 +192,43 @@ namespace frb
   */
   void Driving::receive_actual_velocity(int32_t wheel, WheelControlValue value)
   {
+    if(!_wait_actual_velocity)            return;
+    if(wheel < 0 || wheel >= Wheel::End)  return;
     // wheel index에 해당하는 motor object로 부터 제어 결과 알림 콜백
     // wheel index < 0 : 에러
     // wheel index >= Wheel::End : 
 
     // 1. Buffer에 저장
-    // 2. 4개의 wheel에 모두 보고가 올라왔으면 
+    _actual_velocity[wheel] = value;
+
+    // 2. 4개가 모두 수신되지 않았다면 건너뛰기
+    for(int i=0; i<Wheel::End; i++)
+    {
+      if(!_actual_velocity[i].has_value())  return;
+    }
+
+    double current_time = get_current_micro_time();
+    double delta_time = current_time - _prev_velocity_check_time;
+
+
+    // 3. 4개의 wheel에 모두 보고가 올라왔으면 
     //    - AckermannDouble::calculate_actual_twist() 로 실제 속도 계산
     //    - publish_act_velocity() 로 실제 속도 publish
     //    - Buffer 초기화
-    // 3. 4개가 모두 수신되지 않았다면 대기
+    geometry_msgs::Twist twist = _driving_mode->calculate_actual_twist(_actual_velocity, delta_time/1000.0);
+
+    // 4. 마지막 속도 측정시간 업데이트
+    _prev_velocity_check_time = current_time;
+
+    // 5. 실제 속도 publish
+    publish_act_velocity(twist);
+
+    // 6. Buffer 초기화
+    for(int i=0; i<Wheel::End; i++)
+    {
+      _actual_velocity[i].release();
+    }
+    _wait_actual_velocity = false;
 
     return;
   }

@@ -43,13 +43,12 @@ namespace frb
   public:
     WheelControlValue()
     {
-      _angle    = 0.0;
+      _angular  = 0.0;
       _velocity = 0.0;
     }
-
     WheelControlValue(double angle, double velocity)
     {
-      _angle    = angle;
+      _angular  = angle;
       _velocity = velocity;
     }
 
@@ -57,28 +56,45 @@ namespace frb
     {
     }
 
+    void release()
+    {
+      _angular = DBL_MAX;
+      _velocity = DBL_MAX;
+    }
+
+    void set(double angle, double velocity)
+    {
+      _angular  = angle;
+      _velocity = velocity;
+    }
+
+    bool has_value()
+    {
+      return (_angular != DBL_MAX && _velocity != DBL_MAX);
+    }
+
     // 복사생성자
     WheelControlValue(const WheelControlValue& value)
     {
-      _angle    = value._angle;
+      _angular    = value._angular;
       _velocity = value._velocity;
     }
     WheelControlValue(const WheelControlValue* value)
     {
-      _angle    = value->_angle;
+      _angular    = value->_angular;
       _velocity = value->_velocity;
     }
 
     // 대입연산자
     WheelControlValue& operator=(const WheelControlValue& value)
     {
-      _angle    = value._angle;
+      _angular    = value._angular;
       _velocity = value._velocity;
       return *this;
     }
     WheelControlValue& operator=(const WheelControlValue* value)
     {
-      _angle    = value->_angle;
+      _angular    = value->_angular;
       _velocity = value->_velocity;
       return *this;
     }
@@ -87,19 +103,19 @@ namespace frb
     WheelControlValue operator-(const WheelControlValue& value)
     {
       WheelControlValue result;
-      result._angle    = _angle   - value._angle;
+      result._angular    = _angular   - value._angular;
       result._velocity = _velocity- value._velocity;
       return result;
     }
     WheelControlValue operator-(const WheelControlValue* value)
     {
       WheelControlValue result;
-      result._angle    = _angle   - value->_angle;
+      result._angular    = _angular   - value->_angular;
       result._velocity = _velocity- value->_velocity;
       return result;
     }    
 
-    double _angle;    // 조향 (radian)
+    double _angular;    // 조향 (radian)
     double _velocity; // 속도 (m/s)
   };
 

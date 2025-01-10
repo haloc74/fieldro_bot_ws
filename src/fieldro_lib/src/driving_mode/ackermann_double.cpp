@@ -49,7 +49,7 @@ namespace frb
   {
     for(int i=0; i<Wheel::End; i++)
     {
-      _value[i]._angle    = 0.0;
+      _value[i]._angular    = 0.0;
       _value[i]._velocity = 0.0;
 
       _pos[i].x = 0.0;
@@ -107,12 +107,12 @@ namespace frb
         const double dy = _pos[i].y - icr_y;
         const double radius = std::hypot(dx, dy);
         
-        _value[i]._angle = std::atan2(dy, dx);
+        _value[i]._angular = std::atan2(dy, dx);
         
         // 후륜
         if (i >= 2) 
         {  
-          _value[i]._angle = normalize_angle(_value[i]._angle + M_PI);
+          _value[i]._angular = normalize_angle(_value[i]._angular + M_PI);
         }
         _value[i]._velocity = angular_z * radius;
       }
@@ -124,15 +124,15 @@ namespace frb
       const double movement_angle = std::atan2(linear_y, linear_x);
 
       // 전륜
-      _value[0]._angle = _value[1]._angle = movement_angle;
+      _value[0]._angular = _value[1]._angular = movement_angle;
       // 후륜 (반대 방향)
       const double rear_angle = normalize_angle(movement_angle + M_PI);
-      _value[2]._angle = _value[3]._angle = rear_angle;
+      _value[2]._angular = _value[3]._angular = rear_angle;
 
       // 속도 계산 (cos lookup table 사용 가능)
       for (int i = 0; i < 4; i++) 
       {
-        _value[i]._velocity = velocity * std::cos(movement_angle - _value[i]._angle);
+        _value[i]._velocity = velocity * std::cos(movement_angle - _value[i]._angular);
       }
     }
 
@@ -158,7 +158,7 @@ namespace frb
       for(int i=0; i<4; i++) 
       {
         _value[i]._velocity = 0.0;
-        _value[i]._angle    = 0.0;
+        _value[i]._angular    = 0.0;
       }
       return _value;
     }
@@ -219,11 +219,11 @@ namespace frb
         }
 
         // 각속도 합성
-        _value[i]._angle = (rot_angular_vel*angular_ratio) + (linear_angular_vel*linear_ratio);
+        _value[i]._angular = (rot_angular_vel*angular_ratio) + (linear_angular_vel*linear_ratio);
       }
       else  
       {
-        _value[i]._angle = -_value[i-2]._angle;
+        _value[i]._angular = -_value[i-2]._angular;
       }
     }
     return;
@@ -241,12 +241,12 @@ namespace frb
     const double angle_rate = std::atan2(twist.linear.y, twist.linear.x);
 
     // 전륜
-    _value[Wheel::FrontLeft]._angle   = angle_rate;
-    _value[Wheel::FrontRight]._angle  = angle_rate;
+    _value[Wheel::FrontLeft]._angular   = angle_rate;
+    _value[Wheel::FrontRight]._angular  = angle_rate;
     
     // 후륜 (반대 방향)
-    _value[Wheel::RearLeft]._angle    = -angle_rate;
-    _value[Wheel::RearRight]._angle   = -angle_rate;
+    _value[Wheel::RearLeft]._angular    = -angle_rate;
+    _value[Wheel::RearRight]._angular   = -angle_rate;
 
     // 모든 바퀴 동일 선속도
     for(int i = 0; i < 4; i++) 
@@ -264,12 +264,12 @@ namespace frb
   void AckermannDouble::calculate_rotation_control(const geometry_msgs::Twist& twist, double movement)
   {
     // 전륜
-    _value[Wheel::FrontLeft]._angle = twist.angular.z;
-    _value[Wheel::FrontRight]._angle= twist.angular.z;
+    _value[Wheel::FrontLeft]._angular = twist.angular.z;
+    _value[Wheel::FrontRight]._angular= twist.angular.z;
     
     // 후륜 (반대 방향)
-    _value[Wheel::RearLeft]._angle  = -twist.angular.z;
-    _value[Wheel::RearRight]._angle = -twist.angular.z;
+    _value[Wheel::RearLeft]._angular  = -twist.angular.z;
+    _value[Wheel::RearRight]._angular = -twist.angular.z;
 
     // 각 바퀴의 선속도 계산
     for(int i = 0; i < 4; i++) 
@@ -311,8 +311,8 @@ namespace frb
     geometry_msgs::Twist actual_twist;
 
     // 1. 전륜과 후륜의 평균 각도 계산
-    double front_angle = (value[Wheel::FrontLeft]._angle + value[Wheel::FrontRight]._angle) / 2.0;
-    double rear_angle  = (value[Wheel::RearLeft]._angle + value[Wheel::RearRight]._angle) / 2.0;
+    double front_angle = (value[Wheel::FrontLeft]._angular + value[Wheel::FrontRight]._angular) / 2.0;
+    double rear_angle  = (value[Wheel::RearLeft]._angular + value[Wheel::RearRight]._angular) / 2.0;
 
     // 2. 회전 운동 판단.
     if(std::abs(front_angle - rear_angle) > frb::ThresHold::Rotation)

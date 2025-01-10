@@ -32,13 +32,14 @@ namespace frb
     void publish_act_velocity(geometry_msgs::Twist twist);                  // 실제 속도 및 좌표 publish 함수
 
     ZlbDrive* _drive[Wheel::End];                                           // drive 객체
+
+    bool      _wait_actual_velocity;                                        // 실제 속도 대기 여부
+    WheelControlValue _actual_velocity[Wheel::End];                         // 실제 속도
+    double    _prev_velocity_check_time;                                    // 이전 속도 체크 시간            
+
     void action_complete_notify(int32_t wheel, const Error error);          // motor object로 부터 동작 완료 알림 콜백
 
     void receive_actual_velocity(int32_t wheel, WheelControlValue value);   // motor object로 부터 제어 결과 알림 콜백
-
-    // // motor object로 부터 실제 속도 알림 콜백
-    // void actual_velocity_notify(int32_t pos, uint32_t sequence, 
-    //                             WheelControlValue value, double interval);                     
 
     // 요청된 twist가 움직임이 있는지 없는지 확인
     bool has_movement(const geometry_msgs::Twist& twist_msg);    

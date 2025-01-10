@@ -114,4 +114,6 @@ namespace frb
 
   // bit mask된 io sensor의 on, off 상태를 체크하여 반환
   int8_t check_io_sensor(int32_t sensor_index, int64_t sensor_bit);
+
+  double get_current_micro_time();
 }

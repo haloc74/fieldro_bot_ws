@@ -53,12 +53,12 @@ namespace frb
     void test_stop();                       // break on
     void test_turn(double degree);          // steering motor turn 
 
-    void move(double velocity, double degree);  // move
+    void move(double velocity, double angular);  // move
 
     void stop(bool break_flag);                  // stop  (일반적인 멈춤)
     //void engage_break();                    // break on
     void release_break();                   // break off
-    WheelControlValue get_actual_velocity(); // get actual velocity
+    void request_actual_velocity(); // get actual velocity
 
   protected:
     void update();
