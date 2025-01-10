@@ -130,10 +130,10 @@ message(STATUS "")
   )
 
 # message(STATUS "")
-# message(STATUS "5. fieldro_lib_temp Lib generate")
+# message(STATUS "X. fieldro_lib_temp Lib generate")
 # message(STATUS "")
 
-  # ## 5-1. lib_cpp 하위의 모든 cpp 파일을 찾아서 LIB_SRC_FILES에 저장
+  # ## X-1. lib_cpp 하위의 모든 cpp 파일을 찾아서 LIB_SRC_FILES에 저장
   # file(GLOB_RECURSE LIB_SRC_FILES 
   #   ##"${CMAKE_CURRENT_SOURCE_DIR}/src/lib_cpp/log/*.cpp"  
   #   ##"${CMAKE_CURRENT_SOURCE_DIR}/src/lib_cpp/communication/*.cpp"
@@ -142,17 +142,17 @@ message(STATUS "")
   #   ##"${CMAKE_CURRENT_SOURCE_DIR}/src/lib_cpp/odometry/*.cpp"
   # )
 
-  # ## 5-2. LIB_SRC_FILES의 모든 파일을 컴파일하고 링크하여 실행 파일 생성 하도록 설정
+  # ## X-2. LIB_SRC_FILES의 모든 파일을 컴파일하고 링크하여 실행 파일 생성 하도록 설정
   # add_library(fieldro_lib_temp SHARED ${LIB_SRC_FILES})
 
-  # ## 5-2. fieldro_lib_temp 빌드 시 메시지 생성 의존성 추가
+  # ## X-2. fieldro_lib_temp 빌드 시 메시지 생성 의존성 추가
   # add_dependencies(fieldro_lib_temp
   #   ${${PROJECT_NAME}_EXPORTED_TARGETS}  # 메시지 생성 타겟 의존성 추가
   #   ${catkin_EXPORTED_TARGETS}
   #   fieldro_lib
   # )  
 
-  # ## 5-3. 빌드 순서를 정의 (의존성)
+  # ## X-3. 빌드 순서를 정의 (의존성)
   # target_link_libraries(fieldro_lib_temp
   #   ${catkin_LIBRARIES}
   #   ${MODBUS_LIBRARIES}
@@ -160,7 +160,7 @@ message(STATUS "")
   #   fieldro_lib
   # )
 
-  # ## 5-4. 빌드시 필요한 include 경로 설정
+  # ## X-4. 빌드시 필요한 include 경로 설정
   # target_include_directories(fieldro_lib_temp PUBLIC
   #   ${CMAKE_CURRENT_SOURCE_DIR}/include
   #   ${CMAKE_CURRENT_SOURCE_DIR}/lib_header
@@ -170,23 +170,23 @@ message(STATUS "")
 ##            각 노드별로 설정이 되어야 하는 부분 시작
 ##-----------------------------------------------------------------------------
 message(STATUS "")
-message(STATUS "6. set executable")
+message(STATUS "5. set executable")
 message(STATUS "")
 
-  ## 6-1. droid 실행파일 생성 설정
-  message(STATUS "   6-1. droid_node executable generate")
+  ## 5-1. droid 실행파일 생성 설정
+  message(STATUS "   5-1. droid_node executable generate")
 
-    ## 6-1-1. src/droid 하위의 모든 cpp 파일을 찾아서 SRC_DROID_FILES 저장
+    ## 5-1-1. src/droid 하위의 모든 cpp 파일을 찾아서 SRC_DROID_FILES 저장
     file(GLOB_RECURSE SRC_DROID_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/droid/*.cpp")
 
-    ## 6-1-2. SRC_DROID_FILES 모든 파일을 컴파일하고 링크하여 실행 파일 생성 하도록 설정
+    ## 5-1-2. SRC_DROID_FILES 모든 파일을 컴파일하고 링크하여 실행 파일 생성 하도록 설정
     add_executable(
       ${PROJECT_NAME}
       ${SRC_DROID_FILES}
       "${CMAKE_CURRENT_SOURCE_DIR}/src/_node/droid_node.cpp"
     )
 
-    ## 6-1-3. 빌드 순서를 정의 (의존성)
+    ## 5-1-3. 빌드 순서를 정의 (의존성)
     ## 뒤쪽에 있는 package가 먼저 build 된다.
     ## ${catkin_EXPORTED_TARGETS}->  ${${PROJECT_NAME}_EXPORTED_TARGETS}  -> ${PROJECT_NAME} 순으로 빌드
     add_dependencies(
@@ -195,8 +195,8 @@ message(STATUS "")
       ${catkin_EXPORTED_TARGETS}           # catkin 빌드 시스템에서 정의한 빌드 대상
     )
 
-    message(STATUS "   6-1-4-0")
-    ## 6-1-4. 빌드시 필요한 Lib 링크 설정
+    message(STATUS "   5-1-4-0")
+    ## 5-1-4. 빌드시 필요한 Lib 링크 설정
     target_link_libraries(
       ${PROJECT_NAME}                     # 빌드 대상
       ${catkin_LIBRARIES}                 # catkin 빌드 시스템에서 정의한 라이브러리
@@ -204,32 +204,32 @@ message(STATUS "")
       fieldro_lib
       ## fieldro_lib_temp                         # 
     )
-    message(STATUS "   6-1-4-1")
+    message(STATUS "   5-1-4-1")
 
-  ## 6-2. io_unit_node 실행파일 생성 설정
-  message(STATUS "   6-2. io_unit_node executable generate")
+  ## 5-2. io_unit_node 실행파일 생성 설정
+  message(STATUS "   5-2. io_unit_node executable generate")
 
-    ## 6-2-0 project name 설정
+    ## 5-2-0 project name 설정
     set(PROJECT_IO_NAME "io_unit")
 
-    ## 6-2-1. source_dir/omnibot_io 하위의 모든 cpp 파일을 찾아서 SRC_IO_FILES에 저장
+    ## 5-2-1. source_dir/omnibot_io 하위의 모든 cpp 파일을 찾아서 SRC_IO_FILES에 저장
     file(GLOB_RECURSE SRC_IO_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/io_unit/*.cpp")
 
-    ## 6-2-2. SRC_IO_FILES의 모든 파일과 node_io_signal.cpp을 컴파일하고 링크하여 실행 파일 생성
+    ## 5-2-2. SRC_IO_FILES의 모든 파일과 node_io_signal.cpp을 컴파일하고 링크하여 실행 파일 생성
     add_executable(
       ${PROJECT_IO_NAME}
       ${SRC_IO_FILES}
       "${CMAKE_CURRENT_SOURCE_DIR}/src/_node/io_node.cpp"
     )
 
-    ## 6-2-3. 빌드 순서를 정의 (의존성)
+    ## 5-2-3. 빌드 순서를 정의 (의존성)
     add_dependencies(
       ${PROJECT_IO_NAME}                   # 빌드 대상
       ${${PROJECT_NAME}_EXPORTED_TARGETS}  # package 내부의 다른 빌드 대상
       ${catkin_EXPORTED_TARGETS}           # catkin 빌드 시스템에서 정의한 빌드 대상
     )
 
-    ## 6-2-4. 빌드시 필요한 Lib 링크 설정
+    ## 5-2-4. 빌드시 필요한 Lib 링크 설정
     target_link_libraries(
       ${PROJECT_IO_NAME}                   # 빌드 대상
       ${catkin_LIBRARIES}                  # catkin 빌드 시스템에서 정의한 라이브러리
@@ -240,16 +240,16 @@ message(STATUS "")
     )
 
   ############################################################
-  ## 6-3. unit_observer_node 실행파일 생성 설정
-  message(STATUS "   6-3. unit_observer_node executable generate")
+  ## 5-3. unit_observer_node 실행파일 생성 설정
+  message(STATUS "   5-3. unit_observer_node executable generate")
 
-    ## 6-3-0 project name 설정
+    ## 5-3-0 project name 설정
     set(PROJECT_OBSERVER_NAME "observer_unit")
 
-    ## 6-3-1. source_dir/unit_observer 하위의 모든 cpp 파일을 찾아서 SRC_OBSERVER_FILES에 저장
+    ## 5-3-1. source_dir/unit_observer 하위의 모든 cpp 파일을 찾아서 SRC_OBSERVER_FILES에 저장
     file(GLOB_RECURSE SRC_OBSERVER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/observer_unit/*.cpp")
 
-    ## 6-3-2. SRC_OBSERVER_FILES의 모든 파일과 
+    ## 5-3-2. SRC_OBSERVER_FILES의 모든 파일과 
     ## observer_node.cpp을 컴파일하고 링크하여 실행 파일 생성
     add_executable(
       ${PROJECT_OBSERVER_NAME}
@@ -257,14 +257,14 @@ message(STATUS "")
       "${CMAKE_CURRENT_SOURCE_DIR}/src/_node/observer_node.cpp"
     )
 
-    ## 6-3-3. 빌드 순서를 정의 (의존성)
+    ## 5-3-3. 빌드 순서를 정의 (의존성)
     add_dependencies(
       ${PROJECT_OBSERVER_NAME}             # 빌드 대상
       ${${PROJECT_NAME}_EXPORTED_TARGETS}  # package 내부의 다른 빌드 대상
       ${catkin_EXPORTED_TARGETS}           # catkin 빌드 시스템에서 정의한 빌드 대상
     )
 
-    ## 6-3-4. 빌드시 필요한 Lib 링크 설정
+    ## 5-3-4. 빌드시 필요한 Lib 링크 설정
     target_link_libraries(
       ${PROJECT_OBSERVER_NAME}             # 빌드 대상
       ${catkin_LIBRARIES}                  # catkin 빌드 시스템에서 정의한 라이브러리
@@ -276,16 +276,16 @@ message(STATUS "")
 
 
   ############################################################
-  ## 6-4. loader_node 실행파일 생성 설정
-  message(STATUS "   6-4. loader_node executable generate")
+  ## 5-4. loader_node 실행파일 생성 설정
+  message(STATUS "   5-4. loader_node executable generate")
 
-    ## 6-4-0 project name 설정
+    ## 5-4-0 project name 설정
     set(PROJECT_LOADER_NAME "loader_unit")
 
-    ## 6-4-1. source_dir/loader_unit 하위의 모든 cpp 파일을 찾아서 SRC_LOADER_FILES에 저장
+    ## 5-4-1. source_dir/loader_unit 하위의 모든 cpp 파일을 찾아서 SRC_LOADER_FILES에 저장
     file(GLOB_RECURSE SRC_LOADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/loader_unit/*.cpp")
 
-    ## 6-4-2. SRC_LOADER_FILES의 모든 파일과 
+    ## 5-4-2. SRC_LOADER_FILES의 모든 파일과 
     ## loader_node.cpp을 컴파일하고 링크하여 실행 파일 생성
     add_executable(
       ${PROJECT_LOADER_NAME}
@@ -293,14 +293,14 @@ message(STATUS "")
       "${CMAKE_CURRENT_SOURCE_DIR}/src/_node/loader_node.cpp"
     )
 
-    ## 6-4-3. 빌드 순서를 정의 (의존성)
+    ## 5-4-3. 빌드 순서를 정의 (의존성)
     add_dependencies(
       ${PROJECT_LOADER_NAME}               # 빌드 대상
       ${${PROJECT_NAME}_EXPORTED_TARGETS}  # package 내부의 다른 빌드 대상
       ${catkin_EXPORTED_TARGETS}           # catkin 빌드 시스템에서 정의한 빌드 대상
     )
 
-    ## 6-4-4. 빌드시 필요한 Lib 링크 설정
+    ## 5-4-4. 빌드시 필요한 Lib 링크 설정
     target_link_libraries(
       ${PROJECT_LOADER_NAME}               # 빌드 대상
       ${catkin_LIBRARIES}                  # catkin 빌드 시스템에서 정의한 라이브러리
@@ -311,16 +311,16 @@ message(STATUS "")
     )
     
   ############################################################
-  ## 6-5. driving_node 실행파일 생성 설정
-  message(STATUS "   6-5. driving_node executable generate")
+  ## 5-5. driving_node 실행파일 생성 설정
+  message(STATUS "   5-5. driving_node executable generate")
 
-    ## 6-5-0 project name 설정
+    ## 5-5-0 project name 설정
     set(PROJECT_DRIVING_NAME "driving_unit")
 
-    ## 6-5-1. source_dir/driving_unit 하위의 모든 cpp 파일을 찾아서 SRC_DRIVING_FILES에 저장
+    ## 5-5-1. source_dir/driving_unit 하위의 모든 cpp 파일을 찾아서 SRC_DRIVING_FILES에 저장
     file(GLOB_RECURSE SRC_DRIVING_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/driving_unit/*.cpp")
 
-    ## 6-5-2. SRC_DRIVING_FILES의 모든 파일과 
+    ## 5-5-2. SRC_DRIVING_FILES의 모든 파일과 
     ## driving_node.cpp을 컴파일하고 링크하여 실행 파일 생성
     add_executable(
       ${PROJECT_DRIVING_NAME}
@@ -328,14 +328,14 @@ message(STATUS "")
       "${CMAKE_CURRENT_SOURCE_DIR}/src/_node/driving_node.cpp"
     )
 
-    ## 6-5-3. 빌드 순서를 정의 (의존성)
+    ## 5-5-3. 빌드 순서를 정의 (의존성)
     add_dependencies(
       ${PROJECT_DRIVING_NAME}              # 빌드 대상
       ${${PROJECT_NAME}_EXPORTED_TARGETS}  # package 내부의 다른 빌드 대상
       ${catkin_EXPORTED_TARGETS}           # catkin 빌드 시스템에서 정의한 빌드 대상
     )
 
-    ## 6-5-4. 빌드시 필요한 Lib 링크 설정
+    ## 5-5-4. 빌드시 필요한 Lib 링크 설정
     target_link_libraries(
       ${PROJECT_DRIVING_NAME}              # 빌드 대상
       ${catkin_LIBRARIES}                  # catkin 빌드 시스템에서 정의한 라이브러리
@@ -351,7 +351,7 @@ message(STATUS "")
 ## =============================================================================
 
 message(STATUS "")
-message(STATUS "7. set install")
+message(STATUS "6. set install")
 message(STATUS "")
 
   ## 빌드된 Target을 설치할 위치를 지정
@@ -368,7 +368,7 @@ message(STATUS "")
 
 
 message(STATUS "")
-message(STATUS "8. set copy file")
+message(STATUS "7. set copy file")
 message(STATUS "")
 
   ## include 폴더에 있는 헤더파일을 찾아서 catkin_package()에서 지정한 위치에 설치(복사)
@@ -382,17 +382,17 @@ message(STATUS "")
 
 
 message(STATUS "")
-message(STATUS "9. set etc file copy [config, data, ,,, files]")
+message(STATUS "8. set etc file copy [config, data, ,,, files]")
 message(STATUS "")
 
-  ## 9-1. config 폴더에 복사할 파일이 있는지 확인하고 CONFIG_FILES에 저장합니다.
+  ## 8-1. config 폴더에 복사할 파일이 있는지 확인하고 CONFIG_FILES에 저장합니다.
   file(GLOB_RECURSE COPY_FILES RELATIVE ${PROJECT_SOURCE_DIR} "config/*")
 
-  ## 9-2 config_files 타겟을 추가하고 config 파일들을 종속성으로 지정
+  ## 8-2 config_files 타겟을 추가하고 config 파일들을 종속성으로 지정
   # copy_files : 각 package 별로 이름을 다르게 해줘야 충돌이 발생하지 않음
   add_custom_target(trash_bot_copy_files ALL DEPENDS ${COPY_FILES})
 
-  # 9-3 타겟 실행 시 파일들을 복사하는 명령어를 추가
+  # 8-3 타겟 실행 시 파일들을 복사하는 명령어를 추가
   add_custom_command(TARGET trash_bot_copy_files
       POST_BUILD
       COMMAND ${CMAKE_COMMAND} -E copy_directory

@@ -17,11 +17,15 @@ message(STATUS "")
 ## <exec_depend>name?</exec_depend>   두개의 항목을 추가해야 한다.
 find_package(catkin 
   REQUIRED COMPONENTS
-    fieldro_lib
-    fieldro_msgs
+    geometry_msgs
+    message_generation
+    rosconsole
     roscpp
     rospy
+    sensor_msgs
     std_msgs
+    fieldro_lib
+    fieldro_msgs    
     twinny_msgs
 )
 
@@ -55,6 +59,8 @@ message(STATUS "${PROJECT_NAME} : Step 02.message, service, action add and gener
 ## 종석성을 가진 메세지 및 서비스 등록
 generate_messages(
     DEPENDENCIES
+    geometry_msgs
+    sensor_msgs    
     std_msgs   
     fieldro_msgs
     twinny_msgs
@@ -68,14 +74,15 @@ message(STATUS "${PROJECT_NAME} : Step 03.catin_package 종속성 설정")
   catkin_package(
     # INCLUDE_DIRS include
     CATKIN_DEPENDS              # catkin package 종속성 설정    
-      fieldro_lib
-      fieldro_msgs
       roscpp
       rospy
       std_msgs
+      fieldro_lib
+      fieldro_msgs      
       twinny_msgs
-    DEPENDS yaml-cpp            # yaml lib 의존성 설정
-    DEPENDS MODBUS              # libmodbus 의존성 설정
+    DEPENDS 
+      yaml-cpp            # yaml lib 의존성 설정
+      MODBUS              # libmodbus 의존성 설정
   )
 
 message(STATUS "${PROJECT_NAME} : End Step 03")
@@ -150,6 +157,45 @@ message(STATUS "${PROJECT_NAME} : Step 05.node build")
   #   )
   # message(STATUS "${PROJECT_NAME} : End Step 05-1")
 
+
+  ############################################################
+  ## 5-2. observer node 실행파일 설정
+  message(STATUS "${PROJECT_NAME} : Step 05-2. executable build")
+    
+    ## 5-2-0. observer node 실행파일 이름 설정
+    set(PROJECT_OBSERVER "observer")
+
+    ## 5-2-1. src/unit_observer 하위의 모든 cpp 파일을 찾아서 SRC_DROID_FILES 저장
+    file(GLOB_RECURSE SRC_DROID_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/unit_observer/*.cpp")
+
+    ## 5-2-2. SRC_DROID_FILES 모든 파일을 컴파일하고 링크하여 실행 파일 생성 하도록 설정
+    add_executable(
+      ${PROJECT_OBSERVER}
+      ${SRC_DROID_FILES}
+      "${CMAKE_CURRENT_SOURCE_DIR}/src/_node/node_observer.cpp"
+    )
+
+    ## 5-2-3. 빌드 순서를 정의 (의존성)
+    ## 뒤쪽에 있는 package가 먼저 build 된다.
+    ## ${catkin_EXPORTED_TARGETS}->  ${${PROJECT_NAME}_EXPORTED_TARGETS}  -> ${PROJECT_NAME} 순으로 빌드
+    add_dependencies(
+      ${PROJECT_OBSERVER}                     # 빌드 대상 (가장 최후에 빌드)
+      ${${PROJECT_NAME}_EXPORTED_TARGETS}     # package 내부의 다른 빌드 대상
+      ${catkin_EXPORTED_TARGETS}              # catkin 빌드 시스템에서 정의한 빌드 대상
+      fieldro_msgs_generate_messages_cpp
+    )
+
+    ## 5-2-4. 빌드시 필요한 Lib 링크 설정
+    target_link_libraries(
+      ${PROJECT_OBSERVER}                 # 빌드 대상
+      ${catkin_LIBRARIES}                 # catkin 빌드 시스템에서 정의한 라이브러리
+      ${YAML_CPP_LIBRARIES}               # yaml-cpp 라이브러리
+      fieldro_lib
+      #fieldro_msgs
+    )
+  message(STATUS "${PROJECT_OBSERVER} : End Step 05-2")  
+  ############################################################
+
 message(STATUS "${PROJECT_NAME} : End Step 05")
 
 ##-----------------------------------------------------------------------------
@@ -160,30 +206,29 @@ message(STATUS "${PROJECT_NAME} : End Step 05")
 
 message(STATUS " ")
 message(STATUS "${PROJECT_NAME} : Step 06. Set Install ")
-## 빌드된 Target을 설치할 위치를 지정
-
-  # install(
-  #   TARGETS ${PROJECT_NAME}                               # 설치할 target 지정            
-
-  #   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION} # 정적 라이브러리 설치 위치 지정 (lib dir /.a 파일)
-  #   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION} # 동적 라이브러리 설치 위치 지정 (lib dir /.so 파일)
-  #   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION} # 실행파일 설치 위치 지정        (bin dir /실행파일)
-  # )
+  ## 빌드된 Target을 설치할 위치를 지정
+  install(
+    #TARGETS ${PROJECT_NAME}                               # 설치할 target 지정            
+    TARGETS ${PROJECT_OBSERVER}                           # 설치할 target 지정
+    ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION} # 정적 라이브러리 설치 위치 지정 (lib dir /.a 파일)
+    LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION} # 동적 라이브러리 설치 위치 지정 (lib dir /.so 파일)
+    RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION} # 실행파일 설치 위치 지정        (bin dir /실행파일)
+  )
 message(STATUS "${PROJECT_NAME} : End Step 06")
 
 
 
 message(STATUS " ")
 message(STATUS "${PROJECT_NAME} : Step 07. Set Copy Include")
-## include 폴더에 있는 헤더파일을 찾아서 catkin_package()에서 지정한 위치에 설치(복사)
 
-  # install(DIRECTORY 
-  #         include/
-  #         lib_header/
-  #         DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}   # include 폴더에 복사
-  #         FILES_MATCHING PATTERN "*.h"                        # .h 파일만 복사
-  #         # USE_SOURCE_PERMISSIONS                            # 복사된 파일의 권한을 원본 파일의 권한으로 설정
-  #         )
+  ## include 폴더에 있는 헤더파일을 찾아서 catkin_package()에서 지정한 위치에 설치(복사)
+  install(DIRECTORY 
+          include/
+          lib_header/
+          DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}   # include 폴더에 복사
+          FILES_MATCHING PATTERN "*.h"                        # .h 파일만 복사
+          # USE_SOURCE_PERMISSIONS                            # 복사된 파일의 권한을 원본 파일의 권한으로 설정
+          )
 
 message(STATUS "${PROJECT_NAME} : End Step 07")
 
