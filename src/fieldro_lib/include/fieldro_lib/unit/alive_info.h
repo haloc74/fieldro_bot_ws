@@ -17,8 +17,10 @@ namespace frb
   class AliveInfo 
   {
   public:
-      AliveInfo(int32_t unit_index);    // 생성자
+      AliveInfo(int32_t unit_index, bool check_flag);    // 생성자
       virtual ~AliveInfo() = default;   // 소멸자
+  protected:
+      AliveInfo() = default;            // 생성자      
 
   private:
       int32_t               _unit_index;          // unit에 할당된 index 번호

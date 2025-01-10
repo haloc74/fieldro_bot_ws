@@ -47,10 +47,9 @@ message(STATUS "2. message, service, action add and generate")
 message(STATUS "")
 
   ## 2.1 msg 폴더로 부터 messages 생성
-  add_message_files(
-    FILES
-    # Pose.msg
-  )
+  # add_message_files(
+  #   FILES
+  # )
 
   ## 2.2 srv 폴더로 부터 service 생성
   # add_service_files(

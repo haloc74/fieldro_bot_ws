@@ -7,7 +7,11 @@
 
 . 기존 trash_bot에 있던 stock_bot내용을 stock_bot package에 신규로 구축
 
+
 ID [  ] : 2025-01-10
+1. 기존 observer_unit/alive_info.h, cpp를 fieldro_lib/unit 으로 이동
+
+ID [ 4ee4810 ] : 2025-01-10
 1. fieldro_msgs package msg 디렉토리 구분
 
 ID [ b400411 ] : 2025-01-10

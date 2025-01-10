@@ -22,7 +22,15 @@ namespace frb
     _unit_alive_info.clear();
     for(int i = 0; i < static_cast<int>(frb::UnitName::End); i++)
     {
-      _unit_alive_info.push_back(new AliveInfo(i));
+      if(i == to_int(frb::UnitName::All) || i == to_int(frb::UnitName::Observer))
+      {
+        _unit_alive_info.push_back(new AliveInfo(i, false));
+      }
+      else
+      {
+        _unit_alive_info.push_back(new AliveInfo(i, true));
+      }
+      //_unit_alive_info.push_back(new AliveInfo(i));
     }
 
     // unit alive subscribing

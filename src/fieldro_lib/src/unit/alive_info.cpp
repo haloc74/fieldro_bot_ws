@@ -1,6 +1,6 @@
 
-#include "observer_unit/alive_info.h"
-#include <fieldro_lib/define/unit_define.h>
+#include "unit/alive_info.h"
+
 
 namespace frb
 {
@@ -10,19 +10,28 @@ namespace frb
   * @attention  alive_check() 함수로 어떤 함수를 사용 할 것인지 미리 정의해야 한다.
   * @see        Unit
   */
-  AliveInfo::AliveInfo(int32_t unit_index)
+  AliveInfo::AliveInfo(int32_t unit_index, bool check_flag)
   {
     _unit_index       = unit_index;
     _state            = -1;
 
-    if(_unit_index == to_int(frb::UnitName::All) ||
-       _unit_index == to_int(frb::UnitName::Observer))
+    // if(_unit_index == to_int(frb::UnitName::All) ||
+    //    _unit_index == to_int(frb::UnitName::Observer))
+    // {
+    //   _alive_check_func = []() { return true; };
+    // }
+    // else
+    // {
+    //   _alive_check_func = std::bind(&AliveInfo::alive_check_unit, this);
+    // }
+
+    if(check_flag)
     {
-      _alive_check_func = []() { return true; };
+      _alive_check_func = std::bind(&AliveInfo::alive_check_unit, this);
     }
     else
     {
-      _alive_check_func = std::bind(&AliveInfo::alive_check_unit, this);
+      _alive_check_func = []() { return true; };
     }
 
     try

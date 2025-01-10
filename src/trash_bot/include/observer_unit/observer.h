@@ -6,8 +6,9 @@
 #include <mutex>
 
 #include <fieldro_lib/unit/unit.h>
+#include <fieldro_lib/unit/alive_info.h>
 #include <fieldro_msgs/UnitAliveMsg.h>
-#include "observer_unit/alive_info.h"
+//#include "observer_unit/alive_info.h"
 
  
 namespace frb
