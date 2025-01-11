@@ -9,8 +9,11 @@
 
 
 
-
 ID [  ] : 2025-01-11
+1. droid package BASE 완성 (stock_bot package)
+
+
+ID [ 3fbca5c ] : 2025-01-11
 1. io_define.h 의 위치를 fieldro_lib로 이동
 2. signal_info.h의 위치를 fieldro_lib로 이동
 3. digital_in_define.h 위치를 fieldro_lib에서 package로 이동
