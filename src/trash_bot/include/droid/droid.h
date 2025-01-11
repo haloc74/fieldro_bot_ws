@@ -11,13 +11,14 @@
 #include "twinny_msgs/SwitchReport.h"
 
 #include <fieldro_lib/unit/unit.h>
-#include <fieldro_lib/define/digital_in_define.h>
+//#include <fieldro_lib/define/digital_in_define.h>
 
 #include <fieldro_msgs/UnitActionComplete.h>
 #include <fieldro_msgs/IOSignal.h>
 #include <fieldro_msgs/UnitControl.h>
 #include <fieldro_msgs/UnitStateMsg.h>
 
+#include "io_unit/digital_in_define.h"
 
 
 

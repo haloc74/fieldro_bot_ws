@@ -8,10 +8,17 @@
 . 기존 trash_bot에 있던 stock_bot내용을 stock_bot package에 신규로 구축
 
 
-. stock_bot::io_node 추가
 
 
 ID [  ] : 2025-01-11
+1. io_define.h 의 위치를 fieldro_lib로 이동
+2. signal_info.h의 위치를 fieldro_lib로 이동
+3. digital_in_define.h 위치를 fieldro_lib에서 package로 이동
+4. digital_out_define.h 위치를 fieldro_lib에서 package로 이동
+5. stock_bot::io_node 추가
+
+
+ID [ 681adb2 ] : 2025-01-11
 1. stock_bot::droid node 추가
 
 ID [ e358c7d ] : 2025-01-10
