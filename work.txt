@@ -8,7 +8,16 @@
 . 기존 trash_bot에 있던 stock_bot내용을 stock_bot package에 신규로 구축
 
 
-ID [  ] : 2025-01-10
+. stock_bot::io_node 추가
+
+
+ID [  ] : 2025-01-11
+1. stock_bot::droid node 추가
+
+ID [ e358c7d ] : 2025-01-10
+1. stock_bot::unit_observer 추가
+
+ID [ fe6ebb0 ] : 2025-01-10
 1. 기존 observer_unit/alive_info.h, cpp를 fieldro_lib/unit 으로 이동
 
 ID [ 4ee4810 ] : 2025-01-10

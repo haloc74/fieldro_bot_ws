@@ -126,53 +126,56 @@ message(STATUS "${PROJECT_NAME} : End Step 04")
 message(STATUS " ")
 message(STATUS "${PROJECT_NAME} : Step 05.node build")
 
-  # ## 5-1. droid node 실행파일 설정
-  # message(STATUS "${PROJECT_NAME} : Step 05-1. executable build")
-  #   ## 5-1-1. src/droid 하위의 모든 cpp 파일을 찾아서 SRC_DROID_FILES 저장
-  #   file(GLOB_RECURSE SRC_DROID_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/droid/*.cpp")
+  ############################################################
+  ## 5-1. droid node 실행파일 설정
+  message(STATUS "${PROJECT_NAME} : Step 05-1. droid executable build")
 
-  #   ## 5-1-2. SRC_DROID_FILES 모든 파일을 컴파일하고 링크하여 실행 파일 생성 하도록 설정
-  #   add_executable(
-  #     ${PROJECT_NAME}
-  #     ${SRC_DROID_FILES}
-  #     "${CMAKE_CURRENT_SOURCE_DIR}/src/_node/droid_node.cpp"
-  #   )
+    ## 5-1-1. src/droid 하위의 모든 cpp 파일을 찾아서 SRC_DROID_FILES 저장
+    file(GLOB_RECURSE SRC_DROID_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/droid/*.cpp")
 
-  #   ## 5-1-3. 빌드 순서를 정의 (의존성)
-  #   ## 뒤쪽에 있는 package가 먼저 build 된다.
-  #   ## ${catkin_EXPORTED_TARGETS}->  ${${PROJECT_NAME}_EXPORTED_TARGETS}  -> ${PROJECT_NAME} 순으로 빌드
-  #   add_dependencies(
-  #     ${PROJECT_NAME}                      # 빌드 대상 (가장 최후에 빌드)
-  #     ${${PROJECT_NAME}_EXPORTED_TARGETS}  # package 내부의 다른 빌드 대상
-  #     ${catkin_EXPORTED_TARGETS}           # catkin 빌드 시스템에서 정의한 빌드 대상
-  #   )
+    ## 5-1-2. SRC_DROID_FILES 모든 파일을 컴파일하고 링크하여 실행 파일 생성 하도록 설정
+    add_executable(
+      ${PROJECT_NAME}
+      ${SRC_DROID_FILES}
+      "${CMAKE_CURRENT_SOURCE_DIR}/src/_node/_droid.cpp"
+    )
 
-  #   ## 5-1-4. 빌드시 필요한 Lib 링크 설정
-  #   target_link_libraries(
-  #     ${PROJECT_NAME}                     # 빌드 대상
-  #     ${catkin_LIBRARIES}                 # catkin 빌드 시스템에서 정의한 라이브러리
-  #     ${YAML_CPP_LIBRARIES}               # yaml-cpp 라이브러리
-  #     fieldro_lib
-  #     fieldro_msgs
-  #   )
-  # message(STATUS "${PROJECT_NAME} : End Step 05-1")
+    ## 5-1-3. 빌드 순서를 정의 (의존성)
+    ## 뒤쪽에 있는 package가 먼저 build 된다.
+    ## ${catkin_EXPORTED_TARGETS}->  ${${PROJECT_NAME}_EXPORTED_TARGETS}  -> ${PROJECT_NAME} 순으로 빌드
+    add_dependencies(
+      ${PROJECT_NAME}                      # 빌드 대상 (가장 최후에 빌드)
+      ${${PROJECT_NAME}_EXPORTED_TARGETS}  # package 내부의 다른 빌드 대상
+      ${catkin_EXPORTED_TARGETS}           # catkin 빌드 시스템에서 정의한 빌드 대상
+      fieldro_msgs_generate_messages_cpp
+    )
+
+    ## 5-1-4. 빌드시 필요한 Lib 링크 설정
+    target_link_libraries(
+      ${PROJECT_NAME}                     # 빌드 대상
+      ${catkin_LIBRARIES}                 # catkin 빌드 시스템에서 정의한 라이브러리
+      ${YAML_CPP_LIBRARIES}               # yaml-cpp 라이브러리
+      fieldro_lib
+    )
+  message(STATUS "${PROJECT_NAME} : End Step 05-1")
+  ############################################################
 
 
   ############################################################
   ## 5-2. observer node 실행파일 설정
-  message(STATUS "${PROJECT_NAME} : Step 05-2. executable build")
+  message(STATUS "${PROJECT_NAME} : Step 05-2. observer executable build")
     
     ## 5-2-0. observer node 실행파일 이름 설정
     set(PROJECT_OBSERVER "observer")
 
-    ## 5-2-1. src/unit_observer 하위의 모든 cpp 파일을 찾아서 SRC_DROID_FILES 저장
-    file(GLOB_RECURSE SRC_DROID_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/unit_observer/*.cpp")
+    ## 5-2-1. src/unit_observer 하위의 모든 cpp 파일을 찾아서 SRC_OBSERVER_FILES 저장
+    file(GLOB_RECURSE SRC_OBSERVER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/unit_observer/*.cpp")
 
-    ## 5-2-2. SRC_DROID_FILES 모든 파일을 컴파일하고 링크하여 실행 파일 생성 하도록 설정
+    ## 5-2-2. SRC_OBSERVER_FILES 모든 파일을 컴파일하고 링크하여 실행 파일 생성 하도록 설정
     add_executable(
       ${PROJECT_OBSERVER}
-      ${SRC_DROID_FILES}
-      "${CMAKE_CURRENT_SOURCE_DIR}/src/_node/node_observer.cpp"
+      ${SRC_OBSERVER_FILES}
+      "${CMAKE_CURRENT_SOURCE_DIR}/src/_node/observer.cpp"
     )
 
     ## 5-2-3. 빌드 순서를 정의 (의존성)
@@ -191,7 +194,6 @@ message(STATUS "${PROJECT_NAME} : Step 05.node build")
       ${catkin_LIBRARIES}                 # catkin 빌드 시스템에서 정의한 라이브러리
       ${YAML_CPP_LIBRARIES}               # yaml-cpp 라이브러리
       fieldro_lib
-      #fieldro_msgs
     )
   message(STATUS "${PROJECT_OBSERVER} : End Step 05-2")  
   ############################################################
