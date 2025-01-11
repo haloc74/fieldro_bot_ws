@@ -3,13 +3,18 @@
 . Driving : 주행 subscribe 추가
 . Driving : act_velocity 추가
 . main node에서 control_move를 통하여 회전, 진행을 처리
-
-
 . 기존 trash_bot에 있던 stock_bot내용을 stock_bot package에 신규로 구축
 
 
 
+. stock_bot refactoring
+. trash_bot의 loader part -> lift part로 customizing
+
+
 ID [  ] : 2025-01-11
+1. driving unit 추가
+
+ID [ aae5f89 ] : 2025-01-11
 1. droid package BASE 완성 (stock_bot package)
 
 

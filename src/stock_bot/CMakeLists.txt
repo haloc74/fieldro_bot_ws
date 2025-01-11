@@ -160,7 +160,6 @@ message(STATUS "${PROJECT_NAME} : Step 05.node build")
   message(STATUS "${PROJECT_NAME} : End Step 05-1")
   ############################################################
 
-
   ############################################################
   ## 5-2. observer node 실행파일 설정
   message(STATUS "${PROJECT_NAME} : Step 05-2. observer executable build")
@@ -197,6 +196,81 @@ message(STATUS "${PROJECT_NAME} : Step 05.node build")
     )
   message(STATUS "${PROJECT_OBSERVER} : End Step 05-2")  
   ############################################################
+
+  ############################################################
+  ## 5-3. io node 실행파일 설정
+  message(STATUS "${PROJECT_NAME} : Step 05-3. io executable build")
+    
+    ## 5-3-0. observer node 실행파일 이름 설정
+    set(PROJECT_IO "io")
+
+    ## 5-3-1. src/unit_observer 하위의 모든 cpp 파일을 찾아서 SRC_IO_FILES 저장
+    file(GLOB_RECURSE SRC_IO_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/unit_io/*.cpp")
+
+    ## 5-3-2. SRC_IO 모든 파일을 컴파일하고 링크하여 실행 파일 생성 하도록 설정
+    add_executable(
+      ${PROJECT_IO}
+      ${SRC_IO_FILES}
+      "${CMAKE_CURRENT_SOURCE_DIR}/src/_node/io.cpp"
+    )
+
+    ## 5-3-3. 빌드 순서를 정의 (의존성)
+    ## 뒤쪽에 있는 package가 먼저 build 된다.
+    ## ${catkin_EXPORTED_TARGETS}->  ${${PROJECT_NAME}_EXPORTED_TARGETS}  -> ${PROJECT_NAME} 순으로 빌드
+    add_dependencies(
+      ${PROJECT_IO}                     # 빌드 대상 (가장 최후에 빌드)
+      ${${PROJECT_NAME}_EXPORTED_TARGETS}     # package 내부의 다른 빌드 대상
+      ${catkin_EXPORTED_TARGETS}              # catkin 빌드 시스템에서 정의한 빌드 대상
+      fieldro_msgs_generate_messages_cpp
+    )
+
+    ## 5-3-4. 빌드시 필요한 Lib 링크 설정
+    target_link_libraries(
+      ${PROJECT_IO}                 # 빌드 대상
+      ${catkin_LIBRARIES}                 # catkin 빌드 시스템에서 정의한 라이브러리
+      ${YAML_CPP_LIBRARIES}               # yaml-cpp 라이브러리
+      fieldro_lib
+    )
+  message(STATUS "${PROJECT_IO} : End Step 05-3")  
+  ############################################################
+
+  ############################################################
+  ## 5-4. driving node 실행파일 설정
+  message(STATUS "${PROJECT_NAME} : Step 05-4. driving executable build")
+    
+    ## 5-3-0. driving node 실행파일 이름 설정
+    set(PROJECT_DRIVING "driving")
+
+    ## 5-4-1. src/unit_driving 하위의 모든 cpp 파일을 찾아서 SRC_DRIVING_FILES 저장
+    file(GLOB_RECURSE SRC_DRIVING_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/unit_driving/*.cpp")
+
+    ## 5-4-2. SRC_DRIVING_FILES 모든 파일을 컴파일하고 링크하여 실행 파일 생성 하도록 설정
+    add_executable(
+      ${PROJECT_DRIVING}
+      ${SRC_DRIVING_FILES}
+      "${CMAKE_CURRENT_SOURCE_DIR}/src/_node/driving.cpp"
+    )
+
+    ## 5-4-3. 빌드 순서를 정의 (의존성)
+    ## 뒤쪽에 있는 package가 먼저 build 된다.
+    ## ${catkin_EXPORTED_TARGETS}->  ${${PROJECT_NAME}_EXPORTED_TARGETS}  -> ${PROJECT_NAME} 순으로 빌드
+    add_dependencies(
+      ${PROJECT_DRIVING}                      # 빌드 대상 (가장 최후에 빌드)
+      ${${PROJECT_NAME}_EXPORTED_TARGETS}     # package 내부의 다른 빌드 대상
+      ${catkin_EXPORTED_TARGETS}              # catkin 빌드 시스템에서 정의한 빌드 대상
+      fieldro_msgs_generate_messages_cpp
+    )
+
+    ## 5-3-4. 빌드시 필요한 Lib 링크 설정
+    target_link_libraries(
+      ${PROJECT_DRIVING}                 # 빌드 대상
+      ${catkin_LIBRARIES}                 # catkin 빌드 시스템에서 정의한 라이브러리
+      ${YAML_CPP_LIBRARIES}               # yaml-cpp 라이브러리
+      fieldro_lib
+    )
+  message(STATUS "${PROJECT_DRIVING} : End Step 05-4")  
+  ############################################################  
+
 
 message(STATUS "${PROJECT_NAME} : End Step 05")
 
