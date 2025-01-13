@@ -9,7 +9,9 @@
 . trash_bot의 loader part -> lift part로 customizing
 
 
-ID [  ] : 2025-01-13
+1. PACKAGE 분리 성공
+
+ID [ e151903 ] : 2025-01-13
 1. unit_define.h 를 기존 fieldro_lib package에서 각각의 package로 독립구성
 2. 각 package에 자체 package lib 구축
 3. package_helper 추가
