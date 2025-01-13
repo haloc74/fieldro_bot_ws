@@ -1,6 +1,9 @@
 
 #include "droid.h"
 
+#include "package/package_helper.h"
+#include "package/unit_define.h"
+
 namespace frb
 {
  void Droid::create_unit_initialize_sequence()      

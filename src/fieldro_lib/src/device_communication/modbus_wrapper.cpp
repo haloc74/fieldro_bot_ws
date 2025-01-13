@@ -41,7 +41,7 @@ namespace frb
     case ModbusType::RS232:     break;
     case ModbusType::RS485:     load_option_485();  break;
     default:
-      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, "Invalid ModbusType");
+      LOG->add_log("Signal", frb::LogLevel::Error, 0, "Invalid ModbusType");
       break;
     }      
   }
@@ -62,7 +62,7 @@ namespace frb
     case ModbusType::RS485:     disconnect_modbus_485();      break;
 
     default:                    
-      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, "Invalid ModbusType");
+      LOG->add_log("Signal", frb::LogLevel::Error, 0, "Invalid ModbusType");
       break;
     }      
   }
@@ -82,7 +82,7 @@ namespace frb
     case ModbusType::RS485:     return connect_check_modbus_485();
 
     default:    
-      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, "Invalid ModbusType");
+      LOG->add_log("Signal", frb::LogLevel::Error, 0, "Invalid ModbusType");
       break;
     }
     return CommStatus::Error;
@@ -96,7 +96,7 @@ namespace frb
     case ModbusType::RS485:     return disconnect_modbus_485();
 
     default:    
-      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, "Invalid ModbusType");
+      LOG->add_log("Signal", frb::LogLevel::Error, 0, "Invalid ModbusType");
       break;
     }    
   }
@@ -125,7 +125,7 @@ namespace frb
   {
     if(!set_slave_id(id))
     {
-      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, "modbus_set_slave fail !!!");
+      LOG->add_log("Signal", frb::LogLevel::Error, 0, "modbus_set_slave fail !!!");
       disconnect_modbus_tcp();
       return frb::Error::UnConnect;
     }
@@ -138,7 +138,7 @@ namespace frb
 
     if(!_modbus)
     {
-      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, "modbus_connect fail !!!");
+      LOG->add_log("Signal", frb::LogLevel::Error, 0, "modbus_connect fail !!!");
       disconnect_modbus_tcp();
       return frb::Error::UnConnect;
     }
@@ -146,7 +146,7 @@ namespace frb
     int32_t socket = modbus_get_socket(_modbus);
     if(socket == -1)
     {
-      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, "modbus_connect fail !!!");
+      LOG->add_log("Signal", frb::LogLevel::Error, 0, "modbus_connect fail !!!");
       disconnect_modbus_tcp();
       return frb::Error::UnConnect;
     }
@@ -154,14 +154,14 @@ namespace frb
     // modbus 연결 되어있지 않으면 return
     if(is_connect() != CommStatus::Connect)
     {
-      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, "modbus_connect fail !!!");
+      LOG->add_log("Signal", frb::LogLevel::Error, 0, "modbus_connect fail !!!");
       disconnect_modbus_tcp();
       return frb::Error::UnConnect;
     }
 
     // if(!set_slave_id(id))
     // {
-    //   LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, "modbus_set_slave fail !!!");
+    //   LOG->add_log("Signal", frb::LogLevel::Error, 0, "modbus_set_slave fail !!!");
     //   disconnect_modbus_tcp();
     //   return frb::Error::UnConnect;
     // }
@@ -170,7 +170,7 @@ namespace frb
     socklen_t addrlen = sizeof(error);
     if(getsockopt(socket, SOL_SOCKET, SO_ERROR, &error, &addrlen) != 0)
     {
-      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, "getsockopt fail !!!");
+      LOG->add_log("Signal", frb::LogLevel::Error, 0, "getsockopt fail !!!");
       disconnect_modbus_tcp();
       return frb::Error::UnConnect;
     }
@@ -186,7 +186,7 @@ namespace frb
       std::string error_msg = modbus_strerror(errno);
       ros::Duration duration = ros::Time::now() - current_time;
         
-      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, 
+      LOG->add_log("Signal", frb::LogLevel::Error, 0, 
                   "modbus_read_bits fail: " + error_msg + " (took " + 
                   std::to_string(duration.toSec()) + "s)");
         
@@ -196,7 +196,7 @@ namespace frb
 
     if(result != read_len)
     {
-      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, 
+      LOG->add_log("Signal", frb::LogLevel::Error, 0, 
                     "Incomplete read: got " + std::to_string(result) + 
                     " bits, expected " + std::to_string(read_len));
         
@@ -236,7 +236,7 @@ namespace frb
   {
     if(!set_slave_id(id))
     {
-      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, "modbus_set_slave fail !!!");
+      LOG->add_log("Signal", frb::LogLevel::Error, 0, "modbus_set_slave fail !!!");
       disconnect_modbus_tcp();
       return frb::Error::UnConnect;
     }
@@ -251,7 +251,7 @@ namespace frb
     if(ret == -1)
     {
       std::string str = modbus_strerror(errno);
-      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, "modbus_read_registers fail : " + str);
+      LOG->add_log("Signal", frb::LogLevel::Error, 0, "modbus_read_registers fail : " + str);
       disconnect();
       return frb::Error::ReadFail;
     }
@@ -272,7 +272,7 @@ namespace frb
   {
     if(!set_slave_id(id))
     {
-      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, "modbus_set_slave fail !!!");
+      LOG->add_log("Signal", frb::LogLevel::Error, 0, "modbus_set_slave fail !!!");
       disconnect_modbus_tcp();
       return frb::Error::UnConnect;
     }
@@ -293,8 +293,8 @@ namespace frb
     // 쓰기 성공 여부 확인
     if(write_bits != 1)
     {
-      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, "modbus_write_bit fail !!!");
-      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, std::string("Error Number : ") + modbus_strerror(errno));
+      LOG->add_log("Signal", frb::LogLevel::Error, 0, "modbus_write_bit fail !!!");
+      LOG->add_log("Signal", frb::LogLevel::Error, 0, std::string("Error Number : ") + modbus_strerror(errno));
       disconnect_modbus_tcp();
       return frb::Error::WriteFail;
     }
@@ -316,7 +316,7 @@ namespace frb
   {
     if(!set_slave_id(id))
     {
-      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, "modbus_set_slave fail !!!");
+      LOG->add_log("Signal", frb::LogLevel::Error, 0, "modbus_set_slave fail !!!");
       disconnect_modbus_tcp();
       return frb::Error::UnConnect;
     }
@@ -348,7 +348,7 @@ namespace frb
   {
     if(!set_slave_id(id))
     {
-      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, "modbus_set_slave fail !!!");
+      LOG->add_log("Signal", frb::LogLevel::Error, 0, "modbus_set_slave fail !!!");
       disconnect_modbus_tcp();
       return frb::Error::UnConnect;
     }
@@ -381,7 +381,7 @@ namespace frb
     
     if(modbus_set_slave(_modbus, slave_id) == -1)
     {
-      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, "modbus_set_slave fail !!!");
+      LOG->add_log("Signal", frb::LogLevel::Error, 0, "modbus_set_slave fail !!!");
       return false;
     }
     _last_slave_id = slave_id;

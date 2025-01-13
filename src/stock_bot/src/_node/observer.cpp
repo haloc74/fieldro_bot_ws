@@ -2,8 +2,10 @@
 #include <iostream>
 
 #include <fieldro_lib/log/log.h>
-#include <fieldro_lib/helper/helper.h>
+//#include <fieldro_lib/helper/helper.h>
 #include "unit_observer/observer.h"
+#include "package/package_helper.h"
+#include "package/unit_define.h"
 
 frb::Log* frb::Log::_instance = nullptr;
  
@@ -17,9 +19,9 @@ int main(int argc, char **argv)
 
   // logger 초기화
   LOG->initialize("config/observer.yaml", "logger");
-  LOG->add_log(frb::UnitName::System, frb::LogLevel::Info, 0, " ");
-  LOG->add_log(frb::UnitName::System, frb::LogLevel::Info, 0, " ");
-  LOG->add_log(frb::UnitName::System, frb::LogLevel::Info, 0, "UnitName Observer Start");
+  LOG->add_log(frb::to_string(frb::UnitName::System), frb::LogLevel::Info, 0, " ");
+  LOG->add_log(frb::to_string(frb::UnitName::System), frb::LogLevel::Info, 0, " ");
+  LOG->add_log(frb::to_string(frb::UnitName::System), frb::LogLevel::Info, 0, "UnitName Observer Start");
 
   // Observer 객체 생성
   frb::Observer* observer = new frb::Observer("config/observer.yaml", "main");
@@ -51,7 +53,7 @@ int main(int argc, char **argv)
     {
       if(system("clear") == -1)
       {
-        LOG->add_log(frb::UnitName::System, frb::LogLevel::Error, 0, "system clear error");
+        LOG->add_log(frb::to_string(frb::UnitName::System), frb::LogLevel::Error, 0, "system clear error");
       }
     }
     else

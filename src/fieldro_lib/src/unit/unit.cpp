@@ -5,11 +5,15 @@
 #include <fieldro_msgs/UnitActionComplete.h>
 #include <fieldro_msgs/UnitAliveMsg.h>
 
+#include "helper/enum_template.h"
+
 
 namespace frb
 {
   Unit::Unit(std::string config_file, std::string session)
   {
+    _unit_index = 2;
+
     // main option 로드
     load_unit_option(config_file, session);
 
@@ -63,7 +67,7 @@ namespace frb
     _node_handle->shutdown();
     safe_delete(_node_handle);
 
-    if(_name == UnitName::System)
+    if(_name == "System")
     {
       ros::shutdown();
       ros::waitForShutdown();      
@@ -98,8 +102,9 @@ namespace frb
   {
     fieldro_msgs::UnitActionComplete msg;
     msg.time_stamp      = ros::Time::now();
-    msg.receive_object  = to_int(frb::UnitName::System);
-    msg.action_object   = to_int(_name);
+    //msg.receive_object  = to_int("System");
+    msg.receive_object  = 1;              // System 고정이다.
+    msg.action_object   = _unit_index;//frb::to_int<UnitName>(_name);
     msg.complete_action = action;
     msg.error_code      = error_code;
     _publish_unit_action_complete.publish(msg);
@@ -116,8 +121,9 @@ namespace frb
     {
       // unit alive publish
       fieldro_msgs::UnitAliveMsg msg;
-      msg.index = to_int(_name);
-      msg.state = to_int(_state);
+      //msg.index = to_int(_name);
+      msg.index  = _unit_index;
+      msg.state  = to_int(_state);
       _publish_unit_alive.publish(msg);
 
       // thread Hz 싱크 및 독점 방지를 위한 sleep

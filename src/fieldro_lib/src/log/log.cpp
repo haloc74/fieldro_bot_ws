@@ -33,11 +33,12 @@ namespace frb
   * @return     void
   * @note       message를 _log_queue에 추가시 lock 설정하는 부분 주의해야 함.
   */
-  void Log::add_log(UnitName unit, LogLevel level, int32_t error, std::string msg)
+  //void Log::add_log(UnitName unit, LogLevel level, int32_t error, std::string msg)
+  void Log::add_log(std::string unit_name, LogLevel level, int32_t error, std::string msg)
   {
     {
       std::lock_guard<std::mutex> lock(_mutex);
-      _log_queue.push(std::make_unique<LogMessage>(level, unit, error, std::move(msg))); 
+      _log_queue.push(std::make_unique<LogMessage>(level, unit_name, error, std::move(msg))); 
     }
     _cv.notify_one();
   }

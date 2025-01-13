@@ -5,7 +5,7 @@
 #include <map>
 
 
-#include <fieldro_lib/define/unit_define.h>
+//#include <fieldro_lib/define/unit_define.h>
 #include <fieldro_lib/define/unit_state.h>
 
 #include <fieldro_lib/define/unit_action_define.h>
@@ -43,7 +43,8 @@ namespace frb
     ros::Publisher    _publish_unit_action_complete;  // unit action 수행 완료를 publish 하는   publisher
     ros::Publisher    _publish_unit_alive;            // unit alive publish
 
-    UnitName          _name;                          // unit 이름
+    std::string       _name;                          // unit 이름
+    int32_t           _unit_index;                    // unit index/
     UnitState         _state;                         // unit 상태
     UnitAction        _action;                        // unit action
 

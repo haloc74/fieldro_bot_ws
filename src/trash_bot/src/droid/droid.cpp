@@ -2,12 +2,15 @@
 
 #include "droid.h"
 
-#include <fieldro_lib/helper/helper.h>
+//#include <fieldro_lib/helper/helper.h>
 #include <fieldro_lib/log/log.h>
-#include <fieldro_lib/define/unit_define.h>
+//#include <fieldro_lib/define/unit_define.h>
 #include <fieldro_lib/define/unit_action_define.h>
 #include <fieldro_lib/define/error_code.h>
 #include <fieldro_msgs/UnitAliveMsg.h>
+
+#include "package/unit_define.h"
+#include "package/package_helper.h"
  
 namespace frb
 {
@@ -18,7 +21,11 @@ namespace frb
     load_option(config_file);
 
     // 현재 상태를 _state값중 system에 해당하는 값으로 연결
-    _name   = UnitName::System;
+    //_name   = UnitName::System;
+    _name = frb::to_string(frb::UnitName::System);
+    _unit_index = frb::to_int(frb::UnitName::System);
+
+
     _action = UnitAction::None;
     _state  = UnitState::Created;
 
@@ -153,7 +160,7 @@ namespace frb
     if(command_list.size() < 2 || command_list.size() > 3)              return false;
 
     // command 분석
-    std::tuple<int32_t, int32_t, int32_t, std::string> cmd_data = interpret_command(command_list);
+    std::tuple<int32_t, int32_t, int32_t, std::string> cmd_data = frb::interpret_command(command_list);
 
     if(std::get<1>(cmd_data) == to_int(frb::UnitName::End))     return false;
     if(std::get<2>(cmd_data) == to_int(frb::UnitAction::None))  return false;

@@ -4,7 +4,7 @@
 #include "ros/ros.h"
 
 #include <fieldro_lib/unit/unit.h>
-#include <fieldro_lib/define/unit_define.h>
+//#include <fieldro_lib/define/unit_define.h>
 //#include <fieldro_lib/define/digital_in_define.h>
 #include <fieldro_msgs/IOSignal.h>
 

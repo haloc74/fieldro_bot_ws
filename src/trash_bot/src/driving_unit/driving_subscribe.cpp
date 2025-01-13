@@ -1,5 +1,7 @@
 #include "driving.h"
-#include <fieldro_lib/helper/helper.h>
+//#include <fieldro_lib/helper/helper.h>
+#include "package/package_helper.h"
+#include "package/unit_define.h"
 
 namespace frb
 {
@@ -68,7 +70,7 @@ namespace frb
     switch(action)
     {
     case frb::UnitAction::None:
-      LOG->add_log(frb::UnitName::Driving, frb::LogLevel::Error, 0, "UnitName Action None");
+      LOG->add_log(_name, frb::LogLevel::Error, 0, "UnitName Action None");
       break;
 
     case frb::UnitAction::Init:

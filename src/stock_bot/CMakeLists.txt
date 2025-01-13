@@ -120,6 +120,47 @@ message(STATUS "${PROJECT_NAME} : Step 04.Include Directories")
   )
 message(STATUS "${PROJECT_NAME} : End Step 04")    
 
+
+
+##-----------------------------------------------------------------------------
+##            stock_bot package Lib generate
+##-----------------------------------------------------------------------------
+message(STATUS "")
+message(STATUS "X. stock_bot package Lib generate")
+message(STATUS "")
+
+  set(PACKAGE_LIB "stock_bot_lib")
+
+  ## X-1. lib_cpp 하위의 모든 cpp 파일을 찾아서 LIB_SRC_FILES에 저장
+  file(GLOB_RECURSE LIB_SRC_FILES 
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/package/*.cpp"  
+  )
+
+  ## X-2. LIB_SRC_FILES의 모든 파일을 컴파일하고 링크하여 실행 파일 생성 하도록 설정
+  add_library(${PACKAGE_LIB} SHARED ${LIB_SRC_FILES})
+
+  ## X-2. fieldro_lib_temp 빌드 시 메시지 생성 의존성 추가
+  add_dependencies(${PACKAGE_LIB}
+    ${${PROJECT_NAME}_EXPORTED_TARGETS}  # 메시지 생성 타겟 의존성 추가
+    ${catkin_EXPORTED_TARGETS}
+    fieldro_lib
+  )  
+
+  ## X-3. 빌드 순서를 정의 (의존성)
+  target_link_libraries(${PACKAGE_LIB}
+    ${catkin_LIBRARIES}
+    ${MODBUS_LIBRARIES}
+    ${YAML_CPP_LIBRARIES}
+    fieldro_lib
+  )
+
+  ## X-4. 빌드시 필요한 include 경로 설정
+  target_include_directories(${PACKAGE_LIB} PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+#    ${CMAKE_CURRENT_SOURCE_DIR}/lib_header
+  )
+
+
 ##-----------------------------------------------------------------------------
 ##            각 노드별로 설정이 되어야 하는 부분 시작
 ##-----------------------------------------------------------------------------
@@ -156,6 +197,7 @@ message(STATUS "${PROJECT_NAME} : Step 05.node build")
       ${catkin_LIBRARIES}                 # catkin 빌드 시스템에서 정의한 라이브러리
       ${YAML_CPP_LIBRARIES}               # yaml-cpp 라이브러리
       fieldro_lib
+      ${PACKAGE_LIB}                      # stock_bot package 자체 라이브러리
     )
   message(STATUS "${PROJECT_NAME} : End Step 05-1")
   ############################################################
@@ -193,6 +235,7 @@ message(STATUS "${PROJECT_NAME} : Step 05.node build")
       ${catkin_LIBRARIES}                 # catkin 빌드 시스템에서 정의한 라이브러리
       ${YAML_CPP_LIBRARIES}               # yaml-cpp 라이브러리
       fieldro_lib
+      ${PACKAGE_LIB}                      # stock_bot package 자체 라이브러리
     )
   message(STATUS "${PROJECT_OBSERVER} : End Step 05-2")  
   ############################################################
@@ -230,6 +273,7 @@ message(STATUS "${PROJECT_NAME} : Step 05.node build")
       ${catkin_LIBRARIES}                 # catkin 빌드 시스템에서 정의한 라이브러리
       ${YAML_CPP_LIBRARIES}               # yaml-cpp 라이브러리
       fieldro_lib
+      ${PACKAGE_LIB}                      # stock_bot package 자체 라이브러리
     )
   message(STATUS "${PROJECT_IO} : End Step 05-3")  
   ############################################################
@@ -267,9 +311,49 @@ message(STATUS "${PROJECT_NAME} : Step 05.node build")
       ${catkin_LIBRARIES}                 # catkin 빌드 시스템에서 정의한 라이브러리
       ${YAML_CPP_LIBRARIES}               # yaml-cpp 라이브러리
       fieldro_lib
+      ${PACKAGE_LIB}                      # stock_bot package 자체 라이브러리
     )
   message(STATUS "${PROJECT_DRIVING} : End Step 05-4")  
   ############################################################  
+
+
+  ############################################################
+  ## 5-5. lift node 실행파일 설정
+  message(STATUS "${PROJECT_NAME} : Step 05-5. lift executable build")
+    
+    ## 5-5-0. lift node 실행파일 이름 설정
+    set(PROJECT_LIFT "lift")
+
+    ## 5-5-1. src/unit_lift 하위의 모든 cpp 파일을 찾아서 SRC_LIFT_FILES 저장
+    file(GLOB_RECURSE SRC_LIFT_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/unit_lift/*.cpp")
+
+    ## 5-5-2. SRC_DRIVING_FILES 모든 파일을 컴파일하고 링크하여 실행 파일 생성 하도록 설정
+    add_executable(
+      ${PROJECT_LIFT}
+      ${SRC_LIFT_FILES}
+      "${CMAKE_CURRENT_SOURCE_DIR}/src/_node/lift.cpp"
+    )
+
+    ## 5-5-3. 빌드 순서를 정의 (의존성)
+    ## 뒤쪽에 있는 package가 먼저 build 된다.
+    ## ${catkin_EXPORTED_TARGETS}->  ${${PROJECT_NAME}_EXPORTED_TARGETS}  -> ${PROJECT_NAME} 순으로 빌드
+    add_dependencies(
+      ${PROJECT_LIFT}                      # 빌드 대상 (가장 최후에 빌드)
+      ${${PROJECT_NAME}_EXPORTED_TARGETS}     # package 내부의 다른 빌드 대상
+      ${catkin_EXPORTED_TARGETS}              # catkin 빌드 시스템에서 정의한 빌드 대상
+      fieldro_msgs_generate_messages_cpp
+    )
+
+    ## 5-5-4. 빌드시 필요한 Lib 링크 설정
+    target_link_libraries(
+      ${PROJECT_LIFT}                 # 빌드 대상
+      ${catkin_LIBRARIES}                 # catkin 빌드 시스템에서 정의한 라이브러리
+      ${YAML_CPP_LIBRARIES}               # yaml-cpp 라이브러리
+      fieldro_lib
+      ${PACKAGE_LIB}                      # stock_bot package 자체 라이브러리
+    )
+  message(STATUS "${PROJECT_DRIVING} : End Step 05-5")  
+  ############################################################    
 
 
 message(STATUS "${PROJECT_NAME} : End Step 05")
@@ -286,6 +370,7 @@ message(STATUS "${PROJECT_NAME} : Step 06. Set Install ")
   install(
     #TARGETS ${PROJECT_NAME}                               # 설치할 target 지정            
     TARGETS ${PROJECT_OBSERVER}                           # 설치할 target 지정
+    ${PACKAGE_LIB}                                        # stock_bot package 자체 라이브러리
     ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION} # 정적 라이브러리 설치 위치 지정 (lib dir /.a 파일)
     LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION} # 동적 라이브러리 설치 위치 지정 (lib dir /.so 파일)
     RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION} # 실행파일 설치 위치 지정        (bin dir /실행파일)

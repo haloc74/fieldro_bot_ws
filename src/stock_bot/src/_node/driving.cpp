@@ -1,7 +1,9 @@
 
 #include "unit_driving/driving.h"
-#include <fieldro_lib/helper/helper.h>
+//#include <fieldro_lib/helper/helper.h>
 #include <fieldro_lib/log/log.h>
+#include "package/package_helper.h"
+#include "package/unit_define.h"
 
 frb::Log* frb::Log::_instance = nullptr;
 
@@ -15,9 +17,9 @@ int main(int argc, char** argv)
 
   // log 객체 초기화
   LOG->initialize("config/driving.yaml", "logger");
-  LOG->add_log(frb::UnitName::System, frb::LogLevel::Info, 0, "   ");
-  LOG->add_log(frb::UnitName::System, frb::LogLevel::Info, 0, "   ");
-  LOG->add_log(frb::UnitName::System, frb::LogLevel::Info, 0, "Driving Node Start");
+  LOG->add_log(frb::to_string(frb::UnitName::System), frb::LogLevel::Info, 0, "   ");
+  LOG->add_log(frb::to_string(frb::UnitName::System), frb::LogLevel::Info, 0, "   ");
+  LOG->add_log(frb::to_string(frb::UnitName::System), frb::LogLevel::Info, 0, "Driving Node Start");
 
   // driving 객체 생성
   frb::Driving* driving = new frb::Driving("config/driving.yaml", "main");
@@ -51,14 +53,14 @@ int main(int argc, char** argv)
     {
       if(system("clear") == -1)
       {
-        LOG->add_log(frb::UnitName::Driving, frb::LogLevel::Error, 0, "system clear error");
+        LOG->add_log(frb::to_string(frb::UnitName::System), frb::LogLevel::Error, 0, "system clear error");
       }
     }
     else
     {
       if(!driving->control(input))
       {
-        LOG->add_log(frb::UnitName::Driving, frb::LogLevel::Error, 0, "command error");
+        LOG->add_log(frb::to_string(frb::UnitName::Driving), frb::LogLevel::Error, 0, "command error");
       }
     }
   }

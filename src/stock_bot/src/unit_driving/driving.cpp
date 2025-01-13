@@ -1,8 +1,10 @@
 
 #include "driving.h"
-#include <fieldro_lib/helper/helper.h>
 #include <fieldro_lib/define/driving_define.h>
 #include <fieldro_msgs/UnitActionComplete.h>
+
+#include "package/package_helper.h"
+#include "package/unit_define.h"
 
  
 namespace frb 
@@ -12,7 +14,9 @@ namespace frb
   {
     load_option(config_file);           // option load     
 
-    _name   = UnitName::Driving;
+    _name       = frb::to_string(UnitName::Driving);
+    _unit_index = frb::to_int(UnitName::Driving);
+
     _action = UnitAction::None;
     _state  = frb::UnitState::Created;
 

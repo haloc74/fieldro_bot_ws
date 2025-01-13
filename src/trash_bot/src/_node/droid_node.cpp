@@ -4,7 +4,9 @@
 //#include "log/log.h"
 #include <fieldro_lib/log/log.h>
 //#include "helper/helper.h"
-#include <fieldro_lib/helper/helper.h>
+//#include <fieldro_lib/helper/helper.h>
+#include "package/package_helper.h"
+#include "package/unit_define.h"
 
 frb::Log* frb::Log::_instance = nullptr;
 
@@ -18,9 +20,9 @@ int main(int argc, char **argv)
 
   // log 객체 초기화
   LOG->initialize("config/droid.yaml", "logger");
-  LOG->add_log(frb::UnitName::System, frb::LogLevel::Info, 0, "   ");
-  LOG->add_log(frb::UnitName::System, frb::LogLevel::Info, 0, "   ");
-  LOG->add_log(frb::UnitName::System, frb::LogLevel::Info, 0, "Trash Bot Start");
+  LOG->add_log(frb::to_string(frb::UnitName::System), frb::LogLevel::Info, 0, "   ");
+  LOG->add_log(frb::to_string(frb::UnitName::System), frb::LogLevel::Info, 0, "   ");
+  LOG->add_log(frb::to_string(frb::UnitName::System), frb::LogLevel::Info, 0, "Trash Bot Start");
 
   // carrybot 객체 생성
   frb::Droid* droid = new frb::Droid("config/droid.yaml", "main");
@@ -54,14 +56,14 @@ int main(int argc, char **argv)
     {
       if(system("clear") == -1)
       {
-        LOG->add_log(frb::UnitName::System, frb::LogLevel::Error, 0, "system clear error");
+        LOG->add_log(frb::to_string(frb::UnitName::System), frb::LogLevel::Error, 0, "system clear error");
       } 
     }
     else
     {
       if(!droid->control(input))
       {
-        LOG->add_log(frb::UnitName::System, frb::LogLevel::Error, 0, std::string("Command Error : ")+str);
+        LOG->add_log(frb::to_string(frb::UnitName::System), frb::LogLevel::Error, 0, std::string("Command Error : ")+str);
       }
     }                        
   }

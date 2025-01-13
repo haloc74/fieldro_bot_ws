@@ -1,7 +1,7 @@
 
 #include "wago.h"
 
-#include <fieldro_lib/define/unit_define.h>
+//#include <fieldro_lib/define/unit_define.h>
 #include <fieldro_lib/define/unit_action_define.h>
 #include <fieldro_lib/define/unit_state.h>
 #include <fieldro_lib/helper/helper.h>
@@ -9,6 +9,7 @@
 #include <fieldro_msgs/IOSignal.h>
 #include <fieldro_msgs/UnitAliveMsg.h>
 #include <fieldro_msgs/UnitActionComplete.h>
+#include "package/unit_define.h"
 
 namespace frb
 {
@@ -35,7 +36,7 @@ namespace frb
     switch(action)
     {       
     case frb::UnitAction::None:
-      LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Error, 0, "UnitName Action None");
+      LOG->add_log(_name, frb::LogLevel::Error, 0, "UnitName Action None");
       break;
 
     case frb::UnitAction::Init:
@@ -74,7 +75,7 @@ namespace frb
     // 변경사항이 있을 때만 로그를 남긴다.
     if(update_flag)
     {
-      LOG->add_log(frb::UnitName::Signal, 
+      LOG->add_log(_name, 
                     frb::LogLevel::Info, 
                     0, std::string("Update IO Signal : ")+std::to_string(signal_bit));
     }

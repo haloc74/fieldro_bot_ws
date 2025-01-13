@@ -4,10 +4,13 @@
 
 #include <fieldro_lib/helper/helper.h>
 #include <fieldro_lib/log/log.h>
-#include <fieldro_lib/define/unit_define.h>
+//#include <fieldro_lib/define/unit_define.h>
 #include <fieldro_lib/define/unit_action_define.h>
 #include <fieldro_lib/define/error_code.h>
 #include <fieldro_msgs/UnitAliveMsg.h>
+
+#include "package/package_helper.h"
+#include "package/unit_define.h"
  
 namespace frb
 {
@@ -18,7 +21,10 @@ namespace frb
     load_option(config_file);
 
     // 현재 상태를 _state값중 system에 해당하는 값으로 연결
-    _name   = UnitName::System;
+    //_name   = UnitName::System;
+    _name = frb::to_string(frb::UnitName::System);
+    _unit_index = frb::to_int(frb::UnitName::System);
+
     _action = UnitAction::None;
     _state  = UnitState::Created;
 

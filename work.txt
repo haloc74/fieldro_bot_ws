@@ -5,13 +5,17 @@
 . main node에서 control_move를 통하여 회전, 진행을 처리
 . 기존 trash_bot에 있던 stock_bot내용을 stock_bot package에 신규로 구축
 
-
-
 . stock_bot refactoring
 . trash_bot의 loader part -> lift part로 customizing
 
 
-ID [  ] : 2025-01-11
+ID [  ] : 2025-01-13
+1. unit_define.h 를 기존 fieldro_lib package에서 각각의 package로 독립구성
+2. 각 package에 자체 package lib 구축
+3. package_helper 추가
+
+
+ID [ 3651743 ] : 2025-01-11
 1. driving unit 추가
 
 ID [ aae5f89 ] : 2025-01-11

@@ -1,10 +1,13 @@
 
 #include "loader.h"
 
-#include <fieldro_lib/helper/helper.h>
+//#include <fieldro_lib/helper/helper.h>
 //#include <fieldro_lib/define/digital_in_define.h>
 #include <fieldro_msgs/UnitActionComplete.h>
 #include "io_unit/digital_in_define.h"
+
+#include "package/package_helper.h"
+#include "package/unit_define.h"
 
 namespace frb
 {
@@ -26,7 +29,10 @@ namespace frb
     _sensor_data_update_mask |= (1 << (int)DISignal::LoaderRaise);
 
 
-    _name   = UnitName::Loader;
+    //_name   = UnitName::Loader;
+    _name = frb::to_string(frb::UnitName::Loader);
+    _unit_index = frb::to_int(frb::UnitName::Loader);
+    
     _action = UnitAction::None;
     _state  = frb::UnitState::Created;
 

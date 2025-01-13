@@ -1,9 +1,12 @@
 
 #include "unit_observer/observer.h"
 
-#include <fieldro_lib/helper/helper.h>
+//#include <fieldro_lib/helper/helper.h>
 #include <fieldro_lib/log/log.h>
 #include <fieldro_msgs/UnitActionComplete.h>
+
+#include "package/unit_define.h"
+#include "package/package_helper.h"
 
 namespace frb
 {

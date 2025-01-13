@@ -1,17 +1,22 @@
 
 #include "observer_unit/observer.h"
-
-#include <fieldro_lib/helper/helper.h>
 #include <fieldro_lib/log/log.h>
 #include <fieldro_msgs/UnitActionComplete.h>
 #include <fieldro_msgs/UnitStateMsg.h>
+
+#include "package/package_helper.h"
+#include "package/unit_define.h"
 
 namespace frb
 {
   Observer::Observer(std::string config_file, std::string session)
            : Unit(config_file, session)
   {
-    _name               = frb::UnitName::Observer;     // unit 이름
+    //_name               = frb::UnitName::Observer;     // unit 이름
+    _name       = frb::to_string(frb::UnitName::Observer);
+    _unit_index = frb::to_int(frb::UnitName::Observer);  // unit index
+
+
     _action             = frb::UnitAction::None;       // unit action
     _state              = frb::UnitState::Created;    // unit 현재 상태  
     _last_publish_time  = ros::Time::now();                   // 마지막 업데이트 시간
@@ -108,7 +113,7 @@ namespace frb
     {
       _unit_alive = new_alive_state;
 
-      LOG->add_log(frb::UnitName::Observer, LogInfo, 0, "UnitName Alive State Update : " + std::to_string(_unit_alive));
+      LOG->add_log(_name, LogInfo, 0, "UnitName Alive State Update : " + std::to_string(_unit_alive));
 
       return true;
     }

@@ -129,42 +129,40 @@ message(STATUS "")
     ${MODBUS_INCLUDE_DIRS}
   )
 
-# message(STATUS "")
-# message(STATUS "X. fieldro_lib_temp Lib generate")
-# message(STATUS "")
+message(STATUS "")
+message(STATUS "X. trash_bot package Lib generate")
+message(STATUS "")
 
-  # ## X-1. lib_cpp 하위의 모든 cpp 파일을 찾아서 LIB_SRC_FILES에 저장
-  # file(GLOB_RECURSE LIB_SRC_FILES 
-  #   ##"${CMAKE_CURRENT_SOURCE_DIR}/src/lib_cpp/log/*.cpp"  
-  #   ##"${CMAKE_CURRENT_SOURCE_DIR}/src/lib_cpp/communication/*.cpp"
-  #   ##"${CMAKE_CURRENT_SOURCE_DIR}/src/lib_cpp/unit/*.cpp"
-  #   ##"${CMAKE_CURRENT_SOURCE_DIR}/src/lib_cpp/helper/*.cpp"
-  #   ##"${CMAKE_CURRENT_SOURCE_DIR}/src/lib_cpp/odometry/*.cpp"
-  # )
+  set(PACKAGE_LIB "trash_bot_lib")
 
-  # ## X-2. LIB_SRC_FILES의 모든 파일을 컴파일하고 링크하여 실행 파일 생성 하도록 설정
-  # add_library(fieldro_lib_temp SHARED ${LIB_SRC_FILES})
+  ## X-1. lib_cpp 하위의 모든 cpp 파일을 찾아서 LIB_SRC_FILES에 저장
+  file(GLOB_RECURSE LIB_SRC_FILES 
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/package/*.cpp"  
+  )
 
-  # ## X-2. fieldro_lib_temp 빌드 시 메시지 생성 의존성 추가
-  # add_dependencies(fieldro_lib_temp
-  #   ${${PROJECT_NAME}_EXPORTED_TARGETS}  # 메시지 생성 타겟 의존성 추가
-  #   ${catkin_EXPORTED_TARGETS}
-  #   fieldro_lib
-  # )  
+  ## X-2. LIB_SRC_FILES의 모든 파일을 컴파일하고 링크하여 실행 파일 생성 하도록 설정
+  add_library(${PACKAGE_LIB} SHARED ${LIB_SRC_FILES})
 
-  # ## X-3. 빌드 순서를 정의 (의존성)
-  # target_link_libraries(fieldro_lib_temp
-  #   ${catkin_LIBRARIES}
-  #   ${MODBUS_LIBRARIES}
-  #   ${YAML_CPP_LIBRARIES}
-  #   fieldro_lib
-  # )
+  ## X-2. fieldro_lib_temp 빌드 시 메시지 생성 의존성 추가
+  add_dependencies(${PACKAGE_LIB}
+    ${${PROJECT_NAME}_EXPORTED_TARGETS}  # 메시지 생성 타겟 의존성 추가
+    ${catkin_EXPORTED_TARGETS}
+    fieldro_lib
+  )  
 
-  # ## X-4. 빌드시 필요한 include 경로 설정
-  # target_include_directories(fieldro_lib_temp PUBLIC
-  #   ${CMAKE_CURRENT_SOURCE_DIR}/include
-  #   ${CMAKE_CURRENT_SOURCE_DIR}/lib_header
-  # )
+  ## X-3. 빌드 순서를 정의 (의존성)
+  target_link_libraries(${PACKAGE_LIB}
+    ${catkin_LIBRARIES}
+    ${MODBUS_LIBRARIES}
+    ${YAML_CPP_LIBRARIES}
+    fieldro_lib
+  )
+
+  ## X-4. 빌드시 필요한 include 경로 설정
+  target_include_directories(${PACKAGE_LIB} PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+#    ${CMAKE_CURRENT_SOURCE_DIR}/lib_header
+  )
 
 ##-----------------------------------------------------------------------------
 ##            각 노드별로 설정이 되어야 하는 부분 시작
@@ -202,7 +200,7 @@ message(STATUS "")
       ${catkin_LIBRARIES}                 # catkin 빌드 시스템에서 정의한 라이브러리
       ${YAML_CPP_LIBRARIES}               # yaml-cpp 라이브러리
       fieldro_lib
-      ## fieldro_lib_temp                         # 
+      ${PACKAGE_LIB}                       # package 내부의 라이브러리
     )
     message(STATUS "   5-1-4-1")
 
@@ -236,12 +234,12 @@ message(STATUS "")
       ${YAML_CPP_LIBRARIES}                # yaml-cpp 라이브러리
       ${MODBUS_LIBRARIES}                  # libmodbus 라이브러리
       fieldro_lib
-      ## fieldro_lib_temp                          # fieldro   라이브러리
+      ${PACKAGE_LIB}                       # package 내부의 라이브러리
     )
 
   ############################################################
   ## 5-3. unit_observer_node 실행파일 생성 설정
-  message(STATUS "   5-3. unit_observer_node executable generate")
+    message(STATUS "   5-3. unit_observer_node executable generate")
 
     ## 5-3-0 project name 설정
     set(PROJECT_OBSERVER_NAME "observer_unit")
@@ -271,7 +269,7 @@ message(STATUS "")
       ${YAML_CPP_LIBRARIES}                # yaml-cpp 라이브러리
       ${MODBUS_LIBRARIES}                  # libmodbus 라이브러리
       fieldro_lib
-      ## fieldro_lib_temp                          # fieldro   라이브러리
+      ${PACKAGE_LIB}                       # package 내부의 라이브러리
     )    
 
 
@@ -307,7 +305,7 @@ message(STATUS "")
       ${YAML_CPP_LIBRARIES}                # yaml-cpp 라이브러리
       ${MODBUS_LIBRARIES}                  # libmodbus 라이브러리
       fieldro_lib
-      ## fieldro_lib_temp                          # fieldro   라이브러리
+      ${PACKAGE_LIB}                       # package 내부의 라이브러리
     )
     
   ############################################################
@@ -342,7 +340,7 @@ message(STATUS "")
       ${YAML_CPP_LIBRARIES}                # yaml-cpp 라이브러리
       ${MODBUS_LIBRARIES}                  # libmodbus 라이브러리
       fieldro_lib
-      ## fieldro_lib_temp                          # fieldro   라이브러리
+      ${PACKAGE_LIB}                       # package 내부의 라이브러리
     )    
 
 
@@ -360,7 +358,7 @@ message(STATUS "")
             ${PROJECT_IO_NAME} 
             ${PROJECT_OBSERVER_NAME}
             # ${PROJECT_LOADER_NAME} 
-            # fieldro_lib    
+            ${PACKAGE_LIB}    
     ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION} # 정적 라이브러리 설치 위치 지정 (lib dir /.a 파일)
     LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION} # 동적 라이브러리 설치 위치 지정 (lib dir /.so 파일)
     RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION} # 실행파일 설치 위치 지정        (bin dir /실행파일)
@@ -374,7 +372,6 @@ message(STATUS "")
   ## include 폴더에 있는 헤더파일을 찾아서 catkin_package()에서 지정한 위치에 설치(복사)
   install(DIRECTORY 
     include/
-    lib_header/
     DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}   # include 폴더에 복사
     FILES_MATCHING PATTERN "*.h"                        # .h 파일만 복사
     # USE_SOURCE_PERMISSIONS                            # 복사된 파일의 권한을 원본 파일의 권한으로 설정

@@ -24,12 +24,12 @@
 //#include "define/error_code.h"
 #include <fieldro_lib/define/error_code.h>
 //#include "define/unit_define.h"
-#include <fieldro_lib/define/unit_define.h>
+//#include <fieldro_lib/define/unit_define.h>
 //#include "define/unit_action_define.h"
 #include <fieldro_lib/define/unit_action_define.h>
 
 
-
+ 
 namespace frb
 {
   // Safe Delete Macro 
@@ -103,8 +103,7 @@ namespace frb
   // command를 공백 문자를 기준으로 분해
   std::vector<std::string> seperate_command(std::string input, char operator_char);
 
-  // 분해된 command list를 해석하여 unit, action, parameter를 추출
-  std::tuple<int32_t, int32_t, int32_t, std::string> interpret_command(std::vector<std::string> command_list);
+
 
   // parameter를 분해하여 map 형태로 반환
   std::map<std::string, int32_t> interpret_parameter(std::string parameter);

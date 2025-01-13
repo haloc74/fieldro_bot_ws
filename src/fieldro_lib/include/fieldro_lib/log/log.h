@@ -2,7 +2,7 @@
 #pragma once
 
 //#include "define/unit_define.h"
-#include <fieldro_lib/define/unit_define.h>
+//#include <fieldro_lib/define/unit_define.h>
 #include <fieldro_lib/log/log_message_queue.h>
 
 #include <string>                 
@@ -77,7 +77,8 @@ namespace frb
     * @return     void
     * @note       message를 _log_queue에 추가시 lock 설정하는 부분 주의해야 함.
     */
-    void add_log(UnitName unit, LogLevel level, int32_t error, std::string msg);
+    //void add_log(UnitName unit, LogLevel level, int32_t error, std::string msg);
+    void add_log(std::string unit_name, LogLevel level, int32_t error, std::string msg);
 
   private:
     /**

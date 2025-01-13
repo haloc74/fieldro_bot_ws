@@ -1,7 +1,7 @@
 
 #include "wago.h"
 
-#include <fieldro_lib/define/unit_define.h>
+//#include <fieldro_lib/define/unit_define.h>
 #include <fieldro_lib/define/unit_action_define.h>
 #include <fieldro_lib/define/unit_state.h>
 #include <fieldro_lib/helper/helper.h>
@@ -9,7 +9,7 @@
 #include <fieldro_msgs/IOSignal.h>
 #include <fieldro_msgs/UnitAliveMsg.h>
 #include <fieldro_msgs/UnitActionComplete.h>
-
+#include "package/unit_define.h"
 
 namespace frb
 {
@@ -18,7 +18,14 @@ namespace frb
   {
     load_option(config_file);
 
-    _name   = UnitName::Signal;
+    //_name   = UnitName::Signal;
+    _name   = frb::to_string(frb::UnitName::Signal);
+    _unit_index = frb::to_int(frb::UnitName::Signal);
+
+    _name       = frb::to_string(frb::UnitName::Signal);
+    _unit_index = frb::to_int(frb::UnitName::Signal);
+
+
     _action = UnitAction::None;
     _state  = frb::UnitState::Created;
     
@@ -115,7 +122,7 @@ namespace frb
 
     if(error != frb::Error::None)
     {
-      LOG->add_log(frb::UnitName::Signal, 
+      LOG->add_log(_name, 
                     frb::LogLevel::Error, 
                     frb::to_int(error), 
                     "Read DI Signal Error");
@@ -150,7 +157,7 @@ namespace frb
       if(_signal[i]->update_value(signal[i], log_string, on))
       {
         // 변경 로그 남기기
-        LOG->add_log(frb::UnitName::Signal, frb::LogLevel::Info, 0, log_string+std::string(" : ")+std::to_string(on)); 
+        LOG->add_log(_name, frb::LogLevel::Info, 0, log_string+std::string(" : ")+std::to_string(on)); 
         
         update = true;
       }

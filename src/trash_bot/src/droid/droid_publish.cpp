@@ -1,8 +1,10 @@
 
 #include "droid.h"
-#include <fieldro_lib/helper/helper.h>
 #include <fieldro_lib/log/log.h>
 #include <fieldro_msgs/UnitAliveMsg.h>
+
+#include "package/package_helper.h"
+#include "package/unit_define.h"
 
 namespace frb
 {
@@ -37,7 +39,7 @@ namespace frb
   {
     fieldro_msgs::UnitControl unit_control_msg;
     unit_control_msg.time_stamp     = ros::Time::now();
-    unit_control_msg.target_object  = to_int(frb::UnitName::All);
+    unit_control_msg.target_object  = 0;
     unit_control_msg.action         = to_int(frb::UnitAction::Finish);
     unit_control_msg.command        = "";
     _publish_unit_control.publish(unit_control_msg);

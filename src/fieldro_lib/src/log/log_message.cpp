@@ -4,7 +4,7 @@
 
 namespace frb
 {
-  LogMessage::LogMessage(LogLevel level, UnitName unit, int32_t error, std::string msg)
+  LogMessage::LogMessage(LogLevel level, std::string unit_name, int32_t error, std::string msg)
               :_error(error), _msg(std::move(msg))
   {
     std::memset(_file_name, 0, sizeof(_file_name));
@@ -25,7 +25,7 @@ namespace frb
               timeinfo.tm_sec,
               (int)(curtime%1000));
 
-    _unit       = to_string(unit);//unit_to_string(unit);
+    _unit       = unit_name;
     _log_level  = log_level_to_string(level);
   }
 
