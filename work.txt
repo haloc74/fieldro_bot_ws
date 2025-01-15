@@ -8,7 +8,16 @@
 . stock_bot refactoring
 . trash_bot의 loader part -> lift part로 customizing
 
+. joypad를 이용한 주행 명령 node 추가
 
+. JoyStickXbox Class : unit 상속 구조 만족하도록 Refactoring
+
+
+ID [  ] : 2025-01-15
+1. fieldro_lib/controller/uni_joy_stick_xbox.h 및 cpp 추가.
+
+
+ID [ 114204b ] : 2025-01-13
 1. PACKAGE 분리 성공
 
 ID [ e151903 ] : 2025-01-13
