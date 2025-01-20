@@ -10,17 +10,21 @@
 
 . joypad를 이용한 주행 명령 node 추가
 
-. JoyStickXbox 상속 구조 만족하도록 수정
+. JoyStickXbox Class 주석 제거
+. JoyStickXbox Class Refactoring 검토
+
+
+ID [  ] : 2025-01-20
+1. JoyStickXbox 상속 구조 만족하도록 수정
+  - validate_parameters() 반복 확인
   - unit 상속에 따른 config file 추가
   - load_parameters() 대신 load_option을 사용하도록 변경
-  - validate_parameters() 반복 확인
   - timer를 이용한 thread 대신 unit thread 사용하도록 변경
     update() 함수 추가 
   - 생성자에서의 기본 처리 추가
   - 소멸자에서의 기본 처리 추가 
 
-
-ID [  ] : 2025-01-20
+ID [ 6d01ff5 ] : 2025-01-20
 1. JoyStickXbox Class 기본 Refactoring
 
 ID [ e62d827 ] : 2025-01-15

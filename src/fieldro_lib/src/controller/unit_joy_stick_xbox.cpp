@@ -1,5 +1,6 @@
 
 #include <fieldro_lib/controller/unit_joy_stick_xbox.h>
+#include <fieldro_lib/helper/helper.h>
  
 namespace frb
 {
@@ -10,14 +11,21 @@ namespace frb
   JoyStickXbox::JoyStickXbox(std::string config_file, std::string session) 
           : Unit(config_file, session)
   {
-    _connected = false;
-    _should_run   = false;
+    _connected    = false;
+  //  _should_run   = false;
     _joy_fd       = -1;         // 파일 디스크립터 : 장치가 열리지 않는 상태로 초기화
 
-    load_parameters();           // 파라미터 로드
+    load_option(config_file);   // 옵션 로드
+
+    //load_parameters();           // 파라미터 로드
     validate_parameters();       // 파라미터 유효성 검사
 
     _publish_joystick = _node_handler.advertise<sensor_msgs::Joy>("joy", 1);
+
+//    _should_run = true;
+    _update_thread  = new ThreadActionInfo(config_file, "main");
+    _update_thread->_thread = std::thread(std::bind(&JoyStickXbox::update, this));
+
   }
 
   /**
@@ -27,30 +35,50 @@ namespace frb
   JoyStickXbox::~JoyStickXbox()
   {
     stop();
+
+    _update_thread->_active = false;
+    safe_delete(_update_thread);
   }
 
-  /**
-  * @brief      조이스틱 노드 실행 시작
-  * @param[in]  void
-  * @return     void
-  * @attention  쓰레드를 생성하고 조이스틱 이벤트 처리를 시작한다.
-  *             Timer Event를 이용한 비동기 함수 이므로 사용에 주의
-  *             추후 이 부분에 대한 Refactoring이 필요하다.
-  */
-  void JoyStickXbox::start()
+  void JoyStickXbox::update()
   {
-    _should_run = true;
-    
-    // 주기적인 상태 발행을 위한 타이머 설정
-    _publish_timer = _node_handler.createTimer(
-        ros::Duration(1.0/_autorepeat_rate),
-        &JoyStickXbox::publish_timer_callback,
-        this
-    );
+    while(ros::ok() && _update_thread->_active)
+    {
+      // todo : 
 
-    // 비동기 이벤트 처리를 위한 쓰레드 시작
-    _joystick_thread = std::thread(&JoyStickXbox::joystick_event_loop, this);
+      // 조이스틱 이벤트 처리 루프
+      joystick_event_loop();
+
+      // joystick_msg 발행
+      publish_joystick_msg();
+
+      // thread Hz 싱크 및 독점 방지를 위한 sleep
+      std::this_thread::sleep_for(std::chrono::milliseconds(_update_thread->_sleep));
+    }
   }
+
+  // /**
+  // * @brief      조이스틱 노드 실행 시작
+  // * @param[in]  void
+  // * @return     void
+  // * @attention  쓰레드를 생성하고 조이스틱 이벤트 처리를 시작한다.
+  // *             Timer Event를 이용한 비동기 함수 이므로 사용에 주의
+  // *             추후 이 부분에 대한 Refactoring이 필요하다.
+  // */
+  // void JoyStickXbox::start()
+  // {
+  //   _should_run = true;
+    
+  //   // 주기적인 상태 발행을 위한 타이머 설정
+  //   _publish_timer = _node_handler.createTimer(
+  //       ros::Duration(1.0/_autorepeat_rate),
+  //       &JoyStickXbox::publish_timer_callback,
+  //       this
+  //   );
+
+  //   // 비동기 이벤트 처리를 위한 쓰레드 시작
+  //   _joystick_thread = std::thread(&JoyStickXbox::joystick_event_loop, this);
+  // }
 
   /**
   * @brief      조이스틱 노드 실행 종료
@@ -60,19 +88,20 @@ namespace frb
   */
   void JoyStickXbox::stop()
   {
-    _should_run = false;
-    if(_joystick_thread.joinable())
-    {
-      _joystick_thread.join();
-    }
+    //_should_run = false;
+    // if(_joystick_thread.joinable())
+    // {
+    //   _joystick_thread.join();
+    // }
 
     if(_joy_fd >= 0)
     {
       close(_joy_fd);
       _joy_fd = -1;
     }
+    _connected = false;
 
-    _publish_timer.stop();
+    //_publish_timer.stop();
   }
 
   /**
@@ -84,17 +113,39 @@ namespace frb
   *             <param name="deadzone" value="0.1"/>
   *             <param name="autorepeat_rate" value="30.0"/>
   */
-  void JoyStickXbox::load_parameters()
+  // void JoyStickXbox::load_parameters()
+  // {
+  //   // 함수 내에서만 사용할 node handler 생성
+  //   ros::NodeHandle private_nh("~");
+
+  //   // 파라미터 로드
+  //   private_nh.param<std::string>("dev", _device_name, "/dev/input/js0");
+  //   private_nh.param<double>("deadzone", _deadzone, 0.05);
+  //   private_nh.param<double>("autorepeat_rate", _autorepeat_rate, 20.0);
+  //   return;
+  // }
+  void JoyStickXbox::load_option(std::string config_file)
   {
-    // 함수 내에서만 사용할 node handler 생성
-    ros::NodeHandle private_nh("~");
+    try
+    {
+      // file open
+      std::ifstream yaml_file(config_file);
+      YAML::Node yaml = YAML::Load(yaml_file);
+      yaml_file.close();
 
-    // 파라미터 로드
-    private_nh.param<std::string>("dev", _device_name, "/dev/input/js0");
-    private_nh.param<double>("deadzone", _deadzone, 0.05);
-    private_nh.param<double>("autorepeat_rate", _autorepeat_rate, 20.0);
+      // yaml 파일로부터 조이스틱 디바이스 이름 로드
+      _device_name = yaml["device"].as<std::string>();
 
-    return;
+      // yaml 파일로부터 데드존 값 로드
+      _deadzone = yaml["deadzone"].as<double>();
+
+      // yaml 파일로부터 자동반복 주기 로드
+      _autorepeat_rate = yaml["autorepeat_rate"].as<double>();
+    }
+    catch(const std::exception& e)
+    {
+      ROS_ERROR("JoyStickXbox::load_option() : %s", e.what());
+    }
   }
 
   /**
@@ -177,15 +228,17 @@ namespace frb
   * @param[in]  void
   * @return     void
   * @note       별도의 thread에서 실행되며, 조이스틱 이벤트를 지속적으로 감지하고 처리한다.
+  * @attention  EAGAIN 과 EWOULDBLOCK message가 동일한 system도 있고 아닌 경우도 있다.
   */  
   void JoyStickXbox::joystick_event_loop()
   {
-    while(_should_run && ros::ok())
-    {
+    //while(_should_run && ros::ok())
+    // while(ros::ok())
+    // {
       if(_joy_fd < 0 && !open_joystick())
       {
         ros::Duration(1.0).sleep();
-        continue;
+        return;
       }
 
       js_event event;
@@ -199,12 +252,11 @@ namespace frb
       {
         switch(errno)
         {
-        case EAGAIN:                                                                    break;
-        //case EWOULDBLOCK:                                                               break;
-        case EIO:         ROS_ERROR("Joystick IO Error");            close_joystick();  break;
-        case EBADF:       ROS_ERROR("Joystick Bad File Descriptor"); close_joystick();  break;
-        case EINVAL:      ROS_ERROR("Joystick Invalid Argument");    close_joystick();  break;
-        default:          ROS_ERROR("Joystick Unknown Error");       close_joystick();  break;
+        case EAGAIN:                                                                break;
+        case EIO:     ROS_ERROR("Joystick IO Error");            close_joystick();  break;
+        case EBADF:   ROS_ERROR("Joystick Bad File Descriptor"); close_joystick();  break;
+        case EINVAL:  ROS_ERROR("Joystick Invalid Argument");    close_joystick();  break;
+        default:      ROS_ERROR("Joystick Unknown Error");       close_joystick();  break;
         }
       }
       else
@@ -213,7 +265,7 @@ namespace frb
         close_joystick();
       }
       std::this_thread::sleep_for(std::chrono::milliseconds(1));
-    }
+    //}
   }
 
   /**
@@ -299,13 +351,21 @@ namespace frb
   * @return     void
   * @note       
   */
-  void JoyStickXbox::publish_timer_callback(const ros::TimerEvent&)
+  // void JoyStickXbox::publish_timer_callback(const ros::TimerEvent&)
+  // {
+  //   if(!_connected)    return;
+    
+  //   _joystick_msg.header.stamp = ros::Time::now();
+  //   _publish_joystick.publish(_joystick_msg);
+
+  //   return;
+  // }
+  void JoyStickXbox::publish_joystick_msg()
   {
     if(!_connected)    return;
-    
+
     _joystick_msg.header.stamp = ros::Time::now();
     _publish_joystick.publish(_joystick_msg);
-
     return;
   }          
 
