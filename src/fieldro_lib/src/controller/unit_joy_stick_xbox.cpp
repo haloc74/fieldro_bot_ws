@@ -13,7 +13,7 @@ namespace frb
   {
     _connected    = false;
   //  _should_run   = false;
-    _joy_fd       = -1;         // 파일 디스크립터 : 장치가 열리지 않는 상태로 초기화
+    _file_discriptor       = -1;         // 파일 디스크립터 : 장치가 열리지 않는 상태로 초기화
 
     load_option(config_file);   // 옵션 로드
 
@@ -34,7 +34,8 @@ namespace frb
   */
   JoyStickXbox::~JoyStickXbox()
   {
-    stop();
+    //stop();
+    close_discriptor();
 
     _update_thread->_active = false;
     safe_delete(_update_thread);
@@ -47,7 +48,8 @@ namespace frb
       // todo : 
 
       // 조이스틱 이벤트 처리 루프
-      joystick_event_loop();
+      //event_process();
+      read_file_discriptor();
 
       // joystick_msg 발행
       publish_joystick_msg();
@@ -77,32 +79,34 @@ namespace frb
   //   );
 
   //   // 비동기 이벤트 처리를 위한 쓰레드 시작
-  //   _joystick_thread = std::thread(&JoyStickXbox::joystick_event_loop, this);
+  //   _joystick_thread = std::thread(&JoyStickXbox::event_process, this);
   // }
 
-  /**
-  * @brief      조이스틱 노드 실행 종료
-  * @param[in]  void
-  * @return     void
-  * @note       실행중인 timer와 thread를 정상적으로 종료하고 파일 디스크립터를 닫는다.
-  */
-  void JoyStickXbox::stop()
-  {
-    //_should_run = false;
-    // if(_joystick_thread.joinable())
-    // {
-    //   _joystick_thread.join();
-    // }
+  // /**
+  // * @brief      조이스틱 노드 실행 종료
+  // * @param[in]  void
+  // * @return     void
+  // * @note       실행중인 timer와 thread를 정상적으로 종료하고 파일 디스크립터를 닫는다.
+  // */
+  // void JoyStickXbox::stop()
+  // {
+  //   //_should_run = false;
+  //   // if(_joystick_thread.joinable())
+  //   // {
+  //   //   _joystick_thread.join();
+  //   // }
 
-    if(_joy_fd >= 0)
-    {
-      close(_joy_fd);
-      _joy_fd = -1;
-    }
-    _connected = false;
+  //   if(_file_discriptor >= 0)
+  //   {
+  //     close(_file_discriptor);
+  //     _file_discriptor = -1;
+  //   }
+  //   _connected = false;
 
-    //_publish_timer.stop();
-  }
+  //   //_publish_timer.stop();
+  // }
+
+  
 
   /**
   * @brief      로드된 파라미터들을 확인하고 필요한 경우 보정
@@ -139,8 +143,8 @@ namespace frb
       // yaml 파일로부터 데드존 값 로드
       _deadzone = yaml["deadzone"].as<double>();
 
-      // yaml 파일로부터 자동반복 주기 로드
-      _autorepeat_rate = yaml["autorepeat_rate"].as<double>();
+      // // yaml 파일로부터 자동반복 주기 로드
+      // _autorepeat_rate = yaml["autorepeat_rate"].as<double>();
     }
     catch(const std::exception& e)
     {
@@ -160,16 +164,18 @@ namespace frb
       //ROS_WARN("데드존 값이 1.0 이상입니다. 0.9로 제한합니다.");
       _deadzone = 0.9;
     }
+
     if(_deadzone < 0)
     {
       //ROS_WARN("데드존 값이 음수입니다. 0으로 설정합니다.");
       _deadzone = 0;
     }
-    if(_autorepeat_rate < 0)
-    {
-      //ROS_WARN("자동반복 주기가 음수입니다. 0으로 설정합니다.");
-      _autorepeat_rate = 0;
-    }
+
+    // if(_autorepeat_rate < 0)
+    // {
+    //   //ROS_WARN("자동반복 주기가 음수입니다. 0으로 설정합니다.");
+    //   _autorepeat_rate = 0;
+    // }
     return;
   }
 
@@ -200,11 +206,11 @@ namespace frb
   * @return     bool : 연결 성공 여부
   * @note       조이스틱 장치를 비동기 모드로 열고, 연결 상태를 관리한다.
   */  
-  bool JoyStickXbox::open_joystick()
+  bool JoyStickXbox::open_discriptor()
   {
-    _joy_fd = open(_device_name.c_str(), O_RDONLY | O_NONBLOCK);
+    _file_discriptor = open(_device_name.c_str(), O_RDONLY | O_NONBLOCK);
     
-    if(_joy_fd == -1)
+    if(_file_discriptor == -1)
     {
       if(_connected)
       {
@@ -217,7 +223,7 @@ namespace frb
     if(!_connected)
     {
       ROS_INFO("조이스틱이 연결되었습니다: %s", _device_name.c_str());
-      ROS_INFO("설정: 데드존=%f, 자동반복률=%fHz", _deadzone, _autorepeat_rate);
+      //ROS_INFO("설정: 데드존=%f, 자동반복률=%fHz", _deadzone, _autorepeat_rate);
       _connected = true;
     }
     return true;
@@ -230,39 +236,39 @@ namespace frb
   * @note       별도의 thread에서 실행되며, 조이스틱 이벤트를 지속적으로 감지하고 처리한다.
   * @attention  EAGAIN 과 EWOULDBLOCK message가 동일한 system도 있고 아닌 경우도 있다.
   */  
-  void JoyStickXbox::joystick_event_loop()
+  void JoyStickXbox::read_file_discriptor()
   {
     //while(_should_run && ros::ok())
     // while(ros::ok())
     // {
-      if(_joy_fd < 0 && !open_joystick())
+      if(_file_discriptor < 0 && !open_discriptor())
       {
         ros::Duration(1.0).sleep();
         return;
       }
 
       js_event event;
-      int bytes = read(_joy_fd, &event, sizeof(event));
+      int bytes = read(_file_discriptor, &event, sizeof(event));
 
       if(bytes == sizeof(event))
       {
-        process_joystick_event(event);
+        joystick_event(event);
       }
       else if(bytes == -1)
       {
         switch(errno)
         {
-        case EAGAIN:                                                                break;
-        case EIO:     ROS_ERROR("Joystick IO Error");            close_joystick();  break;
-        case EBADF:   ROS_ERROR("Joystick Bad File Descriptor"); close_joystick();  break;
-        case EINVAL:  ROS_ERROR("Joystick Invalid Argument");    close_joystick();  break;
-        default:      ROS_ERROR("Joystick Unknown Error");       close_joystick();  break;
+        case EAGAIN:                                                       break;
+        case EIO:     ROS_ERROR("Joystick IO Error");            close_discriptor();  break;
+        case EBADF:   ROS_ERROR("Joystick Bad File Descriptor"); close_discriptor();  break;
+        case EINVAL:  ROS_ERROR("Joystick Invalid Argument");    close_discriptor();  break;
+        default:      ROS_ERROR("Joystick Unknown Error");       close_discriptor();  break;
         }
       }
       else
       {
         ROS_WARN("조이스틱 이벤트 Read Fail : %d", bytes);
-        close_joystick();
+        close_discriptor();
       }
       std::this_thread::sleep_for(std::chrono::milliseconds(1));
     //}
@@ -274,13 +280,13 @@ namespace frb
   * @return     void
   * @note       
   */
-  void JoyStickXbox::close_joystick()
+  void JoyStickXbox::close_discriptor()
   {
-    if(_joy_fd < 0)   return;
+    if(_file_discriptor < 0)   return;
 
-    close(_joy_fd);
+    close(_file_discriptor);
 
-    _joy_fd       = -1;
+    _file_discriptor    = -1;
     _connected = false;
 
     return;
@@ -292,15 +298,15 @@ namespace frb
   * @return     void
   * @note       버튼 또는 축 이벤트를 구분하여 적절한 처리 함수로 전달
   */
-  void JoyStickXbox::process_joystick_event(const js_event& event)
+  void JoyStickXbox::joystick_event(const js_event& event)
   {
     if(event.type & JS_EVENT_BUTTON)
     {
-      process_button_event(event);
+      button_event(event);
     }
     else if(event.type & JS_EVENT_AXIS)
     {
-      process_axis_event(event);
+      axis_event(event);
     }
   }
 
@@ -312,14 +318,14 @@ namespace frb
   *             버튼 배열의 크기가 이벤트 번호보다 작을 경우 확장한다.
   *             어떤 조이스틱이냐에 따라서 버튼 갯수는 제각각인데 이를 고려.
   */
-  void JoyStickXbox::process_button_event(const js_event& event)
+  void JoyStickXbox::button_event(const js_event& event)
   {
-    if(event.number >= _joystick_msg.buttons.size())
+    if(event.number >= _msg.buttons.size())
     {
-      _joystick_msg.buttons.resize(event.number + 1, 0);
+      _msg.buttons.resize(event.number + 1, 0);
     }
 
-    _joystick_msg.buttons[event.number] = event.value;
+    _msg.buttons[event.number] = event.value;
   }
 
   /**
@@ -336,13 +342,13 @@ namespace frb
   * @return     void
   * @note       축값을 업데이트하고 데드존을 적용, 필요한 경우 축 배열을 확장
   */
-  void JoyStickXbox::process_axis_event(const js_event& event)
+  void JoyStickXbox::axis_event(const js_event& event)
   {
-    if(event.number >= _joystick_msg.axes.size())
+    if(event.number >= _msg.axes.size())
     {
-      _joystick_msg.axes.resize(event.number + 1, 0);
+      _msg.axes.resize(event.number + 1, 0);
     }
-    _joystick_msg.axes[event.number] = apply_deadzone(event.value);
+    _msg.axes[event.number] = apply_deadzone(event.value);
   }
 
   /**
@@ -355,8 +361,8 @@ namespace frb
   // {
   //   if(!_connected)    return;
     
-  //   _joystick_msg.header.stamp = ros::Time::now();
-  //   _publish_joystick.publish(_joystick_msg);
+  //   _msg.header.stamp = ros::Time::now();
+  //   _publish_joystick.publish(_msg);
 
   //   return;
   // }
@@ -364,8 +370,8 @@ namespace frb
   {
     if(!_connected)    return;
 
-    _joystick_msg.header.stamp = ros::Time::now();
-    _publish_joystick.publish(_joystick_msg);
+    _msg.header.stamp = ros::Time::now();
+    _publish_joystick.publish(_msg);
     return;
   }          
 

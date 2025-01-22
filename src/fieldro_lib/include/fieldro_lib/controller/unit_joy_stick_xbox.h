@@ -23,7 +23,7 @@ namespace frb
     virtual ~JoyStickXbox();
 
 //    void start();                       // 조이스틱 노드 실행 시작            
-    void stop();                        // 조이스틱 노드 실행 종료         
+//    void stop();                        // 조이스틱 노드 실행 종료         
 
   protected:
     virtual void update();              // object main loop
@@ -39,25 +39,29 @@ namespace frb
     std::string _device_name;           // 조이스틱 디바이스 Name(경로) (예: /dev/input/js0)
     bool _connected;                 // 조이스틱 연결 상태 플래그
     double _deadzone;                   // 데드존 값 (0.0 ~ 1.0)
-    double _autorepeat_rate;            // 상태 발행 주기 (Hz)
-    sensor_msgs::Joy _joystick_msg;          // 발행할 Joy 메시지
+    //double _autorepeat_rate;            // 상태 발행 주기 (Hz)
+    sensor_msgs::Joy _msg;            // 발행할 JoyStick 메시지
 
     //std::thread _joystick_thread;       // 조이스틱 이벤트 처리 쓰레드
     //bool _should_run;                   // 쓰레드 실행 제어 플래그
-    int _joy_fd;                        // 조이스틱 파일 디스크립터
+    //int _joy_fd;                        // 조이스틱 파일 디스크립터
+    int _file_discriptor;               // 조이스틱 파일 디스크립터
 
   protected:
     //void load_parameters();
     void validate_parameters();
     double apply_deadzone(double value);
-    void close_joystick();
 
-    bool open_joystick();
-    void joystick_event_loop();
+    bool open_discriptor();
+    void read_file_discriptor();
+    void close_discriptor();
 
-    void process_joystick_event(const js_event& event);
-    void process_button_event(const js_event& event);
-    void process_axis_event(const js_event& event);
+    //void event_process();
+    
+    void joystick_event(const js_event& event);
+    void button_event(const js_event& event);
+    void axis_event(const js_event& event);
+
     //void publish_timer_callback(const ros::TimerEvent&);
     void publish_joystick_msg();
   };

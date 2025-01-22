@@ -10,11 +10,15 @@
 
 . joypad를 이용한 주행 명령 node 추가
 
-. JoyStickXbox Class 주석 제거
-. JoyStickXbox Class Refactoring 검토
+. JoyStickXbox Class 주석된 함수 제거
+. JoyStickXbox Class 주석된 변수 제거
 
 
-ID [  ] : 2025-01-20
+ID [  ] : 2025-01-22
+1. JoyStickXbox::_autorepeat_rate 변수 삭제 (Main Thread와 같은 속도로 동작)
+2. JoyStickXbox Class Refactoring 검토
+
+ID [ dcb9152 ] : 2025-01-20
 1. JoyStickXbox 상속 구조 만족하도록 수정
   - validate_parameters() 반복 확인
   - unit 상속에 따른 config file 추가
