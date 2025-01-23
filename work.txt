@@ -10,11 +10,12 @@
 
 . joypad를 이용한 주행 명령 node 추가
 
-. JoyStickXbox Class 주석된 함수 제거
-. JoyStickXbox Class 주석된 변수 제거
-
-
 ID [  ] : 2025-01-23
+1. JoyStickXbox Class 주석된 함수 제거
+2. JoyStickXbox Class 주석된 변수 제거
+
+
+ID [ 4f0ba2c ] : 2025-01-23
 1. _connected 변수와 _file_discriptor 변수 통합
    연결상태 체크를 _file_discriptor로 체크 
 
