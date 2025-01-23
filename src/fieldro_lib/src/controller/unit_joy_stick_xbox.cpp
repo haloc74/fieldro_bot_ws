@@ -11,7 +11,7 @@ namespace frb
   JoyStickXbox::JoyStickXbox(std::string config_file, std::string session) 
           : Unit(config_file, session)
   {
-    _connected    = false;
+    //_connected    = false;
   //  _should_run   = false;
     _file_discriptor       = -1;         // 파일 디스크립터 : 장치가 열리지 않는 상태로 초기화
 
@@ -20,7 +20,7 @@ namespace frb
     //load_parameters();           // 파라미터 로드
     validate_parameters();       // 파라미터 유효성 검사
 
-    _publish_joystick = _node_handler.advertise<sensor_msgs::Joy>("joy", 1);
+    _publish_joystick = _node_handle->advertise<sensor_msgs::Joy>("joy", 1);
 
 //    _should_run = true;
     _update_thread  = new ThreadActionInfo(config_file, "main");
@@ -36,9 +36,6 @@ namespace frb
   {
     //stop();
     close_discriptor();
-
-    _update_thread->_active = false;
-    safe_delete(_update_thread);
   }
 
   void JoyStickXbox::update()
@@ -208,24 +205,25 @@ namespace frb
   */  
   bool JoyStickXbox::open_discriptor()
   {
+    if(_file_discriptor >= 0)   return true;
+
     _file_discriptor = open(_device_name.c_str(), O_RDONLY | O_NONBLOCK);
     
     if(_file_discriptor == -1)
     {
-      if(_connected)
-      {
-        ROS_ERROR("조이스틱 연결이 끊어졌습니다: %s", _device_name.c_str());
-        _connected = false;
-      }
+      ROS_ERROR("조이스틱 연결 실패: %s", _device_name.c_str());
       return false;
     }
 
-    if(!_connected)
-    {
-      ROS_INFO("조이스틱이 연결되었습니다: %s", _device_name.c_str());
-      //ROS_INFO("설정: 데드존=%f, 자동반복률=%fHz", _deadzone, _autorepeat_rate);
-      _connected = true;
-    }
+    // if(!_connected)
+    // {
+    //   ROS_INFO("조이스틱이 연결되었습니다: %s", _device_name.c_str());
+    //   //ROS_INFO("설정: 데드존=%f, 자동반복률=%fHz", _deadzone, _autorepeat_rate);
+    //   _connected = true;
+    // }
+
+    ROS_INFO("조이스틱이 연결되었습니다: %s", _device_name.c_str());
+
     return true;
   }  
 
@@ -241,11 +239,13 @@ namespace frb
     //while(_should_run && ros::ok())
     // while(ros::ok())
     // {
-      if(_file_discriptor < 0 && !open_discriptor())
-      {
-        ros::Duration(1.0).sleep();
-        return;
-      }
+      // if(_file_discriptor < 0 && !open_discriptor())
+      // {
+      //   //ros::Duration(1.0).sleep();
+      //   return;
+      // }
+
+      if(!open_discriptor())        return;
 
       js_event event;
       int bytes = read(_file_discriptor, &event, sizeof(event));
@@ -286,8 +286,8 @@ namespace frb
 
     close(_file_discriptor);
 
-    _file_discriptor    = -1;
-    _connected = false;
+    _file_discriptor = -1;
+    //_connected = false;
 
     return;
   }
@@ -368,7 +368,8 @@ namespace frb
   // }
   void JoyStickXbox::publish_joystick_msg()
   {
-    if(!_connected)    return;
+    //if(!_connected)    return;
+    if(_file_discriptor < 0)    return;
 
     _msg.header.stamp = ros::Time::now();
     _publish_joystick.publish(_msg);

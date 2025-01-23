@@ -14,7 +14,12 @@
 . JoyStickXbox Class 주석된 변수 제거
 
 
-ID [  ] : 2025-01-22
+ID [  ] : 2025-01-23
+1. _connected 변수와 _file_discriptor 변수 통합
+   연결상태 체크를 _file_discriptor로 체크 
+
+
+ID [ e44c386 ] : 2025-01-22
 1. JoyStickXbox::_autorepeat_rate 변수 삭제 (Main Thread와 같은 속도로 동작)
 2. JoyStickXbox Class Refactoring 검토
 
