@@ -25,6 +25,7 @@ namespace frb
     Signal,           // wago
     Lift,           // lift
     Driving,          // 주행
+    JoyStick,         // 조이스틱
 
     End,
   };
@@ -44,6 +45,7 @@ namespace frb
       case UnitName::Signal:    return "Signal";
       case UnitName::Lift:    return "Lift";
       case UnitName::Driving:   return "Driving";
+      case UnitName::JoyStick:  return "JoyStick";
       // case UnitName::HandlerFork:return "HandlerFork";
       case UnitName::End:       return "End";
     }
@@ -65,6 +67,7 @@ namespace frb
     if(str == "Signal")     return UnitName::Signal;
     if(str == "Lift")     return UnitName::Lift;
     if(str == "Driving")    return UnitName::Driving;
+    if(str == "JoyStick")   return UnitName::JoyStick;
     
     if(str == "End")        return UnitName::End;
 

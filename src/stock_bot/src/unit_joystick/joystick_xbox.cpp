@@ -1,6 +1,7 @@
 
-#include <fieldro_lib/controller/unit_joy_stick_xbox.h>
+//#include <fieldro_lib/controller/unit_joy_stick_xbox.h>
 #include <fieldro_lib/helper/helper.h>
+#include "unit_joystick/joystick_xbox.h"
  
 namespace frb
 {
@@ -17,7 +18,7 @@ namespace frb
     validate_parameters();        // 파라미터 유효성 검사
 
     // joystick msg publisher 생성
-    _publish_joystick = _node_handle->advertise<sensor_msgs::Joy>("joy", 1);
+    _publish_joystick = _node_handle->advertise<sensor_msgs::Joy>("trash_bot/joy", 1);
 
     // main thread 생성
     _update_thread  = new ThreadActionInfo(config_file, "main");
@@ -94,10 +95,10 @@ namespace frb
       yaml_file.close();
 
       // yaml 파일로부터 조이스틱 디바이스 이름 로드
-      _device_name = yaml["device"].as<std::string>();
+      _device_name = yaml["main"]["device"].as<std::string>();
 
       // yaml 파일로부터 데드존 값 로드
-      _deadzone = yaml["deadzone"].as<double>();
+      _deadzone = yaml["main"]["deadzone"].as<double>();
     }
     catch(const std::exception& e)
     {

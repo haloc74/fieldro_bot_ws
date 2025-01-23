@@ -356,6 +356,45 @@ message(STATUS "${PROJECT_NAME} : Step 05.node build")
   ############################################################    
 
 
+  ############################################################
+  ## 5-6. joystick node 실행파일 설정
+  message(STATUS "${PROJECT_NAME} : Step 05-6. joystick executable build")
+    
+    ## 5-6-0. joystick node 실행파일 이름 설정
+    set(PROJECT_JOYSTICK "joystick")
+
+    ## 5-6-1. src/unit_jostick 하위의 모든 cpp 파일을 찾아서 SRC_LIFT_FILES 저장
+    file(GLOB_RECURSE SRC_JOYSTICK_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/unit_joystick/*.cpp")
+
+    ## 5-6-2. SRC_JOYSTICK_FILES 모든 파일을 컴파일하고 링크하여 실행 파일 생성 하도록 설정
+    add_executable(
+      ${PROJECT_JOYSTICK}
+      ${SRC_JOYSTICK_FILES}
+      "${CMAKE_CURRENT_SOURCE_DIR}/src/_node/joystick.cpp"
+    )
+
+    ## 5-6-3. 빌드 순서를 정의 (의존성)
+    ## 뒤쪽에 있는 package가 먼저 build 된다.
+    ## ${catkin_EXPORTED_TARGETS}->  ${${PROJECT_NAME}_EXPORTED_TARGETS}  -> ${PROJECT_NAME} 순으로 빌드
+    add_dependencies(
+      ${PROJECT_JOYSTICK}                     # 빌드 대상 (가장 최후에 빌드)
+      ${${PROJECT_NAME}_EXPORTED_TARGETS}     # package 내부의 다른 빌드 대상
+      ${catkin_EXPORTED_TARGETS}              # catkin 빌드 시스템에서 정의한 빌드 대상
+      fieldro_msgs_generate_messages_cpp
+    )
+
+    ## 5-6-4. 빌드시 필요한 Lib 링크 설정
+    target_link_libraries(
+      ${PROJECT_JOYSTICK}                 # 빌드 대상
+      ${catkin_LIBRARIES}                 # catkin 빌드 시스템에서 정의한 라이브러리
+      ${YAML_CPP_LIBRARIES}               # yaml-cpp 라이브러리
+      fieldro_lib
+      ${PACKAGE_LIB}                      # stock_bot package 자체 라이브러리
+    )
+  message(STATUS "${PROJECT_JOYSTICK} : End Step 05-6")  
+  ############################################################      
+
+
 message(STATUS "${PROJECT_NAME} : End Step 05")
 
 ##-----------------------------------------------------------------------------

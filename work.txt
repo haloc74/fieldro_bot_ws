@@ -8,9 +8,17 @@
 . stock_bot refactoring
 . trash_bot의 loader part -> lift part로 customizing
 
-. joypad를 이용한 주행 명령 node 추가
+. All Finish 명령으로 Destroy 되지 않는 노드 수정
+. stock_bot package에서 trash_bot으로 되있는 부분 수정
+. trash_bot package 압축하여 백업
+
 
 ID [  ] : 2025-01-23
+1. joypad를 이용한 주행 명령 node 추가
+2. rqt를 이용한 topic 발행 여부 체크
+
+
+ID [ 3ff55a1 ] : 2025-01-23
 1. JoyStickXbox Class 주석된 함수 제거
 2. JoyStickXbox Class 주석된 변수 제거
 

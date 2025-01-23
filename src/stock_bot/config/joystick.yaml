@@ -1,6 +1,8 @@
 main:
-  hz                    : 20 
-  spinner_count         : 1
+  hz                  : 20 
+  spinner_count       : 1
+  device              : /dev/input/js0  ## 조이스틱 디바이스 경로
+  deadzone            : 0.1            ## 조이스틱 민감도
 
 alive:
   hz                   : 20          ## heartbeat 보고 주기

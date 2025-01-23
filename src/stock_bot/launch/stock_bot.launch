@@ -1,0 +1,31 @@
+<launch>
+
+  // pkg   : 실행 파일이 있는 패키지 명
+  // tyhpe : 실행시킬 파일명
+  // name  : 실행된 process가 ros에서 어떠한 이름의 node로 표시될지 결정
+
+  // unit_observer 노드 실행
+  <node name="observer_unit" pkg="stock_bot" type="observer" output="screen" />
+    <param name="command_use" value="true"/>    
+
+  // io_signal 노드 실행
+  <node name="io_unit" pkg="stock_bot" type="io" output="screen" />
+    <param name="command_use" value="true"/>
+
+  // lift 노드 실행
+  <node name="lift_unit" pkg="stock_bot" type="lift" output="screen" />
+    <param name="command_use" value="true"/>
+
+  // droid 노드 실행
+  <node name="stock_bot" pkg="stock_bot" type="stock_bot" output="screen"/>
+    <param name="command_use" value="true"/>    
+
+  // driving 노드 실행
+  <node name="driving_unit" pkg="stock_bot" type="driving" output="screen"/>
+    <param name="command_use" value="true"/>
+
+  // joystick 노드 실행
+  <node name="joystick_unit" pkg="stock_bot" type="joystick" output="screen"/>
+    <param name="command_use" value="true"/>    
+
+</launch>

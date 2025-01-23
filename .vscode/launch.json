@@ -13,7 +13,8 @@
       "request": "launch",        
 
       // 실행 할 ros launch 경로 (package가 변경 되거나 할 때 변경 되어야 한다.)
-      "target": "${workspaceFolder}/src/trash_bot/launch/trash_bot.launch",
+      //"target": "${workspaceFolder}/src/trash_bot/launch/trash_bot.launch",
+      "target": "${workspaceFolder}/src/stock_bot/launch/stock_bot.launch",
 
       // 런치 파일을 실행 할 때 함께 실행 될 프로그램 목록
       "launch": [
