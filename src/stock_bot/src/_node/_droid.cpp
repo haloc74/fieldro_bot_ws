@@ -23,7 +23,7 @@ int main(int argc, char **argv)
   LOG->add_log(frb::to_string(frb::UnitName::System), frb::LogLevel::Info, 0, "Trash Bot Start");
 
   // carrybot 객체 생성
-  frb::Droid* droid = new frb::Droid("config/droid.yaml", "main");
+  frb::Droid* droid = new frb::Droid("stock_bot", "config/droid.yaml", "main");
 
   bool command_use = false;
   droid->get_node_handle()->getParam("command_use", command_use);

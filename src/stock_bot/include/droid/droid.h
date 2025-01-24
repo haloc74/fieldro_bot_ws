@@ -41,7 +41,7 @@ namespace frb
   class Droid : public Unit
   { 
   public:
-    Droid(std::string config_file, std::string session);  // 생성자
+    Droid(std::string msg_space, std::string config_file, std::string session);  // 생성자
     ~Droid();
     bool control(std::vector<std::string> command_list);
 

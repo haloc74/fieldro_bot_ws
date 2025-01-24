@@ -13,8 +13,8 @@
 
 namespace frb
 {
-  Wago::Wago(std::string config_file, std::string session)
-       : Unit(config_file, session) 
+  Wago::Wago(std::string msg_space, std::string config_file, std::string session)
+       : Unit(msg_space, config_file, session) 
   {
     load_option(config_file);
 
@@ -31,17 +31,17 @@ namespace frb
     
     // unit action message 수신을 위한 subscriber 생성 및 link
     _subscribe_unit_action = 
-    _node_handle->subscribe("trash_bot/unit_control", 50, &Wago::subscribe_unit_action, this);
+    _node_handle->subscribe(msg_space+"/unit_control", 50, &Wago::subscribe_unit_action, this);
 
     // unit action message 처리 결과 발송을 위한 publisher 생성 및 link
     _publish_unit_action_complete = 
-    _node_handle->advertise<fieldro_msgs::UnitActionComplete>("trash_bot/action_complete", 10);
+    _node_handle->advertise<fieldro_msgs::UnitActionComplete>(msg_space+"/action_complete", 10);
 
     // publisher 생성 및 link
     // io message는 아주 중요한 정보이므로 latch를 true로 설정하여 
     // 나중에 subscriber가 생성되는 node도 마지막(최신) 정보를 받을 수 있도록 한다.
     ros::AdvertiseOptions option = 
-      ros::AdvertiseOptions::create<fieldro_msgs::IOSignal>("trash_bot/io_signal", 20,
+      ros::AdvertiseOptions::create<fieldro_msgs::IOSignal>(msg_space+"/io_signal", 20,
                                                               ros::SubscriberStatusCallback(),
                                                               ros::SubscriberStatusCallback(),
                                                               ros::VoidPtr(),

@@ -12,7 +12,6 @@
 #include <fieldro_lib/helper/thread_action_info.h>
 #include <fieldro_lib/log/log.h>
 
-//#include "trash_bot/UnitControl.h"
 #include <fieldro_msgs/UnitControl.h>
    
 namespace frb
@@ -20,7 +19,7 @@ namespace frb
   class Unit
   {
   public:
-    Unit(std::string config_file, std::string session);		            // 생성자  
+    Unit(std::string msg_space, std::string config_file, std::string session);		            // 생성자  
     virtual ~Unit();		                                              // 소멸자
 
     ros::NodeHandle* get_node_handle();                               // 노드 핸들러 반환

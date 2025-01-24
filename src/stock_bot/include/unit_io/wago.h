@@ -23,7 +23,7 @@ namespace frb
   class Wago : public Unit
   { 
   public:
-    Wago(std::string config_file, std::string session);
+    Wago(std::string msg_space, std::string config_file, std::string session);
     virtual ~Wago();
 
   protected:

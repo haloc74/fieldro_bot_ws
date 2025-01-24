@@ -20,7 +20,7 @@ namespace frb
   class Lift : public Unit
   {
   public:
-    Lift(std::string config_file, std::string session);
+    Lift(std::string msg_space, std::string config_file, std::string session);
     virtual ~Lift();
 
   protected:

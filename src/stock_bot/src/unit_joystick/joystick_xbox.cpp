@@ -9,8 +9,8 @@ namespace frb
   * @brief      기본 설정 로드 및 초기화
   * @note       생성자가 호출된 시점에서는 조이스틱 연결을 시도하지 않는다.
   */
-  JoyStickXbox::JoyStickXbox(std::string config_file, std::string session) 
-          : Unit(config_file, session)
+  JoyStickXbox::JoyStickXbox(std::string msg_space, std::string config_file, std::string session) 
+          : Unit(msg_space, config_file, session)
   {
     _file_discriptor = -1;        // 파일 디스크립터 : 장치가 열리지 않는 상태로 초기화
 
@@ -19,10 +19,10 @@ namespace frb
 
     // unit action message 수신을 위한 subscriber 생성 및 link
     _subscribe_unit_action = 
-    _node_handle->subscribe("trash_bot/unit_control", 50, &JoyStickXbox::subscribe_unit_action, this);    
+    _node_handle->subscribe(msg_space+"/unit_control", 50, &JoyStickXbox::subscribe_unit_action, this);    
 
     // joystick msg publisher 생성
-    _publish_joystick = _node_handle->advertise<sensor_msgs::Joy>("trash_bot/joy", 1);
+    _publish_joystick = _node_handle->advertise<sensor_msgs::Joy>(msg_space+"/joy", 1);
 
     // spinn 구동 (생성은 Unit Class 담당)
     _spinner->start();

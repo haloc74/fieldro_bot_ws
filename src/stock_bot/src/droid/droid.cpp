@@ -14,8 +14,8 @@
  
 namespace frb
 {
-  Droid::Droid(std::string config_file, std::string session) 
-        : Unit(config_file, session)
+  Droid::Droid(std::string msg_space, std::string config_file, std::string session) 
+        : Unit(msg_space, config_file, session)
   {
     // 관련 옵션 로드
     load_option(config_file);
@@ -35,16 +35,16 @@ namespace frb
     _node_handle->subscribe("twinny_robot/VelControl", 100, &Droid::subscribe_velocity_control, this);
 
     _subscribe_action_complete = 
-    _node_handle->subscribe("trash_bot/action_complete", 10, &Droid::subscribe_action_complete, this);
+    _node_handle->subscribe(msg_space + "/action_complete", 10, &Droid::subscribe_action_complete, this);
 
     _subscribe_unit_state = 
-    _node_handle->subscribe("trash_bot/UnitStateMsg", 100, &Droid::subscribe_unit_state, this);
+    _node_handle->subscribe(msg_space + "/UnitStateMsg", 100, &Droid::subscribe_unit_state, this);
 
     _publish_unit_control = 
-    _node_handle->advertise<fieldro_msgs::UnitControl>("trash_bot/unit_control", 10);
+    _node_handle->advertise<fieldro_msgs::UnitControl>(msg_space + "/unit_control", 10);
 
     _publish_driving_control =
-    _node_handle->advertise<geometry_msgs::Twist>("trash_bot/driving_control", 100);    
+    _node_handle->advertise<geometry_msgs::Twist>(msg_space + "/driving_control", 100);    
 
     _control_sequence.clear();
     _pending_sequence.clear();

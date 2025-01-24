@@ -25,7 +25,7 @@ int main(int argc, char ** argv)
   LOG->add_log(frb::to_string(frb::UnitName::System), frb::LogLevel::Info, 0, "Lift Start");
 
   // node main 객체 생성
-  frb::Lift* lift = new frb::Lift("config/lift.yaml", "main");
+  frb::Lift* lift = new frb::Lift("stock_bot", "config/lift.yaml", "main");
  
   bool command_use = false;
   

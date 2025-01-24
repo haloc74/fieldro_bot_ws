@@ -14,8 +14,8 @@
 
 namespace frb
 {
-  Observer::Observer(std::string config_file, std::string session)
-           : Unit(config_file, session)
+  Observer::Observer(std::string msg_space, std::string config_file, std::string session)
+           : Unit(msg_space, config_file, session)
   {
     //_name               = frb::UnitName::Observer;     // unit 이름
     _name = frb::to_string(frb::UnitName::Observer);
@@ -43,13 +43,13 @@ namespace frb
     }
 
     // unit alive subscribing
-    _subscribe_unit_alive = _node_handle->subscribe("trash_bot/UnitAliveMsg", 100, &Observer::subscribe_unit_alive, this);
+    _subscribe_unit_alive = _node_handle->subscribe(msg_space+"/UnitAliveMsg", 100, &Observer::subscribe_unit_alive, this);
 
     // unit control message 수신을 위한 subscriber 생성 및 link
-    _subscribe_unit_action = _node_handle->subscribe("trash_bot/unit_control", 50, &Observer::subscribe_unit_action, this);    
+    _subscribe_unit_action = _node_handle->subscribe(msg_space+"/unit_control", 50, &Observer::subscribe_unit_action, this);    
 
     // unit state publishing
-    _publish_units_state = _node_handle->advertise<fieldro_msgs::UnitStateMsg>("trash_bot/UnitStateMsg", 100);
+    _publish_units_state = _node_handle->advertise<fieldro_msgs::UnitStateMsg>(msg_space+"/UnitStateMsg", 100);
 
     // spinner 구동
     _spinner->start();

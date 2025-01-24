@@ -24,7 +24,7 @@ int main(int argc, char **argv)
   LOG->add_log(frb::to_string(frb::UnitName::System), frb::LogLevel::Info, 0, "IO Signal Start");
 
   // wago 객체 생성
-  frb::Wago* wago = new frb::Wago("config/io.yaml", "wago");
+  frb::Wago* wago = new frb::Wago("stock_bot", "config/io.yaml", "wago");
  
   bool command_use = false;
   wago->get_node_handle()->getParam("command_use", command_use);

@@ -33,11 +33,11 @@
 		},
 
     {
-      "label": "Run trash_bot",
+      "label": "Run stock_bot",
       "type": "shell",
-      "command": "${workspaceFolder}/devel/lib/trash_bot/trash_bot",
+      "command": "${workspaceFolder}/devel/lib/stock_bot/stock_bot",
 			"options": {
-				"cwd": "${workspaceFolder}/devel/lib/trash_bot"
+				"cwd": "${workspaceFolder}/devel/lib/stock_bot"
 			},
       "presentation": {
         "reveal": "always",

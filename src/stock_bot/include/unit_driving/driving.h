@@ -14,7 +14,7 @@ namespace frb
   class Driving : public Unit
   {
   public:
-    Driving(std::string config_file, std::string session);
+    Driving(std::string msg_space, std::string config_file, std::string session);
     virtual ~Driving();
 
   protected:

@@ -23,7 +23,7 @@ namespace frb
   class Observer : public Unit
   {
   public:
-    Observer(std::string config_file, std::string session);		    // 생성자
+    Observer(std::string msg_space, std::string config_file, std::string session);		    // 생성자
     virtual ~Observer();		  // 소멸자
  
   protected:

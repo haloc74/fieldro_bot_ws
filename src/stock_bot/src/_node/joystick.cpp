@@ -22,7 +22,7 @@ int main(int argc, char **argv)
   LOG->add_log(frb::to_string(frb::UnitName::System), frb::LogLevel::Info, 0, "JoyStick Start");
 
   // joystick 객체 생성
-  frb::JoyStickXbox* joystick = new frb::JoyStickXbox("config/joystick.yaml", "joystick");
+  frb::JoyStickXbox* joystick = new frb::JoyStickXbox("stock_bot", "config/joystick.yaml", "joystick");
  
   bool command_use = false;
   joystick->get_node_handle()->getParam("command_use", command_use);

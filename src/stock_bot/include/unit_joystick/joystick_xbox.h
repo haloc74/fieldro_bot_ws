@@ -28,7 +28,7 @@ namespace frb
   class JoyStickXbox : public Unit
   {
   public:
-    JoyStickXbox(std::string config_file, std::string session);
+    JoyStickXbox(std::string msg_space, std::string config_file, std::string session);
     virtual ~JoyStickXbox();
 
   protected:

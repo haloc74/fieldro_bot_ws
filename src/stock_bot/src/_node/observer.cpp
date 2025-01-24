@@ -24,7 +24,7 @@ int main(int argc, char **argv)
   LOG->add_log(frb::to_string(frb::UnitName::System), frb::LogLevel::Info, 0, "UnitName Observer Start");
 
   // Observer 객체 생성
-  frb::Observer* observer = new frb::Observer("config/observer.yaml", "main");
+  frb::Observer* observer = new frb::Observer("stock_bot", "config/observer.yaml", "main");
 
   // command 사용여부 설정
   bool command_use = false;

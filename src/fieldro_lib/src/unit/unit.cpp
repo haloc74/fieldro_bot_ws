@@ -10,8 +10,10 @@
 
 namespace frb
 {
-  Unit::Unit(std::string config_file, std::string session)
+  Unit::Unit(std::string msg_space, std::string config_file, std::string session)
   {
+    std::string name;
+
     _unit_index = 2;
 
     // main option 로드
@@ -29,12 +31,14 @@ namespace frb
     _spinner = new ros::AsyncSpinner(_spinner_count);
 
     // action complete publish 생성
+    name = msg_space + "/action_complete";
     _publish_unit_action_complete =
-    _node_handle->advertise<fieldro_msgs::UnitActionComplete>("trash_bot/action_complete", 10);
+    _node_handle->advertise<fieldro_msgs::UnitActionComplete>(msg_space+"/action_complete", 10);
   
     // alive publish 생성
+    name = msg_space + "/UnitAliveMsg";
     _publish_unit_alive =
-    _node_handle->advertise<fieldro_msgs::UnitAliveMsg>("trash_bot/UnitAliveMsg", 10);
+    _node_handle->advertise<fieldro_msgs::UnitAliveMsg>(msg_space+"/UnitAliveMsg", 10);
 
     // alive thread 정보 생성
     _alive_thread = new ThreadActionInfo(config_file, "alive");

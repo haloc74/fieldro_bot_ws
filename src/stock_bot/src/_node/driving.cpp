@@ -22,7 +22,7 @@ int main(int argc, char** argv)
   LOG->add_log(frb::to_string(frb::UnitName::System), frb::LogLevel::Info, 0, "Driving Node Start");
 
   // driving 객체 생성
-  frb::Driving* driving = new frb::Driving("config/driving.yaml", "main");
+  frb::Driving* driving = new frb::Driving("stock_bot", "config/driving.yaml", "main");
 
   bool command_use = false;
   driving->get_node_handle()->getParam("command_use", command_use);
