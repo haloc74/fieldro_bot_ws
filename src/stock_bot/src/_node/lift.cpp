@@ -65,6 +65,7 @@ int main(int argc, char ** argv)
     }
     else
     {
+      LOG->add_log(frb::to_string(frb::UnitName::Lift), frb::LogLevel::Warning, 0, "not emplimented command");
     }    
   }
 

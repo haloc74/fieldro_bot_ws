@@ -17,8 +17,15 @@ namespace frb
     load_option(config_file);     // 옵션 로드
     validate_parameters();        // 파라미터 유효성 검사
 
+    // unit action message 수신을 위한 subscriber 생성 및 link
+    _subscribe_unit_action = 
+    _node_handle->subscribe("trash_bot/unit_control", 50, &JoyStickXbox::subscribe_unit_action, this);    
+
     // joystick msg publisher 생성
     _publish_joystick = _node_handle->advertise<sensor_msgs::Joy>("trash_bot/joy", 1);
+
+    // spinn 구동 (생성은 Unit Class 담당)
+    _spinner->start();
 
     // main thread 생성
     _update_thread  = new ThreadActionInfo(config_file, "main");
@@ -31,7 +38,10 @@ namespace frb
   */
   JoyStickXbox::~JoyStickXbox()
   {
-    //stop();
+    // thread 해제
+    _update_thread->_active = false;
+    safe_delete(_update_thread);
+
     close_discriptor();
   }
 

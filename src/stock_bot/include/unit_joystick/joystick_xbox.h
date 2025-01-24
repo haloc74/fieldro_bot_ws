@@ -34,6 +34,8 @@ namespace frb
   protected:
     virtual void update();                              // object main loop
     virtual void load_option(std::string config_file);  // option load 
+    virtual void subscribe_unit_action(const fieldro_msgs::UnitControl& msg);
+
     virtual void load_parameters();                     // parameter load
 
   protected:
@@ -54,7 +56,7 @@ namespace frb
     void joystick_event(const js_event& event);   // joystick event process
     void button_event(const js_event& event);     // button event 처리
     void axis_event(const js_event& event);       // axis event 처리
-
+     
     bool publish_joystick_msg();                  // joystick message publish
   };
 }

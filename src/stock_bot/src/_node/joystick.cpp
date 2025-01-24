@@ -59,10 +59,7 @@ int main(int argc, char **argv)
     }
     else
     {
-      // if(!joystick->control(input))
-      // {
-      //   LOG->add_log(frb::to_string(frb::UnitName::JoyStick), frb::LogLevel::Error, 0, "command error");
-      // }      
+      LOG->add_log(frb::to_string(frb::UnitName::JoyStick), frb::LogLevel::Warning, 0, "not emplimented command");
     }    
   }
 

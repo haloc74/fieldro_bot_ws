@@ -34,16 +34,16 @@ namespace frb
 
     // unit action message 수신을 위한 subscriber 생성 및 link
     _subscribe_unit_action =
-    _node_handle->subscribe("stock_bot/unit_control", 10, &Lift::subscribe_unit_action, this);
+    _node_handle->subscribe("trash_bot/unit_control", 10, &Lift::subscribe_unit_action, this);
 
     // unit action message 처리 결과 발송을 위한 publisher 생성 및 link
     _publish_unit_action_complete =
-    _node_handle->advertise<fieldro_msgs::UnitActionComplete>("stock_bot/action_complete", 10);
+    _node_handle->advertise<fieldro_msgs::UnitActionComplete>("trash_bot/action_complete", 10);
 
     // io signal message 수신을 위한 subscriber 생성 및 link
     // fieldro_msgs::IOSignal
     _subscribe_iosignal =
-    _node_handle->subscribe("stock_bot/io_signal", 10, &Lift::subscribe_iosignal, this);
+    _node_handle->subscribe("trash_bot/io_signal", 10, &Lift::subscribe_iosignal, this);
 
     // spinn 구동 (생성은 Unit Class 담당)
     _spinner->start();
