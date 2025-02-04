@@ -32,6 +32,10 @@ namespace frb
     _subscribe_driving_control =
     _node_handle->subscribe(msg_space+"/driving_control", 100, &Driving::subscribe_driving_control, this);
 
+    // 조이스틱 subscriber 생성 및 link
+    _subscribe_joy_msg =
+    _node_handle->subscribe(msg_space+"/joy", 100, &Driving::subscribe_joy_msg, this);
+
     // 속도제어 publisher 생성 및 link
     _publish_act_velocity =
     _node_handle->advertise<geometry_msgs::Twist>("twinny_robot/ActVel", 100);
@@ -39,26 +43,26 @@ namespace frb
     _wait_actual_velocity = false;
     _prev_velocity_check_time = DBL_MAX;
 
-    for(int i = 0; i < Wheel::End; i++)
-    {
-      _drive[i] = new ZlbDrive(std::bind(&Driving::action_complete_notify, 
-                                          this, 
-                                          std::placeholders::_1,
-                                          std::placeholders::_2),
-                                std::bind(&Driving::receive_actual_velocity,
-                                          this,
-                                          std::placeholders::_1,
-                                          std::placeholders::_2),
-                                std::bind(&Unit::log_msg, 
-                                          this, 
-                                          std::placeholders::_1, 
-                                          std::placeholders::_2, 
-                                          std::placeholders::_3),
-                                config_file,
-                                i);
+    // for(int i = 0; i < Wheel::End; i++)
+    // {
+    //   _drive[i] = new ZlbDrive(std::bind(&Driving::action_complete_notify, 
+    //                                       this, 
+    //                                       std::placeholders::_1,
+    //                                       std::placeholders::_2),
+    //                             std::bind(&Driving::receive_actual_velocity,
+    //                                       this,
+    //                                       std::placeholders::_1,
+    //                                       std::placeholders::_2),
+    //                             std::bind(&Unit::log_msg, 
+    //                                       this, 
+    //                                       std::placeholders::_1, 
+    //                                       std::placeholders::_2, 
+    //                                       std::placeholders::_3),
+    //                             config_file,
+    //                             i);
 
-      _actual_velocity[i].release();
-    }
+    //   _actual_velocity[i].release();
+    // }
 
     // spinn 구동 (생성은 Unit Class 담당)
     _spinner->start();

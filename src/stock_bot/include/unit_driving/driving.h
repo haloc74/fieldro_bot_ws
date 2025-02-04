@@ -6,6 +6,7 @@
 
 #include <fieldro_lib/unit/unit.h>
 #include <fieldro_lib/driving_mode/ackermann_double.h>
+#include <sensor_msgs/Joy.h>
 #include <geometry_msgs/Twist.h>
 #include "zlb_drive.h"
    
@@ -27,6 +28,9 @@ namespace frb
   protected:
     ros::Subscriber _subscribe_driving_control;                            // 주행 제어 subscriber
     void subscribe_driving_control(const geometry_msgs::Twist &twist_msg); // 주행 제어 subscribe callback
+
+    ros::Subscriber _subscribe_joy_msg;                                      // 조이스틱 subscriber
+    void subscribe_joy_msg(const sensor_msgs::Joy& joy_msg);                // 조이스틱 subscribe callback
 
     ros::Publisher _publish_act_velocity;                                   // 실제 속도 및 좌표 publisher
     void publish_act_velocity(geometry_msgs::Twist twist);                  // 실제 속도 및 좌표 publish 함수

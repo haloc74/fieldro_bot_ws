@@ -1,4 +1,3 @@
-
 //#include <fieldro_lib/controller/unit_joy_stick_xbox.h>
 #include <fieldro_lib/helper/helper.h>
 #include "unit_joystick/joystick_xbox.h"
@@ -23,6 +22,7 @@ namespace frb
 
     // joystick msg publisher 생성
     _publish_joystick = _node_handle->advertise<sensor_msgs::Joy>(msg_space+"/joy", 1);
+    _msg.header.frame_id = "joy";
 
     // spinn 구동 (생성은 Unit Class 담당)
     _spinner->start();
@@ -56,7 +56,13 @@ namespace frb
     while(ros::ok() && _update_thread->_active)
     {
       // 조이스틱 이벤트 처리
-      read_file_discriptor();
+      if(!read_file_discriptor())
+      {
+        // 조이스틱 장치가 연결되지 않은 경우
+        // 1초 대기 후 재시도
+        std::this_thread::sleep_for(std::chrono::seconds(1));
+        continue;
+      }
 
       // joystick_msg 발행
       publish_joystick_msg();
@@ -101,6 +107,11 @@ namespace frb
     {
       // file open
       std::ifstream yaml_file(config_file);
+      if (!yaml_file.is_open())
+      {
+        throw std::runtime_error("Failed to open config file: " + config_file);
+      }
+
       YAML::Node yaml = YAML::Load(yaml_file);
       yaml_file.close();
 
@@ -113,6 +124,7 @@ namespace frb
     catch(const std::exception& e)
     {
       ROS_ERROR("JoyStickXbox::load_option() : %s", e.what());
+      throw; // Re-throw the exception to be handled by the caller if necessary
     }
   }
 
@@ -183,9 +195,9 @@ namespace frb
   * @note       main thread에서 호출 되며 매 호출시 마다 조이스틱 이벤트를 지속적으로 감지하고 처리.
   * @attention  EAGAIN 과 EWOULDBLOCK message가 동일한 system도 있고 아닌 경우도 있다.
   */  
-  void JoyStickXbox::read_file_discriptor()
+  bool JoyStickXbox::read_file_discriptor()
   {
-    if(!open_discriptor())        return;
+    if(!open_discriptor())        return false;
 
     js_event event;
 
@@ -205,12 +217,16 @@ namespace frb
       case EINVAL:  ROS_ERROR("Joystick Invalid Argument");    close_discriptor();  break;
       default:      ROS_ERROR("Joystick Unknown Error");       close_discriptor();  break;
       }
+      return false;
     }
     else
     {
       ROS_WARN("조이스틱 이벤트 Read Fail : %d", bytes);
       close_discriptor();
+      return false;
     }
+
+    return true;
   }
 
   /**
@@ -260,7 +276,6 @@ namespace frb
     {
       _msg.buttons.resize(event.number + 1, 0);
     }
-
     _msg.buttons[event.number] = event.value;
   }
 
@@ -282,7 +297,7 @@ namespace frb
   {
     if(event.number >= _msg.axes.size())
     {
-      _msg.axes.resize(event.number + 1, 0);
+      _msg.axes.resize(event.number+1, 0);
     }
     _msg.axes[event.number] = apply_deadzone(event.value);
   }
@@ -296,6 +311,7 @@ namespace frb
   bool JoyStickXbox::publish_joystick_msg()
   {
     if(_file_discriptor < 0)    return false;
+    if(_msg.axes.size() < 8 || _msg.buttons.size() < 13)    return false;
 
     _msg.header.stamp = ros::Time::now();
     _publish_joystick.publish(_msg);

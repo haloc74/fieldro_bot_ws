@@ -50,7 +50,7 @@ namespace frb
     double  apply_deadzone(double value);         // stick deadzone 적용
 
     bool open_discriptor();                       // open joystick file discriptor
-    void read_file_discriptor();                  // read joystick file discriptor                
+    bool read_file_discriptor();                  // read joystick file discriptor                
     void close_discriptor();                      // close joystick file discriptor         
 
     void joystick_event(const js_event& event);   // joystick event process

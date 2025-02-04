@@ -5,6 +5,10 @@ main:
 alive:
   hz                   : 20          ## heartbeat 보고 주기
 
+motor:
+  wheel_base           : 50         ## wheel base
+  track_width          : 50         ## track width
+
 FrontLeft:
   hz          : 50                    ## motor thread 동작 속도 
   comm_type   : "Modbus485"           ## 통신 방식 (ModbusTCP, RTU(232, 485))
