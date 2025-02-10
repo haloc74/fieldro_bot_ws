@@ -40,6 +40,9 @@ namespace frb
     _subscribe_unit_state = 
     _node_handle->subscribe(msg_space + "/UnitStateMsg", 100, &Droid::subscribe_unit_state, this);
 
+    _subscribe_joystick =
+    _node_handle->subscribe(msg_space + "/joy", 20, &Droid::subscribe_joystick, this);
+
     _publish_unit_control = 
     _node_handle->advertise<fieldro_msgs::UnitControl>(msg_space + "/unit_control", 10);
 
@@ -193,6 +196,8 @@ namespace frb
 
       // 여러개의 object처리 할 필요가 있어 session_name으로 구분한다.
       //_alive_publish_interval = yaml["main"]["alive_publish_interval"].as<int32_t>();
+
+      joystick_control = yaml["main"]["joystick_control"].as<int32_t>();
     }
     catch(YAML::Exception& e)
     {

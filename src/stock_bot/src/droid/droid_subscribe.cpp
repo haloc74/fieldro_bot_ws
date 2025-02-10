@@ -132,4 +132,47 @@ namespace frb
     
     return;
   }  
+
+  /**
+  * @brief      조이스틱 message를 수신하는 callback 함수
+  * @param[in]  const sensor_msgs::Joy &joy_msg : 조이스틱 message
+  * @return     void
+  * @note       주행, lift control, emo 등의 메세지로 분리해야 한다.
+  * @attention  
+  */
+  void Droid::subscribe_joystick(const sensor_msgs::Joy &joy_msg)
+  {
+    if(joystick_control == 0)    return; 
+
+    system("clear");
+
+    // todo : 조이스틱 제어에 대한 처리
+    std::cout << "JoyStick 0: " << joy_msg.axes[0] << std::endl;
+    std::cout << "JoyStick 1: " << joy_msg.axes[1] << std::endl;
+    std::cout << "JoyStick 2: " << joy_msg.axes[2] << std::endl;
+    std::cout << "JoyStick 3: " << joy_msg.axes[3] << std::endl;
+    std::cout << "JoyStick 4: " << joy_msg.axes[4] << std::endl;
+    std::cout << "JoyStick 5: " << joy_msg.axes[5] << std::endl;
+    std::cout << "JoyStick 6: " << joy_msg.axes[6] << std::endl;
+    std::cout << "JoyStick 7: " << joy_msg.axes[7] << std::endl;    
+
+    std::cout << "JoyButton 0: " << joy_msg.buttons[0] << std::endl;
+    std::cout << "JoyButton 1: " << joy_msg.buttons[1] << std::endl;
+    std::cout << "JoyButton 2: " << joy_msg.buttons[2] << std::endl;
+    std::cout << "JoyButton 3: " << joy_msg.buttons[3] << std::endl;
+    std::cout << "JoyButton 4: " << joy_msg.buttons[4] << std::endl;
+    std::cout << "JoyButton 5: " << joy_msg.buttons[5] << std::endl;
+    std::cout << "JoyButton 6: " << joy_msg.buttons[6] << std::endl;
+    std::cout << "JoyButton 7: " << joy_msg.buttons[7] << std::endl;
+    std::cout << "JoyButton 8: " << joy_msg.buttons[8] << std::endl;
+    std::cout << "JoyButton 9: " << joy_msg.buttons[9] << std::endl;
+    std::cout << "JoyButton 10: " << joy_msg.buttons[10] << std::endl;
+    std::cout << "JoyButton 11: " << joy_msg.buttons[11] << std::endl;
+    std::cout << "JoyButton 12: " << joy_msg.buttons[12] << std::endl;
+    std::cout << "JoyButton 13: " << joy_msg.buttons[13] << std::endl;
+
+    std::cout << " : " << std::endl;    
+
+    return;
+  }
 }

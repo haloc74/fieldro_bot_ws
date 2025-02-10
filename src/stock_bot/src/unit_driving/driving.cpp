@@ -32,9 +32,9 @@ namespace frb
     _subscribe_driving_control =
     _node_handle->subscribe(msg_space+"/driving_control", 100, &Driving::subscribe_driving_control, this);
 
-    // 조이스틱 subscriber 생성 및 link
-    _subscribe_joy_msg =
-    _node_handle->subscribe(msg_space+"/joy", 100, &Driving::subscribe_joy_msg, this);
+    // // 조이스틱 subscriber 생성 및 link
+    // _subscribe_joy_msg =
+    // _node_handle->subscribe(msg_space+"/joy", 100, &Driving::subscribe_joy_msg, this);
 
     // 속도제어 publisher 생성 및 link
     _publish_act_velocity =

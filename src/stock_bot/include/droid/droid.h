@@ -6,6 +6,7 @@
 #include <tuple>
 
 #include "ros/ros.h"
+#include <sensor_msgs/Joy.h>
 #include "geometry_msgs/Twist.h"
 #include "twinny_msgs/BatteryReport.h"
 #include "twinny_msgs/SwitchReport.h"
@@ -57,11 +58,13 @@ namespace frb
     ros::Subscriber     _subscribe_velocity_control;  // 속도 제어를 받기 위한 subscriber  
     ros::Subscriber     _subscribe_unit_state;        // unit state를 받기 위한 subscriber
     ros::Subscriber     _subscribe_action_complete;   // 각 Unit의 동작 완료 상태를 받기 위한 subscriber
+    ros::Subscriber     _subscribe_joystick;          // 조이스틱 제어를 받기 위한 subscriber
 
     void subscribe_switch_report(const twinny_msgs::SwitchReport Switch_Check);    
     void subscribe_velocity_control(const geometry_msgs::Twist &twist_msg);
     void subscribe_action_complete(const fieldro_msgs::UnitActionComplete &action_complete_msg);
     void subscribe_unit_state(const fieldro_msgs::UnitStateMsg &msg);
+    void subscribe_joystick(const sensor_msgs::Joy &joy_msg);
 
 
   private:
@@ -81,6 +84,8 @@ namespace frb
     bool is_all_sequence_empty();  // 모든 sequence가 비어 있는지 확인
     void create_unit_initialize_sequence();
     //void add_sequence_with_delay(int32_t unit_name, int32_t unit_action, int32_t delay_ms);
+
+    int32_t joystick_control;
   };
 
 }

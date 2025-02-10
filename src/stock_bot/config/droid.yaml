@@ -1,9 +1,10 @@
 main:
-  hz                    : 50 
-  spinner_count         : 3
+  hz                  : 50 
+  spinner_count       : 3
+  joystick_control    : 1             ## joystick 제어 가능 여부 (0:no, 그외:ok)
 
 alive:
-  hz                   : 20          ## heartbeat 보고 주기
+  hz                  : 20            ## heartbeat 보고 주기
 
 logger:
   debug               : 1             ## debug 옵션 (0: off, 그외 : on)

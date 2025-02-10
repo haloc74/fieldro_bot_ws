@@ -9,7 +9,12 @@
 . driving 객체에서 joy_stick topic scale up or down 
 . driving 객체에서 수신된 joy message를 분해하기.
 
+
 ID [  ] : 2025-02-10
+1. droid에 joystick control 사용 변수 추가 
+2. driving class에서 joystick subscribe 하던 것 삭제
+
+ID [ ca8722a ] : 2025-02-10
 1. joystick keymap header 추가
 
 ID [ 073346d ] : 2025-02-04
