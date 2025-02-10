@@ -1,6 +1,7 @@
 //#include <fieldro_lib/controller/unit_joy_stick_xbox.h>
 #include <fieldro_lib/helper/helper.h>
 #include "unit_joystick/joystick_xbox.h"
+#include "key_map.h"
  
 namespace frb
 {
@@ -311,7 +312,10 @@ namespace frb
   bool JoyStickXbox::publish_joystick_msg()
   {
     if(_file_discriptor < 0)    return false;
-    if(_msg.axes.size() < 8 || _msg.buttons.size() < 13)    return false;
+
+    if(_msg.axes.size() < JoyKey::JoyKey_Axix_End || 
+        _msg.buttons.size() < JoyKey::JoyKey_Button_End)    
+        return false;
 
     _msg.header.stamp = ros::Time::now();
     _publish_joystick.publish(_msg);

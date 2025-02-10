@@ -1,5 +1,5 @@
 main:
-  hz                  : 10 
+  hz                  : 20 
   spinner_count       : 1
   device              : /dev/input/js0  ## 조이스틱 디바이스 경로
   deadzone            : 0.1            ## 조이스틱 민감도
