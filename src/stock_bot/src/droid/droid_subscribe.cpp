@@ -4,6 +4,7 @@
 #include <fieldro_lib/helper/helper.h>
 #include <fieldro_lib/log/log.h>
 #include "package/unit_define.h"
+#include "unit_joystick/key_map.h"
 
 namespace frb
 {
@@ -146,33 +147,60 @@ namespace frb
 
     system("clear");
 
-    // todo : 조이스틱 제어에 대한 처리
-    std::cout << "JoyStick 0: " << joy_msg.axes[0] << std::endl;
-    std::cout << "JoyStick 1: " << joy_msg.axes[1] << std::endl;
-    std::cout << "JoyStick 2: " << joy_msg.axes[2] << std::endl;
-    std::cout << "JoyStick 3: " << joy_msg.axes[3] << std::endl;
-    std::cout << "JoyStick 4: " << joy_msg.axes[4] << std::endl;
-    std::cout << "JoyStick 5: " << joy_msg.axes[5] << std::endl;
-    std::cout << "JoyStick 6: " << joy_msg.axes[6] << std::endl;
-    std::cout << "JoyStick 7: " << joy_msg.axes[7] << std::endl;    
+    if(joy_msg.buttons[JoyKey::LeftBumper] == 1 && 
+       joy_msg.buttons[JoyKey::RightBumper] == 1)
+    {
+      // todo 주행과 Lift control 모두가 눌려있다.
+      // 조작되면 안된다.
+      std::cout << "Both LeftBumper and RightBumper are pressed." << std::endl;
 
-    std::cout << "JoyButton 0: " << joy_msg.buttons[0] << std::endl;
-    std::cout << "JoyButton 1: " << joy_msg.buttons[1] << std::endl;
-    std::cout << "JoyButton 2: " << joy_msg.buttons[2] << std::endl;
-    std::cout << "JoyButton 3: " << joy_msg.buttons[3] << std::endl;
-    std::cout << "JoyButton 4: " << joy_msg.buttons[4] << std::endl;
-    std::cout << "JoyButton 5: " << joy_msg.buttons[5] << std::endl;
-    std::cout << "JoyButton 6: " << joy_msg.buttons[6] << std::endl;
-    std::cout << "JoyButton 7: " << joy_msg.buttons[7] << std::endl;
-    std::cout << "JoyButton 8: " << joy_msg.buttons[8] << std::endl;
-    std::cout << "JoyButton 9: " << joy_msg.buttons[9] << std::endl;
-    std::cout << "JoyButton 10: " << joy_msg.buttons[10] << std::endl;
-    std::cout << "JoyButton 11: " << joy_msg.buttons[11] << std::endl;
-    std::cout << "JoyButton 12: " << joy_msg.buttons[12] << std::endl;
-    std::cout << "JoyButton 13: " << joy_msg.buttons[13] << std::endl;
+      // todo : 주행 멈추기
+      // todo : Lift control 멈추기
+      return;
+    }
 
-    std::cout << " : " << std::endl;    
+    if(joy_msg.buttons[JoyKey::LeftBumper] == 1)
+    {
+      // todo : 주행 제어에 대한 처리
+      std::cout << "LeftBumper is pressed." << std::endl;
+    }
 
+    if(joy_msg.buttons[JoyKey::RightBumper] == 1)
+    {
+      // todo : Lift control 제어에 대한 처리
+      std::cout << "RightBumper is pressed." << std::endl;
+    }
+
+    std::cout << "Axes 0: " << joy_msg.axes[0] << std::endl;
+    std::cout << "Axes 1: " << joy_msg.axes[1] << std::endl;
+    std::cout << "Axes 2: " << joy_msg.axes[2] << std::endl;
+    std::cout << "Axes 3: " << joy_msg.axes[3] << std::endl;
+    std::cout << "Axes 4: " << joy_msg.axes[4] << std::endl;
+    std::cout << "Axes 5: " << joy_msg.axes[5] << std::endl;
+    std::cout << "Axes 6: " << joy_msg.axes[6] << std::endl;
+    std::cout << "Axes 7: " << joy_msg.axes[7] << std::endl;    
+
+    std::cout << "Button : " << 
+    joy_msg.buttons[0] << " , " << 
+    joy_msg.buttons[1] << " , " <<  
+    joy_msg.buttons[2] << " , " <<  
+    joy_msg.buttons[3] << " , " <<  
+    joy_msg.buttons[4] << " , " <<  
+    std::endl;
+
+    std::cout << "Button : " << 
+    joy_msg.buttons[5] << " , " << 
+    joy_msg.buttons[6] << " , " <<  
+    joy_msg.buttons[7] << " , " <<  
+    joy_msg.buttons[8] << " , " <<  
+    joy_msg.buttons[9] << " , " <<  
+    std::endl;    
+
+    std::cout << "Button : " << 
+    joy_msg.buttons[10] << " , " << 
+    joy_msg.buttons[11] << " , " <<  
+    std::endl;    
+    
     return;
   }
 }

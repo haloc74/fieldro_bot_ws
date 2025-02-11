@@ -17,6 +17,8 @@ namespace frb
     load_option(config_file);     // 옵션 로드
     validate_parameters();        // 파라미터 유효성 검사
 
+    _controller = new ManualController(std::bind(&JoyStickXbox::notify_joystick_msg, this, std::placeholders::_1));
+
     // unit action message 수신을 위한 subscriber 생성 및 link
     _subscribe_unit_action = 
     _node_handle->subscribe(msg_space+"/unit_control", 50, &JoyStickXbox::subscribe_unit_action, this);    
@@ -65,16 +67,14 @@ namespace frb
         continue;
       }
 
-      // joystick_msg 발행
-      publish_joystick_msg();
+      // joystick_msg 해석 
+      interpret_msg();
 
       // thread Hz 싱크 및 독점 방지를 위한 sleep
       std::this_thread::sleep_for(std::chrono::milliseconds(_update_thread->_sleep));
     }
   }
 
-
-  
 
   /**
   * @brief      로드된 파라미터들을 확인하고 필요한 경우 보정
@@ -309,7 +309,7 @@ namespace frb
   * @return     bool : 발행 성공 여부 
   * @note       
   */
-  bool JoyStickXbox::publish_joystick_msg()
+  bool JoyStickXbox::interpret_msg()
   {
     if(_file_discriptor < 0)    return false;
 
@@ -317,9 +317,17 @@ namespace frb
         _msg.buttons.size() < JoyKey::JoyKey_Button_End)    
         return false;
 
-    _msg.header.stamp = ros::Time::now();
-    _publish_joystick.publish(_msg);
+    //_msg.header.stamp = ros::Time::now();
+    //_publish_joystick.publish(_msg);
+
+    _controller->receive_data(_msg);
 
     return true;
-  }          
+  }
+  
+  void JoyStickXbox::notify_joystick_msg(const sensor_msgs::Joy& msg)
+  {
+    _publish_joystick.publish(msg);
+    return;
+  }
 }

@@ -5,12 +5,11 @@
 . main node에서 control_move를 통하여 회전, 진행을 처리
 . 기존 trash_bot에 있던 stock_bot내용을 stock_bot package에 신규로 구축
 
-. stock_bot refactoring
-. driving 객체에서 joy_stick topic scale up or down 
-. driving 객체에서 수신된 joy message를 분해하기.
 
+ID [  ] : 2025-02-11
+1. joy message 분해하여 safety button 눌렸을 경우에만 동작하도록 수정
 
-ID [  ] : 2025-02-10
+ID [ f66b43d ] : 2025-02-10
 1. droid에 joystick control 사용 변수 추가 
 2. driving class에서 joystick subscribe 하던 것 삭제
 

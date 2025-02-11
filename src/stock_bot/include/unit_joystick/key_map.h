@@ -23,7 +23,7 @@ namespace frb
     FaceX,
     FaceY,
     Button5,
-    LeftBunmper,     // 왼쪽   상단 Turn 버튼
+    LeftBumper,     // 왼쪽   상단 Turn 버튼
     RightBumper,     // 오른쪽 상단 Turn 버튼
     Button8,
     Button9,

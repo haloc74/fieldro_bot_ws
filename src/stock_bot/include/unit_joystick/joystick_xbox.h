@@ -8,6 +8,7 @@
 #include <unistd.h>
 #include <thread>
 #include <fieldro_lib/unit/unit.h>
+#include "manual_controller.h"
 
 // sensor_msgs/Joy.msg
 // Header header
@@ -44,6 +45,7 @@ namespace frb
     double            _deadzone;                  // 데드존 값 (0.0 ~ 1.0)
     int               _file_discriptor;           // 조이스틱 파일 디스크립터 (open된 상태면 3 이상)
     sensor_msgs::Joy  _msg;                       // 발행할 JoyStick 메시지
+    ManualController* _controller;                // 조이스틱 제어 클래스
 
   protected:
     void    validate_parameters();                // option value 유효성 확인
@@ -57,7 +59,8 @@ namespace frb
     void button_event(const js_event& event);     // button event 처리
     void axis_event(const js_event& event);       // axis event 처리
      
-    bool publish_joystick_msg();                  // joystick message publish
+    bool interpret_msg();                  // joystick message publish
+    void notify_joystick_msg(const sensor_msgs::Joy& msg);  // joystick message notify
   };
 }
  
