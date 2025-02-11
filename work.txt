@@ -5,8 +5,11 @@
 . main node에서 control_move를 통하여 회전, 진행을 처리
 . 기존 trash_bot에 있던 stock_bot내용을 stock_bot package에 신규로 구축
 
-
 ID [  ] : 2025-02-11
+1. xbox_controller.drawio 내용 update
+  - 조작 방법 설명
+
+ID [ 9c110bc ] : 2025-02-11
 1. joy message 분해하여 safety button 눌렸을 경우에만 동작하도록 수정
 
 ID [ f66b43d ] : 2025-02-10
