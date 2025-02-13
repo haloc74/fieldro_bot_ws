@@ -313,7 +313,7 @@ namespace frb
   {
     if(_file_discriptor < 0)    return false;
 
-    if(_msg.axes.size() < JoyKey::JoyKey_Axix_End || 
+    if(_msg.axes.size() < JoyKey::JoyKey_Axis_End || 
         _msg.buttons.size() < JoyKey::JoyKey_Button_End)    
         return false;
 

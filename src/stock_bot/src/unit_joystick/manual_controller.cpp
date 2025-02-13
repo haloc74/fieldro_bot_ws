@@ -7,6 +7,10 @@ namespace frb
   ManualController::ManualController(std::function<void(const sensor_msgs::Joy msg)> joystick_publish_callback)
   {
     notify_joystick_msg = joystick_publish_callback;
+
+    // button, axis 갯수 설정 : 매번 조회하는 overhead 피하기 위해서
+    _button_count = to_int(JoyButton::End);
+    _axis_count   = to_int(JoyStick::End);
   }
 
   ManualController::~ManualController() 
@@ -26,14 +30,56 @@ namespace frb
   {
     msg.header.stamp    = ros::Time::now();
     msg.header.frame_id = "joy";
-    msg.axes.resize(JoyKey::JoyKey_Axix_End, 0.0);        // 모든 축 값을 0.0으로 초기화
-    msg.buttons.resize(JoyKey::JoyKey_Button_End, 0);     // 모든 버튼값을 0.0으로 초기화
+    msg.axes.resize(_axis_count, 0.0);         // 모든 축 값을 0.0으로 초기화
+    msg.buttons.resize(_button_count, 0);       // 모든 버튼값을 0.0으로 초기화
 
     msg.axes[JoyKey::LeftTrigger] = -1.0;
     msg.axes[JoyKey::RightTrigger] = -1.0;
 
     return;
   }
+
+  /**
+  * @brief      주행 데이터 복사
+  * @param[in]  const sensor_msgs::Joy& : 수신된 Joy 메시지 (원본)
+  * @param[out] sensor_msgs::Joy&       : 복사할 Joy 메시지 (복사본)
+  * @return     void
+  * @note       
+  */
+  void ManualController::copy_driving_data(const sensor_msgs::Joy& msg, sensor_msgs::Joy& info)
+  {
+    info.axes[to_int(JoyStick::LeftVertical)] = msg.axes[to_int(JoyStick::LeftVertical)];
+    return;
+  }
+
+  /**
+  * @brief      조향 데이터 복사
+  * @param[in]  const sensor_msgs::Joy& : 수신된 Joy 메시지 (원본)
+  * @param[out] sensor_msgs::Joy&       : 복사할 Joy 메시지 (복사본)
+  * @return     void
+  * @note       
+  */
+  void ManualController::copy_streering_data(const sensor_msgs::Joy& msg, sensor_msgs::Joy& info)
+  {
+    info.buttons[to_int(JoyButton::FaceX)] = msg.buttons[to_int(JoyButton::FaceX)];
+    info.buttons[to_int(JoyButton::FaceB)] = msg.buttons[to_int(JoyButton::FaceB)];
+    return;
+  }
+
+  /**
+  * @brief      리프팅 데이터 복사
+  * @param[in]  const sensor_msgs::Joy& : 수신된 Joy 메시지 (원본)
+  * @param[out] sensor_msgs::Joy&       : 복사할 Joy 메시지 (복사본)
+  * @return     void
+  * @note       
+  */
+  void ManualController::copy_lifting_data(const sensor_msgs::Joy& msg, sensor_msgs::Joy& info)
+  {
+    info.axes[to_int(JoyStick::RightVertical)] = msg.axes[to_int(JoyStick::RightVertical)];
+    return;
+  }
+
+
 
   /**
   * @brief      수신된 Joy 메시지 처리
@@ -51,26 +97,16 @@ namespace frb
     
     switch(get_control_type(msg))
     {
-      case ManualControlType::Duplicate:        // safety button 중복
-        break;    
-      case ManualControlType::Driving:          // 주행 처리
-        info.axes[JoyKey::LeftStick_Vertical] = msg.axes[JoyKey::LeftStick_Vertical];
-        break;
-      case ManualControlType::Steering:         // Steering 처리
-        info.buttons[JoyKey::FaceX] = msg.buttons[JoyKey::FaceX];
-        info.buttons[JoyKey::FaceB] = msg.buttons[JoyKey::FaceB];
-        break;
-      case ManualControlType::Lifting:          // Lifting 처리
-        info.axes[JoyKey::RightStick_Vertical] = msg.axes[JoyKey::RightStick_Vertical];
-        break;
-      case ManualControlType::None:             // 아무런 동작이 없다.
-        break;      
-      default:        
-        break;
+      case ManualControlType::Duplicate:                                  break;    // safety button 중복
+      case ManualControlType::Driving:    copy_driving_data(msg, info);   break;    // 주행 처리
+      case ManualControlType::Steering:   copy_streering_data(msg, info); break;    // Steering 처리
+      case ManualControlType::Lifting:    copy_lifting_data(msg, info);   break;    // Lifting 처리
+      case ManualControlType::None:                                       break;    // 아무런 동작이 없다.
+      default:                                                            break;     
     }
 
     notify_joystick_msg(info);
-
+    
     return 0;
   }
 

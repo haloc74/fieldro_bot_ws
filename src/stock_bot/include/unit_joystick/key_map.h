@@ -2,6 +2,7 @@
 #pragma once
 
 #include <stdint.h>
+#include <fieldro_lib/helper/enum_template.h>
 
 namespace frb
 {
@@ -15,7 +16,7 @@ namespace frb
     LeftTrigger,
     DPad_Horizontal,
     DPad_Vertical,
-    JoyKey_Axix_End,
+    JoyKey_Axis_End,
 
     FaceA = 0,
     FaceB,
@@ -23,8 +24,8 @@ namespace frb
     FaceX,
     FaceY,
     Button5,
-    LeftBumper,     // 왼쪽   상단 Turn 버튼
-    RightBumper,     // 오른쪽 상단 Turn 버튼
+    LeftBumper,       // 왼쪽   상단 Turn 버튼
+    RightBumper,      // 오른쪽 상단 Turn 버튼
     Button8,
     Button9,
     Btn_Back,
@@ -32,20 +33,38 @@ namespace frb
     JoyKey_Button_End,
   };
 
-  // class KeyMap
-  // {
-  // public:
-  //   KeyMapping() {}
-  //   ~KeyMapping() {}
+  enum class JoyStick
+  {
+    LeftHorizontal = 0,
+    LeftVertical,
 
-  // protected:
-  //   double  _axis[JoyKey_Axix_End];
-  //   int32_t _buttons[JoyKey_Button_End];
+    RightHorizontal,
+    RightVertical,
 
-  //   void initialize();
+    RightTrigger,
+    LeftTrigger,
 
-  //   bool is_action_possible();
-    
+    DPadHorizontal,
+    DPadVertical,
 
-  // };
+    End,
+  };
+
+  enum class JoyButton
+  {
+    FaceA = 0,
+    FaceB,
+    Push2,
+    FaceX,
+    FaceY,
+    Push5,
+
+    LeftBumper,
+    RightBumper,
+    Push8,
+    Push9,    
+    Back,
+    Start,
+    End,
+  };
 }
