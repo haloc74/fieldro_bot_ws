@@ -1,13 +1,13 @@
 
-. Differancial Model로 일단 프로그래밍 하기 
-. Driving : 주행 subscribe 추가
-. Driving : act_velocity 추가
 
-. main node에서 control_move를 통하여 회전, 진행을 처리
-. 기존 trash_bot에 있던 stock_bot내용을 stock_bot package에 신규로 구축
+
+. JoyStick 객체의 관리를 어떻게 할 것인지 정해야 한다...
 
 
 ID [  ] : 2025-02-13
+1. JoyStickXbox Class Refactoring
+
+ID [ bd2d42c ] : 2025-02-13
 1. ManualController Class Refactoring 
 
 ID [ ea82012 ] : 2025-02-11

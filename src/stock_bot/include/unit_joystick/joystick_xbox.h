@@ -24,7 +24,7 @@ namespace frb
   * @note			PS3 message로 변환하지 않고 XBOX 조이스틱 메시지 그대로 발행
   *           변환이 필요 할 경우 추후 wrapper 클래스를 만들어서 사용
   * @details	
-  * @see			sensor_msgs/Joy.msg
+  * @see			sensor_msgs/Joy.msg, document/xbox controller.drawio, document/xbox controller.pptx
   */
   class JoyStickXbox : public Unit
   {
@@ -36,7 +36,6 @@ namespace frb
     virtual void update();                              // object main loop
     virtual void load_option(std::string config_file);  // option load 
     virtual void subscribe_unit_action(const fieldro_msgs::UnitControl& msg);
-
     virtual void load_parameters();                     // parameter load
 
   protected:
@@ -45,6 +44,7 @@ namespace frb
     double            _deadzone;                  // 데드존 값 (0.0 ~ 1.0)
     int               _file_discriptor;           // 조이스틱 파일 디스크립터 (open된 상태면 3 이상)
     sensor_msgs::Joy  _msg;                       // 발행할 JoyStick 메시지
+    sensor_msgs::Joy  _default_msg;               // 기본 메시지
     ManualController* _controller;                // 조이스틱 제어 클래스
 
   protected:
@@ -59,21 +59,8 @@ namespace frb
     void button_event(const js_event& event);     // button event 처리
     void axis_event(const js_event& event);       // axis event 처리
      
-    bool interpret_msg();                  // joystick message publish
-    void notify_joystick_msg(const sensor_msgs::Joy& msg);  // joystick message notify
+    bool interpret_msg();                                   // joystick message 해석
+    void publish_joystick_msg(const sensor_msgs::Joy& msg); // joystick message 발행
+    bool is_complete_msg();                                 // joystick message complete check
   };
 }
- 
-
-// int main(int argc, char **argv)
-// {
-//     ros::init(argc, argv, "simple_joy_node");
-    
-//     JoyStickXbox joystick;
-//     joystick.start();
-    
-//     ros::spin();
-    
-//     joystick.stop();
-//     return 0;
-// }    

@@ -1,4 +1,4 @@
-//#include <fieldro_lib/controller/unit_joy_stick_xbox.h>
+
 #include <fieldro_lib/helper/helper.h>
 #include "unit_joystick/joystick_xbox.h"
 #include "key_map.h"
@@ -14,10 +14,17 @@ namespace frb
   {
     _file_discriptor = -1;        // 파일 디스크립터 : 장치가 열리지 않는 상태로 초기화
 
+    // 기본 메세지 구성 (비상시 사용)
+    _default_msg.header.frame_id = "joy";
+    _default_msg.axes.resize(to_int(JoyStick::End), 0.0);         // 모든 축 값을 0.0으로 초기화
+    _default_msg.buttons.resize(to_int(JoyButton::End), 0);      // 모든 버튼값을 0.0으로 초기화
+    _default_msg.axes[JoyKey::LeftTrigger] = -1.0;
+    _default_msg.axes[JoyKey::RightTrigger] = -1.0;
+
     load_option(config_file);     // 옵션 로드
     validate_parameters();        // 파라미터 유효성 검사
 
-    _controller = new ManualController(std::bind(&JoyStickXbox::notify_joystick_msg, this, std::placeholders::_1));
+    _controller = new ManualController(std::bind(&JoyStickXbox::publish_joystick_msg, this, std::placeholders::_1));
 
     // unit action message 수신을 위한 subscriber 생성 및 link
     _subscribe_unit_action = 
@@ -67,8 +74,13 @@ namespace frb
         continue;
       }
 
-      // joystick_msg 해석 
-      interpret_msg();
+      // joystick 메세지 해석 및 발행
+      if(!interpret_msg())
+      {
+        // 메세지 해석 실패시 안전을 위해 기본 메세지 발행
+        _default_msg.header.stamp = ros::Time::now();
+        publish_joystick_msg(_default_msg);
+      }
 
       // thread Hz 싱크 및 독점 방지를 위한 sleep
       std::this_thread::sleep_for(std::chrono::milliseconds(_update_thread->_sleep));
@@ -307,27 +319,42 @@ namespace frb
   * @brief      조이스틱 메시지 발행
   * @param[in]  void
   * @return     bool : 발행 성공 여부 
-  * @note       
+  * @attention  메세지의 해석은 ManualController에게 위임
+  *             ManualController는 callback을 통해 joystick 메세지를 publish 한다.
   */
   bool JoyStickXbox::interpret_msg()
   {
     if(_file_discriptor < 0)    return false;
-
-    if(_msg.axes.size() < JoyKey::JoyKey_Axis_End || 
-        _msg.buttons.size() < JoyKey::JoyKey_Button_End)    
-        return false;
-
-    //_msg.header.stamp = ros::Time::now();
-    //_publish_joystick.publish(_msg);
+    if(!is_complete_msg())      return false;
 
     _controller->receive_data(_msg);
 
     return true;
   }
   
-  void JoyStickXbox::notify_joystick_msg(const sensor_msgs::Joy& msg)
+  /**
+  * @brief      실제 joystick 메시지 발행하는 함수
+  * @param[in]  const sensor_msgs::Joy& msg : 발행할 메시지
+  * @return     void
+  * @attention  JoyStickXbox 객체에서 직절 발행하지 않고 ManualController를 통해 발행한다.
+  */
+  void JoyStickXbox::publish_joystick_msg(const sensor_msgs::Joy& msg)
   {
     _publish_joystick.publish(msg);
     return;
+  }
+
+  /**
+  * @brief      예상되는 모든 axis와 button이 메시지에 포함되어 있는지 확인
+  * @param[in]  void
+  * @return     bool : 메시지 완성 여부
+  * @note       일부 메세지만 들어왔을 때에는 컨트롤 하지 않는다.
+  *             연결초기, 프로그램 시작 초기에는 메시지가 완성되지 않을 수 있다.
+  */
+  bool JoyStickXbox::is_complete_msg()
+  {
+    if(_msg.axes.size() < JoyKey::JoyKey_Axis_End)      return false;
+    if(_msg.buttons.size() < JoyKey::JoyKey_Button_End) return false;
+    return true;
   }
 }
