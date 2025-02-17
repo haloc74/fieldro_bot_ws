@@ -1,7 +1,8 @@
 main:
-  hz                  : 50 
-  spinner_count       : 3
-  joystick_control    : 1             ## joystick 제어 가능 여부 (0:no, 그외:ok)
+  hz                      : 50 
+  spinner_count           : 3
+  driving_mode_changeable : 0         ## 주행모드 변경 가능 여부 (0:no, 그외:ok)
+  joystick_control        : 0         ## joystick 제어 가능 여부 (0:no, 그외:ok)
 
 alive:
   hz                  : 20            ## heartbeat 보고 주기

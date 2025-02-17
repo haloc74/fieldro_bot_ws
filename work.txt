@@ -3,8 +3,30 @@
 
 . JoyStick 객체의 관리를 어떻게 할 것인지 정해야 한다...
 
+. 현재 Droid 객체에서 JoyStick 안정성 체크하던 부분을 삭제 
+  ManualController 객체가 모두 판단해서 보내준다.
 
-ID [  ] : 2025-02-13
+. 수동주행시 선속도와 각속도 조합해서 명령하기.
+
+. joystick 객체에서 현재 sensor_msg 에서 
+
+ID [  ] : 2025-02-17
+1. io_map 변경
+2. wheel 통신 포트 option 변경
+
+
+ID [ 8b71633 ] : 2025-02-14
+1. droid 객체에서 각 unit initialize 순서 정리
+2. droid : driving_mode_changeable 옵션 추가
+3. droid : joystick_control 옵션 추가
+4. io_signal에 ManualControl 신호 추가
+5. driving_mode_changeable 옵션과 joystick_control 옵션 조합하여 
+   자동, 수동주행 취사 선택 하도록 변경
+6. 수동 주행시 twinny 자동 주행 모드 데이터 무시
+7. 자동 주행시 manual 주행 모드 데이터 무시
+
+
+ID [ 8b71633 ] : 2025-02-13
 1. JoyStickXbox Class Refactoring
 
 ID [ bd2d42c ] : 2025-02-13

@@ -126,26 +126,52 @@ namespace frb
   * @return     void
   * @attention  Motor의 회전은 RPM으로 제어가 되므로 
   *             속도를 rmp으로 변환 해야 하는 작업이 필요하다.       
+  *             수동 모드 일 경우 자동제어 하면 안된다.
   */
   void Droid::subscribe_velocity_control(const geometry_msgs::Twist &twist_msg)
   {
+    if(_joystick_control == 1)            return; 
+
     publish_driving_control(twist_msg);
     
     return;
-  }  
+  }
+  
+  /**
+  * @brief      IO signal message를 수신하는 callback 함수
+  * @param[in]  const fieldro_msgs::IOSignal& msg : IO signal message
+  * @return     void
+  * @note       Droid object에서는 manual control을 위한 signal을 받아야 한다.
+  * @attention  option을 통해 주행모드 변경을 할 수없다고 하면 변경 불가능
+  */
+  void Droid::subscribe_iosignal(const fieldro_msgs::IOSignal& msg)
+  {
+    if(!_is_driving_mode_changeable)    return;
+
+    int32_t flag = (msg.signal_bit & 0x01);
+
+    if(_joystick_control != flag)
+    {
+      _joystick_control = flag;
+      log_msg(LogInfo, 0, "Driving Mode Changed : " + std::to_string(_joystick_control));
+    }
+    return;
+  }
 
   /**
   * @brief      조이스틱 message를 수신하는 callback 함수
   * @param[in]  const sensor_msgs::Joy &joy_msg : 조이스틱 message
   * @return     void
   * @note       주행, lift control, emo 등의 메세지로 분리해야 한다.
-  * @attention  
+  * @attention  옵션을 통해 수동 조작 가능 여부 판단 해야 한다.
+  *             수동 조작이 불가능하면 아무런 처리를 하지 않는다.  
   */
   void Droid::subscribe_joystick(const sensor_msgs::Joy &joy_msg)
   {
-    if(joystick_control == 0)    return; 
+    if(_is_driving_mode_changeable == 0)  return;
+    if(_joystick_control == 0)            return; 
 
-    system("clear");
+    //system("clear");
 
     if(joy_msg.buttons[JoyKey::LeftBumper] == 1 && 
        joy_msg.buttons[JoyKey::RightBumper] == 1)
@@ -170,6 +196,8 @@ namespace frb
       // todo : Lift control 제어에 대한 처리
       std::cout << "RightBumper is pressed." << std::endl;
     }
+
+    joy_msg.axes.size();
 
     std::cout << "Axes 0: " << joy_msg.axes[0] << std::endl;
     std::cout << "Axes 1: " << joy_msg.axes[1] << std::endl;

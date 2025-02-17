@@ -34,6 +34,9 @@ namespace frb
     _subscribe_velocity_control =
     _node_handle->subscribe("twinny_robot/VelControl", 100, &Droid::subscribe_velocity_control, this);
 
+    _subscribe_iosignal = 
+    _node_handle->subscribe(msg_space + "/io_signal", 10, &Droid::subscribe_iosignal, this);
+
     _subscribe_action_complete = 
     _node_handle->subscribe(msg_space + "/action_complete", 10, &Droid::subscribe_action_complete, this);
 
@@ -196,8 +199,11 @@ namespace frb
 
       // 여러개의 object처리 할 필요가 있어 session_name으로 구분한다.
       //_alive_publish_interval = yaml["main"]["alive_publish_interval"].as<int32_t>();
+      _is_driving_mode_changeable = yaml["main"]["driving_mode_changeable"].as<int32_t>();
+      _joystick_control = yaml["main"]["joystick_control"].as<int32_t>();
 
-      joystick_control = yaml["main"]["joystick_control"].as<int32_t>();
+      log_msg(LogInfo, 0, "Driving Mode : " + std::to_string(_is_driving_mode_changeable));
+      log_msg(LogInfo, 0, "Joystick Control : " + std::to_string(_joystick_control));
     }
     catch(YAML::Exception& e)
     {

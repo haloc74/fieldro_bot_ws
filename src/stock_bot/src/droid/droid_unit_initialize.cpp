@@ -6,44 +6,23 @@
 
 namespace frb
 {
- void Droid::create_unit_initialize_sequence()      
- {  
-  add_sequence(to_int(frb::UnitName::Observer), to_int(frb::UnitAction::Init));
+  /**
+  * @brief      링크 되어야 하는 유닛들의 초기화 순서를 정의한다.
+  * @param[in]  void
+  * @return     void
+  * @attention  observer, signal 두 유닛은 그 어떤 유닛보다 먼저 초기화 되어야 한다.
+  *             이후 뒤쪽으로 가면서 더 위험한 unit들을 초기화 한다.
+  */
+  void Droid::create_unit_initialize_sequence()      
+  {  
+    add_sequence(to_int(frb::UnitName::Observer), to_int(frb::UnitAction::Init));   // step 1 : observer
+    add_sequence(to_int(frb::UnitName::Signal),   to_int(frb::UnitAction::Init));   // step 2 : signal
+    //add_sequence(to_int(frb::UnitName::JoyStick), to_int(frb::UnitAction::Init));   // step 3 : manual controller
+    add_sequence(to_int(frb::UnitName::Lift),     to_int(frb::UnitAction::Init));   // step 4 : lifter
+    add_sequence(to_int(frb::UnitName::Driving),  to_int(frb::UnitAction::Init));   // step 5 : driving
 
-  add_sequence(to_int(frb::UnitName::Signal), to_int(frb::UnitAction::Init)); 
-
-  //add_sequence(to_int(frb::UnitName::Loader), to_int(frb::UnitAction::Init));
-  add_sequence(to_int(frb::UnitName::Driving), to_int(frb::UnitAction::Init));
-
-  // Loader 
-  // add_sequence(to_int(frb::UnitName::Loader), to_int(frb::UnitAction::Fall));
-  // add_sequence(to_int(frb::UnitName::Loader), to_int(frb::UnitAction::Raise));
-
-   log_msg(LogInfo, 0, "create_unit_initialize_sequence !!!");
- }
-
-  // void Droid::add_sequence_with_delay(int32_t unit_name, int32_t unit_action, int32_t delay_ms)
-  // {
-  //     std::this_thread::sleep_for(std::chrono::milliseconds(delay_ms));
-  //     add_sequence(unit_name, unit_action);
-  // }
-
-  // void Droid::create_unit_initialize_sequence()      
-  // {  
-  //   auto seq1 = std::async(std::launch::async, [this]() 
-  //   {
-  //       add_sequence_with_delay(to_int(frb::UnitName::Observer), to_int(frb::UnitAction::Init), 0);
-  //   });
-    
-  //   auto seq2 = std::async(std::launch::async, [this]() 
-  //   {
-  //       add_sequence_with_delay(to_int(frb::UnitName::Signal), to_int(frb::UnitAction::Init), 100);
-  //   });
-    
-  //   auto seq3 = std::async(std::launch::async, [this]() 
-  //   {
-  //       add_sequence_with_delay(to_int(frb::UnitName::Driving), to_int(frb::UnitAction::Init), 200);
-  //   });
-  // } 
-
+    log_msg(LogInfo, 0, "create_unit_initialize_sequence !!!");
+    return;
+  }
+  
 }

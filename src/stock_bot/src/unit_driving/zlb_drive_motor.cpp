@@ -14,11 +14,11 @@ namespace frb
   */
   void ZlbDrive::confirm_motor_connection()
   {
-    int32_t status = get_motor_status(to_int(frb::SlaveId::Traction));
-
+    int32_t traction = get_motor_status(to_int(frb::SlaveId::Traction));
+    int32_t steer = get_motor_status(to_int(frb::SlaveId::Steering));
     if(!_servo_power)
     {
-      if(frb::is_on_signal(ZlbStatus::Voltage_enable, status))
+      if(frb::is_on_signal(ZlbStatus::Voltage_enable, traction))
       {
         _servo_power = true;                // 
         setup_motor_configurations();       // motor 초기값 설정
@@ -103,6 +103,7 @@ namespace frb
       notify_log_msg(frb::LogLevel::Info, 
                       0, 
                       std::string("ZlbDrive::get_motor_status [ ") +
+                      std::to_string(_wheel_index) + 
                       std::to_string(slave_id) +
                       std::string(" ]") +
                       std::string(": motor status - ") + 

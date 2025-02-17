@@ -24,8 +24,8 @@
   <node name="driving_unit" pkg="stock_bot" type="driving" output="screen"/>
     <param name="command_use" value="true"/>
 
-  // joystick 노드 실행
+  <!-- // joystick 노드 실행
   <node name="joystick_unit" pkg="stock_bot" type="joystick" output="screen"/>
-    <param name="command_use" value="true"/>    
+    <param name="command_use" value="true"/>     -->
 
 </launch>

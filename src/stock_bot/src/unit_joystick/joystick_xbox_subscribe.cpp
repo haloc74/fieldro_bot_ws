@@ -30,6 +30,7 @@ namespace frb
       break;
 
     case frb::UnitAction::Init:
+      publish_unit_action_complete(to_int<frb::UnitAction>(action), frb::to_int(frb::Error::None));
       break;
 
     case frb::UnitAction::Finish:  

@@ -31,7 +31,9 @@ namespace frb
     _unit_alive_info.clear();
     for(int i = 0; i < static_cast<int>(frb::UnitName::End); i++)
     {
-      if(i == to_int(frb::UnitName::All) || i == to_int(frb::UnitName::Observer))
+      if(i == to_int(frb::UnitName::All) || 
+         i == to_int(frb::UnitName::Observer) ||
+         i == to_int(frb::UnitName::JoyStick))
       {
         _unit_alive_info.push_back(new AliveInfo(i, false));
       }

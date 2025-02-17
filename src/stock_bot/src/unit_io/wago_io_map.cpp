@@ -20,16 +20,16 @@ namespace frb
     int32_t index = 0; 
 
     // Loader Limit
-    index = to_int(frb::DISignal::LoaderFall);
-    _signal[index] = new SignalInfo(index, IOContactType::NC, to_string(frb::DISignal::LoaderFall));
-    index = to_int(frb::DISignal::LoaderRaise);
-    _signal[index] = new SignalInfo(index, IOContactType::NC, to_string(frb::DISignal::LoaderRaise));
+    index = to_int(frb::DISignal::LiftBottomSafe);
+    _signal[index] = new SignalInfo(index, IOContactType::NC, to_string(frb::DISignal::LiftBottomSafe));
+    index = to_int(frb::DISignal::LiftTopSafe);
+    _signal[index] = new SignalInfo(index, IOContactType::NC, to_string(frb::DISignal::LiftTopSafe));
 
-    // Gripper Limit
-    index = to_int(frb::DISignal::Gripper_Min);
-    _signal[index] = new SignalInfo(index, IOContactType::NC, to_string(frb::DISignal::Gripper_Min));
-    index = to_int(frb::DISignal::Gripper_Max);
-    _signal[index] = new SignalInfo(index, IOContactType::NC, to_string(frb::DISignal::Gripper_Max));
+    // // Gripper Limit
+    // index = to_int(frb::DISignal::Gripper_Min);
+    // _signal[index] = new SignalInfo(index, IOContactType::NC, to_string(frb::DISignal::Gripper_Min));
+    // index = to_int(frb::DISignal::Gripper_Max);
+    // _signal[index] = new SignalInfo(index, IOContactType::NC, to_string(frb::DISignal::Gripper_Max));
   }
 
   /**

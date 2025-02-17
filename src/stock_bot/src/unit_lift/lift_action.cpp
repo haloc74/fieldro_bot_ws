@@ -47,7 +47,7 @@ namespace frb
   {
     if(!is_controlable())      return;
 
-    if(is_sensor_on(DISignal::LoaderFall))
+    if(is_sensor_on(DISignal::LiftBottomSafe))
     {
       log_msg(LogInfo, 0, "fall limit sensor already on === ");
       fall_limit_sensor_on();
@@ -87,7 +87,7 @@ namespace frb
       return;
     }
 
-    if(is_sensor_on(DISignal::LoaderRaise))
+    if(is_sensor_on(DISignal::LiftTopSafe))
     {
       log_msg(LogInfo, 0, "raise limit sensor already on === ");
       raise_limit_sensor_on();

@@ -21,8 +21,8 @@ namespace frb
     // sensor data중 loader와 관련된 곳만 마스킹
     // digital_in_define.h 참조
     _sensor_data_update_mask = 0x00;
-    _sensor_data_update_mask |= (1 << (int)DISignal::LoaderFall);
-    _sensor_data_update_mask |= (1 << (int)DISignal::LoaderRaise);
+    _sensor_data_update_mask |= (1 << (int)DISignal::LiftBottomSafe);
+    _sensor_data_update_mask |= (1 << (int)DISignal::LiftTopSafe);
 
 
     //_name   = UnitName::Lift;

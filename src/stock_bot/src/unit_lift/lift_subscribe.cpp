@@ -32,6 +32,7 @@ namespace frb
       break;
 
     case frb::UnitAction::Init:
+      publish_unit_action_complete(to_int<frb::UnitAction>(action), frb::to_int(frb::Error::None));
       break;
 
     case frb::UnitAction::Fall:
@@ -75,13 +76,13 @@ namespace frb
     if(current_bits == _prev_sensor_data)   return;
 
     // 하한 limit 센서 신호 변경 + On 체크
-    if(is_sensor_update_and_on((int)DISignal::LoaderFall, current_bits))
+    if(is_sensor_update_and_on((int)DISignal::LiftBottomSafe, current_bits))
     {
       fall_limit_sensor_on();
     }
 
     // 상한 limit 센서 신호 변경 + On 체크
-    if(is_sensor_update_and_on((int)DISignal::LoaderRaise, current_bits))
+    if(is_sensor_update_and_on((int)DISignal::LiftTopSafe, current_bits))
     {
       raise_limit_sensor_on();
     }

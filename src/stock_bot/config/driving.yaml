@@ -12,7 +12,7 @@ motor:
 FrontLeft:
   hz          : 50                    ## motor thread 동작 속도 
   comm_type   : "Modbus485"           ## 통신 방식 (ModbusTCP, RTU(232, 485))
-  device      : "/dev/ttyModbus_ZLB"  ## device name
+  device      : "/dev/tty_WHEEL_FL"   ## device name
   port        : 0                     ## port number
   baud        : 115200                ## baudrate
   slave_id    : 1                     ## slave id
@@ -30,7 +30,7 @@ FrontLeft:
 FrontRight:
   hz          : 50                    ## motor thread 동작 속도 
   comm_type   : "Modbus485"           ## 통신 방식 (ModbusTCP, RTU(232, 485))
-  device      : "/dev/ttyModbus_ZLB2"  ## device name
+  device      : "/dev/tty_WHEEL_FR"   ## device name
   port        : 0                     ## port number
   baud        : 115200                ## baudrate
   slave_id    : 1                     ## slave id
@@ -48,7 +48,7 @@ FrontRight:
 RearLeft:
   hz          : 50                    ## motor thread 동작 속도 
   comm_type   : "Modbus485"           ## 통신 방식 (ModbusTCP, RTU(232, 485))
-  device      : "/dev/ttyModbus_ZLB3"  ## device name
+  device      : "/dev/tty_WHEEL_RL"   ## device name
   port        : 0                     ## port number
   baud        : 115200                ## baudrate
   slave_id    : 1                     ## slave id
@@ -66,7 +66,7 @@ RearLeft:
 RearRight:
   hz          : 50                    ## motor thread 동작 속도 
   comm_type   : "Modbus485"           ## 통신 방식 (ModbusTCP, RTU(232, 485))
-  device      : "/dev/ttyModbus_ZLB4"  ## device name
+  device      : "/dev/tty_WHEEL_RR"   ## device name
   port        : 0                     ## port number
   baud        : 115200                ## baudrate
   slave_id    : 1                     ## slave id

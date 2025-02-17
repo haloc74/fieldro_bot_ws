@@ -59,12 +59,14 @@ namespace frb
     ros::Subscriber     _subscribe_unit_state;        // unit state를 받기 위한 subscriber
     ros::Subscriber     _subscribe_action_complete;   // 각 Unit의 동작 완료 상태를 받기 위한 subscriber
     ros::Subscriber     _subscribe_joystick;          // 조이스틱 제어를 받기 위한 subscriber
-
+    ros::Subscriber     _subscribe_iosignal;          // IOSignal을 받기 위한 subscriber 
+  
     void subscribe_switch_report(const twinny_msgs::SwitchReport Switch_Check);    
     void subscribe_velocity_control(const geometry_msgs::Twist &twist_msg);
     void subscribe_action_complete(const fieldro_msgs::UnitActionComplete &action_complete_msg);
     void subscribe_unit_state(const fieldro_msgs::UnitStateMsg &msg);
     void subscribe_joystick(const sensor_msgs::Joy &joy_msg);
+    void subscribe_iosignal(const fieldro_msgs::IOSignal& msg);          // IOSignal을 받기 위한 callback 함수
 
 
   private:
@@ -85,7 +87,8 @@ namespace frb
     void create_unit_initialize_sequence();
     //void add_sequence_with_delay(int32_t unit_name, int32_t unit_action, int32_t delay_ms);
 
-    int32_t joystick_control;
+    int32_t _is_driving_mode_changeable;
+    int32_t _joystick_control;
   };
 
 }

@@ -114,17 +114,20 @@ namespace frb
 
     case frb::UnitAction::Release:
       _action = frb::UnitAction::Release;
-      _drive[Wheel::FrontLeft]->release_break();
+      //_drive[Wheel::FrontLeft]->release_break();
+      _drive[Wheel::RearLeft]->release_break();
       break;
 
     case frb::UnitAction::Move:
       _action = frb::UnitAction::Move;
-      _drive[Wheel::FrontLeft]->test_run();
+      //_drive[Wheel::FrontLeft]->test_run();
+      _drive[Wheel::RearLeft]->test_run();
       break;
 
     case frb::UnitAction::Stop:
       _action = frb::UnitAction::Stop;
-      _drive[Wheel::FrontLeft]->stop(true);
+      //_drive[Wheel::FrontLeft]->stop(true);
+      _drive[Wheel::RearLeft]->stop(true);
       break;
 
     case frb::UnitAction::Turn:
