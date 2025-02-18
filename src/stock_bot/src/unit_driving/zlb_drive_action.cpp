@@ -79,6 +79,13 @@ namespace frb
   */
   void ZlbDrive::turn(double degree)
   {
+    double minus = 1.0;
+    // if(degree < 0.0)
+    // {
+    //   minus = -1.0;
+    //   degree *= -1.0;
+    // }
+
     if(!_steer_position->is_valid_position(degree))
     {
       notify_log_msg(LogError, 0, "ZlbDrive::test_turn : invalid position");
@@ -87,7 +94,8 @@ namespace frb
     }
 
     int32_t position  = degree_to_position(degree);
-    uint32_t rpm      = convert_rpm_to_zlb_rpm(100);  
+
+    uint32_t rpm      = convert_rpm_to_zlb_rpm(100*minus);  
 
     add_packet(_slave_id[int32_t(SlaveId::Steering)], 
                ServoFD1X5::POSITION_COMMAND_REGISTER, 
@@ -114,7 +122,6 @@ namespace frb
     // todo : 1초 마다 is_steering_complete() 함수 호출 하여
     //        steering motor status 확인하여 동작이 종료 되었는지 확인
     // delay_call(1000, std::bind(&ZlbDrive::is_steering_complete, this));    
-
     return;
   }
 
@@ -195,6 +202,10 @@ namespace frb
     add_packet(_slave_id[int32_t(SlaveId::Traction)], ServoFD1X5::CONTROL_REGISTER, 
               ServoFD1X5::CONTROL_VALUES::RESET, MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER,
               to_int(frb::UnitAction::Reset));
+
+    add_packet(_slave_id[int32_t(SlaveId::Steering)], ServoFD1X5::CONTROL_REGISTER, 
+                ServoFD1X5::CONTROL_VALUES::RESET, MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER,
+                to_int(frb::UnitAction::Reset));              
 
     return;
   }

@@ -90,7 +90,7 @@ namespace frb
       }
 
       if(ret != frb::Error::None)
-      {
+      { 
         notify_log_msg(frb::LogLevel::Error, 0, "ZlbDrive::packet_process : modbus write fail");
         notify_log_msg(frb::LogLevel::Error, 0, std::string("Error Code : ") + std::to_string(to_int(ret)));
         notify_log_msg(frb::LogLevel::Error, 0, std::string("Slave ID : ") + std::to_string((*it)->_slave_id));

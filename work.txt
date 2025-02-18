@@ -8,18 +8,16 @@
 . 수동주행시 선속도와 각속도 조합해서 명령하기.
 . joystick 객체에서 현재 sensor_msg 에서 
 
-. Steering 점검
-
-
 ID [  ] : 2025-02-18
+1. Steering 점검 완료
+
+ID [ 8c86829 ] : 2025-02-18
 1. ELD2 : Homing Function 추가 
 2. Traction Wheel 4개 모두 점검 
 3. Traction coefficient 옵션 설정 : 주행방향 계수지정
 
-
 ID [ eace53a ] : 2025-02-18
 1. traction Motor Test
-
 
 ID [ 74f6bd9 ] : 2025-02-18
 1. Zlb Drive 초기화 되지 않던 버그 수정

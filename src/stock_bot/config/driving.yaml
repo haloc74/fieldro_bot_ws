@@ -1,5 +1,5 @@
 main:
-  hz                    : 50 
+  hz                    : 25 
   spinner_count         : 1
 
 alive:

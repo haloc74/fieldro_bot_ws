@@ -69,7 +69,7 @@ namespace frb
     //   _actual_velocity[i].release();
     // }
 
-    _test_wheel = Wheel::FrontRight;
+    _test_wheel = Wheel::RearLeft;
 
       _drive[_test_wheel] = new ZlbDrive(std::bind(&Driving::action_complete_notify, 
                                           this, 

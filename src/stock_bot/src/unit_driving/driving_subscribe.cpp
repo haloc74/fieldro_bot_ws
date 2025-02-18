@@ -101,6 +101,7 @@ namespace frb
 
     case frb::UnitAction::Turn:
       _action = frb::UnitAction::Turn;
+      Unit::publish_unit_action_complete(to_int(_action), to_int(frb::Error::None));
       value = std::stod(msg.command);
       _drive[_test_wheel]->test_turn(value);
       break;
@@ -109,6 +110,7 @@ namespace frb
       _action = frb::UnitAction::GetStatus;
       Unit::publish_unit_action_complete(to_int(_action), to_int(frb::Error::None));
       _drive[_test_wheel]->get_motor_status(to_int(frb::SlaveId::Traction));
+      _drive[_test_wheel]->get_motor_status(to_int(frb::SlaveId::Steering));
       action_complete_notify(-1, frb::Error::None);
       break;
     

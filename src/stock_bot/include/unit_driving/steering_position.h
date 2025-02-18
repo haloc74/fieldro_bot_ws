@@ -54,10 +54,16 @@ namespace frb
     */
     bool is_valid_position(int32_t target_position)
     {
-      if(target_position < _left_limit || target_position > _right_limit)    
+      // if(target_position < _left_limit || target_position > _right_limit)    
+      // {
+      //   return false;
+      // }
+
+      if(target_position > _left_limit || target_position < _right_limit)    
       {
         return false;
       }
+
       return true;
     }
 
