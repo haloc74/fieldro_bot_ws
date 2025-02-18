@@ -23,6 +23,7 @@ namespace frb
     void    update();
 
     frb::Error control_move(int32_t abs_pos, int16_t rpm, int32_t check_interval, int32_t timeout_millisec);
+    frb::Error control_homing(int16_t speed, int16_t acc, int16_t dec);
     frb::Error get_motor_status();
     int32_t get_motor_position();
 

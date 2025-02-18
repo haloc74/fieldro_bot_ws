@@ -184,6 +184,40 @@ namespace frb
     return frb::Error::None;
   }
 
+  frb::Error ELD2_RS7020B::control_homing(int16_t speed, int16_t acc, int16_t dec)
+  {
+    // Homing 관련 Mode Data 설정
+    uint16_t value = 0x00;
+    // data |= (1 << 0); // 0:CCW, 1:CW
+    // data |= (1 << 1); // Specific position after homing
+    // data |= (1 << 2); // Homing mode (0:Position Limit, Origin Homing)
+    // data |= (1 << 8); // Homing z-signal
+    frb::Error error = _comm->write_data_register((int)SERVO_ADDRESS::CTRL_HOMING, sizeof(value), value);
+    if(error != frb::Error::None)
+    {
+      log_msg(LogError, 0, "ELD2 : control_homing fail");
+      log_msg(LogError, 0, std::string("ELD2 : ") + modbus_strerror(errno));
+      return frb::Error::WriteFail;
+    }
+    else
+    {
+      log_msg(LogInfo, 0, "ELD2 : control_homing - speed = "+std::to_string(speed));
+    }
+
+    // 속도, 가, 감속 설정
+    uint16_t speed_value[4];
+    speed_value[0] = 100;
+    speed_value[1] = 5;
+    speed_value[2] = 10;
+    speed_value[3] = 10;
+    error = _comm->write_data_registers((int)SERVO_ADDRESS::HOMING_SPEED_HBS, sizeof(speed_value), speed_value);
+
+    // 실제 Homing 동작
+    error = _comm->write_data_register((int)SERVO_ADDRESS::CTRL_MOTION, static_cast<uint16_t>(SERVO_VALUE::HOMING));
+
+    return frb::Error::None;
+  }
+
   /**
   * @brief      motor의 현재 위치 확인
   * @param[in]  
