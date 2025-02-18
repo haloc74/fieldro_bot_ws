@@ -14,8 +14,8 @@ namespace frb
   */
   void ZlbDrive::confirm_motor_connection()
   {
-    int32_t traction = get_motor_status(to_int(frb::SlaveId::Traction));
-    int32_t steer = get_motor_status(to_int(frb::SlaveId::Steering));
+    int32_t traction  = get_motor_status(to_int(frb::SlaveId::Traction));
+    int32_t steer     = get_motor_status(to_int(frb::SlaveId::Steering));
     if(!_servo_power)
     {
       if(frb::is_on_signal(ZlbStatus::Voltage_enable, traction))
@@ -166,8 +166,10 @@ namespace frb
   *   #define RATIO_MOTOR 35      // 기어비
   *   #define RATIO_STEER 5.5
   */
-  uint32_t ZlbDrive::convert_rpm_to_zlb_rpm(uint32_t rpm)
+  uint32_t ZlbDrive::convert_rpm_to_zlb_rpm(double rpm)
   {
+    if(rpm < 0.0)  return 0;
+    
     double   exact     = (static_cast<double>(rpm) * 512.0 * ZlbMotorParams::RESOLUTION) / ZlbMotorParams::FACTOR;
     uint32_t converted = static_cast<uint32_t>(exact + 0.5);
 
@@ -180,10 +182,14 @@ namespace frb
   * @return     int32_t rpm       : 변환된 rpm 값
   * @note       
   */
-  int32_t ZlbDrive::convert_velocity_to_rpm(int32_t velocity)
+  double ZlbDrive::convert_velocity_to_rpm(double velocity)
   {
-    double   rpm = (velocity * 60.0) / (2.0 * M_PI * ZlbMotorParams::WHEEL_RAIDOUS);
+    if(velocity < 0.0)  return 0.0;
 
-    return static_cast<int32_t>(rpm);
+    //double   rpm = (velocity * 60.0) / (2.0 * M_PI * ZlbMotorParams::WHEEL_RAIDOUS);
+    double   rpm = (velocity * 60.0) / (M_PI * ZlbMotorParams::WHEEL_RAIDOUS);
+
+    return rpm;
+    //return static_cast<int32_t>(rpm);
   }        
 }

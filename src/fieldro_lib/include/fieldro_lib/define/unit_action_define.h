@@ -45,6 +45,7 @@ namespace frb
 
     GetStatus   = 0x0F10,                                // 상태 확인
     GetPosition,
+    Reset,
 
     EStop    = 0x0FF0,                                // 비상 정지 (System)
     Finish   = 0x0FF1,                                   // 종료      (System)
@@ -85,6 +86,7 @@ namespace frb
     
     {UnitAction::GetStatus,   "GetStatus"},
     {UnitAction::GetPosition, "GetPosition"},
+    {UnitAction::Reset,       "Reset"},
     
     {UnitAction::EStop,   "EStop"},
     {UnitAction::Finish,  "Finish"},

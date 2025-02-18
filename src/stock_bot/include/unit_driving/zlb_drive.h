@@ -59,6 +59,8 @@ namespace frb
     //void engage_break();                    // break on
     void release_break();                   // break off
     void request_actual_velocity(); // get actual velocity
+    void reset();
+    int32_t   get_motor_status(int32_t slave_id);     // motor 상태 확인
 
   protected:
     void update();
@@ -93,12 +95,12 @@ namespace frb
     
     void      confirm_motor_connection();             // motor 통신 연결 확인
     void      setup_motor_configurations();           // motor 초기값 설정
-    int32_t   get_motor_status(int32_t slave_id);     // motor 상태 확인
+    
     void      is_steering_complete();                 // steering motor 동작 완료 확인             
 
-    int32_t   degree_to_position(const double degree);    // degree -> position 변환    
-    uint32_t  convert_rpm_to_zlb_rpm(uint32_t rpm);       // rpm -> zlb rpm 변환
-    int32_t   convert_velocity_to_rpm(int32_t velocity);  // velocity -> rpm 변환
+    int32_t   degree_to_position(const double degree);   // degree -> position 변환    
+    uint32_t  convert_rpm_to_zlb_rpm(double rpm);        // rpm -> zlb rpm 변환
+    double   convert_velocity_to_rpm(double velocity);   // velocity -> rpm 변환
 
     void turn(double degree);                        // steering motor turn
     void run(double velocity);                       // traction motor run

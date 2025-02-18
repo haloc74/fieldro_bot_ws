@@ -129,7 +129,7 @@ namespace frb
   */
   void ZlbDrive::run(double velocity)
   {
-    uint32_t rpm = convert_velocity_to_rpm(velocity);
+    double rpm = convert_velocity_to_rpm(velocity);
 
     uint32_t zlb_rpm = convert_rpm_to_zlb_rpm(rpm);
 
@@ -179,5 +179,20 @@ namespace frb
     _encoder_tracker->reset();
 
     return;
-  }  
+  }
+  
+  /**
+  * @brief      motor reset
+  * @param[in]  void
+  * @return     void
+  * @note       
+  */
+  void ZlbDrive::reset()
+  {
+    add_packet(_slave_id[int32_t(SlaveId::Traction)], ServoFD1X5::CONTROL_REGISTER, 
+              ServoFD1X5::CONTROL_VALUES::RESET, MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER,
+              to_int(frb::UnitAction::Reset));
+
+    return;
+  }
 }

@@ -64,4 +64,9 @@ int main(int argc, char** argv)
       }
     }
   }
+
+  safe_delete(driving);
+  delete LOG;
+
+  return 0;
 }

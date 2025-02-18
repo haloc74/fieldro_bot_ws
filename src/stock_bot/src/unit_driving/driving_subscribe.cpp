@@ -114,19 +114,20 @@ namespace frb
 
     case frb::UnitAction::Release:
       _action = frb::UnitAction::Release;
-      //_drive[Wheel::FrontLeft]->release_break();
+      Unit::publish_unit_action_complete(to_int(_action), to_int(frb::Error::None));
       _drive[Wheel::RearLeft]->release_break();
       break;
 
     case frb::UnitAction::Move:
       _action = frb::UnitAction::Move;
-      //_drive[Wheel::FrontLeft]->test_run();
       _drive[Wheel::RearLeft]->test_run();
+      Unit::publish_unit_action_complete(to_int(_action), to_int(frb::Error::None));
+      
       break;
 
     case frb::UnitAction::Stop:
       _action = frb::UnitAction::Stop;
-      //_drive[Wheel::FrontLeft]->stop(true);
+      Unit::publish_unit_action_complete(to_int(_action), to_int(frb::Error::None));
       _drive[Wheel::RearLeft]->stop(true);
       break;
 
@@ -138,8 +139,15 @@ namespace frb
 
     case frb::UnitAction::GetStatus:
       _action = frb::UnitAction::GetStatus;
-      //_drive->get_motor_status();
+      Unit::publish_unit_action_complete(to_int(_action), to_int(frb::Error::None));
+      _drive[Wheel::RearLeft]->get_motor_status(to_int(frb::SlaveId::Traction));
       action_complete_notify(-1, frb::Error::None);
+      break;
+    
+    case frb::UnitAction::Reset:
+      _action = frb::UnitAction::Reset;
+      Unit::publish_unit_action_complete(to_int(_action), to_int(frb::Error::None));
+      _drive[Wheel::RearLeft]->reset();
       break;
 
     case frb::UnitAction::Finish:
