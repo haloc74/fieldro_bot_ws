@@ -36,6 +36,7 @@ namespace frb
     void publish_act_velocity(geometry_msgs::Twist twist);                  // 실제 속도 및 좌표 publish 함수
 
     ZlbDrive* _drive[Wheel::End];                                           // drive 객체
+    int32_t   _test_wheel;
 
     bool      _wait_actual_velocity;                                        // 실제 속도 대기 여부
     WheelControlValue _actual_velocity[Wheel::End];                         // 실제 속도
@@ -49,5 +50,7 @@ namespace frb
     bool has_movement(const geometry_msgs::Twist& twist_msg);    
 
     std::mutex _lock_twist;                                                 // twist lock
+
+
   };
 }

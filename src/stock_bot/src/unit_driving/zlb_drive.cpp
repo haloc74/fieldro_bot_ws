@@ -125,6 +125,9 @@ namespace frb
       YAML::Node yaml = YAML::Load(yaml_file);
       yaml_file.close();
 
+      // traction motor speed coefficient
+      _coefficient = yaml[session]["coefficient"].as<double>();
+
       _slave_id[to_int(frb::SlaveId::Traction)] = yaml[session]["traction_id"].as<int32_t>();
       _slave_id[to_int(frb::SlaveId::Steering)] = yaml[session]["steering_id"].as<int32_t>();
 

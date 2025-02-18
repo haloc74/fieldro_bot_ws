@@ -69,7 +69,9 @@ namespace frb
     //   _actual_velocity[i].release();
     // }
 
-      _drive[Wheel::RearLeft] = new ZlbDrive(std::bind(&Driving::action_complete_notify, 
+    _test_wheel = Wheel::RearRight;
+
+      _drive[_test_wheel] = new ZlbDrive(std::bind(&Driving::action_complete_notify, 
                                           this, 
                                           std::placeholders::_1,
                                           std::placeholders::_2),
@@ -83,10 +85,10 @@ namespace frb
                                           std::placeholders::_2, 
                                           std::placeholders::_3),
                                 config_file,
-                                Wheel::RearLeft);
+                                _test_wheel);
 
       // 속도 초기화.
-      _actual_velocity[Wheel::RearLeft].release();    
+      _actual_velocity[_test_wheel].release();    
 
     // spinn 구동 (생성은 Unit Class 담당)
     _spinner->start();

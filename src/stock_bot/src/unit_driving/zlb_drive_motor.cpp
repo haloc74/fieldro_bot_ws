@@ -168,7 +168,7 @@ namespace frb
   */
   uint32_t ZlbDrive::convert_rpm_to_zlb_rpm(double rpm)
   {
-    if(rpm < 0.0)  return 0;
+//    if(rpm < 0.0)  return 0;
     
     double   exact     = (static_cast<double>(rpm) * 512.0 * ZlbMotorParams::RESOLUTION) / ZlbMotorParams::FACTOR;
     uint32_t converted = static_cast<uint32_t>(exact + 0.5);
@@ -184,7 +184,7 @@ namespace frb
   */
   double ZlbDrive::convert_velocity_to_rpm(double velocity)
   {
-    if(velocity < 0.0)  return 0.0;
+//    if(velocity < 0.0)  return 0.0;
 
     //double   rpm = (velocity * 60.0) / (2.0 * M_PI * ZlbMotorParams::WHEEL_RAIDOUS);
     double   rpm = (velocity * 60.0) / (M_PI * ZlbMotorParams::WHEEL_RAIDOUS);

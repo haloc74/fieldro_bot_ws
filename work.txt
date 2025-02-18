@@ -8,9 +8,11 @@
 . 수동주행시 선속도와 각속도 조합해서 명령하기.
 . joystick 객체에서 현재 sensor_msg 에서 
 
-
-
 ID [  ] : 2025-02-18
+1. traction Motor Test
+
+
+ID [ 74f6bd9 ] : 2025-02-18
 1. Zlb Drive 초기화 되지 않던 버그 수정
    - USB 연결 이후 전원 껐다 켜야 함 그렇지 않으면 485 통신이 되지 않음
 2. Zlb Drive Reset 명령어 추가

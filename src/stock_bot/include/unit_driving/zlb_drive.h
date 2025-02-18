@@ -92,6 +92,7 @@ namespace frb
   protected:                                          // _motor
     int32_t _slave_id[to_int(frb::SlaveId::End)];     // slave id
     SteeringPosition* _steer_position;                // steering motor 위치객체
+    double    _coefficient;                 // traction motor speed coefficient
     
     void      confirm_motor_connection();             // motor 통신 연결 확인
     void      setup_motor_configurations();           // motor 초기값 설정

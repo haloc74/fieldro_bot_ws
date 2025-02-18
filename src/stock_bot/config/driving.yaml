@@ -20,6 +20,7 @@ FrontLeft:
   retry_turm  : 2                     ## 통신 연결 시도 간격
   debug       : 1                     ## debug 옵션 (0: off, 그외 : on)
 
+  coefficient : 1.0                   ## traction motor speed coefficient
   traction_id : 1                     ## traction motor id
   steering_id : 2                     ## steering motor id
 
@@ -38,6 +39,7 @@ FrontRight:
   retry_turm  : 2                     ## 통신 연결 시도 간격
   debug       : 1                     ## debug 옵션 (0: off, 그외 : on)
 
+  coefficient : 1.0                   ## traction motor speed coefficient
   traction_id : 1                     ## traction motor id
   steering_id : 2                     ## steering motor id
 
@@ -56,6 +58,7 @@ RearLeft:
   retry_turm  : 2                     ## 통신 연결 시도 간격
   debug       : 1                     ## debug 옵션 (0: off, 그외 : on)
 
+  coefficient : -1.0                  ## traction motor speed coefficient
   traction_id : 1                     ## traction motor id
   steering_id : 2                     ## steering motor id
 
@@ -74,6 +77,7 @@ RearRight:
   retry_turm  : 2                     ## 통신 연결 시도 간격
   debug       : 1                     ## debug 옵션 (0: off, 그외 : on)
 
+  coefficient : -1.0                  ## traction motor speed coefficient
   traction_id : 1                     ## traction motor id
   steering_id : 2                     ## steering motor id
 

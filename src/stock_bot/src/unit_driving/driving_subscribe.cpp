@@ -56,38 +56,6 @@ namespace frb
     return;
   }
 
-  // void Driving::subscribe_joy_msg(const sensor_msgs::Joy& joy_msg)
-  // {
-  //   std::cout << "JoyStick 0: " << joy_msg.axes[0] << std::endl;
-  //   std::cout << "JoyStick 1: " << joy_msg.axes[1] << std::endl;
-  //   std::cout << "JoyStick 2: " << joy_msg.axes[2] << std::endl;
-  //   std::cout << "JoyStick 3: " << joy_msg.axes[3] << std::endl;
-  //   std::cout << "JoyStick 4: " << joy_msg.axes[4] << std::endl;
-  //   std::cout << "JoyStick 5: " << joy_msg.axes[5] << std::endl;
-  //   std::cout << "JoyStick 6: " << joy_msg.axes[6] << std::endl;
-  //   std::cout << "JoyStick 7: " << joy_msg.axes[7] << std::endl;    
-
-  //   std::cout << "JoyButton 0: " << joy_msg.buttons[0] << std::endl;
-  //   std::cout << "JoyButton 1: " << joy_msg.buttons[1] << std::endl;
-  //   std::cout << "JoyButton 2: " << joy_msg.buttons[2] << std::endl;
-  //   std::cout << "JoyButton 3: " << joy_msg.buttons[3] << std::endl;
-  //   std::cout << "JoyButton 4: " << joy_msg.buttons[4] << std::endl;
-  //   std::cout << "JoyButton 5: " << joy_msg.buttons[5] << std::endl;
-  //   std::cout << "JoyButton 6: " << joy_msg.buttons[6] << std::endl;
-  //   std::cout << "JoyButton 7: " << joy_msg.buttons[7] << std::endl;
-  //   std::cout << "JoyButton 8: " << joy_msg.buttons[8] << std::endl;
-  //   std::cout << "JoyButton 9: " << joy_msg.buttons[9] << std::endl;
-  //   std::cout << "JoyButton 10: " << joy_msg.buttons[10] << std::endl;
-  //   std::cout << "JoyButton 11: " << joy_msg.buttons[11] << std::endl;
-  //   std::cout << "JoyButton 12: " << joy_msg.buttons[12] << std::endl;
-  //   std::cout << "JoyButton 13: " << joy_msg.buttons[13] << std::endl;
-
-  //   std::cout << " : " << std::endl;
-
-
-  //   return;
-  // }
-
   void Driving::subscribe_unit_action(const fieldro_msgs::UnitControl& msg)
   {
     frb::UnitName unit = to_enum<frb::UnitName>(msg.target_object);
@@ -115,12 +83,12 @@ namespace frb
     case frb::UnitAction::Release:
       _action = frb::UnitAction::Release;
       Unit::publish_unit_action_complete(to_int(_action), to_int(frb::Error::None));
-      _drive[Wheel::RearLeft]->release_break();
+      _drive[_test_wheel]->release_break();
       break;
 
     case frb::UnitAction::Move:
       _action = frb::UnitAction::Move;
-      _drive[Wheel::RearLeft]->test_run();
+      _drive[_test_wheel]->test_run();
       Unit::publish_unit_action_complete(to_int(_action), to_int(frb::Error::None));
       
       break;
@@ -128,26 +96,26 @@ namespace frb
     case frb::UnitAction::Stop:
       _action = frb::UnitAction::Stop;
       Unit::publish_unit_action_complete(to_int(_action), to_int(frb::Error::None));
-      _drive[Wheel::RearLeft]->stop(true);
+      _drive[_test_wheel]->stop(true);
       break;
 
     case frb::UnitAction::Turn:
       _action = frb::UnitAction::Turn;
       value = std::stod(msg.command);
-      _drive[Wheel::FrontLeft]->test_turn(value);
+      _drive[_test_wheel]->test_turn(value);
       break;
 
     case frb::UnitAction::GetStatus:
       _action = frb::UnitAction::GetStatus;
       Unit::publish_unit_action_complete(to_int(_action), to_int(frb::Error::None));
-      _drive[Wheel::RearLeft]->get_motor_status(to_int(frb::SlaveId::Traction));
+      _drive[_test_wheel]->get_motor_status(to_int(frb::SlaveId::Traction));
       action_complete_notify(-1, frb::Error::None);
       break;
     
     case frb::UnitAction::Reset:
       _action = frb::UnitAction::Reset;
       Unit::publish_unit_action_complete(to_int(_action), to_int(frb::Error::None));
-      _drive[Wheel::RearLeft]->reset();
+      _drive[_test_wheel]->reset();
       break;
 
     case frb::UnitAction::Finish:

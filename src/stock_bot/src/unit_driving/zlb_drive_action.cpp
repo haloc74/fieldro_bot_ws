@@ -129,6 +129,9 @@ namespace frb
   */
   void ZlbDrive::run(double velocity)
   {
+    // 바퀴에 해당하는 계수를 곱해준다.
+    velocity *= _coefficient;;
+
     double rpm = convert_velocity_to_rpm(velocity);
 
     uint32_t zlb_rpm = convert_rpm_to_zlb_rpm(rpm);
