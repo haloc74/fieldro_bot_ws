@@ -44,7 +44,7 @@ namespace frb
     void publish_io_signal(const int64_t signal_bit, bool update_flag);
 
     // io signal을 저장하기 위한 배열
-    SignalInfo* _signal[static_cast<int32_t>(frb::DISignal::COUNT)];
+    SignalInfo* _signal[static_cast<int32_t>(frb::DISignal::COUNT)+1];
     void create_io_map();
     void delete_io_map();
     void read_di_signal();

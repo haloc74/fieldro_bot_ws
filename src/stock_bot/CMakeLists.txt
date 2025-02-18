@@ -3,6 +3,11 @@ cmake_minimum_required(VERSION 3.0.2)
 ## 0. project(package) 정의
 project(stock_bot)
 
+# 컴파일시 모든 최적화 옵션 끄기
+if(CMAKE_BUILD_TYPE MATCHES Debug)
+    add_compile_options(-O0)  # 모든 최적화 비활성화
+    add_compile_options(-g)   # 디버그 정보 추가
+endif()
 
 message(STATUS "")
 message(STATUS "${PROJECT_NAME} : Start CMakeLists.txt")
