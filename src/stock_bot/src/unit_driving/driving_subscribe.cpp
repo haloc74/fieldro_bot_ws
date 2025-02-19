@@ -63,7 +63,12 @@ namespace frb
     if(unit != frb::UnitName::Driving && unit != frb::UnitName::All)      return;
 
     frb::UnitAction action = to_enum<frb::UnitAction>(msg.action);
-    double value = 0.0;
+
+    double value = std::numeric_limits<double>::max();
+    if(msg.command != "" && is_number(msg.command))
+    {
+      value = std::stod(msg.command);
+    }
 
     log_msg(LogInfo, 0, "UnitName Action Sub : " + to_string(unit) + " - " + to_string(action));
 
@@ -80,44 +85,62 @@ namespace frb
       _action = frb::UnitAction::None;
       break;
 
-    case frb::UnitAction::Release:
-      _action = frb::UnitAction::Release;
+    // case frb::UnitAction::Release:
+    //   _action = frb::UnitAction::Release;
+    //   Unit::publish_unit_action_complete(to_int(_action), to_int(frb::Error::None));
+    //   _drive[_test_wheel]->release_break();
+    //   break;
+
+    case frb::UnitAction::Break:
+      _action = frb::UnitAction::Break;
       Unit::publish_unit_action_complete(to_int(_action), to_int(frb::Error::None));
-      _drive[_test_wheel]->release_break();
+      //_drive[_test_wheel]->breaking(msg.command);
+      breaking(msg.command);
       break;
 
     case frb::UnitAction::Move:
       _action = frb::UnitAction::Move;
-      _drive[_test_wheel]->test_run();
       Unit::publish_unit_action_complete(to_int(_action), to_int(frb::Error::None));
-      
+      move(value);
       break;
 
     case frb::UnitAction::Stop:
       _action = frb::UnitAction::Stop;
       Unit::publish_unit_action_complete(to_int(_action), to_int(frb::Error::None));
-      _drive[_test_wheel]->stop(true);
+      //_drive[_test_wheel]->stop(true);
+      stop();
       break;
 
-    case frb::UnitAction::Turn:
-      _action = frb::UnitAction::Turn;
+    case frb::UnitAction::Steer:
+      _action = frb::UnitAction::Steer;
       Unit::publish_unit_action_complete(to_int(_action), to_int(frb::Error::None));
-      value = std::stod(msg.command);
-      _drive[_test_wheel]->test_turn(value);
+      // {
+      //   double value2 = std::numeric_limits<double>::max();
+      //   if(msg.command != "" && is_number(msg.command))
+      //   {
+      //     value2 = std::stod(msg.command);
+      //   }
+      //   steer(value2);
+      // }
+      // value = std::stod(msg.command);
+      // _drive[_test_wheel]->test_turn(value);
+      steer(value);
       break;
 
     case frb::UnitAction::GetStatus:
       _action = frb::UnitAction::GetStatus;
       Unit::publish_unit_action_complete(to_int(_action), to_int(frb::Error::None));
-      _drive[_test_wheel]->get_motor_status(to_int(frb::SlaveId::Traction));
-      _drive[_test_wheel]->get_motor_status(to_int(frb::SlaveId::Steering));
+      // _drive[_test_wheel]->get_motor_status(to_int(frb::SlaveId::Traction));
+      // _drive[_test_wheel]->get_motor_status(to_int(frb::SlaveId::Steering));
       action_complete_notify(-1, frb::Error::None);
+      get_motor_status();
       break;
     
     case frb::UnitAction::Reset:
       _action = frb::UnitAction::Reset;
       Unit::publish_unit_action_complete(to_int(_action), to_int(frb::Error::None));
-      _drive[_test_wheel]->reset();
+      reset();
+      //_drive[_test_wheel]->reset();
       break;
 
     case frb::UnitAction::Finish:
@@ -125,5 +148,64 @@ namespace frb
       ros::shutdown(); // ROS 노드 종료 추가
       break;
     }    
+  }
+
+  void Driving::move(double velocity)
+  {
+    if(velocity == std::numeric_limits<double>::max())  return;
+
+    for(int i=0; i<Wheel::End; i++)
+    {
+      _drive[i]->propulsion(velocity);
+    }
+  }
+
+  void Driving::steer(double degree)
+  {
+    if(degree == std::numeric_limits<double>::max())  return;
+
+    for(int i=0; i<Wheel::End; i++)
+    {
+      _drive[i]->steering(degree);
+    }
+  }
+
+  void Driving::stop()
+  {
+    for(int i=0; i<Wheel::End; i++)
+    {
+      _drive[i]->stop(true);
+    }
+  }
+
+  void Driving::reset()
+  {
+    for(int i=0; i<Wheel::End; i++)
+    {
+      _drive[i]->reset();
+    }
+  }
+
+  void Driving::breaking(std::string state)
+  {
+    bool flag = true;
+    if(state != "" && state == "on")
+    {
+      flag = true;
+    }
+
+    for(int i=0; i<Wheel::End; i++)
+    {
+      _drive[i]->breaking(flag);
+    }
+  }
+
+  void Driving::get_motor_status()
+  {
+    for(int i=0; i<Wheel::End; i++)
+    {
+      _drive[i]->get_motor_status(to_int(frb::SlaveId::Traction));
+      _drive[i]->get_motor_status(to_int(frb::SlaveId::Steering));
+    }
   }
 }

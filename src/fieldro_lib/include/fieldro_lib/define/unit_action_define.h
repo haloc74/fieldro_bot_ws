@@ -33,10 +33,11 @@ namespace frb
     Move    = 0x00C0,   Moving,       Moved,             // 이동      (AGV)
     Stop    = 0x00D0,   Stopping,     Stopped,           // 정지      (AGV)   
     Turn    = 0x00E0,   Turning,      Turned,            // 회전      (AGV)
-    Break   = 0x00F0,   Breaking,     Breaked,           // 정지      (AGV)
+    Steer   = 0x00F0,   Steering,     Steered,           // 조향      (AGV)
+    Break   = 0x0100,   Breaking,     Breaked,           // 브레이크  (AGV)
 
 
-    MoveToLowLimit = 0x00E0,                             // Limit 위치로 이동 (Motor)
+    MoveToLowLimit = 0x0110,                             // Limit 위치로 이동 (Motor)
     MoveToHighLimit,         
     
 
@@ -47,7 +48,7 @@ namespace frb
     GetPosition,
     Reset,
 
-    EStop    = 0x0FF0,                                // 비상 정지 (System)
+    EStop    = 0x0FF0,                                    // 비상 정지 (System)
     Finish   = 0x0FF1,                                   // 종료      (System)
     
     End, 
@@ -76,6 +77,7 @@ namespace frb
     {UnitAction::Move, "Move"},         {UnitAction::Moving, "Moving"},           {UnitAction::Moved, "Moved"},
     {UnitAction::Stop, "Stop"},         {UnitAction::Stopping, "Stopping"},       {UnitAction::Stopped, "Stopped"},
     {UnitAction::Turn, "Turn"},         {UnitAction::Turning, "Turning"},         {UnitAction::Turned, "Turned"},
+    {UnitAction::Steer, "Steer"},       {UnitAction::Steering, "Steering"},       {UnitAction::Steered, "Steered"},
     {UnitAction::Break, "Break"},       {UnitAction::Breaking, "Breaking"},       {UnitAction::Breaked, "Breaked"},
 
     {UnitAction::MoveToLowLimit,  "MoveToLowLimit"},

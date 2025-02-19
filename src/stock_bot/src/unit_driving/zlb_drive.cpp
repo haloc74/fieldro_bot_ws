@@ -51,9 +51,7 @@ namespace frb
 
   ZlbDrive::~ZlbDrive()
   {
-    stop(true);
-
-    usleep(5000000);
+    usleep(2000000);
 
     std::this_thread::sleep_for(std::chrono::seconds(1));
 
@@ -126,7 +124,8 @@ namespace frb
       yaml_file.close();
 
       // traction motor speed coefficient
-      _coefficient = yaml[session]["coefficient"].as<double>();
+      _propulsion_direction = yaml[session]["propulsion_direction"].as<double>();
+      _steer_direction = yaml[session]["steer_direction"].as<double>();
 
       _slave_id[to_int(frb::SlaveId::Traction)] = yaml[session]["traction_id"].as<int32_t>();
       _slave_id[to_int(frb::SlaveId::Steering)] = yaml[session]["steering_id"].as<int32_t>();

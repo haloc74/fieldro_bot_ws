@@ -174,4 +174,11 @@ namespace frb
     return time;
   }
 
+  bool is_number(const std::string& str)
+  {
+    char* end = nullptr;
+    std::strtod(str.c_str(), &end);
+    return end != str.c_str() && *end == '\0';
+  }
+
 }

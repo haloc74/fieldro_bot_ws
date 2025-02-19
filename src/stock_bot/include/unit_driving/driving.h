@@ -51,6 +51,12 @@ namespace frb
 
     std::mutex _lock_twist;                                                 // twist lock
 
-
+  protected:
+    void move(double velocity);
+    void steer(double degree);
+    void stop();
+    void reset();
+    void breaking(std::string state);
+    void get_motor_status();
   };
 }

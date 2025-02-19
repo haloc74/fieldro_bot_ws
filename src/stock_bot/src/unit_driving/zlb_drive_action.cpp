@@ -68,7 +68,7 @@ namespace frb
 
   /**
   * @brief      steer motor turn action
-  * @param[in]  int32_t degree : turn degree
+  * @param[in]  int32_t degree : degree
   * @return     void
   * @note       degree값은 absolute position으로 설정이 된다.
   * @attention  - 제어 순서에 주의 
@@ -77,15 +77,8 @@ namespace frb
   *               꼭 해줘야 실제 turn이 된다.
   *             - degree는 증분값이 아니다.
   */
-  void ZlbDrive::turn(double degree)
+  void ZlbDrive::steering(double degree)
   {
-    double minus = 1.0;
-    // if(degree < 0.0)
-    // {
-    //   minus = -1.0;
-    //   degree *= -1.0;
-    // }
-
     if(!_steer_position->is_valid_position(degree))
     {
       notify_log_msg(LogError, 0, "ZlbDrive::test_turn : invalid position");
@@ -93,9 +86,9 @@ namespace frb
       return;
     }
 
+    degree *= _steer_direction;
     int32_t position  = degree_to_position(degree);
-
-    uint32_t rpm      = convert_rpm_to_zlb_rpm(100*minus);  
+    uint32_t rpm      = convert_rpm_to_zlb_rpm(100);  
 
     add_packet(_slave_id[int32_t(SlaveId::Steering)], 
                ServoFD1X5::POSITION_COMMAND_REGISTER, 
@@ -122,22 +115,26 @@ namespace frb
     // todo : 1초 마다 is_steering_complete() 함수 호출 하여
     //        steering motor status 확인하여 동작이 종료 되었는지 확인
     // delay_call(1000, std::bind(&ZlbDrive::is_steering_complete, this));    
+
+    // 동작 완료 통보
+    notify_action_result(_wheel_index, frb::Error::None);
+
     return;
   }
 
   /**
-  * @brief      traction motor run action
+  * @brief      propulsion motor run action (전/후 진)
   * @param[in]  int32_t velocity : run velocity  (m/s)
   * @return     void
-  * @note       
-  * @attention  1. velocity값을 rpm으로 변환
+  * @attention  바퀴위치(전, 후)에 따라 CW 방향이 반대이므로 해당 사항을 고려해야 함.
+  * @note       1. velocity값을 rpm으로 변환
   *             2. rpm 값을 Zlb rpm으로 변환
   *             3. traction motor run
   */
-  void ZlbDrive::run(double velocity)
+  void ZlbDrive::propulsion(double velocity)
   {
-    // 바퀴에 해당하는 계수를 곱해준다.
-    velocity *= _coefficient;;
+    // 앞, 뒤 바퀴의 CW 방향이 반대이므로 바퀴에 해당하는 계수를 곱해준다.
+    velocity *= _propulsion_direction;
 
     double rpm = convert_velocity_to_rpm(velocity);
 
@@ -149,6 +146,8 @@ namespace frb
                MODBUS_FUNC_CODE::WRITE_MULTIPLE_REGISTERS, 
                to_int(frb::UnitAction::Move));
 
+    // 동작 완료 통보
+    notify_action_result(_wheel_index, frb::Error::None);                   
     return;
   }
 
@@ -158,13 +157,38 @@ namespace frb
   * @attention  실제 브레이크를 해제하는것이 아닌 속도를 0으로 만들어서 break를 해제하는것       
   *             속도 0으로 만든 다음에 인가를 해줘야 한다.
   */
-  void ZlbDrive::release_break()
-  {
-    add_packet(_slave_id[int32_t(SlaveId::Traction)], ServoFD1X5::VELOCITY_COMMAND_REGISTER, 
-               0, MODBUS_FUNC_CODE::WRITE_MULTIPLE_REGISTERS);
+  // void ZlbDrive::release_break()
+  // {
+  //   add_packet(_slave_id[int32_t(SlaveId::Traction)], ServoFD1X5::VELOCITY_COMMAND_REGISTER, 
+  //              0, MODBUS_FUNC_CODE::WRITE_MULTIPLE_REGISTERS);
 
-    add_packet(_slave_id[int32_t(SlaveId::Traction)], ServoFD1X5::CONTROL_REGISTER, 
-               ServoFD1X5::CONTROL_VALUES::START, MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER);    
+  //   add_packet(_slave_id[int32_t(SlaveId::Traction)], ServoFD1X5::CONTROL_REGISTER, 
+  //              ServoFD1X5::CONTROL_VALUES::START, MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER);    
+  // }
+
+  /**
+  * @brief      motor break on/off
+  * @attention  브레이크 해제시 실제 브레이크를 해제하는것이 아닌 속도를 0으로 만들어서 
+  *             break를 해제하는것으로 속도 0으로 만든 다음에 인가를 해줘야 한다.
+  */  
+  void ZlbDrive::breaking(bool flag)
+  {
+    if(flag)
+    {
+      add_packet(_slave_id[int32_t(SlaveId::Traction)], ServoFD1X5::CONTROL_REGISTER, 
+                 ServoFD1X5::CONTROL_VALUES::STOP, MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER,
+                 to_int(frb::UnitAction::Stop));    
+    }
+    else
+    {
+      //release_break();
+      add_packet(_slave_id[int32_t(SlaveId::Traction)], ServoFD1X5::VELOCITY_COMMAND_REGISTER, 
+                  0, MODBUS_FUNC_CODE::WRITE_MULTIPLE_REGISTERS);
+
+      add_packet(_slave_id[int32_t(SlaveId::Traction)], ServoFD1X5::CONTROL_REGISTER, 
+                  ServoFD1X5::CONTROL_VALUES::START, MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER);          
+    }
+    return;
   }
 
   /**
@@ -176,14 +200,17 @@ namespace frb
   */
   void ZlbDrive::stop(bool break_flag)
   {
-    run(0.0);
-    turn(0.0);
+    //run(0.0);
+    //turn(0.0);
+    propulsion(0.0);
+    steering(0.0);
 
     if(break_flag)
     {
-      add_packet(_slave_id[int32_t(SlaveId::Traction)], ServoFD1X5::CONTROL_REGISTER, 
-                  ServoFD1X5::CONTROL_VALUES::STOP, MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER,
-                  to_int(frb::UnitAction::Stop));    
+      breaking(true);
+      // add_packet(_slave_id[int32_t(SlaveId::Traction)], ServoFD1X5::CONTROL_REGISTER, 
+      //             ServoFD1X5::CONTROL_VALUES::STOP, MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER,
+      //             to_int(frb::UnitAction::Stop));    
     }
 
     _encoder_tracker->reset();

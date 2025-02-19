@@ -8,9 +8,19 @@
 . 수동주행시 선속도와 각속도 조합해서 명령하기.
 . joystick 객체에서 현재 sensor_msg 에서 
 
-. 전체 Wheel 동시 컨트롤 하기.
+. ZlbDrive::void move(double velocity, double angular) 함수 수정
+. joystick 연결
+. joystick을 이용한 주행 구현
+. joystick을 이용한 turn 구현
 
-ID [  ] : 2025-02-18
+ID [  ] : 2025-02-19
+1. ZlbDrive release_break() 함수 삭제
+2. ZlbDrive breaking(std::string state) 함수 추가 
+3. 전체 Wheel 동시 컨트롤 하기.
+4. Steering Control 관련 방향 계수 추가    
+5. traction control 방향 변수 변경 coefficient -> direction
+
+ID [ 46d93e3 ] : 2025-02-18
 1. io_map manual switch 변경 16->5
 2. LeadShine Driver 점검 : 통신 Cable 교체
 3. CMakeLists.txt - 최적화 옵션 끄기 추가

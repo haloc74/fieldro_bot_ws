@@ -49,18 +49,19 @@ namespace frb
              std::string config_file, int32_t wheel_index);
     virtual ~ZlbDrive();
 
-    void test_run();
-    void test_stop();                       // break on
-    void test_turn(double degree);          // steering motor turn 
+    // void test_run();
+    // void test_stop();                             // break on
+    // void test_turn(double degree);                // steering motor turn 
 
-    void move(double velocity, double angular);  // move
-
-    void stop(bool break_flag);                  // stop  (일반적인 멈춤)
-    //void engage_break();                    // break on
-    void release_break();                   // break off
-    void request_actual_velocity(); // get actual velocity
+    void move(double velocity, double angular);   // move
+    void stop(bool break_flag);                   // stop  (일반적인 멈춤)
+    void request_actual_velocity();               // get actual velocity
     void reset();
+    void breaking(bool flag);                     // break on/off
     int32_t   get_motor_status(int32_t slave_id);     // motor 상태 확인
+
+    void propulsion(double velocity);
+    void steering(double degree);
 
   protected:
     void update();
@@ -74,9 +75,6 @@ namespace frb
     int32_t           _wheel_index;             // wheel index
 
     DoubleEncoderTracker* _encoder_tracker;     // encoder tracker
-
-    // int32_t _prev_timer;                        // 이전 timer 값
-    // int32_t _prev_encoder[frb::ZlbMotor::End];  // 이전 encoder 값
 
   protected:                                    // _packet
     std::deque<ZlbPacket*>  _packets;           // motor 제어 패킷 리스트
@@ -92,7 +90,8 @@ namespace frb
   protected:                                          // _motor
     int32_t _slave_id[to_int(frb::SlaveId::End)];     // slave id
     SteeringPosition* _steer_position;                // steering motor 위치객체
-    double    _coefficient;                 // traction motor speed coefficient
+    double    _propulsion_direction;                  // 전,후진 방향에 대한 +- 값
+    double    _steer_direction;                       // 좌,우 방향에 대한 +- 값
     
     void      confirm_motor_connection();             // motor 통신 연결 확인
     void      setup_motor_configurations();           // motor 초기값 설정
@@ -103,8 +102,8 @@ namespace frb
     uint32_t  convert_rpm_to_zlb_rpm(double rpm);        // rpm -> zlb rpm 변환
     double   convert_velocity_to_rpm(double velocity);   // velocity -> rpm 변환
 
-    void turn(double degree);                        // steering motor turn
-    void run(double velocity);                       // traction motor run
+    // void turn(double degree);                        // steering motor turn
+    // void run(double velocity);                       // traction motor run
 
   protected:
     // 동작 완료 통보 (상위 : callback)

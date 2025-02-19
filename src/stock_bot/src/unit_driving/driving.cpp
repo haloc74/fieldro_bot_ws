@@ -1,5 +1,6 @@
 
 #include "driving.h"
+#include <future>
 #include <fieldro_lib/define/driving_define.h>
 #include <fieldro_msgs/UnitActionComplete.h>
 
@@ -46,32 +47,7 @@ namespace frb
     for(int i = 0; i < Wheel::End; i++)
     {
       _drive[i] = nullptr;
-    }
-
-    // for(int i = 0; i < Wheel::End; i++)
-    // {
-    //   _drive[i] = new ZlbDrive(std::bind(&Driving::action_complete_notify, 
-    //                                       this, 
-    //                                       std::placeholders::_1,
-    //                                       std::placeholders::_2),
-    //                             std::bind(&Driving::receive_actual_velocity,
-    //                                       this,
-    //                                       std::placeholders::_1,
-    //                                       std::placeholders::_2),
-    //                             std::bind(&Unit::log_msg, 
-    //                                       this, 
-    //                                       std::placeholders::_1, 
-    //                                       std::placeholders::_2, 
-    //                                       std::placeholders::_3),
-    //                             config_file,
-    //                             i);
-
-    //   _actual_velocity[i].release();
-    // }
-
-    _test_wheel = Wheel::RearLeft;
-
-      _drive[_test_wheel] = new ZlbDrive(std::bind(&Driving::action_complete_notify, 
+      _drive[i] = new ZlbDrive(std::bind(&Driving::action_complete_notify, 
                                           this, 
                                           std::placeholders::_1,
                                           std::placeholders::_2),
@@ -85,10 +61,15 @@ namespace frb
                                           std::placeholders::_2, 
                                           std::placeholders::_3),
                                 config_file,
-                                _test_wheel);
+                                i);
 
-      // 속도 초기화.
-      _actual_velocity[_test_wheel].release();    
+      _actual_velocity[i].release();
+    }
+
+    _test_wheel = Wheel::RearLeft;
+
+    // 속도 초기화.
+    _actual_velocity[_test_wheel].release();    
 
     // spinn 구동 (생성은 Unit Class 담당)
     _spinner->start();
@@ -100,11 +81,19 @@ namespace frb
 
   Driving::~Driving()
   {
-    // 객체 소멸 topic 메세지 전송을 위한 약간의 시간 대기
-    
-    for(int i = 0; i < Wheel::End; i++)
+    // 최우선적으로 모터 구동을 멈춘다
+    for(int i=0; i<Wheel::End; i++)
     {
-      safe_delete(_drive[i]);
+      _drive[i]->stop(true);
+    }
+
+    // 모터 객체 삭제
+    for(int i=0; i<Wheel::End; i++)
+    {
+      std::async(std::launch::async, [=]() 
+      {
+        safe_delete(_drive[i]);
+      });
     }
     safe_delete(_driving_mode);
 

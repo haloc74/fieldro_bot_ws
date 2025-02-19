@@ -115,4 +115,7 @@ namespace frb
   int8_t check_io_sensor(int32_t sensor_index, int64_t sensor_bit);
 
   double get_current_micro_time();
+
+  // string이 숫자인지 확인 (int, float, double 모두 가능)
+  bool is_number(const std::string& str);
 }

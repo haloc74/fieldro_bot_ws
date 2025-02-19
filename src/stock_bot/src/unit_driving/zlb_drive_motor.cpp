@@ -22,7 +22,8 @@ namespace frb
       {
         _servo_power = true;                // 
         setup_motor_configurations();       // motor 초기값 설정
-        release_break();                    // break 해제
+        //release_break();                    // break 해제
+        breaking(false);                    // break 해제
 
         // todo :
         // notify_action_result(frb::Error::None); 호출 하여 
