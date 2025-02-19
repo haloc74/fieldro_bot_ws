@@ -48,27 +48,6 @@ namespace frb
   */
   void ManualController::copy_driving_data(const sensor_msgs::Joy& msg, sensor_msgs::Joy& info)
   {
-    // info.axes[to_int(JoyStick::LeftVertical)] = msg.axes[to_int(JoyStick::LeftVertical)];
-    // if(abs(info.axes[to_int(JoyStick::LeftVertical)]) < abs(_propulsion_dead_zone))
-    // {
-    //   info.axes[to_int(JoyStick::LeftVertical)] = 0.0;
-    // }
-    // else
-    // {
-    //   info.axes[to_int(JoyStick::LeftVertical)] += (_propulsion_dead_zone*-1.0f);
-    // }
-
-
-    // info.axes[to_int(JoyStick::LeftHorizontal)] = msg.axes[to_int(JoyStick::LeftHorizontal)];
-    // if(abs(info.axes[to_int(JoyStick::LeftHorizontal)]) < abs(_steer_dead_zone))
-    // {
-    //   info.axes[to_int(JoyStick::LeftHorizontal)] = 0.0;
-    // }
-    // else
-    // {
-    //   info.axes[to_int(JoyStick::LeftHorizontal)] += (_steer_dead_zone*-1.0f);
-    // }
-
     info.axes[to_int(JoyStick::LeftVertical)] = msg.axes[to_int(JoyStick::LeftVertical)];
     if(info.axes[to_int(JoyStick::LeftVertical)] < -0.9)
     {

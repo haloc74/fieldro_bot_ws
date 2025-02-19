@@ -62,6 +62,7 @@ namespace frb
 
     void propulsion(double velocity);
     void steering(double degree);
+    void steering_vel(double velocity);
 
   protected:
     void update();

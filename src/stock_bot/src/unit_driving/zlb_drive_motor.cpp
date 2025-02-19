@@ -69,10 +69,21 @@ namespace frb
                MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER);               
 
     // position mode set
+    // add_packet(_slave_id[int32_t(SlaveId::Steering)], 
+    //            ServoFD1X5::OPMODE_REGISTER, 
+    //            ServoFD1X5::OPMODE_VALUES::POSITION, 
+    //            MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER);
+
+    // steering motor (속도모드, 방향설정)
     add_packet(_slave_id[int32_t(SlaveId::Steering)], 
                ServoFD1X5::OPMODE_REGISTER, 
-               ServoFD1X5::OPMODE_VALUES::POSITION, 
+               ServoFD1X5::OPMODE_VALUES::VELOCITY, 
                MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER);
+    add_packet(_slave_id[int32_t(SlaveId::Steering)], 
+                ServoFD1X5::VELOCITY_DIRECTION_REGISTER, 
+                0, 
+                MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER);               
+
     return;
   } 
 

@@ -9,10 +9,12 @@
 . joystick 객체에서 현재 sensor_msg 에서 
 
 . ZlbDrive::void move(double velocity, double angular) 함수 수정
-. joystick을 이용한 turn 구현
-
+. steer position mode 추가 하기
 
 ID [  ] : 2025-02-19
+1. joystick을 이용한 turn 구현
+
+ID [ 13586a9 ] : 2025-02-19
 1. joystick 연결
 2. joystick을 이용한 주행 구현
 

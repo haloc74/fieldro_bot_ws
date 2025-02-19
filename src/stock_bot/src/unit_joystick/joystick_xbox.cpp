@@ -342,7 +342,9 @@ namespace frb
   void JoyStickXbox::publish_joystick_msg(const sensor_msgs::Joy& msg)
   {
     log_msg(LogInfo, 0, "Joystick pub : " + 
-            std::to_string(msg.axes[to_int(JoyStick::LeftVertical)]));
+            std::to_string(msg.axes[to_int(JoyStick::LeftVertical)]) +
+            "     " +
+            std::to_string(msg.axes[to_int(JoyStick::LeftHorizontal)]));
 
     _publish_joystick.publish(msg);
 

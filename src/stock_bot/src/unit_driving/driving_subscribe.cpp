@@ -57,7 +57,7 @@ namespace frb
   void Driving::subscribe_driving_control(const geometry_msgs::Twist &twist_msg)
   {
     move(twist_msg.linear.x);
-    //steer(twist_msg.angular.z);
+    steer(twist_msg.angular.z);
     return;
   }  
 
@@ -158,9 +158,12 @@ namespace frb
   {
     if(degree == std::numeric_limits<double>::max())  return;
 
+    log_msg(LogInfo, 0, "Steer : " + std::to_string(degree));
+
     for(int i=0; i<Wheel::End; i++)
     {
-      if(_drive[i] != nullptr)  _drive[i]->steering(degree);
+      //if(_drive[i] != nullptr)  _drive[i]->steering(degree);
+      if(_drive[i] != nullptr)  _drive[i]->steering_vel(degree);
     }
   }
 

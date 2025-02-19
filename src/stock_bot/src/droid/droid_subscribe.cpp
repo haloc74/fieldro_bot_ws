@@ -173,11 +173,12 @@ namespace frb
     if(_joystick_control == 0)            return; 
 
     double propulsion_velocity = joy_msg.axes[to_int(JoyStick::LeftVertical)] * _propulsion_scale_factor;
-    double steer_velocity      = joy_msg.axes[to_int(JoyStick::RightHorizontal)] * _steer_scale_factor;
+    double steer_velocity      = joy_msg.axes[to_int(JoyStick::LeftHorizontal)] * _steer_scale_factor;
 
     geometry_msgs::Twist msg;
     msg.linear.x  = propulsion_velocity;
     msg.angular.z = steer_velocity;
+
     publish_driving_control(msg);
 
     log_msg(LogInfo, 0, "Joystick Control : " + std::to_string(propulsion_velocity) + " - " + std::to_string(steer_velocity));

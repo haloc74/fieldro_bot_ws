@@ -122,6 +122,23 @@ namespace frb
     return;
   }
 
+  void ZlbDrive::steering_vel(double velocity)
+  {
+    uint32_t rpm = convert_rpm_to_zlb_rpm(velocity);
+
+    add_packet(_slave_id[int32_t(SlaveId::Steering)],
+                ServoFD1X5::VELOCITY_COMMAND_REGISTER, 
+                rpm, 
+                MODBUS_FUNC_CODE::WRITE_MULTIPLE_REGISTERS);
+
+    add_packet(_slave_id[int32_t(SlaveId::Steering)], 
+                ServoFD1X5::CONTROL_REGISTER,
+                ServoFD1X5::CONTROL_VALUES::START, 
+                MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER);                                        
+
+    return;
+  }
+
   /**
   * @brief      propulsion motor run action (전/후 진)
   * @param[in]  int32_t velocity : run velocity  (m/s)
