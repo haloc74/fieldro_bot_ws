@@ -26,30 +26,36 @@ namespace frb
     AckermannDouble* _driving_mode;                                         // 주행 모드 객체
 
   protected:
-    ros::Subscriber _subscribe_driving_control;                            // 주행 제어 subscriber
-    void subscribe_driving_control(const geometry_msgs::Twist &twist_msg); // 주행 제어 subscribe callback
+    // vel_control subscriber
+    ros::Subscriber _subscribe_driving_control;
+    void subscribe_driving_control(const geometry_msgs::Twist &twist_msg);
 
-    // ros::Subscriber _subscribe_joy_msg;                                      // 조이스틱 subscriber
-    // void subscribe_joy_msg(const sensor_msgs::Joy& joy_msg);                // 조이스틱 subscribe callback
+    // Joystick Subscriber
+    ros::Subscriber _subscribe_joy_msg;
+    void subscribe_joy_msg(const sensor_msgs::Joy& joy_msg);
 
-    ros::Publisher _publish_act_velocity;                                   // 실제 속도 및 좌표 publisher
-    void publish_act_velocity(geometry_msgs::Twist twist);                  // 실제 속도 및 좌표 publish 함수
+    // act_vel publisher
+    ros::Publisher _publish_act_velocity;
+    void publish_act_velocity(geometry_msgs::Twist twist);
 
-    ZlbDrive* _drive[Wheel::End];                                           // drive 객체
-    int32_t   _test_wheel;
+    ZlbDrive* _drive[Wheel::End];                             // drive 객체
+    int32_t   _test_wheel;                                    // 테스트 휠            
 
-    bool      _wait_actual_velocity;                                        // 실제 속도 대기 여부
-    WheelControlValue _actual_velocity[Wheel::End];                         // 실제 속도
-    double    _prev_velocity_check_time;                                    // 이전 속도 체크 시간            
+    bool      _wait_actual_velocity;                          // 실제 속도 대기 여부
+    WheelControlValue _actual_velocity[Wheel::End];           // 실제 속도
+    double    _prev_velocity_check_time;                      // 이전 속도 체크 시간            
 
-    void action_complete_notify(int32_t wheel, const Error error);          // motor object로 부터 동작 완료 알림 콜백
+    // motor object로 부터 동작 완료 알림 콜백
+    void action_complete_notify(int32_t wheel, const Error error);          
 
-    void receive_actual_velocity(int32_t wheel, WheelControlValue value);   // motor object로 부터 제어 결과 알림 콜백
+    // motor object로 부터 제어 결과 알림 콜백
+    void receive_actual_velocity(int32_t wheel, WheelControlValue value);   
 
     // 요청된 twist가 움직임이 있는지 없는지 확인
     bool has_movement(const geometry_msgs::Twist& twist_msg);    
 
-    std::mutex _lock_twist;                                                 // twist lock
+    // twist lock
+    std::mutex _lock_twist;                                                 
 
   protected:
     void move(double velocity);

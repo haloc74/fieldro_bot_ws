@@ -201,6 +201,9 @@ namespace frb
       //_alive_publish_interval = yaml["main"]["alive_publish_interval"].as<int32_t>();
       _is_driving_mode_changeable = yaml["main"]["driving_mode_changeable"].as<int32_t>();
       _joystick_control = yaml["main"]["joystick_control"].as<int32_t>();
+      
+      _propulsion_scale_factor = yaml["main"]["propulsion_scale_factor"].as<double>();
+      _steer_scale_factor = yaml["main"]["steer_scale_factor"].as<double>();
 
       log_msg(LogInfo, 0, "Driving Mode : " + std::to_string(_is_driving_mode_changeable));
       log_msg(LogInfo, 0, "Joystick Control : " + std::to_string(_joystick_control));

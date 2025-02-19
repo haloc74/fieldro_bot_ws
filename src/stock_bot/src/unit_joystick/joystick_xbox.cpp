@@ -252,6 +252,7 @@ namespace frb
   {
     if(_file_discriptor < 0)   return;
 
+    ROS_ERROR("조이스틱 연결이 끊어졌습니다.");
     close(_file_discriptor);
     _file_discriptor = -1;
     return;
@@ -340,7 +341,11 @@ namespace frb
   */
   void JoyStickXbox::publish_joystick_msg(const sensor_msgs::Joy& msg)
   {
+    log_msg(LogInfo, 0, "Joystick pub : " + 
+            std::to_string(msg.axes[to_int(JoyStick::LeftVertical)]));
+
     _publish_joystick.publish(msg);
+
     return;
   }
 

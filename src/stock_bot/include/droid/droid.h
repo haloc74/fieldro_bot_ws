@@ -89,6 +89,8 @@ namespace frb
 
     int32_t _is_driving_mode_changeable;
     int32_t _joystick_control;
+    double _propulsion_scale_factor;
+    double _steer_scale_factor;
   };
 
 }

@@ -13,48 +13,53 @@ namespace frb
   * @attention  매우중요 : 멈추고 자동으로 속도계산을 위한 timer를 초기화 시킨다.
   * 
   */
+  // void Driving::subscribe_driving_control(const geometry_msgs::Twist &twist_msg)
+  // {
+  //   std::lock_guard<std::mutex> lock(_lock_twist);
+    
+  //   if(!has_movement(twist_msg))  
+  //   {
+  //     // 움직임을 멈춰야 하는경우는 최우선적용이다.
+  //     // _wait_actual_velocity 플래그와 상관없이 동작되어야 한다.
+  //     for(int i=0; i<Wheel::End; i++)
+  //     {
+  //       _drive[Wheel::FrontLeft]->stop(false);
+  //       _actual_velocity[i].release();
+  //     }
+  //     _wait_actual_velocity     = false;
+  //     _prev_velocity_check_time = DBL_MAX;
+  //   }
+  //   else
+  //   {
+  //     // 움직여야 할 경우 이전 요청에 대한 응답이 완료되지 않은 상태에서는 보내지 않는다.
+  //     if(_wait_actual_velocity)   return;
+
+  //     WheelControlValue* value = _driving_mode->calculate_wheel_control(twist_msg);
+  //     for(int i=0; i<Wheel::End; i++)
+  //     {
+  //       _drive[i]->move(value[i]._velocity, value[i]._angular);
+  //       _actual_velocity[i].release();
+  //     }
+
+  //     // 이전 속도 측정시간이 설정 되어있지 않은 경우 설정해준다.
+  //     // stedy clock을 사용하여 시간을 측정한다.
+  //     // 시간의 단위는 ns 이다.
+  //     if(_prev_velocity_check_time == DBL_MAX)
+  //     {
+  //       _prev_velocity_check_time = get_current_micro_time();
+  //     }
+  //   }
+  //   // actual velocity 대기 플래그 설정해준다.
+  //   _wait_actual_velocity = true;
+  //   return;
+  // }
+
   void Driving::subscribe_driving_control(const geometry_msgs::Twist &twist_msg)
   {
-    std::lock_guard<std::mutex> lock(_lock_twist);
-    
-    if(!has_movement(twist_msg))  
-    {
-      // 움직임을 멈춰야 하는경우는 최우선적용이다.
-      // _wait_actual_velocity 플래그와 상관없이 동작되어야 한다.
-      for(int i=0; i<Wheel::End; i++)
-      {
-        _drive[Wheel::FrontLeft]->stop(false);
-        _actual_velocity[i].release();
-      }
-      _wait_actual_velocity     = false;
-      _prev_velocity_check_time = DBL_MAX;
-    }
-    else
-    {
-      // 움직여야 할 경우 이전 요청에 대한 응답이 완료되지 않은 상태에서는 보내지 않는다.
-      if(_wait_actual_velocity)   return;
-
-      WheelControlValue* value = _driving_mode->calculate_wheel_control(twist_msg);
-      for(int i=0; i<Wheel::End; i++)
-      {
-        _drive[i]->move(value[i]._velocity, value[i]._angular);
-        _actual_velocity[i].release();
-      }
-
-      // 이전 속도 측정시간이 설정 되어있지 않은 경우 설정해준다.
-      // stedy clock을 사용하여 시간을 측정한다.
-      // 시간의 단위는 ns 이다.
-      if(_prev_velocity_check_time == DBL_MAX)
-      {
-        _prev_velocity_check_time = get_current_micro_time();
-      }
-    }
-
-    // actual velocity 대기 플래그 설정해준다.
-    _wait_actual_velocity = true;
-
+    move(twist_msg.linear.x);
+    //steer(twist_msg.angular.z);
     return;
-  }
+  }  
 
   void Driving::subscribe_unit_action(const fieldro_msgs::UnitControl& msg)
   {
@@ -94,7 +99,6 @@ namespace frb
     case frb::UnitAction::Break:
       _action = frb::UnitAction::Break;
       Unit::publish_unit_action_complete(to_int(_action), to_int(frb::Error::None));
-      //_drive[_test_wheel]->breaking(msg.command);
       breaking(msg.command);
       break;
 
@@ -114,16 +118,6 @@ namespace frb
     case frb::UnitAction::Steer:
       _action = frb::UnitAction::Steer;
       Unit::publish_unit_action_complete(to_int(_action), to_int(frb::Error::None));
-      // {
-      //   double value2 = std::numeric_limits<double>::max();
-      //   if(msg.command != "" && is_number(msg.command))
-      //   {
-      //     value2 = std::stod(msg.command);
-      //   }
-      //   steer(value2);
-      // }
-      // value = std::stod(msg.command);
-      // _drive[_test_wheel]->test_turn(value);
       steer(value);
       break;
 
@@ -156,7 +150,7 @@ namespace frb
 
     for(int i=0; i<Wheel::End; i++)
     {
-      _drive[i]->propulsion(velocity);
+      if(_drive[i] != nullptr)  _drive[i]->propulsion(velocity);
     }
   }
 
@@ -166,7 +160,7 @@ namespace frb
 
     for(int i=0; i<Wheel::End; i++)
     {
-      _drive[i]->steering(degree);
+      if(_drive[i] != nullptr)  _drive[i]->steering(degree);
     }
   }
 
@@ -174,7 +168,7 @@ namespace frb
   {
     for(int i=0; i<Wheel::End; i++)
     {
-      _drive[i]->stop(true);
+      if(_drive[i] != nullptr)  _drive[i]->stop(true);
     }
   }
 
@@ -182,21 +176,21 @@ namespace frb
   {
     for(int i=0; i<Wheel::End; i++)
     {
-      _drive[i]->reset();
+      if(_drive[i] != nullptr)  _drive[i]->reset();
     }
   }
 
   void Driving::breaking(std::string state)
   {
     bool flag = true;
-    if(state != "" && state == "on")
+    if(state != "" && state == "off")
     {
-      flag = true;
+      flag = false;
     }
 
     for(int i=0; i<Wheel::End; i++)
     {
-      _drive[i]->breaking(flag);
+      if(_drive[i] != nullptr)  _drive[i]->breaking(flag);
     }
   }
 
@@ -204,8 +198,8 @@ namespace frb
   {
     for(int i=0; i<Wheel::End; i++)
     {
-      _drive[i]->get_motor_status(to_int(frb::SlaveId::Traction));
-      _drive[i]->get_motor_status(to_int(frb::SlaveId::Steering));
+      if(_drive[i] != nullptr)  _drive[i]->get_motor_status(to_int(frb::SlaveId::Traction));
+      if(_drive[i] != nullptr)  _drive[i]->get_motor_status(to_int(frb::SlaveId::Steering));
     }
   }
 }

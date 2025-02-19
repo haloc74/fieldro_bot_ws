@@ -48,7 +48,49 @@ namespace frb
   */
   void ManualController::copy_driving_data(const sensor_msgs::Joy& msg, sensor_msgs::Joy& info)
   {
+    // info.axes[to_int(JoyStick::LeftVertical)] = msg.axes[to_int(JoyStick::LeftVertical)];
+    // if(abs(info.axes[to_int(JoyStick::LeftVertical)]) < abs(_propulsion_dead_zone))
+    // {
+    //   info.axes[to_int(JoyStick::LeftVertical)] = 0.0;
+    // }
+    // else
+    // {
+    //   info.axes[to_int(JoyStick::LeftVertical)] += (_propulsion_dead_zone*-1.0f);
+    // }
+
+
+    // info.axes[to_int(JoyStick::LeftHorizontal)] = msg.axes[to_int(JoyStick::LeftHorizontal)];
+    // if(abs(info.axes[to_int(JoyStick::LeftHorizontal)]) < abs(_steer_dead_zone))
+    // {
+    //   info.axes[to_int(JoyStick::LeftHorizontal)] = 0.0;
+    // }
+    // else
+    // {
+    //   info.axes[to_int(JoyStick::LeftHorizontal)] += (_steer_dead_zone*-1.0f);
+    // }
+
     info.axes[to_int(JoyStick::LeftVertical)] = msg.axes[to_int(JoyStick::LeftVertical)];
+    if(info.axes[to_int(JoyStick::LeftVertical)] < -0.9)
+    {
+      info.axes[to_int(JoyStick::LeftVertical)] = -0.9;
+    }
+    else if(info.axes[to_int(JoyStick::LeftVertical)] > 0.9)
+    {
+      info.axes[to_int(JoyStick::LeftVertical)] = 0.9;
+    }
+
+
+    info.axes[to_int(JoyStick::LeftHorizontal)] = msg.axes[to_int(JoyStick::LeftHorizontal)];
+    if(info.axes[to_int(JoyStick::LeftHorizontal)] < -0.9)
+    {
+      info.axes[to_int(JoyStick::LeftHorizontal)] = -0.9;
+    }
+    else if(info.axes[to_int(JoyStick::LeftHorizontal)] > 0.9)
+    {
+      info.axes[to_int(JoyStick::LeftHorizontal)] = 0.9;
+    }
+
+
     return;
   }
 
@@ -61,8 +103,8 @@ namespace frb
   */
   void ManualController::copy_streering_data(const sensor_msgs::Joy& msg, sensor_msgs::Joy& info)
   {
-    info.buttons[to_int(JoyButton::FaceX)] = msg.buttons[to_int(JoyButton::FaceX)];
-    info.buttons[to_int(JoyButton::FaceB)] = msg.buttons[to_int(JoyButton::FaceB)];
+    // info.buttons[to_int(JoyButton::FaceX)] = msg.buttons[to_int(JoyButton::FaceX)];
+    // info.buttons[to_int(JoyButton::FaceB)] = msg.buttons[to_int(JoyButton::FaceB)];
     return;
   }
 
@@ -85,7 +127,7 @@ namespace frb
   * @brief      수신된 Joy 메시지 처리
   * @param[in]  const sensor_msgs::Joy 수신된 Joy 메시지
   * @return     int32_t : 처리 결과
-  * @note       callback을 통해 message publish 해야 한다.
+  * @note       JoyStickXbox::publish_joystick_msg() callback을 통해 message publish 해야 한다.
   */
   int32_t ManualController::receive_data(const sensor_msgs::Joy msg)
   {

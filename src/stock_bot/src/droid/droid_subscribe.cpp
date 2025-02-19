@@ -148,7 +148,7 @@ namespace frb
   {
     if(!_is_driving_mode_changeable)    return;
 
-    int32_t flag = (msg.signal_bit & 0x01);
+    int32_t flag = (msg.signal_bit & 0x20);
 
     if(_joystick_control != flag)
     {
@@ -162,7 +162,8 @@ namespace frb
   * @brief      조이스틱 message를 수신하는 callback 함수
   * @param[in]  const sensor_msgs::Joy &joy_msg : 조이스틱 message
   * @return     void
-  * @note       주행, lift control, emo 등의 메세지로 분리해야 한다.
+  * @note       조이스틱 메세지는 발행전 복합동작에 대한 판단을 해서 보내주게 된다
+  *             그래서 이곳에서는 안전장치 및 복합 동작에 대한 구분을 할 필요는 없다.
   * @attention  옵션을 통해 수동 조작 가능 여부 판단 해야 한다.
   *             수동 조작이 불가능하면 아무런 처리를 하지 않는다.  
   */
@@ -171,64 +172,16 @@ namespace frb
     if(_is_driving_mode_changeable == 0)  return;
     if(_joystick_control == 0)            return; 
 
-    //system("clear");
+    double propulsion_velocity = joy_msg.axes[to_int(JoyStick::LeftVertical)] * _propulsion_scale_factor;
+    double steer_velocity      = joy_msg.axes[to_int(JoyStick::RightHorizontal)] * _steer_scale_factor;
 
-    if(joy_msg.buttons[JoyKey::LeftBumper] == 1 && 
-       joy_msg.buttons[JoyKey::RightBumper] == 1)
-    {
-      // todo 주행과 Lift control 모두가 눌려있다.
-      // 조작되면 안된다.
-      std::cout << "Both LeftBumper and RightBumper are pressed." << std::endl;
+    geometry_msgs::Twist msg;
+    msg.linear.x  = propulsion_velocity;
+    msg.angular.z = steer_velocity;
+    publish_driving_control(msg);
 
-      // todo : 주행 멈추기
-      // todo : Lift control 멈추기
-      return;
-    }
+    log_msg(LogInfo, 0, "Joystick Control : " + std::to_string(propulsion_velocity) + " - " + std::to_string(steer_velocity));
 
-    if(joy_msg.buttons[JoyKey::LeftBumper] == 1)
-    {
-      // todo : 주행 제어에 대한 처리
-      std::cout << "LeftBumper is pressed." << std::endl;
-    }
-
-    if(joy_msg.buttons[JoyKey::RightBumper] == 1)
-    {
-      // todo : Lift control 제어에 대한 처리
-      std::cout << "RightBumper is pressed." << std::endl;
-    }
-
-    joy_msg.axes.size();
-
-    std::cout << "Axes 0: " << joy_msg.axes[0] << std::endl;
-    std::cout << "Axes 1: " << joy_msg.axes[1] << std::endl;
-    std::cout << "Axes 2: " << joy_msg.axes[2] << std::endl;
-    std::cout << "Axes 3: " << joy_msg.axes[3] << std::endl;
-    std::cout << "Axes 4: " << joy_msg.axes[4] << std::endl;
-    std::cout << "Axes 5: " << joy_msg.axes[5] << std::endl;
-    std::cout << "Axes 6: " << joy_msg.axes[6] << std::endl;
-    std::cout << "Axes 7: " << joy_msg.axes[7] << std::endl;    
-
-    std::cout << "Button : " << 
-    joy_msg.buttons[0] << " , " << 
-    joy_msg.buttons[1] << " , " <<  
-    joy_msg.buttons[2] << " , " <<  
-    joy_msg.buttons[3] << " , " <<  
-    joy_msg.buttons[4] << " , " <<  
-    std::endl;
-
-    std::cout << "Button : " << 
-    joy_msg.buttons[5] << " , " << 
-    joy_msg.buttons[6] << " , " <<  
-    joy_msg.buttons[7] << " , " <<  
-    joy_msg.buttons[8] << " , " <<  
-    joy_msg.buttons[9] << " , " <<  
-    std::endl;    
-
-    std::cout << "Button : " << 
-    joy_msg.buttons[10] << " , " << 
-    joy_msg.buttons[11] << " , " <<  
-    std::endl;    
-    
     return;
   }
 }

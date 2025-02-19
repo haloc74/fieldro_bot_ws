@@ -66,10 +66,23 @@ namespace frb
       _actual_velocity[i].release();
     }
 
-    _test_wheel = Wheel::RearLeft;
+    _test_wheel = Wheel::RearRight;
+    // _drive[_test_wheel] = new ZlbDrive(std::bind(&Driving::action_complete_notify, 
+    //                                 this, 
+    //                                 std::placeholders::_1,
+    //                                 std::placeholders::_2),
+    //                           std::bind(&Driving::receive_actual_velocity,
+    //                                 this,
+    //                                 std::placeholders::_1,
+    //                                 std::placeholders::_2),
+    //                           std::bind(&Unit::log_msg, 
+    //                                 this, 
+    //                                 std::placeholders::_1, 
+    //                                 std::placeholders::_2, 
+    //                                 std::placeholders::_3),
+    //                           config_file,
+    //                           _test_wheel);    
 
-    // 속도 초기화.
-    _actual_velocity[_test_wheel].release();    
 
     // spinn 구동 (생성은 Unit Class 담당)
     _spinner->start();
@@ -84,7 +97,7 @@ namespace frb
     // 최우선적으로 모터 구동을 멈춘다
     for(int i=0; i<Wheel::End; i++)
     {
-      _drive[i]->stop(true);
+      if(_drive[i] != nullptr) _drive[i]->stop(true);
     }
 
     // 모터 객체 삭제

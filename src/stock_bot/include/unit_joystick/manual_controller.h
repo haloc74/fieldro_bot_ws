@@ -28,8 +28,8 @@ namespace frb
     int32_t receive_data(const sensor_msgs::Joy msg);                     // 수신된 Joy 메시지 처리
 
   protected:
-    int32_t _button_count;     // 버튼  갯수
-    int32_t _axis_count;       // 축    갯수
+    int32_t _button_count;          // 버튼  갯수
+    int32_t _axis_count;            // 축    갯수
 
     std::function<void(const sensor_msgs::Joy msg)> notify_joystick_msg;  // 조이스틱 메시지 발행 콜백
 
