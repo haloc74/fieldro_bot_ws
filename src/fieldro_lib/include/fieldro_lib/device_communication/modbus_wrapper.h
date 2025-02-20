@@ -53,6 +53,7 @@ namespace frb
 
     frb::Error write_data_register(int32_t id, int32_t address, uint16_t value);
     frb::Error write_data_register(int32_t address, uint16_t value);
+    frb::Error write_data_register_test(int32_t address, int16_t value);
 
     frb::Error write_data_registers(int32_t id, int32_t address, int16_t len, uint16_t* value);
     frb::Error write_data_registers(int32_t address, int16_t len, uint16_t* value);

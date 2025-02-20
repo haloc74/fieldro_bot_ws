@@ -35,7 +35,7 @@ namespace frb
     int64_t _sensor_data_update_mask;                                 // sensor data update mask
     int64_t _prev_sensor_data;                                        // 이전 센서 상태를 저장하기 위한 변수
     ros::Subscriber _subscribe_iosignal;                              // IOSignal을 받기 위한 subscriber 
-    void subscribe_iosignal(const fieldro_msgs::IOSignal& msg);          // IOSignal을 받기 위한 callback 함수
+    void subscribe_iosignal(const fieldro_msgs::IOSignal& msg);       // IOSignal을 받기 위한 callback 함수
 
     // loader
     bool is_controlable();                                            // Loader의 동작 가능여부

@@ -21,6 +21,7 @@ namespace frb
     case frb::UnitState::Created:
       if(msg.alive == 0x00)
       {
+        // todo : 다른 object 들이 모두 생성 되었다 
         log_msg(LogInfo, 0, "All Init - Next Step Process");
         _state = frb::UnitState::Normal;
         delay_call(3000, std::bind(&Droid::create_unit_initialize_sequence, this));
@@ -80,14 +81,13 @@ namespace frb
         //unit_action_to_string(int_to_unit_action((*it)->action)));
       }
       _pending_sequence.erase(it);
-
       break;
     }
 
     // 모든 unit의 초기화가 완료되었을 경우
-    if(_state == frb::UnitState::Active && is_all_sequence_empty())
+    if(!_all_unit_initialize_complete && is_all_sequence_empty())
     {
-      _state = frb::UnitState::Normal;
+      _all_unit_initialize_complete = true;
       log_msg(LogInfo, 0, "All Unit Initialize Complete !!!");
     }
 
@@ -171,18 +171,30 @@ namespace frb
   {
     if(_is_driving_mode_changeable == 0)  return;
     if(_joystick_control == 0)            return; 
+    if(!_all_unit_initialize_complete)    return;
 
     double propulsion_velocity = joy_msg.axes[to_int(JoyStick::LeftVertical)] * _propulsion_scale_factor;
     double steer_velocity      = joy_msg.axes[to_int(JoyStick::LeftHorizontal)] * _steer_scale_factor;
+    double lift_velocity       = joy_msg.axes[to_int(JoyStick::RightVertical)];
 
     geometry_msgs::Twist msg;
     msg.linear.x  = propulsion_velocity;
     msg.angular.z = steer_velocity;
-
     publish_driving_control(msg);
-
     log_msg(LogInfo, 0, "Joystick Control : " + std::to_string(propulsion_velocity) + " - " + std::to_string(steer_velocity));
 
+
+    // Lift control
+    if(lift_velocity < -1.0f)   lift_velocity = -1.0f;
+    if(lift_velocity > 1.0f)    lift_velocity = 1.0f;  
+    add_sequence(to_int(UnitName::Lift), to_int(UnitAction::Lift), std::to_string(lift_velocity));
+
+
+    log_msg(LogInfo, 0, "Joystick Control : " + 
+                        std::to_string(propulsion_velocity) + " - " + 
+                        std::to_string(steer_velocity) + " - " +
+                        std::to_string(lift_velocity));
+                        
     return;
   }
 }

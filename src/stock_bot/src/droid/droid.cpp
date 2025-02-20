@@ -27,6 +27,7 @@ namespace frb
 
     _action = UnitAction::None;
     _state  = UnitState::Created;
+    _all_unit_initialize_complete = false;
 
     _subscribe_switch_report =
     _node_handle->subscribe("twinny_robot/SwitchReport", 10, &Droid::subscribe_switch_report, this);

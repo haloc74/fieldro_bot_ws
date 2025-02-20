@@ -15,6 +15,10 @@ namespace frb
     action_result_notify  = action_result_callback;
     log_msg_notify        = log_callback;
 
+    _control_mode = CONTROL_MODE::CONTROL_MODE_END;
+
+    load_option(config_file);
+
     _comm_state = CommStatus::Disconnect;
     _comm = new ModbusWrapper(ModbusType::RS485,
                               config_file, 
@@ -23,6 +27,7 @@ namespace frb
 
     _servo_power = false;
 
+    _status           = SERVO_STATUS::END;
     _motor_status     = 0;
     _current_position = 0;
     _target_position  = 0;
@@ -79,7 +84,6 @@ namespace frb
     }
 
     uint16_t value = on ? (int16_t)SERVO_VALUE::POWER_ON : (int16_t)SERVO_VALUE::POWER_OFF;
-
     frb::Error ret = _comm->write_data_registers((int)SERVO_ADDRESS::CTRL_POWER, 1, &value);
 
     if(ret != frb::Error::None)
@@ -96,6 +100,40 @@ namespace frb
     }
 
     return frb::Error::None;
+  }
+
+  frb::Error ELD2_RS7020B::control_speed_move(double direction)
+  {
+    if(_comm_state != frb::CommStatus::Connect) return frb::Error::UnConnect;
+    if(!_servo_power)                           return frb::Error::PowerOff;   
+    
+    if(_control_mode != CONTROL_MODE::VELOCITY)
+    {
+      log_msg(LogError, 0, "ELD2 : control_speed_move fail - control mode is not velocity");
+      return frb::Error::ControlModeError;
+    }    
+
+    int16_t value = (rand()%250+250)*direction;
+    frb::Error error = _comm->write_data_register_test((int)VELOCITY_CONTROL::FIRST_SPEED, 0);
+
+    usleep(1000000);
+
+    error = _comm->write_data_register_test((int)VELOCITY_CONTROL::FIRST_SPEED, 500);
+
+    if(error != frb::Error::None)
+    {
+      std::string str = modbus_strerror(errno);
+      //log_msg(LogError, 0, std::string("ELD2 : Error (" + str + ")"));
+      log_msg(LogError, 0, "ELD2 : Error (" + str + ")");
+      return frb::Error::WriteFail;
+    }
+    else
+    {
+      //log_msg(LogInfo, 0, std::string("ELD2 : control PR0 - position = ") + std::to_string(position));
+      log_msg(LogInfo, 0, "control_speed_move = "+ std::to_string(direction));
+    }
+
+    return frb::Error::None;    
   }
 
   frb::Error ELD2_RS7020B::control_move(int32_t abs_pos, int16_t rpm, int32_t check_interval, int32_t timeout_millisec)
@@ -149,15 +187,44 @@ namespace frb
     return false;
   }
 
+                    
+  void ELD2_RS7020B::control_pr0(int16_t rpm)
+  {
+    uint16_t status = 0x0000;
+    uint16_t value[8];
+    memset(value, 0x00, sizeof(uint16_t)*8);
+
+    if(rpm < -300)    rpm = -300;
+    if(rpm > 300)     rpm = 300;
+
+    //_target_position = position;
+
+    value[0] = (int16_t)SERVO_VALUE::SPEED;                           // 제어 모드
+    value[1] = (u_int16_t)((0) >> 16);  // 위치값 HBS
+    value[2] = (u_int16_t)(0);          // 위치값 LBS
+    value[3] = (int16_t)rpm;                   // Speed (RPM)
+    value[4] = (int16_t)200;                   // Accel 시간 ms
+    value[5] = (int16_t)200;                   // Decel 시간 ms
+    value[6] = 0x00;                           // delay time ms
+    value[7] = 0x10;                           // Path Number
+
+    frb::Error error = _comm->write_data_registers((int)SERVO_ADDRESS::CTRL_PR0, sizeof(value), value);    
+  }
   frb::Error ELD2_RS7020B::control_pr0(int16_t mode, int32_t position, int16_t rpm, int16_t acc, int16_t dec)
   {
+    if(_control_mode != CONTROL_MODE::POSITION)
+    {
+      log_msg(LogError, 0, "ELD2 : control_homing fail - control mode is not position");
+      return frb::Error::ControlModeError;
+    }
+
     uint16_t status = 0x0000;
     uint16_t value[8];
     memset(value, 0x00, sizeof(uint16_t)*8);
 
     _target_position = position;
 
-    value[0] = mode;                           // 제어 모드
+    value[0] = (int16_t)mode;                   // 제어 모드
     value[1] = (u_int16_t)((position) >> 16);  // 위치값 HBS
     value[2] = (u_int16_t)(position);          // 위치값 LBS
     value[3] = (int16_t)rpm;                   // Speed (RPM)
@@ -186,13 +253,19 @@ namespace frb
 
   frb::Error ELD2_RS7020B::control_homing(int16_t speed, int16_t acc, int16_t dec)
   {
+    if(_control_mode != CONTROL_MODE::POSITION)
+    {
+      log_msg(LogError, 0, "ELD2 : control_homing fail - control mode is not position");
+      return frb::Error::ControlModeError;
+    }
+
     // Homing 관련 Mode Data 설정
     uint16_t value = 0x00;
     // data |= (1 << 0); // 0:CCW, 1:CW
     // data |= (1 << 1); // Specific position after homing
     // data |= (1 << 2); // Homing mode (0:Position Limit, Origin Homing)
     // data |= (1 << 8); // Homing z-signal
-    frb::Error error = _comm->write_data_register((int)SERVO_ADDRESS::CTRL_HOMING, sizeof(value), value);
+    frb::Error error = _comm->write_data_register((int)SERVO_ADDRESS::CTRL_HOMING, value);
     if(error != frb::Error::None)
     {
       log_msg(LogError, 0, "ELD2 : control_homing fail");
@@ -303,11 +376,70 @@ namespace frb
 
     if(_comm_state == CommStatus::Connect && !_servo_power)
     {
-      control_power(true);
+      // 모드를 위치 제어 모드로 변경
+      change_to_position_mode();
+
+      // servo power off 상태이므로 on 시키기
+      frb::Error::None == control_power(true);
+
+      if(_servo_power)
+      {
+        log_msg_notify(LogInfo, 0, "motor power on success"); 
+        _status = SERVO_STATUS::STATUS_READY;        
+      }
+      else
+      {
+        log_msg_notify(LogInfo, 0, "motor power on fail !!");
+        _status = SERVO_STATUS::STATUS_ERROR;
+        _error  = true;
+        std::async(std::launch::async, action_result_notify, frb::Error::PowerFault);
+      }
     }
 
     return;
   } 
+
+  void ELD2_RS7020B::initialize()
+  {
+    if(_error || _status == SERVO_STATUS::STATUS_ERROR)  
+    {
+      std::async(std::launch::async, action_result_notify, frb::Error::UnConnect);
+      log_msg(LogError, 0, "motor error : ");
+      return;
+    }
+
+    if(_comm_state != frb::CommStatus::Connect)
+    {
+      std::async(std::launch::async, action_result_notify, frb::Error::UnConnect);
+      log_msg(LogError, 0, "motor is not connected");
+      return;
+    }
+
+    if(_status != SERVO_STATUS::STATUS_READY)  
+    {
+      std::async(std::launch::async, action_result_notify, frb::Error::Busy);
+      log_msg(LogInfo, 0, "motor is busy");
+      return;
+    }
+
+
+    if(_servo_power)
+    {
+      log_msg_notify(LogInfo, 0, "motor homing start");
+
+      // homing 시작
+      control_homing(20, 20, 20);
+      _status = SERVO_STATUS::STATUS_HOME;
+
+      // homing 완료 감시 시작
+      delay_call(1000, std::bind(&ELD2_RS7020B::check_homing_complete, this));
+    }
+    else
+    {
+      log_msg_notify(LogInfo, 0, "motor power on fail !!");
+      std::async(std::launch::async, action_result_notify, frb::Error::PowerFault);
+    }    
+  }
 
   /**
   * @brief      motor 제어 가능 여부 확인
@@ -363,6 +495,94 @@ namespace frb
 
     return;
   }
+  void ELD2_RS7020B::check_homing_complete()
+  {
+    if(_error)  return;
+
+    get_motor_status();
+
+    bool ready = (_motor_status & 0x0001) ? true : false;
+    bool home  = (_motor_status & 0x0008) ? true : false;
+
+    if(!ready || !home)
+    {
+      log_msg(LogInfo, 0, "homing delay_call restart");
+      delay_call(1000, std::bind(&ELD2_RS7020B::check_homing_complete, this));
+      return;
+    }
+
+    // todo : homing 완료에 따른 object state 변경
+    _status = SERVO_STATUS::STATUS_READY;
+
+    // callback을 통해 동작 완료 전달
+    std::async(std::launch::async, action_result_notify, frb::Error::None);
+
+    // 이전 action이 종료 되었으므로 timeout_sequence 증가
+    increase_timeout_sequence();
+
+    get_motor_position();
+
+    //change_to_speed_mode();
+
+    return;    
+  }
+
+  void ELD2_RS7020B::change_to_speed_mode()
+  {
+    int32_t mode = (int32_t)CONTROL_MODE::MODE_SETTING;
+    int16_t value = (int16_t)CONTROL_MODE::VELOCITY;
+
+    // 속도 모드로 변경
+    frb::Error error = _comm->write_data_register(mode, value);
+
+    if(error != frb::Error::None)
+    {
+      _error = true;
+      _status = SERVO_STATUS::STATUS_ERROR;
+      log_msg(LogError, 0, "change_to_speed_mode fail");
+      log_msg(LogError, 0, std::string("ELD2 : ") + modbus_strerror(errno));
+    }
+    else
+    {
+      // 속도값이 위치할 address 설정 (첫번째 위치의 속도값을 사용할 것이다 VELOCITY_CONTROL::FIRST_SPEED)
+      mode = (int32_t)VELOCITY_CONTROL::VELOCITY_SWITCHING;
+      error = _comm->write_data_register(mode, 1);
+
+      if(error != frb::Error::None)
+      {
+        _error = true;
+        _status = SERVO_STATUS::STATUS_ERROR;
+        log_msg(LogError, 0, "change_to_speed_mode fail");
+        log_msg(LogError, 0, std::string("ELD2 : ") + modbus_strerror(errno));
+      }
+      else
+      {
+        _control_mode = CONTROL_MODE::VELOCITY;
+        log_msg(LogInfo, 0, "change_to_speed_mode success");
+      }
+    }
+    return;
+  }
+
+  void ELD2_RS7020B::change_to_position_mode()
+  {
+    // 위치 모드로 변경
+    frb::Error error = _comm->write_data_register((int)CONTROL_MODE::MODE_SETTING, (int16_t)CONTROL_MODE::POSITION);
+    if(error != frb::Error::None)
+    {
+      _error = true;
+      _status = SERVO_STATUS::STATUS_ERROR;
+      log_msg(LogError, 0, "change_to_position_mode fail");
+      log_msg(LogError, 0, std::string("ELD2 : ") + modbus_strerror(errno));
+    }
+    else
+    {
+      _control_mode = CONTROL_MODE::POSITION;
+      log_msg(LogInfo, 0, "change_to_position_mode success");
+    }
+    return;
+  }
+
 
   /**
   * @brief      motor 동작 시간 초과시 호출
@@ -403,4 +623,29 @@ namespace frb
 
     return;
   }  
+
+  void ELD2_RS7020B::load_option(std::string config_file)
+  {
+    try
+    {
+      std::ifstream yaml_file(config_file);
+      YAML::Node yaml = YAML::Load(yaml_file);
+      yaml_file.close();
+      _home_position  = yaml["motor"]["home_position"].as<int32_t>();
+    }
+    catch(YAML::Exception& e)
+    {
+      std::cout << "YAML Exception : " << e.what() << std::endl;
+    }
+    catch(std::exception& e)
+    {
+      std::cout << "Exception : " << e.what() << std::endl;
+    }
+    catch(...)
+    {
+      std::cout << "Unknown Exception" << std::endl;
+    }
+    
+    return;
+  }
 }

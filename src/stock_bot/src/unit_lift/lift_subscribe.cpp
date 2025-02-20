@@ -3,6 +3,7 @@
 
 #include "lift.h"
 #include <fieldro_lib/define/unit_state.h>
+#include <fieldro_lib/helper/helper.h>
 
 
 namespace frb
@@ -22,8 +23,13 @@ namespace frb
        unit != frb::UnitName::All)      return;
 
     frb::UnitAction action = to_enum<frb::UnitAction>(msg.action);
-
     log_msg(LogInfo, 0, "UnitName Action Sub : " + to_string(unit) + " - " + to_string(action));
+
+    double value = std::numeric_limits<double>::max();
+    if(msg.command != "" && is_number(msg.command))
+    {
+      value = std::stod(msg.command);
+    }
 
     switch(action)
     {
@@ -32,23 +38,33 @@ namespace frb
       break;
 
     case frb::UnitAction::Init:
+      //publish_unit_action_complete(to_int<frb::UnitAction>(action), frb::to_int(frb::Error::None));
+      _action = frb::UnitAction::Init;
+      _motor->initialize();
+      break;
+
+    // case frb::UnitAction::Fall:
+    //   std::async(std::launch::async, [this] { execute_fall_action(); });
+    //   break;
+    // case frb::UnitAction::Middle:
+    //   std::async(std::launch::async, [this] { execute_middle_action(); });
+    //   break;
+    // case frb::UnitAction::Raise:
+    //   std::async(std::launch::async, [this] { execute_raise_action(); });
+    //   break;
+
+    case frb::UnitAction::Lift:
+      //_motor->control_speed_move(value);
+      value *= 300.0;
+      if(value < -300.0)  value = -300.0;
+      if(value > 300.0)   value = 300.0;
+      _motor->control_pr0(value);
       publish_unit_action_complete(to_int<frb::UnitAction>(action), frb::to_int(frb::Error::None));
-      break;
-
-    case frb::UnitAction::Fall:
-      std::async(std::launch::async, [this] { execute_fall_action(); });
-      break;
-
-    case frb::UnitAction::Middle:
-      std::async(std::launch::async, [this] { execute_middle_action(); });
-      break;
-
-    case frb::UnitAction::Raise:
-      std::async(std::launch::async, [this] { execute_raise_action(); });
       break;
 
     case frb::UnitAction::Stop:
       _motor->stop_motor();
+      publish_unit_action_complete(to_int<frb::UnitAction>(action), frb::to_int(frb::Error::None));
       break;
 
     case frb::UnitAction::Finish:

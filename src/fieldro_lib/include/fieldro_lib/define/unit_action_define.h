@@ -24,6 +24,7 @@ namespace frb
     Middle  = 0x0060,   Middleing,    Middled,           // 중간      (Lift)
     Home    = 0x0070,   Homing,       Homed,             // 홈        (Lift)
     Raise   = 0x0080,   Raising,      Raised,            // 상승      (Lift)
+    Lift    = 0x0085,   Lifting,      Lifted,            // 높이      (Lift)
  
     Transfer= 0x0090,   Transfering,  Transfered,        // 물체 이동 (Handler)
     
@@ -71,6 +72,7 @@ namespace frb
     {UnitAction::Middle, "Middle"},     {UnitAction::Middleing, "Middleing"},     {UnitAction::Middled, "Middled"},
     {UnitAction::Home, "Home"},         {UnitAction::Homing, "Homing"},           {UnitAction::Homed, "Homed"},
     {UnitAction::Raise, "Raise"},       {UnitAction::Raising, "Raising"},         {UnitAction::Raised, "Raised"},
+    {UnitAction::Lift, "Lift"},         {UnitAction::Lifting, "Lifting"},         {UnitAction::Lifted, "Lifted"},
     {UnitAction::Transfer, "Transfer"}, {UnitAction::Transfering, "Transfering"}, {UnitAction::Transfered, "Transfered"},
     {UnitAction::Grip, "Grip"},         {UnitAction::Gripping, "Gripping"},       {UnitAction::Gripped, "Gripped"},
     {UnitAction::Release, "Release"},   {UnitAction::Releasing, "Releasing"},     {UnitAction::Released, "Released"},

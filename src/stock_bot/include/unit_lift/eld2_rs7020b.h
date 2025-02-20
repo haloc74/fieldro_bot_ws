@@ -8,6 +8,15 @@
 
 #include "eld2_rs7020b_define.h"
 
+/*
+  1. motor 연결
+  2. current position 확인 
+  3. current position < home position 이면 homing direction CW
+  4. current position > home position 이면 homing direction CCW
+  5. current position == home position 이면 skip
+  6. homing 종료 되면 initialize 완료
+     motor get_motor_status() - _motor_status & 0x0008 체크 
+*/
 
 
 namespace frb
@@ -20,12 +29,16 @@ namespace frb
                  std::string config_file);
     ~ELD2_RS7020B();
 
+    void    initialize();
     void    update();
 
     frb::Error control_move(int32_t abs_pos, int16_t rpm, int32_t check_interval, int32_t timeout_millisec);
+    frb::Error control_speed_move(double direction);
     frb::Error control_homing(int16_t speed, int16_t acc, int16_t dec);
     frb::Error get_motor_status();
     int32_t get_motor_position();
+
+    void control_pr0(int16_t rmp);
 
     CommStatus  get_comm_state()  { return _comm_state; }
     bool        get_servo_power() { return _servo_power; }
@@ -44,10 +57,14 @@ namespace frb
     
     bool _error;
     frb::Error control_power(bool on);                      // 서보 전원 제어 
-    
+
+    // class object status
+    SERVO_STATUS _status;
+
     
     // Motor Data
     uint16_t  _motor_status;                // 모터 상태 data
+    int32_t   _home_position;               // motor home 위치 
     int32_t   _current_position;            // motor 현재 위치
     int32_t   _target_position;             // motor 목표 위치
 
@@ -56,7 +73,10 @@ namespace frb
     int16_t _dec;     // 감속 시간 ms
     int16_t _rpm;     // speed rpm
 
+    CONTROL_MODE _control_mode;             // motor 제어 모드
+
     void check_action_complete();
+    void check_homing_complete();
     
     void action_timeout(int sequence);
     int32_t _timeout_sequence;            // timeout을 설정한 sequence
@@ -67,6 +87,10 @@ namespace frb
     frb::Error control_pr0(int16_t mode, int32_t position, int16_t rpm, int16_t acc, int16_t dec);
 
     void log_msg(frb::LogLevel level, int32_t error_code, std::string log);
+    void load_option(std::string config_file);
+
+    void change_to_position_mode();
+    void change_to_speed_mode();
   };
 }
 

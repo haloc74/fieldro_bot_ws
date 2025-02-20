@@ -34,6 +34,10 @@ namespace frb
         return;
       }
 
+      // if(_action == frb::UnitAction::Init)
+      // {
+      // }
+
       // 동작 완료 보고 (정상 완료)
       Unit::publish_unit_action_complete(to_int(_action), frb::to_int(Error::None));
 

@@ -31,7 +31,6 @@ namespace frb
   // 0x6208 : path 1
   // 0x620F : path 2
   //  
-
   enum class SERVO_ADDRESS
   {
     CTRL_POWER    = 0x0405,  // 0x0405 : 0x0083 : ON, 0x0003 : OFF
@@ -50,7 +49,27 @@ namespace frb
 
     GET_POSITION  = 0x602C,  // 현재 위치 Address
     GET_STATUS    = 0x0B05,  // 모터 상태 Address
-  };  
+  };
+  
+  enum class CONTROL_MODE
+  {
+    MODE_SETTING = 0x0003,  // Pr0.01, Contorl Mode Settings
+    POSITION     = 0,
+    VELOCITY     = 1,
+    TORQUE       = 2,
+    CONTROL_MODE_END,
+  };
+
+  enum class VELOCITY_CONTROL
+  {
+    VELOCITY_SWITCHING = 0x0301,  // Pr3.00, Velocity internal/external switching
+    VELOCITY_DIRECTION = 0x0303,  // Pr3.01, Velocity command rotational direction selection
+    FIRST_SPEED        = 0x0309,  // Pr3.04, 1st speed of velosity setting
+    SECOND_SPEED       = 0x030B,  // Pr3.05, 2st speed of velosity setting
+    THIRD_SPEED        = 0x030D,  // Pr3.06, 3st speed of velosity setting
+    FOURTH_SPEED       = 0x030F,  // Pr3.07, 4th speed of velosity setting
+  };
+
 
   enum class SERVO_VALUE
   {
@@ -80,6 +99,7 @@ namespace frb
     STATUS_HOME     = 0x0008,     // 원점복귀 완료
     STATUS_IN_POS   = 0x0010,     // 위치 도달
     STATUS_IN_SPEED = 0x0020,     // 속도 도달
+    END             = 0x0040,     // 없음
   };
 
   enum class LOADER_SENSOR_STATE

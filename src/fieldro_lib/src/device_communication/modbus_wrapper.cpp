@@ -365,6 +365,17 @@ namespace frb
     }
     return frb::Error::None;
   }
+  frb::Error ModbusWrapper::write_data_register_test(int32_t address, int16_t value)
+  {
+    std::lock_guard<std::mutex> lock(_lock);
+    int32_t ret = modbus_write_register(_modbus, address, value);
+    if(ret == -1)
+    {
+      disconnect();
+      return frb::Error::WriteFail;
+    }
+    return frb::Error::None;
+  }
 
 
   /**

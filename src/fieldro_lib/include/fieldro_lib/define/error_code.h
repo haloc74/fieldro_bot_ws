@@ -61,6 +61,8 @@ namespace frb
     TimeOut,
     SetSlaveFail,
 
+    ControlModeError,
+
     FileDoseNotExist = 1200,
 
     SendFail = 1300, 
@@ -74,6 +76,7 @@ namespace frb
     NotInitialized,
     InitializeFail,
     ProcedualError,
+    PowerFault,
 
     OutOfRange = 1600,
 
