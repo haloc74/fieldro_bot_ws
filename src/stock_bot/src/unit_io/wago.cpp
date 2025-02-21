@@ -69,6 +69,13 @@ namespace frb
 
   Wago::~Wago()
   {
+    // IO 출력을 모두 해제한다.
+    for(int i=0; i<to_int(frb::DOSignal::END); ++i)
+    {
+      write_do_signal(i, 0);
+      usleep(100000);
+    }
+
     // modbus 해제
     safe_delete(_modbus);
 
@@ -79,6 +86,7 @@ namespace frb
     // io signal map 해제
     delete_io_map();
   }
+
 
   /**
   * @brief      main thread update 함수
@@ -130,6 +138,20 @@ namespace frb
     }
 
     update_di_signal(signal);
+  }
+  void Wago::write_do_signal(int32_t address, int value)
+  {
+    std::lock_guard<std::mutex> lock(_lock);
+
+    frb::Error error = _modbus->write_data_bits(address, value);
+
+    if(error != frb::Error::None)
+    {
+      LOG->add_log(_name, 
+                    frb::LogLevel::Error, 
+                    frb::to_int(error), 
+                    "Write DO Signal Error");
+    }
   }
 
   /**

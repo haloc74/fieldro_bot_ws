@@ -13,6 +13,7 @@
 #include "package/unit_define.h"  
 #include "package/package_helper.h"
 
+
 namespace frb
 {
   /**
@@ -32,7 +33,6 @@ namespace frb
 
     // 요청된 action에 따른 처리
     frb::UnitAction action = to_enum<frb::UnitAction>(unit_control_msg.action);
-
     log_msg(LogInfo, 0, "Action Sub : " + to_string(unit) + " - " + to_string(action));
 
     switch(action)
@@ -44,7 +44,21 @@ namespace frb
     case frb::UnitAction::Init:
       //_state =  static_cast<int>(frb::UnitState::Idle);
       _state = frb::UnitState::Normal;
-      publish_unit_action_complete(to_int<frb::UnitAction>(action), frb::to_int(frb::Error::None));
+      
+      break;
+
+    case frb::UnitAction::Break:
+      if(unit_control_msg.command != "")
+      {
+        if(unit_control_msg.command == "on")
+        {
+          write_do_signal(to_int(DOSignal::DO_BREAK), 0);
+        }
+        else if(unit_control_msg.command == "off")
+        {
+          write_do_signal(to_int(DOSignal::DO_BREAK), 1);
+        }
+      }
       break;
 
     case frb::UnitAction::Finish:  
@@ -58,6 +72,8 @@ namespace frb
     default:                                  
       break;
     }
+
+    publish_unit_action_complete(to_int<frb::UnitAction>(action), frb::to_int(frb::Error::None));
   }
 
 

@@ -31,7 +31,11 @@ namespace frb
 
     // 속도제어 subscriber 생성 및 link
     _subscribe_driving_control =
-    _node_handle->subscribe(msg_space+"/driving_control", 100, &Driving::subscribe_driving_control, this);
+    _node_handle->subscribe(msg_space+"/driving_control", 20, &Driving::subscribe_driving_control, this);
+
+    // Manual Control Subscriber
+    _subscribe_manual_control =
+    _node_handle->subscribe(msg_space+"/manual_control", 20, &Driving::subscribe_manual_control, this);
 
     // // 조이스틱 subscriber 생성 및 link
     // _subscribe_joy_msg =
@@ -43,6 +47,8 @@ namespace frb
 
     _wait_actual_velocity = false;
     _prev_velocity_check_time = DBL_MAX;
+    _last_steer_value = DBL_MAX;
+    _last_propulsion_value = DBL_MAX;
 
     for(int i = 0; i < Wheel::End; i++)
     {
@@ -118,7 +124,9 @@ namespace frb
   {
     while(_update_thread->_active)
     {
-      // todo : 
+      // // todo : 
+      // int32_t count = _drive[2]->get_remain_packet_count();
+      // log_msg(LogInfo, 0, "Remain Packets : " + std::to_string(count));
 
       // thread Hz 싱크 및 독점 방지를 위한 sleep
       std::this_thread::sleep_for(std::chrono::milliseconds(_update_thread->_sleep));

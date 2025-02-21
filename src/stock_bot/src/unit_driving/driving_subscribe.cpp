@@ -54,10 +54,47 @@ namespace frb
   //   return;
   // }
 
+  void Driving::subscribe_manual_control(const fieldro_msgs::ManualControl& msg)
+  {
+    double value = 0.0;
+
+    //move(msg.propulsion_value);
+    if(is_update_filter(_last_propulsion_value, msg.propulsion_value, 0.05))
+    {
+      _last_propulsion_value = msg.propulsion_value;
+      if(abs(_last_propulsion_value) <= 0.05) _last_propulsion_value = 0.0;
+      move(msg.propulsion_value);
+    }
+
+    //steer(msg.steering_value);
+    if(is_update_filter(_last_steer_value, msg.steering_value, 5.0))
+    {
+      _last_steer_value = msg.steering_value;
+      if(abs(_last_steer_value) <= 5.0) _last_steer_value = 0.0;
+      steer(msg.steering_value);
+    }
+
+    log_msg(LogInfo, 0, "control data : " + 
+            std::to_string(msg.propulsion_value) +
+            "  " +
+            std::to_string(msg.steering_value));
+
+    int32_t remain_packets = _drive[2]->get_remain_packet_count();
+    log_msg(LogInfo, 0, "Remain Packets : " + std::to_string(remain_packets));    
+  }
+
+  bool Driving::is_update_filter(double prev_value, double cur_value, double gap)
+  {
+    if(std::abs(prev_value - cur_value) > gap)  
+      return true;
+    return false;
+  }
+
   void Driving::subscribe_driving_control(const geometry_msgs::Twist &twist_msg)
   {
     move(twist_msg.linear.x);
     steer(twist_msg.angular.z);
+
     return;
   }  
 

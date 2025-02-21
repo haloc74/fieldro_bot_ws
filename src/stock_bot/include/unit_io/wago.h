@@ -8,6 +8,7 @@
 #include <fieldro_lib/io_signal/signal_info.h>
 
 #include "digital_in_define.h"
+#include "digital_out_define.h"
 
 /**
 * @author		  fieldro
@@ -48,6 +49,7 @@ namespace frb
     void create_io_map();
     void delete_io_map();
     void read_di_signal();
+    void write_do_signal(int32_t address, int value);
     void update_di_signal(const uint8_t* const signal);
   };
 }

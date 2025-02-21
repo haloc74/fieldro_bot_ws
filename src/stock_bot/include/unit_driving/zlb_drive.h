@@ -59,6 +59,10 @@ namespace frb
     void reset();
     void breaking(bool flag);                     // break on/off
     int32_t   get_motor_status(int32_t slave_id);     // motor 상태 확인
+    int32_t   get_remain_packet_count()
+    {
+      return _packets.size();
+    }
 
     void propulsion(double velocity);
     void steering(double degree);

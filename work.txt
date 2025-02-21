@@ -1,21 +1,29 @@
 
 . Lift ManualControl 신호가 일정시간 이상 수신되지 않으면 멈추도록 Programming 필요
 . Lift ManualControl 시 rpm이 0으로 설정되었음에도 계속해서 움직임이 관측됨 : 원인 파악 필요
+. Lift subscribe_iosignal 부분 삭제 고려
 
+. Joystick 전송 Delay 해결 방안 생각하기
+. 
 
 . JoyStick 객체의 관리를 어떻게 할 것인지 정해야 한다...
 
 . wago DOO 신호 발생 (Light On)
 
+
 . ZlbDrive::void move(double velocity, double angular) 함수 수정
 . steer position mode 추가 하기
-
 . Zlb Drive 생성자에서 위치 모드로 설정하고 원점 위치로 Wheel 정렬 시키는 기능 추가.
-. 주행 명령은 queue에 대기 시키지 않고 바로 발송
-. 주행 명령은 action complete 보고하지 않도록 하기.
+. Propulsion Motor Brake 풀리지 않는 문제 ....
 
 
 ID [  ] : 2025-02-21
+1. Driving 주행, 조향 ManualControl topic을 이용하여 컨트롤
+2. 주행 명령은 queue에 대기 시키지 않고 바로 발송
+3. 주행 명령은 action complete 보고하지 않도록 하기.  
+4. Wago Digital out 추가 
+
+ID [ cbed003 ] : 2025-02-21
 0. Lift Manual Control Refactoring 완료
 1. user - Lift 상승, 하강 명령 별도의 토픽으로 만들기
 2. user - LiftControl은 control queue에 등록 시키지 않고 바로 전달하기

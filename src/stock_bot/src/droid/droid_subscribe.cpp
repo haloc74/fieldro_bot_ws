@@ -191,7 +191,6 @@ namespace frb
 
     // 수동조작 message 발행
     publish_manual_control(propulsion_velocity, steer_velocity, lift_velocity);
-
     log_msg(LogInfo, 0, "Joystick Control : " + 
                         std::to_string(propulsion_velocity) + " - " + 
                         std::to_string(steer_velocity) + " - " +

@@ -4,6 +4,7 @@
 
 #include <mutex>
 
+#include <fieldro_msgs/ManualControl.h>
 #include <fieldro_lib/unit/unit.h>
 #include <fieldro_lib/driving_mode/ackermann_double.h>
 #include <sensor_msgs/Joy.h>
@@ -30,9 +31,9 @@ namespace frb
     ros::Subscriber _subscribe_driving_control;
     void subscribe_driving_control(const geometry_msgs::Twist &twist_msg);
 
-    // Joystick Subscriber
-    ros::Subscriber _subscribe_joy_msg;
-    void subscribe_joy_msg(const sensor_msgs::Joy& joy_msg);
+    // Manual Control Subscriber
+    ros::Subscriber _subscribe_manual_control;                        // 수동 제어를 받기 위한 subscriber
+    void subscribe_manual_control(const fieldro_msgs::ManualControl& msg);  // 수동 제어를 받기 위한 callback 함수
 
     // act_vel publisher
     ros::Publisher _publish_act_velocity;
@@ -40,6 +41,9 @@ namespace frb
 
     ZlbDrive* _drive[Wheel::End];                             // drive 객체
     int32_t   _test_wheel;                                    // 테스트 휠            
+
+    double _last_steer_value;
+    double _last_propulsion_value;
 
     bool      _wait_actual_velocity;                          // 실제 속도 대기 여부
     WheelControlValue _actual_velocity[Wheel::End];           // 실제 속도
@@ -64,5 +68,7 @@ namespace frb
     void reset();
     void breaking(std::string state);
     void get_motor_status();
+
+    bool is_update_filter(double prev_value, double cur_value, double gap);
   };
 }
