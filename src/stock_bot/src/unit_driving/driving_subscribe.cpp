@@ -67,11 +67,18 @@ namespace frb
     }
 
     //steer(msg.steering_value);
-    if(is_update_filter(_last_steer_value, msg.steering_value, 5.0))
+    if(is_update_filter(_last_steer_value, msg.steering_value, 0.1))
     {
-      _last_steer_value = msg.steering_value;
-      if(abs(_last_steer_value) <= 5.0) _last_steer_value = 0.0;
-      steer(msg.steering_value);
+      //_last_steer_value = msg.steering_value;
+      double steer_value = msg.steering_value*100.0;
+      if(steer_value > 100.0) steer_value = 100.0;
+      if(steer_value < -100.0) steer_value = -100.0;
+
+      if(abs(_last_steer_value) <= 10.0) _last_steer_value = 0.0;
+
+      _last_steer_value = steer_value;
+
+      steer(_last_steer_value);
     }
 
     log_msg(LogInfo, 0, "control data : " + 

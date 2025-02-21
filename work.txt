@@ -16,8 +16,13 @@
 . Zlb Drive 생성자에서 위치 모드로 설정하고 원점 위치로 Wheel 정렬 시키는 기능 추가.
 . Propulsion Motor Brake 풀리지 않는 문제 ....
 
-
 ID [  ] : 2025-02-21
+1. Wago Class Refactoring
+2. Wago Class : subscribe, publish cpp 파일 분리
+  기존 wago_message.cpp -> wago_subscribe.cpp, wago_publish.cpp로 분리
+3. Manual Control 버그 수정
+
+ID [ f84bd73 ] : 2025-02-21
 1. Droid Class Refactoring
 
 ID [ a006fe0 ] : 2025-02-21
