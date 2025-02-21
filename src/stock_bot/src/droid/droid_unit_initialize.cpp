@@ -7,6 +7,26 @@
 namespace frb
 {
   /**
+  * @brief      unit 초기화 process를 시작한다.
+  * @param[in]  int32_t alive_value : unit들의 alive 상태
+  * @return     void
+  * @note       
+  */
+  void Droid::start_initialize_process(int32_t alive_value)
+  {
+    if(alive_value != 0x00)    return;
+
+    _state = frb::UnitState::Active;
+
+    log_msg(LogInfo, 0, "Start initialize process --- ");
+   
+    delay_call(3000, std::bind(&Droid::create_unit_initialize_sequence, this));
+
+    return;
+  }
+  
+
+  /**
   * @brief      링크 되어야 하는 유닛들의 초기화 순서를 정의한다.
   * @param[in]  void
   * @return     void

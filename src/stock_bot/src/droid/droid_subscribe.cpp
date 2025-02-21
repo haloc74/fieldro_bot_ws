@@ -12,24 +12,20 @@ namespace frb
   * @brief      unit의 상태를 subscribe하는 함수
   * @param[in]  const fieldro_msgs::UnitStateMsg &msg : unit의 상태 정보
   * @return     void
-  * @note       
+  * @see        fieldro_msgs::UnitStateMsg
+  *             int32 alive
+  *             int32 []
   */
   void Droid::subscribe_unit_state(const fieldro_msgs::UnitStateMsg &msg)
   {
     switch(_state)
     {
     case frb::UnitState::Created:
-      if(msg.alive == 0x00)
-      {
-        // todo : 다른 object 들이 모두 생성 되었다 
-        log_msg(LogInfo, 0, "All Init - Next Step Process");
-        _state = frb::UnitState::Normal;
-        delay_call(3000, std::bind(&Droid::create_unit_initialize_sequence, this));
-      }
+      start_initialize_process(msg.alive);
       break;
     case frb::UnitState::Active:    break;
-    //case frb::UnitState::Idle:      break;
-    //case frb::UnitState::Busy:      break;
+    case frb::UnitState::Ready:     break;
+    case frb::UnitState::Busy:      break;
     case frb::UnitState::Normal:    break;
     case frb::UnitState::Error:     break;
     case frb::UnitState::End:       break;
@@ -46,6 +42,8 @@ namespace frb
   /*            1. action_complete_msg의 action_object와 pending_sequence의 target_object가 일치할 경우
   /*            2. action_complete_msg의 action과 pending_sequence의 action이 일치할 경우
   /*            두 조건이 모두 만족할 경우 pending_sequence에서 삭제한다.
+
+  /* @attention sequence번호를 이용한 처리를 생각해보자 병렬 프로그래밍시 문제가 발생 할 수 있다.
   */
   void Droid::subscribe_action_complete(const fieldro_msgs::UnitActionComplete &action_complete_msg)
   {
@@ -65,13 +63,16 @@ namespace frb
       if((*it)->target_object != action_complete_msg.action_object)   continue;
       if((*it)->action != action_complete_msg.complete_action)        continue;
 
-      // todo : action fail 처리
       if(action_complete_msg.error_code != frb::to_int(Error::None))
       {
-        log_msg(LogError, action_complete_msg.error_code, "action_fail : "+ 
-        to_string(to_enum<frb::UnitName>((*it)->target_object)) + " - " +
-        to_string<frb::UnitAction>((*it)->action));
-        //unit_action_to_string(to_enum<frb::UnitAction>((*it)->action)));
+        log_msg(LogError, 
+                action_complete_msg.error_code, 
+                "action_fail : "+ 
+                to_string(to_enum<frb::UnitName>((*it)->target_object)) + 
+                " - " +
+                to_string<frb::UnitAction>((*it)->action));
+
+        // todo : action fail 처리
       }
       else
       {
@@ -84,23 +85,9 @@ namespace frb
       break;
     }
 
-    // 모든 unit의 초기화가 완료되었을 경우
-    if(!_all_unit_initialize_complete && is_all_sequence_empty())
-    {
-      _all_unit_initialize_complete = true;
-      log_msg(LogInfo, 0, "All Unit Initialize Complete !!!");
-    }
-
+    // 모든 unit의 초기화가 완료되었을 경우 준비 상태로 전환 시킨다.
+    all_unit_initialize_complete();
     return;
-  }  
-
-  /**
-  * @brief      constro_sequence 및 pending_sequence가 모두 비어 있는지 확인하는 함수
-  * @note       
-  */
-  bool Droid::is_all_sequence_empty()
-  {
-    return _control_sequence.empty() && _pending_sequence.empty();
   }
 
   /**
@@ -130,9 +117,10 @@ namespace frb
   */
   void Droid::subscribe_velocity_control(const geometry_msgs::Twist &twist_msg)
   {
+    // 조이스틱 컨트롤 중에는 자동제어 하면 안된다.
     if(_joystick_control == 1)            return; 
-
-    publish_driving_control(twist_msg);
+    
+    // todo : 자동 제어에서 Twinny message를 받아서 주행 처리 하자...
     
     return;
   }
@@ -171,23 +159,11 @@ namespace frb
   {
     if(_is_driving_mode_changeable == 0)  return;
     if(_joystick_control == 0)            return; 
-    if(!_all_unit_initialize_complete)    return;
+    if(_state != frb::UnitState::Ready)   return;
 
-    double propulsion_velocity = joy_msg.axes[to_int(JoyStick::LeftVertical)] * _propulsion_scale_factor;
-    double steer_velocity      = joy_msg.axes[to_int(JoyStick::LeftHorizontal)] * _steer_scale_factor;
+    double propulsion_velocity = joy_msg.axes[to_int(JoyStick::LeftVertical)];
+    double steer_velocity      = joy_msg.axes[to_int(JoyStick::LeftHorizontal)];
     double lift_velocity       = joy_msg.axes[to_int(JoyStick::RightVertical)];
-
-    // geometry_msgs::Twist msg;
-    // msg.linear.x  = propulsion_velocity;
-    // msg.angular.z = steer_velocity;
-    // publish_driving_control(msg);
-    // log_msg(LogInfo, 0, "Joystick Control : " + std::to_string(propulsion_velocity) + " - " + std::to_string(steer_velocity));
-
-
-    // // Lift control
-    // if(lift_velocity < -1.0f)   lift_velocity = -1.0f;
-    // if(lift_velocity > 1.0f)    lift_velocity = 1.0f;  
-    // add_sequence(to_int(UnitName::Lift), to_int(UnitAction::Lift), std::to_string(lift_velocity));
 
     // 수동조작 message 발행
     publish_manual_control(propulsion_velocity, steer_velocity, lift_velocity);

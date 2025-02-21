@@ -3,8 +3,9 @@ main:
   spinner_count           : 3
   driving_mode_changeable : 1         ## 주행모드 변경 가능 여부 (0:no, 그외:ok)
   joystick_control        : 1         ## joystick 제어 가능 여부 (0:no, 그외:ok)
-  propulsion_scale_factor : -4.8       ## joystick scale factor
-  steer_scale_factor      : 100.0       ## joystick scale factor
+
+  # propulsion_scale_factor : -4.8       ## joystick scale factor
+  # steer_scale_factor      : 100.0       ## joystick scale factor
 
 alive:
   hz                  : 20            ## heartbeat 보고 주기

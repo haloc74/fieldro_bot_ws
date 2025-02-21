@@ -20,14 +20,13 @@ namespace frb
     // 관련 옵션 로드
     load_option(config_file);
 
-    // 현재 상태를 _state값중 system에 해당하는 값으로 연결
-    //_name   = UnitName::System;
-    _name = frb::to_string(frb::UnitName::System);
+    // 객체의 이름 및 index 설정
+    _name       = frb::to_string(frb::UnitName::System);
     _unit_index = frb::to_int(frb::UnitName::System);
 
+    // 객체의 상태 및 action 설정
     _action = UnitAction::None;
     _state  = UnitState::Created;
-    _all_unit_initialize_complete = false;
 
     _subscribe_switch_report =
     _node_handle->subscribe("twinny_robot/SwitchReport", 10, &Droid::subscribe_switch_report, this);
@@ -49,9 +48,6 @@ namespace frb
 
     _publish_unit_control = 
     _node_handle->advertise<fieldro_msgs::UnitControl>(msg_space + "/unit_control", 10);
-
-    _publish_driving_control =
-    _node_handle->advertise<geometry_msgs::Twist>(msg_space + "/driving_control", 100);    
 
     _publish_manual_control =
     _node_handle->advertise<fieldro_msgs::ManualControl>(msg_space + "/manual_control", 10);
@@ -189,6 +185,40 @@ namespace frb
   }
 
   /**
+  * @brief      constro_sequence 및 pending_sequence가 모두 비어 있는지 확인하는 함수
+  * @note       
+  */
+  bool Droid::is_all_sequence_empty()
+  {
+    return _control_sequence.empty() && _pending_sequence.empty();
+  }
+
+  
+
+  /**
+  * @brief      모든 unit의 초기화가 완료되었을 경우 준비 상태로 전환 시키는 함수
+  * @param[in]  void
+  * @return     void
+  * @note       1. UnitState를 Reade 상태로 변경
+  *             2. LED 조명을 바꿔야 하면 이곳에서 바꾼다....
+  */
+  void Droid::all_unit_initialize_complete()
+  {
+    if(_state != frb::UnitState::Active)    return;
+    if(!is_all_sequence_empty())            return;
+
+    _state = frb::UnitState::Ready;
+
+    // todo : LED 조명을 바꿔야 하면 이곳에서 바꾼다....
+    
+    log_msg(LogInfo, 0, "All Unit Initialize Complete !!!");
+    log_msg(LogInfo, 0, "Unit State Change : Active -> Ready");
+
+    return;
+  }
+
+
+  /**
   * @brief      Droid 관련 option 로드
   * @note       
   */
@@ -206,8 +236,8 @@ namespace frb
       _is_driving_mode_changeable = yaml["main"]["driving_mode_changeable"].as<int32_t>();
       _joystick_control = yaml["main"]["joystick_control"].as<int32_t>();
       
-      _propulsion_scale_factor = yaml["main"]["propulsion_scale_factor"].as<double>();
-      _steer_scale_factor = yaml["main"]["steer_scale_factor"].as<double>();
+      // _propulsion_scale_factor = yaml["main"]["propulsion_scale_factor"].as<double>();
+      // _steer_scale_factor = yaml["main"]["steer_scale_factor"].as<double>();
 
       log_msg(LogInfo, 0, "Driving Mode : " + std::to_string(_is_driving_mode_changeable));
       log_msg(LogInfo, 0, "Joystick Control : " + std::to_string(_joystick_control));

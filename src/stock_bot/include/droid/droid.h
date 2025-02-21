@@ -53,7 +53,6 @@ namespace frb
 
   protected:
     ros::Publisher      _publish_unit_control;        // unit control을 발송하기 위한 publisher
-    ros::Publisher      _publish_driving_control;     // 주행 제어를 발송하기 위한 publisher 
     ros::Publisher      _publish_manual_control;      // 수동 제어를 발송하기 위한 publisher
 
     ros::Subscriber     _subscribe_switch_report;     // 스위치 상태를 받기 위한 subscriber
@@ -78,24 +77,21 @@ namespace frb
     void add_sequence(int32_t unit, int32_t action, std::string command="");
     void message_publish();
 
-    //void publish_unit_control(int32_t unit, int32_t action, std::string command="");
     void publish_all_destroy();
     void publish_unit_control(std::unique_ptr<fieldro_msgs::UnitControl> unit_control_msg);
-    void publish_driving_control(const geometry_msgs::Twist &twist_msg);
     void publish_manual_control(double propulsion, double steering, double lifting);
 
     // user command control
     std::map<int32_t, int32_t, std::string> _command_map;
-    bool is_all_sequence_empty();  // 모든 sequence가 비어 있는지 확인
-    void create_unit_initialize_sequence();
-    //void add_sequence_with_delay(int32_t unit_name, int32_t unit_action, int32_t delay_ms);
+    bool is_all_sequence_empty();             // 모든 sequence가 비어 있는지 확인
 
-    int32_t _is_driving_mode_changeable;
-    int32_t _joystick_control;
-    double _propulsion_scale_factor;
-    double _steer_scale_factor;
-
-    bool _all_unit_initialize_complete;
+    void start_initialize_process(int32_t alive_value);          // 초기화 Process 시작
+    void create_unit_initialize_sequence();             // unit 초기화 순서 설정
+    void all_unit_initialize_complete();                // 모든 unit 초기화 완료
+    
+    // controller option
+    int32_t _is_driving_mode_changeable;      // 자동 <---> 수동 모드 전환 가능 여부
+    int32_t _joystick_control;                // 조이스틱 제어 여부
   };
 
 }

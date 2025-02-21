@@ -44,13 +44,6 @@ namespace frb
     unit_control_msg.action         = to_int(frb::UnitAction::Finish);
     unit_control_msg.command        = "";
     _publish_unit_control.publish(unit_control_msg);
-
-    // log_msg(LogInfo, 
-    //         0, 
-    //         "unit control Pub (Command Req) : " + 
-    //         to_string(to_enum<frb::UnitName>(unit)) + 
-    //         " - " + 
-    //         to_string<frb::UnitAction>(action));
     return;
   }  
 
@@ -88,13 +81,15 @@ namespace frb
     return;
   }
 
-  void Droid::publish_driving_control(const geometry_msgs::Twist &twist_msg)
-  {
-    _publish_driving_control.publish(twist_msg);
-    
-    return;
-  }
 
+  /**
+  * @brief      수동 제어 message를 발송하는 함수
+  * @param[in]  double propulsion : 전진/후진 속도
+  * @param[in]  double steering : 좌/우 회전 속도
+  * @param[in]  double lifting : 리프팅 속도
+  * @return     void
+  * @attention  수동제어 Driving, Lifting는 Action Complete 응답이 필요없다.
+  */
   void Droid::publish_manual_control(double propulsion, double steering, double lifting)
   {
     fieldro_msgs::ManualControl msg;
@@ -103,7 +98,6 @@ namespace frb
     msg.propulsion_value = propulsion;
     msg.steering_value   = steering;
     msg.lifting_value    = lifting;
-    
     _publish_manual_control.publish(msg);
     
     return;

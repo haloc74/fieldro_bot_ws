@@ -11,8 +11,8 @@ namespace frb
   {
     Created = 0x00, // 생성됨
     Active,         // 활성화 (초기화 중)
-//    Idle,           // 대기 중
-//    Busy,           // 동작 중
+    Ready,          // 동작 대기
+    Busy,           // 동작 중
     Normal,         // 정상
     Error,          // 에러
     End,
@@ -29,8 +29,8 @@ namespace frb
     {
       case UnitState::Created:  return "Created";
       case UnitState::Active:   return "Active";
-//      case UnitState::Idle:     return "Idle";
-//      case UnitState::Busy:     return "Busy";
+      case UnitState::Ready:    return "Ready";
+      case UnitState::Busy:     return "Busy";
       case UnitState::Normal:   return "Normal";
       case UnitState::Error:    return "Error";
       case UnitState::End:      return "End";
@@ -48,8 +48,8 @@ namespace frb
   {
     if(str == "Created")  return UnitState::Created;
     if(str == "Active")   return UnitState::Active;
-//    if(str == "Idle")     return UnitState::Idle;
-//    if(str == "Busy")     return UnitState::Busy;
+    if(str == "Ready")    return UnitState::Ready;
+    if(str == "Busy")     return UnitState::Busy;
     if(str == "Normal")   return UnitState::Normal;
     if(str == "Error")    return UnitState::Error;
     if(str == "End")      return UnitState::End;
