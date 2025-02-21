@@ -3,6 +3,8 @@
 
 . JoyStick 객체의 관리를 어떻게 할 것인지 정해야 한다...
 
+. wago DOO 신호 발생 (Light On)
+
 . ZlbDrive::void move(double velocity, double angular) 함수 수정
 . steer position mode 추가 하기
 
@@ -11,8 +13,13 @@
 . 주행 명령은 action complete 보고하지 않도록 하기.
 
 
+. user - LiftControl은 control queue에 등록 시키지 않고 바로 전달하기
+  action_complete 필요 없다.
+. user - Lift 상승, 하강 명령 별도의 토픽으로 만들기
 
-ID [  ] : 2025-02-20
+
+
+ID [ 51fe4b6 ] : 2025-02-20
 1. Lift 상승 하강 Programming
 2. Joystick을 이용한 Lift 상승 하강 작업
 
