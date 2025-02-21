@@ -18,6 +18,7 @@
 #include <fieldro_msgs/IOSignal.h>
 #include <fieldro_msgs/UnitControl.h>
 #include <fieldro_msgs/UnitStateMsg.h>
+#include <fieldro_msgs/ManualControl.h>
 
 #include "unit_io/digital_in_define.h"
 
@@ -53,6 +54,7 @@ namespace frb
   protected:
     ros::Publisher      _publish_unit_control;        // unit control을 발송하기 위한 publisher
     ros::Publisher      _publish_driving_control;     // 주행 제어를 발송하기 위한 publisher 
+    ros::Publisher      _publish_manual_control;      // 수동 제어를 발송하기 위한 publisher
 
     ros::Subscriber     _subscribe_switch_report;     // 스위치 상태를 받기 위한 subscriber
     ros::Subscriber     _subscribe_velocity_control;  // 속도 제어를 받기 위한 subscriber  
@@ -80,6 +82,7 @@ namespace frb
     void publish_all_destroy();
     void publish_unit_control(std::unique_ptr<fieldro_msgs::UnitControl> unit_control_msg);
     void publish_driving_control(const geometry_msgs::Twist &twist_msg);
+    void publish_manual_control(double propulsion, double steering, double lifting);
 
     // user command control
     std::map<int32_t, int32_t, std::string> _command_map;

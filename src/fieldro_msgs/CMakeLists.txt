@@ -23,6 +23,7 @@ add_message_files(
   unit/UnitAliveMsg.msg
   unit/UnitControl.msg
   unit/UnitStateMsg.msg
+  ManualControl.msg
 )
 
 ## 2.4 종속성을 가진 메세지 및 서비스 생성

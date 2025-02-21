@@ -94,4 +94,18 @@ namespace frb
     
     return;
   }
+
+  void Droid::publish_manual_control(double propulsion, double steering, double lifting)
+  {
+    fieldro_msgs::ManualControl msg;
+
+    msg.time_stamp = ros::Time::now();
+    msg.propulsion_value = propulsion;
+    msg.steering_value   = steering;
+    msg.lifting_value    = lifting;
+    
+    _publish_manual_control.publish(msg);
+    
+    return;
+  }
 }

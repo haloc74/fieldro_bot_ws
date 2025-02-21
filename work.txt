@@ -1,4 +1,6 @@
 
+. Lift ManualControl 신호가 일정시간 이상 수신되지 않으면 멈추도록 Programming 필요
+. Lift ManualControl 시 rpm이 0으로 설정되었음에도 계속해서 움직임이 관측됨 : 원인 파악 필요
 
 
 . JoyStick 객체의 관리를 어떻게 할 것인지 정해야 한다...
@@ -13,11 +15,15 @@
 . 주행 명령은 action complete 보고하지 않도록 하기.
 
 
-. user - LiftControl은 control queue에 등록 시키지 않고 바로 전달하기
+ID [  ] : 2025-02-21
+0. Lift Manual Control Refactoring 완료
+1. user - Lift 상승, 하강 명령 별도의 토픽으로 만들기
+2. user - LiftControl은 control queue에 등록 시키지 않고 바로 전달하기
   action_complete 필요 없다.
-. user - Lift 상승, 하강 명령 별도의 토픽으로 만들기
 
 
+ID [ 92f084c ] : 2025-02-21
+1. Lift Refactoring 시작지점
 
 ID [ 51fe4b6 ] : 2025-02-20
 1. Lift 상승 하강 Programming

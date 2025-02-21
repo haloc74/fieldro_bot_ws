@@ -177,18 +177,20 @@ namespace frb
     double steer_velocity      = joy_msg.axes[to_int(JoyStick::LeftHorizontal)] * _steer_scale_factor;
     double lift_velocity       = joy_msg.axes[to_int(JoyStick::RightVertical)];
 
-    geometry_msgs::Twist msg;
-    msg.linear.x  = propulsion_velocity;
-    msg.angular.z = steer_velocity;
-    publish_driving_control(msg);
-    log_msg(LogInfo, 0, "Joystick Control : " + std::to_string(propulsion_velocity) + " - " + std::to_string(steer_velocity));
+    // geometry_msgs::Twist msg;
+    // msg.linear.x  = propulsion_velocity;
+    // msg.angular.z = steer_velocity;
+    // publish_driving_control(msg);
+    // log_msg(LogInfo, 0, "Joystick Control : " + std::to_string(propulsion_velocity) + " - " + std::to_string(steer_velocity));
 
 
-    // Lift control
-    if(lift_velocity < -1.0f)   lift_velocity = -1.0f;
-    if(lift_velocity > 1.0f)    lift_velocity = 1.0f;  
-    add_sequence(to_int(UnitName::Lift), to_int(UnitAction::Lift), std::to_string(lift_velocity));
+    // // Lift control
+    // if(lift_velocity < -1.0f)   lift_velocity = -1.0f;
+    // if(lift_velocity > 1.0f)    lift_velocity = 1.0f;  
+    // add_sequence(to_int(UnitName::Lift), to_int(UnitAction::Lift), std::to_string(lift_velocity));
 
+    // 수동조작 message 발행
+    publish_manual_control(propulsion_velocity, steer_velocity, lift_velocity);
 
     log_msg(LogInfo, 0, "Joystick Control : " + 
                         std::to_string(propulsion_velocity) + " - " + 

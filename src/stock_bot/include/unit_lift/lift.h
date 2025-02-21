@@ -6,6 +6,7 @@
 #include <fieldro_lib/unit/unit.h>
 //#include <fieldro_lib/define/unit_define.h>
 #include <fieldro_msgs/IOSignal.h>
+#include <fieldro_msgs/ManualControl.h>
 
 #include "motion_info.h"
 #include "eld2_rs7020b.h"
@@ -30,12 +31,15 @@ namespace frb
 
     ELD2_RS7020B*       _motor;                                       // Motor 객체
     MotionInfo          _motion;                                      // 동작 정보 (범위, 시간, 속도, timeout 등 정보)
+    double  _joystick_scale;  // 수동 제어를 위한 속도 scale factor
 
     // sensor info receive
     int64_t _sensor_data_update_mask;                                 // sensor data update mask
     int64_t _prev_sensor_data;                                        // 이전 센서 상태를 저장하기 위한 변수
     ros::Subscriber _subscribe_iosignal;                              // IOSignal을 받기 위한 subscriber 
     void subscribe_iosignal(const fieldro_msgs::IOSignal& msg);       // IOSignal을 받기 위한 callback 함수
+    ros::Subscriber _subscribe_manual_control;                        // 수동 제어를 받기 위한 subscriber
+    void subscribe_manual_control(const fieldro_msgs::ManualControl& msg);  // 수동 제어를 받기 위한 callback 함수
 
     // loader
     bool is_controlable();                                            // Loader의 동작 가능여부

@@ -53,6 +53,9 @@ namespace frb
     _publish_driving_control =
     _node_handle->advertise<geometry_msgs::Twist>(msg_space + "/driving_control", 100);    
 
+    _publish_manual_control =
+    _node_handle->advertise<fieldro_msgs::ManualControl>(msg_space + "/manual_control", 10);
+
     _control_sequence.clear();
     _pending_sequence.clear();
     _command_map.clear();

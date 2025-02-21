@@ -45,6 +45,9 @@ namespace frb
     _subscribe_iosignal =
     _node_handle->subscribe(msg_space+"/io_signal", 10, &Lift::subscribe_iosignal, this);
 
+    _subscribe_manual_control =
+    _node_handle->subscribe(msg_space+"/manual_control", 10, &Lift::subscribe_manual_control, this);
+
     // spinn 구동 (생성은 Unit Class 담당)
     _spinner->start();
  
@@ -233,6 +236,7 @@ namespace frb
       _safety_distance  = yaml["main"]["safety_distance"].as<int32_t>();
       _action_rpm       = yaml["main"]["action_rpm"].as<int32_t>();
       _action_timeout   = yaml["main"]["action_timeout"].as<int32_t>();
+      _joystick_scale   = yaml["main"]["joystick_scale"].as<double>();
     }
     catch(YAML::Exception& e)
     {

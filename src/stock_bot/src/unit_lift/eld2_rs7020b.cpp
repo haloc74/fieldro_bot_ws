@@ -194,11 +194,7 @@ namespace frb
     uint16_t value[8];
     memset(value, 0x00, sizeof(uint16_t)*8);
 
-    if(rpm < -300)    rpm = -300;
-    if(rpm > 300)     rpm = 300;
-
-    //_target_position = position;
-
+    //_target_position = 0;
     value[0] = (int16_t)SERVO_VALUE::SPEED;                           // 제어 모드
     value[1] = (u_int16_t)((0) >> 16);  // 위치값 HBS
     value[2] = (u_int16_t)(0);          // 위치값 LBS
@@ -208,8 +204,20 @@ namespace frb
     value[6] = 0x00;                           // delay time ms
     value[7] = 0x10;                           // Path Number
 
-    frb::Error error = _comm->write_data_registers((int)SERVO_ADDRESS::CTRL_PR0, sizeof(value), value);    
+    frb::Error error = _comm->write_data_registers((int)SERVO_ADDRESS::CTRL_PR0, sizeof(value), value); 
+    
+    if(error != frb::Error::None)
+    {
+      std::string str = modbus_strerror(errno);
+      log_msg(LogError, 0, "ELD2 : Error (" + str + ")");
+    }
+    else
+    {
+      log_msg(LogInfo, 0, "ELD2 : control PR0 - rpm = "+std::to_string(rpm));
+    }
+    return;
   }
+
   frb::Error ELD2_RS7020B::control_pr0(int16_t mode, int32_t position, int16_t rpm, int16_t acc, int16_t dec)
   {
     if(_control_mode != CONTROL_MODE::POSITION)

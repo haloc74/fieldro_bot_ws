@@ -117,4 +117,47 @@ namespace frb
 
     return;
   }
+
+  /**
+  * @brief      수동 제어 topic을 수신하는 callback 함수
+  * @param[in]  const fieldro_msgs::ManualControl& msg : manual control message
+  * @return     void
+  * @note       전달 되어진 값을 그대로 사용하는 것이 아니라 검증 이후 scale factor 적용하여 사용
+  */
+  void Lift::subscribe_manual_control(const fieldro_msgs::ManualControl& msg)
+  {
+    // 현재 의미없음 - 구분을 하지 않고 있음
+    //if(msg.control_type != 3)   return; 
+
+    double value = 0.0;
+
+    // 미세한 값에 반응하는것을 방지하기 위하여 0.1 이하의 값은 무시
+    if(std::abs(msg.lifting_value) < 0.1)
+    {
+      value = 0.0;
+    }
+    else
+    {
+      // scale factor를 적용하여 속도 조절
+      value = msg.lifting_value * _joystick_scale;
+
+      // scale factor가 음수일 경우 반대로 적용
+      if(_joystick_scale < 0.0)
+      {
+        if(value > -_joystick_scale)  value = -_joystick_scale;
+        if(value < _joystick_scale)   value = _joystick_scale;
+      }
+      else
+      {
+        if(value < -_joystick_scale)  value = -_joystick_scale;
+        if(value > _joystick_scale)   value = _joystick_scale;
+      }
+    }
+  
+    _motor->control_pr0(value);
+
+    log_msg(LogInfo, 0, "Manual Control Value: " + std::to_string(value));
+    
+    return;
+  }
 }
