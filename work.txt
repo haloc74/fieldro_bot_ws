@@ -16,7 +16,14 @@
 . Zlb Drive 생성자에서 위치 모드로 설정하고 원점 위치로 Wheel 정렬 시키는 기능 추가.
 . Propulsion Motor Brake 풀리지 않는 문제 ....
 
-ID [  ] : 2025-02-21
+
+ID [  ] : 2025-02-22
+1. Joystick B 버튼을 이용한 Break On, Off 조작 추가
+2. Joystick Back 버튼을 이용한 Wheel Motor Reset 조작 추가
+3. Joystick Y 버튼을 이용한 Light On, Off 조작 로직 추가
+   Wago Class 수정
+
+ID [ b3aa164 ] : 2025-02-21
 1. Wago Class Refactoring
 2. Wago Class : subscribe, publish cpp 파일 분리
   기존 wago_message.cpp -> wago_subscribe.cpp, wago_publish.cpp로 분리

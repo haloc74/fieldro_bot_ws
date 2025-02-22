@@ -15,7 +15,7 @@ namespace frb
     None,         // 없음
     Duplicate,    // 중복   (조작하면 안됨)
     Driving,      // 주행
-    Steering,     // Steering
+    Breaking,     // Breaking
     Lifting,      // Lifting
     End,          //
   };
@@ -39,7 +39,7 @@ namespace frb
 
     // 각 부분별 control data 복사
     void copy_driving_data(const sensor_msgs::Joy& msg, sensor_msgs::Joy& info);    // 주행
-    void copy_streering_data(const sensor_msgs::Joy& msg, sensor_msgs::Joy& info);  // Steering
+    void copy_face_data(const sensor_msgs::Joy& msg, sensor_msgs::Joy& info);       // Face Button
     void copy_lifting_data(const sensor_msgs::Joy& msg, sensor_msgs::Joy& info);    // Lifting
   };
 }

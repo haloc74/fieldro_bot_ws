@@ -28,6 +28,16 @@ namespace frb
     _action = UnitAction::None;
     _state  = UnitState::Created;
 
+    // 테스트를 위한 Brake 
+    _prev_brake               = false;
+    _prev_brake_button        = 0;
+
+    _prev_brake_reset_button  = 0;
+
+    _prev_light               = false;
+    _prev_light_button        = 0;
+
+
     _subscribe_switch_report =
     _node_handle->subscribe("twinny_robot/SwitchReport", 10, &Droid::subscribe_switch_report, this);
 

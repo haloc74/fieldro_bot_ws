@@ -53,6 +53,19 @@ namespace frb
         }
       }
       break;
+    case frb::UnitAction::Light:
+    if(unit_control_msg.command != "")
+    {
+      if(unit_control_msg.command == "on")
+      {
+        write_do_signal(to_int(DOSignal::DO_CAMERA_RIGHT), 1);
+      }
+      else if(unit_control_msg.command == "off")
+      {
+        write_do_signal(to_int(DOSignal::DO_CAMERA_RIGHT), 0);
+      }
+    }    
+      break;
 
     case frb::UnitAction::Finish:  
       log_msg(LogInfo, 0, "REQ : Finish");

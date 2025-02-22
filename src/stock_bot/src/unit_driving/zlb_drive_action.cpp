@@ -151,7 +151,7 @@ namespace frb
   void ZlbDrive::propulsion(double velocity)
   {
     // 앞, 뒤 바퀴의 CW 방향이 반대이므로 바퀴에 해당하는 계수를 곱해준다.
-    velocity *= _propulsion_direction;
+    velocity *= _propulsion_direction * 3.0;
 
     double rpm = convert_velocity_to_rpm(velocity);
 

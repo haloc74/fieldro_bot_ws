@@ -80,10 +80,13 @@ namespace frb
   * @return     void
   * @note       
   */
-  void ManualController::copy_streering_data(const sensor_msgs::Joy& msg, sensor_msgs::Joy& info)
+  void ManualController::copy_face_data(const sensor_msgs::Joy& msg, sensor_msgs::Joy& info)
   {
-    // info.buttons[to_int(JoyButton::FaceX)] = msg.buttons[to_int(JoyButton::FaceX)];
-    // info.buttons[to_int(JoyButton::FaceB)] = msg.buttons[to_int(JoyButton::FaceB)];
+    info.buttons[to_int(JoyButton::FaceY)]  = msg.buttons[to_int(JoyButton::FaceY)];
+    info.buttons[to_int(JoyButton::FaceB)]  = msg.buttons[to_int(JoyButton::FaceB)];
+
+    info.buttons[to_int(JoyButton::Back)]   = msg.buttons[to_int(JoyButton::Back)];
+    
     return;
   }
 
@@ -120,7 +123,7 @@ namespace frb
     {
       case ManualControlType::Duplicate:                                  break;    // safety button 중복
       case ManualControlType::Driving:    copy_driving_data(msg, info);   break;    // 주행 처리
-      case ManualControlType::Steering:   copy_streering_data(msg, info); break;    // Steering 처리
+      case ManualControlType::Breaking:   copy_face_data(msg, info);      break;    // Breaking 처리
       case ManualControlType::Lifting:    copy_lifting_data(msg, info);   break;    // Lifting 처리
       case ManualControlType::None:                                       break;    // 아무런 동작이 없다.
       default:                                                            break;     
@@ -150,7 +153,7 @@ namespace frb
     }
     else if(msg.buttons[JoyKey::RightBumper] == 1)
     {
-      return ManualControlType::Steering;
+      return ManualControlType::Breaking;
     }
     else if(msg.axes[JoyKey::LeftTrigger] == 1.0 && msg.axes[JoyKey::RightTrigger] == 1.0)
     {

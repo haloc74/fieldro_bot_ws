@@ -92,6 +92,15 @@ namespace frb
     // controller option
     int32_t _is_driving_mode_changeable;      // 자동 <---> 수동 모드 전환 가능 여부
     int32_t _joystick_control;                // 조이스틱 제어 여부
+
+    bool    _prev_brake;          // 이전 브레이크 상태
+    int32_t _prev_brake_button;   // 브레이크 버튼 (0:fff, 1:on)
+
+    int32_t _prev_brake_reset_button;
+    
+    bool    _prev_light;
+    int32_t _prev_light_button;
+
   };
 
 }

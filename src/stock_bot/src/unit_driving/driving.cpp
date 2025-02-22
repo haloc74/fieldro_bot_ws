@@ -53,6 +53,9 @@ namespace frb
     for(int i = 0; i < Wheel::End; i++)
     {
       _drive[i] = nullptr;
+
+      //if(i < 2) continue;
+
       _drive[i] = new ZlbDrive(std::bind(&Driving::action_complete_notify, 
                                           this, 
                                           std::placeholders::_1,

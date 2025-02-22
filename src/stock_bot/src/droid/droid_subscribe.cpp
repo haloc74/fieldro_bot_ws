@@ -171,6 +171,49 @@ namespace frb
                         std::to_string(propulsion_velocity) + " - " + 
                         std::to_string(steer_velocity) + " - " +
                         std::to_string(lift_velocity));
+
+    // 브레이크 버튼 처리                        
+    int32_t cur_brake_button = joy_msg.buttons[to_int(JoyButton::FaceB)];   
+    if(_prev_brake_button == 1 && cur_brake_button == 0)
+    {
+      _prev_brake ^= true;
+      if(_prev_brake)
+      {
+        add_sequence(to_int(frb::UnitName::Driving), to_int(frb::UnitAction::Break), "on");
+      }
+      else
+      {
+        add_sequence(to_int(frb::UnitName::Driving), to_int(frb::UnitAction::Break), "off");
+      }
+      log_msg(LogInfo, 0, "Braking Changee : " + std::to_string(_prev_brake));
+    }
+    _prev_brake_button = cur_brake_button;
+
+    // Brake Reset 처리
+    int32_t cur_brake_reset_button = joy_msg.buttons[to_int(JoyButton::Back)];
+    if(_prev_brake_reset_button == 1 && cur_brake_reset_button == 0)
+    {
+      add_sequence(to_int(frb::UnitName::Driving), to_int(frb::UnitAction::Reset));
+      log_msg(LogInfo, 0, "Brake Reset");
+    }
+    _prev_brake_reset_button = cur_brake_reset_button;
+    
+    // Light Button 처리
+    int32_t cur_light_button = joy_msg.buttons[to_int(JoyButton::FaceY)];
+    if(_prev_light_button == 1 && cur_light_button == 0)
+    {
+      _prev_light ^= true;
+      if(_prev_light)
+      {
+        add_sequence(to_int(frb::UnitName::Signal), to_int(frb::UnitAction::Light), "on");
+      }
+      else
+      {
+        add_sequence(to_int(frb::UnitName::Signal), to_int(frb::UnitAction::Light), "off");
+      }
+      log_msg(LogInfo, 0, "Light Change : " + std::to_string(_prev_light));
+    }
+    _prev_light_button = cur_light_button;
                         
     return;
   }

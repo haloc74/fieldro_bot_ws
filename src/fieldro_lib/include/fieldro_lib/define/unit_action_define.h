@@ -27,7 +27,6 @@ namespace frb
     Lift    = 0x0085,   Lifting,      Lifted,            // 높이      (Lift)
  
     Transfer= 0x0090,   Transfering,  Transfered,        // 물체 이동 (Handler)
-    
     Grip    = 0x00A0,   Gripping,     Gripped,           // 그립      (Gripper)
     Release = 0x00B0,   Releasing,    Released,          // 릴리즈
 
@@ -41,9 +40,10 @@ namespace frb
     MoveToLowLimit = 0x0110,                             // Limit 위치로 이동 (Motor)
     MoveToHighLimit,         
     
-
+     
     PowerOn = 0x0F00,                                    // 전원 On/Off
-    PowerOff,                    
+    PowerOff,         
+    Light,           
 
     GetStatus   = 0x0F10,                                // 상태 확인
     GetPosition,
@@ -87,6 +87,7 @@ namespace frb
     
     {UnitAction::PowerOn,   "PowerOn"},
     {UnitAction::PowerOff,  "PowerOff"},
+    {UnitAction::Light,     "Light"},
     
     {UnitAction::GetStatus,   "GetStatus"},
     {UnitAction::GetPosition, "GetPosition"},

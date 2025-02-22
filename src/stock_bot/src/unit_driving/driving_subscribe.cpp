@@ -61,7 +61,7 @@ namespace frb
     //move(msg.propulsion_value);
     if(is_update_filter(_last_propulsion_value, msg.propulsion_value, 0.05))
     {
-      _last_propulsion_value = msg.propulsion_value;
+      _last_propulsion_value = msg.propulsion_value * 3.0;
       if(abs(_last_propulsion_value) <= 0.05) _last_propulsion_value = 0.0;
       move(msg.propulsion_value);
     }
