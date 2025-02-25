@@ -124,6 +124,7 @@ namespace frb
 
   void ZlbDrive::steering_vel(double velocity)
   {
+    velocity *= _steer_direction;
     uint32_t rpm = convert_rpm_to_zlb_rpm(velocity);
 
     add_packet(_slave_id[int32_t(SlaveId::Steering)],
@@ -151,7 +152,7 @@ namespace frb
   void ZlbDrive::propulsion(double velocity)
   {
     // 앞, 뒤 바퀴의 CW 방향이 반대이므로 바퀴에 해당하는 계수를 곱해준다.
-    velocity *= _propulsion_direction * 3.0;
+    velocity *= (_propulsion_direction * 3.0);
 
     double rpm = convert_velocity_to_rpm(velocity);
 

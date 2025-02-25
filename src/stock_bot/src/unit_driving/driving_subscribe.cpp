@@ -86,8 +86,8 @@ namespace frb
             "  " +
             std::to_string(msg.steering_value));
 
-    int32_t remain_packets = _drive[2]->get_remain_packet_count();
-    log_msg(LogInfo, 0, "Remain Packets : " + std::to_string(remain_packets));    
+    // int32_t remain_packets = _drive[2]->get_remain_packet_count();
+    // log_msg(LogInfo, 0, "Remain Packets : " + std::to_string(remain_packets));    
   }
 
   bool Driving::is_update_filter(double prev_value, double cur_value, double gap)

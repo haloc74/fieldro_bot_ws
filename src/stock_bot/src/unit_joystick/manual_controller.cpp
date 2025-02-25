@@ -59,14 +59,14 @@ namespace frb
     }
 
 
-    info.axes[to_int(JoyStick::LeftHorizontal)] = msg.axes[to_int(JoyStick::LeftHorizontal)];
-    if(info.axes[to_int(JoyStick::LeftHorizontal)] < -0.9)
+    info.axes[to_int(JoyStick::DPadHorizontal)] = msg.axes[to_int(JoyStick::DPadHorizontal)];
+    if(info.axes[to_int(JoyStick::DPadHorizontal)] < -0.9)
     {
-      info.axes[to_int(JoyStick::LeftHorizontal)] = -0.9;
+      info.axes[to_int(JoyStick::DPadHorizontal)] = -0.9;
     }
-    else if(info.axes[to_int(JoyStick::LeftHorizontal)] > 0.9)
+    else if(info.axes[to_int(JoyStick::DPadHorizontal)] > 0.9)
     {
-      info.axes[to_int(JoyStick::LeftHorizontal)] = 0.9;
+      info.axes[to_int(JoyStick::DPadHorizontal)] = 0.9;
     }
 
 

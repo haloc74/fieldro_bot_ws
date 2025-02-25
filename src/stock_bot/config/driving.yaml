@@ -20,10 +20,10 @@ FrontLeft:
   retry_turm  : 2                     ## 통신 연결 시도 간격
   debug       : 1                     ## debug 옵션 (0: off, 그외 : on)
 
-  propulsion_direction : 1.0                   ## traction motor speed coefficient
+  propulsion_direction : -1.0                   ## traction motor speed coefficient
   traction_id : 1                     ## traction motor id
 
-  steer_direction : 1.0                 ## steering motor speed coefficient
+  steer_direction : -1.0                 ## steering motor speed coefficient
   steering_id   : 2                   ## steering motor id
 
   home_position : 63000               # mechanical origin
@@ -41,10 +41,10 @@ FrontRight:
   retry_turm  : 2                     ## 통신 연결 시도 간격
   debug       : 1                     ## debug 옵션 (0: off, 그외 : on)
 
-  propulsion_direction : 1.0                   ## traction motor speed coefficient
+  propulsion_direction : -1.0                   ## traction motor speed coefficient
   traction_id : 1                     ## traction motor id
 
-  steer_direction : 1.0                 ## steering motor speed coefficient
+  steer_direction : -1.0                 ## steering motor speed coefficient
   steering_id : 2                     ## steering motor id
 
   home_position : 63000               # mechanical origin
@@ -62,10 +62,10 @@ RearLeft:
   retry_turm  : 2                     ## 통신 연결 시도 간격
   debug       : 1                     ## debug 옵션 (0: off, 그외 : on)
 
-  propulsion_direction : -1.0                   ## traction motor speed coefficient
+  propulsion_direction : 1.0                   ## traction motor speed coefficient
   traction_id : 1                     ## traction motor id
 
-  steer_direction : -1.0                ## steering motor speed coefficient
+  steer_direction : 1.0                ## steering motor speed coefficient
   steering_id : 2                     ## steering motor id
 
   home_position : 63000               # mechanical origin
@@ -83,10 +83,10 @@ RearRight:
   retry_turm  : 2                     ## 통신 연결 시도 간격
   debug       : 1                     ## debug 옵션 (0: off, 그외 : on)
 
-  propulsion_direction : -1.0                   ## traction motor speed coefficient
+  propulsion_direction : 1.0                   ## traction motor speed coefficient
   traction_id : 1                     ## traction motor id
 
-  steer_direction : -1.0                ## steering motor speed coefficient
+  steer_direction : 1.0                ## steering motor speed coefficient
   steering_id : 2                     ## steering motor id
 
   home_position : 63000               # mechanical origin

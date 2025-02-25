@@ -29,7 +29,7 @@ namespace frb
     _state  = UnitState::Created;
 
     // 테스트를 위한 Brake 
-    _prev_brake               = false;
+    _prev_brake               = true;
     _prev_brake_button        = 0;
 
     _prev_brake_reset_button  = 0;

@@ -5,7 +5,7 @@ main:
   action_rpm        : 100             ## 동작 rpm (초기화 속도는 50% - limit: [50~500])
   action_check      : 1000            ## 동작 완료 check 주기 (millisecond)
   action_timeout    : 30000           ## 동작 timeout (millisecond) - 초기화에서는 200%
-  joystick_scale    : -300.0          ## 조이스틱 수동 조작시 scale factor 값 (100 ~ 500 정도)
+  joystick_scale    : -1200.0          ## 조이스틱 수동 조작시 scale factor 값 (100 ~ 500 정도)
                                       ## 조이스틱 값이 위쪽이 -1 값이라서 위쪽으로 갔을 때 상승시키기 위하여 음수로 설정
                                       ## 값이 클수록 Lift 속도가 빨라짐
 

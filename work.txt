@@ -17,7 +17,12 @@
 . Propulsion Motor Brake 풀리지 않는 문제 ....
 
 
-ID [  ] : 2025-02-22
+ID [  ] : 2025-02-25
+1. 25.02.24 WataAI 시연 직후
+2. 주행 형태 (전륜 구동으로 변경)
+3. BreakRelease Wago를 이용한 Release로 변경
+
+ID [ 3e90c64 ] : 2025-02-22
 1. Joystick B 버튼을 이용한 Break On, Off 조작 추가
 2. Joystick Back 버튼을 이용한 Wheel Motor Reset 조작 추가
 3. Joystick Y 버튼을 이용한 Light On, Off 조작 로직 추가

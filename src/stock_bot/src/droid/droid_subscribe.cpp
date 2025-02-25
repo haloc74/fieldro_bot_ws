@@ -161,8 +161,8 @@ namespace frb
     if(_joystick_control == 0)            return; 
     if(_state != frb::UnitState::Ready)   return;
 
-    double propulsion_velocity = joy_msg.axes[to_int(JoyStick::LeftVertical)];
-    double steer_velocity      = joy_msg.axes[to_int(JoyStick::LeftHorizontal)];
+    double propulsion_velocity = joy_msg.axes[to_int(JoyStick::LeftVertical)]*1.5;
+    double steer_velocity      = joy_msg.axes[to_int(JoyStick::DPadHorizontal)]*0.6;
     double lift_velocity       = joy_msg.axes[to_int(JoyStick::RightVertical)];
 
     // 수동조작 message 발행
@@ -180,10 +180,12 @@ namespace frb
       if(_prev_brake)
       {
         add_sequence(to_int(frb::UnitName::Driving), to_int(frb::UnitAction::Break), "on");
+        add_sequence(to_int(frb::UnitName::Signal), to_int(frb::UnitAction::Break), "on");
       }
       else
       {
         add_sequence(to_int(frb::UnitName::Driving), to_int(frb::UnitAction::Break), "off");
+        add_sequence(to_int(frb::UnitName::Signal), to_int(frb::UnitAction::Break), "off");
       }
       log_msg(LogInfo, 0, "Braking Changee : " + std::to_string(_prev_brake));
     }
