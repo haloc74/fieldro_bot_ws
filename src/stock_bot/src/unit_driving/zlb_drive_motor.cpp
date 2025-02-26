@@ -14,8 +14,8 @@ namespace frb
   */
   void ZlbDrive::confirm_motor_connection()
   {
-    int32_t traction  = get_motor_status(to_int(frb::SlaveId::Traction));
-    int32_t steer     = get_motor_status(to_int(frb::SlaveId::Steering));
+    int32_t traction  = get_motor_status(to_int(frb::SlaveId::Thrust));
+    int32_t steer     = get_motor_status(to_int(frb::SlaveId::Steer));
     if(!_servo_power)
     {
       if(frb::is_on_signal(ZlbStatus::Voltage_enable, traction))
@@ -53,33 +53,33 @@ namespace frb
   void ZlbDrive::setup_motor_configurations()
   {
     // traction motor (속도모드, 방향설정)
-    add_packet(_slave_id[int32_t(SlaveId::Traction)], ServoFD1X5::OPMODE_REGISTER, 
+    add_packet(_slave_id[int32_t(SlaveId::Thrust)], ServoFD1X5::OPMODE_REGISTER, 
                ServoFD1X5::OPMODE_VALUES::VELOCITY, MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER);
-    add_packet(_slave_id[int32_t(SlaveId::Traction)], ServoFD1X5::VELOCITY_DIRECTION_REGISTER, 
+    add_packet(_slave_id[int32_t(SlaveId::Thrust)], ServoFD1X5::VELOCITY_DIRECTION_REGISTER, 
                0, MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER);  
 
     // steering motor (좌우 limit 설정, 위치모드, 방향설정)
-    add_packet(_slave_id[int32_t(SlaveId::Steering)], 
+    add_packet(_slave_id[int32_t(SlaveId::Steer)], 
                ServoFD1X5::DIN1_REGISTER, 
                ServoFD1X5::LIMIT_MODE::POSITIVE, 
                MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER);
-    add_packet(_slave_id[int32_t(SlaveId::Steering)], 
+    add_packet(_slave_id[int32_t(SlaveId::Steer)], 
                ServoFD1X5::DIN3_REGISTER, 
                ServoFD1X5::LIMIT_MODE::NEGATIVE, 
                MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER);               
 
     // position mode set
-    // add_packet(_slave_id[int32_t(SlaveId::Steering)], 
+    // add_packet(_slave_id[int32_t(SlaveId::Steer)], 
     //            ServoFD1X5::OPMODE_REGISTER, 
     //            ServoFD1X5::OPMODE_VALUES::POSITION, 
     //            MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER);
 
     // steering motor (속도모드, 방향설정)
-    add_packet(_slave_id[int32_t(SlaveId::Steering)], 
+    add_packet(_slave_id[int32_t(SlaveId::Steer)], 
                ServoFD1X5::OPMODE_REGISTER, 
                ServoFD1X5::OPMODE_VALUES::VELOCITY, 
                MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER);
-    add_packet(_slave_id[int32_t(SlaveId::Steering)], 
+    add_packet(_slave_id[int32_t(SlaveId::Steer)], 
                 ServoFD1X5::VELOCITY_DIRECTION_REGISTER, 
                 0, 
                 MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER);               
@@ -136,7 +136,7 @@ namespace frb
   */
   void ZlbDrive::is_steering_complete()
   {
-      int32_t status = get_motor_status(_slave_id[to_int(SlaveId::Steering)]);
+      int32_t status = get_motor_status(_slave_id[to_int(SlaveId::Steer)]);
       if(frb::is_on_signal(ZlbStatus::Target_reached, status))
       {
         notify_log_msg(frb::LogLevel::Info, 0, "ZlbDrive::check_steer_motor_status : target reached");

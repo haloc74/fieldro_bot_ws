@@ -45,10 +45,10 @@ namespace frb
     _publish_act_velocity =
     _node_handle->advertise<geometry_msgs::Twist>("twinny_robot/ActVel", 100);
 
-    _wait_actual_velocity = false;
+    _wait_actual_velocity     = false;
     _prev_velocity_check_time = DBL_MAX;
-    _last_steer_value = DBL_MAX;
-    _last_propulsion_value = DBL_MAX;
+    _last_steer_value         = DBL_MAX;
+    _last_thrust_value        = DBL_MAX;
 
     for(int i = 0; i < Wheel::End; i++)
     {
@@ -167,12 +167,11 @@ namespace frb
       // 주행모드 객체 생성
       int32_t wheel_base  = yaml["motor"]["wheel_base"].as<int32_t>();
       int32_t track_width = yaml["motor"]["track_width"].as<int32_t>();
+      _driving_mode     = new AckermannDouble(wheel_base, track_width);
 
-      _driving_mode = new AckermannDouble(wheel_base, track_width);
-
-      // todo 
-      //int32_t     value = yaml["session"]["key"].as<int32_t>();
-      //std::string value = yaml["session"]["key"].as<std::string>();
+      // 수동조작 시 입력값에 대한 scale value 설정
+      _thrust_scale  = yaml["motor"]["thrust_scale"].as<double>();
+      _steer_scale   = yaml["motor"]["steer_scale"].as<double>();
     }
     catch(YAML::Exception& e)
     {

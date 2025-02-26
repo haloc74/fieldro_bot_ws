@@ -42,8 +42,10 @@ namespace frb
     ZlbDrive* _drive[Wheel::End];                             // drive 객체
     int32_t   _test_wheel;                                    // 테스트 휠            
 
-    double _last_steer_value;
-    double _last_propulsion_value;
+    double _last_steer_value;         // 이전 조향값
+    double _last_thrust_value;        // 이전 추진값
+    double _thrust_scale;         // 수동조작 시 추진 scale
+    double _steer_scale;           // 수동조작 시 회전 scale
 
     bool      _wait_actual_velocity;                          // 실제 속도 대기 여부
     WheelControlValue _actual_velocity[Wheel::End];           // 실제 속도
@@ -59,11 +61,14 @@ namespace frb
     bool has_movement(const geometry_msgs::Twist& twist_msg);    
 
     // twist lock
-    std::mutex _lock_twist;                                                 
+    std::mutex _lock_twist;                   
+    
+    void update_thrust_velocity(double velocity);     // 주행속도 update
+    void update_steer_velocity(double velocity);       // 조향속도 update
 
   protected:
-    void move(double velocity);
-    void steer(double degree);
+    void transmit_thrust(double velocity);      // 실제 추진 명령을 motor 객체로 전달
+    void transmit_steer(double velocity);       // 실제 조향 명령을 motor 객체로 전달
     void stop();
     void reset();
     void breaking(std::string state);

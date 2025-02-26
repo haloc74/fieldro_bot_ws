@@ -9,10 +9,10 @@ namespace frb
   //enum class SlaveId
   enum class SlaveId
   {
-    None      = 0,
-    Traction  = 1,
-    Steering  = 2,
-    End       = 3,
+    None   = 0,
+    Thrust = 1,
+    Steer  = 2,
+    End    = 3,
   };
 
   /**
@@ -25,8 +25,8 @@ namespace frb
     switch(value)
     {
       case SlaveId::None:     return "None";
-      case SlaveId::Traction: return "Traction";
-      case SlaveId::Steering: return "Steering";
+      case SlaveId::Thrust: return "Thrust";
+      case SlaveId::Steer: return "Steer";
       case SlaveId::End:      return "End";
     }
     return "UnKnown";
@@ -41,8 +41,8 @@ namespace frb
   inline SlaveId to_enum<SlaveId, std::string>(const std::string& str)
   {
     if(str == "None")     return SlaveId::None;
-    if(str == "Traction") return SlaveId::Traction;
-    if(str == "Steering") return SlaveId::Steering;
+    if(str == "Thrust") return SlaveId::Thrust;
+    if(str == "Steer") return SlaveId::Steer;
     if(str == "End")      return SlaveId::End;
 
     return SlaveId::End;

@@ -69,11 +69,11 @@ namespace frb
         // 
         if((*it)->_address == ServoFD1X5::POSITION_FEEDBACK_REGISTER)
         {
-          if((*it)->_slave_id == _slave_id[to_int(SlaveId::Traction)])
+          if((*it)->_slave_id == _slave_id[to_int(SlaveId::Thrust)])
           {
             //_encoder_value[0] = reinterpret_cast<int32_t*>(&((*it)->_value));
           }
-          else if((*it)->_slave_id == _slave_id[to_int(SlaveId::Steering)])
+          else if((*it)->_slave_id == _slave_id[to_int(SlaveId::Steer)])
           {
             //_encoder_value[0] = reinterpret_cast<int32_t*>(&((*it)->_value));
           }

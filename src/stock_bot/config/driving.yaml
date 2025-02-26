@@ -1,16 +1,18 @@
 main:
-  hz                    : 25 
-  spinner_count         : 1
+  hz                  : 50 
+  spinner_count       : 1
+  thrust_scale        : 3.0
+  steer_scale         : 1.0
 
 alive:
-  hz                   : 20          ## heartbeat 보고 주기
+  hz                   : 20           ## heartbeat 보고 주기
 
 motor:
-  wheel_base           : 50         ## wheel base
-  track_width          : 50         ## track width
+  wheel_base           : 50           ## wheel base
+  track_width          : 50           ## track width
 
 FrontLeft:
-  hz          : 100                    ## motor thread 동작 속도 
+  hz          : 100                   ## motor thread 동작 속도 
   comm_type   : "Modbus485"           ## 통신 방식 (ModbusTCP, RTU(232, 485))
   device      : "/dev/tty_WHEEL_FL"   ## device name
   port        : 0                     ## port number
@@ -20,18 +22,18 @@ FrontLeft:
   retry_turm  : 2                     ## 통신 연결 시도 간격
   debug       : 1                     ## debug 옵션 (0: off, 그외 : on)
 
-  propulsion_direction : -1.0                   ## traction motor speed coefficient
-  traction_id : 1                     ## traction motor id
+  thrust_direction : -1.0         ## traction motor speed coefficient
+  thrust_id : 1                     ## traction motor id
 
-  steer_direction : -1.0                 ## steering motor speed coefficient
-  steering_id   : 2                   ## steering motor id
+  steer_direction : -1.0              ## steering motor speed coefficient
+  steer_id   : 2                   ## steering motor id
 
   home_position : 63000               # mechanical origin
   left_limit    : 4048000             ## positive_sensor_limit - 12000(homing mode default offset value)
   right_limit   : -419800             ## negative_sensor_limit + 12000(homing mode default offset value)
 
 FrontRight:
-  hz          : 100                    ## motor thread 동작 속도 
+  hz          : 100                   ## motor thread 동작 속도 
   comm_type   : "Modbus485"           ## 통신 방식 (ModbusTCP, RTU(232, 485))
   device      : "/dev/tty_WHEEL_FR"   ## device name
   port        : 0                     ## port number
@@ -41,11 +43,11 @@ FrontRight:
   retry_turm  : 2                     ## 통신 연결 시도 간격
   debug       : 1                     ## debug 옵션 (0: off, 그외 : on)
 
-  propulsion_direction : -1.0                   ## traction motor speed coefficient
-  traction_id : 1                     ## traction motor id
+  thrust_direction : -1.0                   ## traction motor speed coefficient
+  thrust_id : 1                     ## traction motor id
 
-  steer_direction : -1.0                 ## steering motor speed coefficient
-  steering_id : 2                     ## steering motor id
+  steer_direction : -1.0              ## steering motor speed coefficient
+  steer_id : 2                     ## steering motor id
 
   home_position : 63000               # mechanical origin
   left_limit    : 4048000             ## positive_sensor_limit - 12000(homing mode default offset value)
@@ -62,18 +64,18 @@ RearLeft:
   retry_turm  : 2                     ## 통신 연결 시도 간격
   debug       : 1                     ## debug 옵션 (0: off, 그외 : on)
 
-  propulsion_direction : 1.0                   ## traction motor speed coefficient
-  traction_id : 1                     ## traction motor id
+  thrust_direction : 1.0                   ## traction motor speed coefficient
+  thrust_id : 1                     ## traction motor id
 
-  steer_direction : 1.0                ## steering motor speed coefficient
-  steering_id : 2                     ## steering motor id
+  steer_direction : 1.0               ## steering motor speed coefficient
+  steer_id : 2                     ## steering motor id
 
   home_position : 63000               # mechanical origin
   left_limit    : 4048000             ## positive_sensor_limit - 12000(homing mode default offset value)
   right_limit   : -419800             ## negative_sensor_limit + 12000(homing mode default offset value)  
 
 RearRight:
-  hz          : 100                    ## motor thread 동작 속도 
+  hz          : 100                   ## motor thread 동작 속도 
   comm_type   : "Modbus485"           ## 통신 방식 (ModbusTCP, RTU(232, 485))
   device      : "/dev/tty_WHEEL_RR"   ## device name
   port        : 0                     ## port number
@@ -83,11 +85,11 @@ RearRight:
   retry_turm  : 2                     ## 통신 연결 시도 간격
   debug       : 1                     ## debug 옵션 (0: off, 그외 : on)
 
-  propulsion_direction : 1.0                   ## traction motor speed coefficient
-  traction_id : 1                     ## traction motor id
+  thrust_direction : 1.0          ## traction motor speed coefficient
+  thrust_id : 1                     ## traction motor id
 
-  steer_direction : 1.0                ## steering motor speed coefficient
-  steering_id : 2                     ## steering motor id
+  steer_direction : 1.0               ## steering motor speed coefficient
+  steer_id : 2                     ## steering motor id
 
   home_position : 63000               # mechanical origin
   left_limit    : 4048000             ## positive_sensor_limit - 12000(homing mode default offset value)

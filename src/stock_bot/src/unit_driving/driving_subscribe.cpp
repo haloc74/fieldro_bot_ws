@@ -54,53 +54,109 @@ namespace frb
   //   return;
   // }
 
+  /**
+  * @brief      Joystick 수동 조작시 추진속도 업데이트
+  * @param[in]  double velocity : 추진 속도
+  * @return     void
+  * @note       last 속도와 비교하여 속도 변화가 작을 경우 반영하지 않는다.
+  * @attention  실제 motor에 값을 전달 할 때는 꼭 propulsion_scale을 곱하여 전달해야 한다.
+  * 
+  */
+  void Driving::update_thrust_velocity(double velocity)
+  {
+    // 속도 변화가 작을 경우 반영하지 않는다.
+    if(!is_update_filter(_last_thrust_value, velocity, 0.1)) 
+    {
+      return;
+    }
+
+    // 추진속도 업데이트
+    _last_thrust_value = velocity;
+
+    // 잔진동을 방지하기 위한 Filter
+    if(abs(_last_thrust_value) < 0.05)
+    {
+      _last_thrust_value = 0.0;
+    }
+
+    // 추진값을 motor 객체로 전달
+    transmit_thrust(_last_thrust_value*_thrust_scale);
+
+    return;
+  }
+
+  /**
+  * @brief      Joystick 수동 조작시 조향값 업데이트
+  * @param[in]  double velocity : 조향값
+  * @return     void
+  * @note       last 조향값과 비교하여 조향값 변화가 작을 경우 반영하지 않는다.
+  * @attention  실제 motor에 값을 전달 할 때는 꼭 steering_scale을 곱하여 전달해야 한다.
+  */
+  void Driving::update_steer_velocity(double velocity)
+  {
+    // 조향값 변화가 작을 경우 반영하지 않는다.
+    if(!is_update_filter(_last_steer_value, velocity, 0.1))
+    {
+      return;
+    }
+
+    // 조향속도 업데이트
+    _last_steer_value = velocity;
+
+    // 잔진동을 방지하기 위한 Filter
+    if(abs(_last_steer_value) < 10.0)
+    {
+      _last_steer_value = 0.0;
+    }
+
+    // 조향값을 motor 객체로 전달
+    transmit_steer(_last_steer_value*_steer_scale);
+
+    return;
+  }
+
+  /**
+  * @brief      수동조작(Joystick) 시 수신되는 메세지 처리
+  * @param[in]  const fieldro_msgs::ManualControl& msg : 수동조작 메세지
+  * @return     void
+  * @note       
+  */
   void Driving::subscribe_manual_control(const fieldro_msgs::ManualControl& msg)
   {
-    double value = 0.0;
+    // 추진 속도 업데이트
+    update_thrust_velocity(msg.propulsion_value);
 
-    //move(msg.propulsion_value);
-    if(is_update_filter(_last_propulsion_value, msg.propulsion_value, 0.05))
-    {
-      _last_propulsion_value = msg.propulsion_value * 3.0;
-      if(abs(_last_propulsion_value) <= 0.05) _last_propulsion_value = 0.0;
-      move(msg.propulsion_value);
-    }
+    // 조향값 업데이트
+    update_steer_velocity(msg.steering_value);
 
-    //steer(msg.steering_value);
-    if(is_update_filter(_last_steer_value, msg.steering_value, 0.1))
-    {
-      //_last_steer_value = msg.steering_value;
-      double steer_value = msg.steering_value*100.0;
-      if(steer_value > 100.0) steer_value = 100.0;
-      if(steer_value < -100.0) steer_value = -100.0;
-
-      if(abs(_last_steer_value) <= 10.0) _last_steer_value = 0.0;
-
-      _last_steer_value = steer_value;
-
-      steer(_last_steer_value);
-    }
-
+    // log data
     log_msg(LogInfo, 0, "control data : " + 
             std::to_string(msg.propulsion_value) +
             "  " +
             std::to_string(msg.steering_value));
-
-    // int32_t remain_packets = _drive[2]->get_remain_packet_count();
-    // log_msg(LogInfo, 0, "Remain Packets : " + std::to_string(remain_packets));    
   }
 
   bool Driving::is_update_filter(double prev_value, double cur_value, double gap)
   {
     if(std::abs(prev_value - cur_value) > gap)  
+    {
       return true;
+    }
     return false;
   }
 
+  /**
+  * @brief      TCT를 이용한 자동 주행 시 속도 제어 subscriber callback 
+  * @param[in]  const geometry_msgs::Twist &twist_msg : 속도 제어 메세지
+  * @return     void
+  * @note       
+  * @todo       주행방식에 따라서 각 모터의 속도를 계산하여 전달해야 한다.
+  */
   void Driving::subscribe_driving_control(const geometry_msgs::Twist &twist_msg)
   {
-    move(twist_msg.linear.x);
-    steer(twist_msg.angular.z);
+    transmit_thrust(twist_msg.linear.x);
+
+    transmit_steer(twist_msg.angular.z);
 
     return;
   }  
@@ -149,7 +205,7 @@ namespace frb
     case frb::UnitAction::Move:
       _action = frb::UnitAction::Move;
       Unit::publish_unit_action_complete(to_int(_action), to_int(frb::Error::None));
-      move(value);
+      transmit_thrust(value);
       break;
 
     case frb::UnitAction::Stop:
@@ -162,7 +218,7 @@ namespace frb
     case frb::UnitAction::Steer:
       _action = frb::UnitAction::Steer;
       Unit::publish_unit_action_complete(to_int(_action), to_int(frb::Error::None));
-      steer(value);
+      transmit_steer(value);
       break;
 
     case frb::UnitAction::GetStatus:
@@ -188,26 +244,32 @@ namespace frb
     }    
   }
 
-  void Driving::move(double velocity)
+  /**
+  * @brief      각 motor 객체로 추진 속도 전달하는 함수
+  * @param[in]  double  velocity : 추진 속도
+  * @return     void
+  * @note       
+  */
+  void Driving::transmit_thrust(double velocity)
   {
     if(velocity == std::numeric_limits<double>::max())  return;
 
     for(int i=0; i<Wheel::End; i++)
     {
-      if(_drive[i] != nullptr)  _drive[i]->propulsion(velocity);
+      if(_drive[i] != nullptr)  _drive[i]->thrust(velocity);
     }
   }
 
-  void Driving::steer(double degree)
+  void Driving::transmit_steer(double velocity)
   {
-    if(degree == std::numeric_limits<double>::max())  return;
+    if(velocity == std::numeric_limits<double>::max())  return;
 
-    log_msg(LogInfo, 0, "Steer : " + std::to_string(degree));
+    log_msg(LogInfo, 0, "Steer : " + std::to_string(velocity));
 
     for(int i=0; i<Wheel::End; i++)
     {
       //if(_drive[i] != nullptr)  _drive[i]->steering(degree);
-      if(_drive[i] != nullptr)  _drive[i]->steering_vel(degree);
+      if(_drive[i] != nullptr)  _drive[i]->steer_velocity(velocity);
     }
   }
 
@@ -245,8 +307,8 @@ namespace frb
   {
     for(int i=0; i<Wheel::End; i++)
     {
-      if(_drive[i] != nullptr)  _drive[i]->get_motor_status(to_int(frb::SlaveId::Traction));
-      if(_drive[i] != nullptr)  _drive[i]->get_motor_status(to_int(frb::SlaveId::Steering));
+      if(_drive[i] != nullptr)  _drive[i]->get_motor_status(to_int(frb::SlaveId::Thrust));
+      if(_drive[i] != nullptr)  _drive[i]->get_motor_status(to_int(frb::SlaveId::Steer));
     }
   }
 }

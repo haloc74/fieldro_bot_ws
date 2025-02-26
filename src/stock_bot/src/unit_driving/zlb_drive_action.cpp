@@ -55,11 +55,11 @@ namespace frb
   */
   void ZlbDrive::request_actual_velocity()
   {
-    add_packet(_slave_id[int32_t(SlaveId::Steering)], 
+    add_packet(_slave_id[int32_t(SlaveId::Steer)], 
                ServoFD1X5::POSITION_FEEDBACK_REGISTER, 
                0, MODBUS_FUNC_CODE::READ_HOLDING_REGISTERS);
 
-    add_packet(_slave_id[int32_t(SlaveId::Traction)], 
+    add_packet(_slave_id[int32_t(SlaveId::Thrust)], 
                ServoFD1X5::POSITION_FEEDBACK_REGISTER, 
                0, MODBUS_FUNC_CODE::READ_HOLDING_REGISTERS);
     return;
@@ -77,7 +77,7 @@ namespace frb
   *               꼭 해줘야 실제 turn이 된다.
   *             - degree는 증분값이 아니다.
   */
-  void ZlbDrive::steering(double degree)
+  void ZlbDrive::steer_degree(double degree)
   {
     if(!_steer_position->is_valid_position(degree))
     {
@@ -90,24 +90,24 @@ namespace frb
     int32_t position  = degree_to_position(degree);
     uint32_t rpm      = convert_rpm_to_zlb_rpm(100);  
 
-    add_packet(_slave_id[int32_t(SlaveId::Steering)], 
+    add_packet(_slave_id[int32_t(SlaveId::Steer)], 
                ServoFD1X5::POSITION_COMMAND_REGISTER, 
                position, 
                MODBUS_FUNC_CODE::WRITE_MULTIPLE_REGISTERS);
 
-    add_packet(_slave_id[int32_t(SlaveId::Steering)],
+    add_packet(_slave_id[int32_t(SlaveId::Steer)],
                 ServoFD1X5::POSITION_SPEED_COMMAND_REGISTER, 
                 rpm, 
                 MODBUS_FUNC_CODE::WRITE_MULTIPLE_REGISTERS);//, 
                 //to_int(frb::UnitAction::Turn));
 
     // absolute position set enable
-    add_packet(_slave_id[int32_t(SlaveId::Steering)], 
+    add_packet(_slave_id[int32_t(SlaveId::Steer)], 
                 ServoFD1X5::CONTROL_REGISTER,
                 ServoFD1X5::CONTROL_VALUES::ABSOLUTE_POSITION::SET1, 
                 MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER);
 
-    add_packet(_slave_id[int32_t(SlaveId::Steering)], 
+    add_packet(_slave_id[int32_t(SlaveId::Steer)], 
                 ServoFD1X5::CONTROL_REGISTER,
                 ServoFD1X5::CONTROL_VALUES::ABSOLUTE_POSITION::SET2, 
                 MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER);                        
@@ -122,17 +122,17 @@ namespace frb
     return;
   }
 
-  void ZlbDrive::steering_vel(double velocity)
+  void ZlbDrive::steer_velocity(double velocity)
   {
     velocity *= _steer_direction;
     uint32_t rpm = convert_rpm_to_zlb_rpm(velocity);
 
-    add_packet(_slave_id[int32_t(SlaveId::Steering)],
+    add_packet(_slave_id[int32_t(SlaveId::Steer)],
                 ServoFD1X5::VELOCITY_COMMAND_REGISTER, 
                 rpm, 
                 MODBUS_FUNC_CODE::WRITE_MULTIPLE_REGISTERS);
 
-    add_packet(_slave_id[int32_t(SlaveId::Steering)], 
+    add_packet(_slave_id[int32_t(SlaveId::Steer)], 
                 ServoFD1X5::CONTROL_REGISTER,
                 ServoFD1X5::CONTROL_VALUES::START, 
                 MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER);                                        
@@ -141,7 +141,7 @@ namespace frb
   }
 
   /**
-  * @brief      propulsion motor run action (전/후 진)
+  * @brief      thrust motor run action (전/후 진)
   * @param[in]  int32_t velocity : run velocity  (m/s)
   * @return     void
   * @attention  바퀴위치(전, 후)에 따라 CW 방향이 반대이므로 해당 사항을 고려해야 함.
@@ -149,7 +149,7 @@ namespace frb
   *             2. rpm 값을 Zlb rpm으로 변환
   *             3. traction motor run
   */
-  void ZlbDrive::propulsion(double velocity)
+  void ZlbDrive::thrust(double velocity)
   {
     // 앞, 뒤 바퀴의 CW 방향이 반대이므로 바퀴에 해당하는 계수를 곱해준다.
     velocity *= (_propulsion_direction * 3.0);
@@ -158,7 +158,7 @@ namespace frb
 
     uint32_t zlb_rpm = convert_rpm_to_zlb_rpm(rpm);
 
-    add_packet(_slave_id[int32_t(SlaveId::Traction)], 
+    add_packet(_slave_id[int32_t(SlaveId::Thrust)], 
                ServoFD1X5::VELOCITY_COMMAND_REGISTER, 
                zlb_rpm, 
                MODBUS_FUNC_CODE::WRITE_MULTIPLE_REGISTERS, 
@@ -177,10 +177,10 @@ namespace frb
   */
   // void ZlbDrive::release_break()
   // {
-  //   add_packet(_slave_id[int32_t(SlaveId::Traction)], ServoFD1X5::VELOCITY_COMMAND_REGISTER, 
+  //   add_packet(_slave_id[int32_t(SlaveId::Thrust)], ServoFD1X5::VELOCITY_COMMAND_REGISTER, 
   //              0, MODBUS_FUNC_CODE::WRITE_MULTIPLE_REGISTERS);
 
-  //   add_packet(_slave_id[int32_t(SlaveId::Traction)], ServoFD1X5::CONTROL_REGISTER, 
+  //   add_packet(_slave_id[int32_t(SlaveId::Thrust)], ServoFD1X5::CONTROL_REGISTER, 
   //              ServoFD1X5::CONTROL_VALUES::START, MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER);    
   // }
 
@@ -193,17 +193,17 @@ namespace frb
   {
     if(flag)
     {
-      add_packet(_slave_id[int32_t(SlaveId::Traction)], ServoFD1X5::CONTROL_REGISTER, 
+      add_packet(_slave_id[int32_t(SlaveId::Thrust)], ServoFD1X5::CONTROL_REGISTER, 
                  ServoFD1X5::CONTROL_VALUES::STOP, MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER,
                  to_int(frb::UnitAction::Stop));    
     }
     else
     {
       //release_break();
-      add_packet(_slave_id[int32_t(SlaveId::Traction)], ServoFD1X5::VELOCITY_COMMAND_REGISTER, 
+      add_packet(_slave_id[int32_t(SlaveId::Thrust)], ServoFD1X5::VELOCITY_COMMAND_REGISTER, 
                   0, MODBUS_FUNC_CODE::WRITE_MULTIPLE_REGISTERS);
 
-      add_packet(_slave_id[int32_t(SlaveId::Traction)], ServoFD1X5::CONTROL_REGISTER, 
+      add_packet(_slave_id[int32_t(SlaveId::Thrust)], ServoFD1X5::CONTROL_REGISTER, 
                   ServoFD1X5::CONTROL_VALUES::START, MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER);          
     }
     return;
@@ -220,13 +220,13 @@ namespace frb
   {
     //run(0.0);
     //turn(0.0);
-    propulsion(0.0);
-    steering(0.0);
+    thrust(0.0);
+    steer_velocity(0.0);
 
     if(break_flag)
     {
       breaking(true);
-      // add_packet(_slave_id[int32_t(SlaveId::Traction)], ServoFD1X5::CONTROL_REGISTER, 
+      // add_packet(_slave_id[int32_t(SlaveId::Thrust)], ServoFD1X5::CONTROL_REGISTER, 
       //             ServoFD1X5::CONTROL_VALUES::STOP, MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER,
       //             to_int(frb::UnitAction::Stop));    
     }
@@ -244,11 +244,11 @@ namespace frb
   */
   void ZlbDrive::reset()
   {
-    add_packet(_slave_id[int32_t(SlaveId::Traction)], ServoFD1X5::CONTROL_REGISTER, 
+    add_packet(_slave_id[int32_t(SlaveId::Thrust)], ServoFD1X5::CONTROL_REGISTER, 
               ServoFD1X5::CONTROL_VALUES::RESET, MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER,
               to_int(frb::UnitAction::Reset));
 
-    add_packet(_slave_id[int32_t(SlaveId::Steering)], ServoFD1X5::CONTROL_REGISTER, 
+    add_packet(_slave_id[int32_t(SlaveId::Steer)], ServoFD1X5::CONTROL_REGISTER, 
                 ServoFD1X5::CONTROL_VALUES::RESET, MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER,
                 to_int(frb::UnitAction::Reset));              
 

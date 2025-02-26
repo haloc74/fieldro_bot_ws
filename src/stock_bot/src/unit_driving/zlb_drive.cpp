@@ -124,11 +124,11 @@ namespace frb
       yaml_file.close();
 
       // traction motor speed coefficient
-      _propulsion_direction = yaml[session]["propulsion_direction"].as<double>();
+      _propulsion_direction = yaml[session]["thrust_direction"].as<double>();
       _steer_direction = yaml[session]["steer_direction"].as<double>();
 
-      _slave_id[to_int(frb::SlaveId::Traction)] = yaml[session]["traction_id"].as<int32_t>();
-      _slave_id[to_int(frb::SlaveId::Steering)] = yaml[session]["steering_id"].as<int32_t>();
+      _slave_id[to_int(frb::SlaveId::Thrust)] = yaml[session]["thrust_id"].as<int32_t>();
+      _slave_id[to_int(frb::SlaveId::Steer)] = yaml[session]["steer_id"].as<int32_t>();
 
       _steer_position->_left_limit  = yaml[session]["left_limit"].as<int32_t>();
       _steer_position->_right_limit = yaml[session]["right_limit"].as<int32_t>();

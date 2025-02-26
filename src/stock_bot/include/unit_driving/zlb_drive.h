@@ -64,9 +64,9 @@ namespace frb
       return _packets.size();
     }
 
-    void propulsion(double velocity);
-    void steering(double degree);
-    void steering_vel(double velocity);
+    void thrust(double velocity);
+    void steer_degree(double degree);
+    void steer_velocity(double velocity);
 
   protected:
     void update();

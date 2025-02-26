@@ -15,9 +15,28 @@
 . steer position mode 추가 하기
 . Zlb Drive 생성자에서 위치 모드로 설정하고 원점 위치로 Wheel 정렬 시키는 기능 추가.
 . Propulsion Motor Brake 풀리지 않는 문제 ....
+. 주행 동기화 문제 
 
+ID [  ] : 2025-02-26
+1. Driving Class 함수명 및 변수명 변경
+    move()                      -> transmit_thrust()
+    steering()                  -> transmit_steer()
+    update_propulsion_velocity()-> update_thrust_velocity()
+    update_steering_velocity()  -> update_steer_velocity()
+    _propulsion_scale           -> _thrust_scale
+    _steering_scale             -> _steer_scale
+    _last_propulsion_value      -> _last_thrust_value
+    _last_steering_value        -> _last_steer_value
+2. Driving Class 변수명 변경에 따른 driving.yaml 옵션 key 값 변경
+3. ZlbDrive Class 변수명 변경
+    propulsion()    -> thrust()
+    steering()      -> steer_degree()
+    steering_vel()  -> steer_velocity()
+    _propulsion_direction -> _thrust_direction
+4. ZlbDrive Class 변수명 변경에 따른 driving.yaml 옵션 key값 변경
+    
 
-ID [  ] : 2025-02-25
+ID [ e4e933c ] : 2025-02-25
 1. 25.02.24 WataAI 시연 직후
 2. 주행 형태 (전륜 구동으로 변경)
 3. BreakRelease Wago를 이용한 Release로 변경
