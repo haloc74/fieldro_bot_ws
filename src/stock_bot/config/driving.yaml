@@ -1,8 +1,6 @@
 main:
   hz                  : 50 
   spinner_count       : 1
-  thrust_scale        : 3.0
-  steer_scale         : 1.0
 
 alive:
   hz                   : 20           ## heartbeat 보고 주기
@@ -10,6 +8,8 @@ alive:
 motor:
   wheel_base           : 50           ## wheel base
   track_width          : 50           ## track width
+  thrust_scale        : 3.0
+  steer_scale         : 50.0
 
 FrontLeft:
   hz          : 100                   ## motor thread 동작 속도 

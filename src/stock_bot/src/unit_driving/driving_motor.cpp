@@ -32,6 +32,7 @@ namespace frb
 
     // 추진값을 motor 객체로 전달
     transmit_thrust(_last_thrust_value*_thrust_scale);
+    log_msg(LogInfo, 0, "thrust data : " + std::to_string(_last_thrust_value*_thrust_scale));
 
     return;
   }
@@ -55,13 +56,14 @@ namespace frb
     _last_steer_value = velocity;
 
     // 잔진동을 방지하기 위한 Filter
-    if(abs(_last_steer_value) < 10.0)
+    if(abs(_last_steer_value) < 0.1)
     {
       _last_steer_value = 0.0;
     }
 
     // 조향값을 motor 객체로 전달
     transmit_steer(_last_steer_value*_steer_scale);
+    log_msg(LogInfo, 0, "steer data : " + std::to_string(_last_steer_value*_steer_scale));
 
     return;
   } 

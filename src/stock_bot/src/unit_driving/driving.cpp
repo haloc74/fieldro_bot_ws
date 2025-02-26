@@ -113,8 +113,8 @@ namespace frb
     while(_update_thread->_active)
     {
       // // todo : 
-      // int32_t count = _drive[2]->get_remain_packet_count();
-      // log_msg(LogInfo, 0, "Remain Packets : " + std::to_string(count));
+      int32_t count = _drive[0]->get_remain_packet_count();
+      log_msg(LogInfo, 0, "Remain Packets : " + std::to_string(count));
 
       // thread Hz 싱크 및 독점 방지를 위한 sleep
       std::this_thread::sleep_for(std::chrono::milliseconds(_update_thread->_sleep));
