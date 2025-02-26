@@ -292,6 +292,11 @@ message(STATUS "${PROJECT_NAME} : Step 05.node build")
 
     ## 5-4-1. src/unit_driving 하위의 모든 cpp 파일을 찾아서 SRC_DRIVING_FILES 저장
     file(GLOB_RECURSE SRC_DRIVING_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/unit_driving/*.cpp")
+    # # 누락된 파일 명시적으로 추가
+    # list(APPEND SRC_DRIVING_FILES 
+    # "${CMAKE_CURRENT_SOURCE_DIR}/src/unit_driving/driving_action.cpp"
+    # "${CMAKE_CURRENT_SOURCE_DIR}/src/unit_driving/driving_motor.cpp"
+    # )
 
     ## 5-4-2. SRC_DRIVING_FILES 모든 파일을 컴파일하고 링크하여 실행 파일 생성 하도록 설정
     add_executable(

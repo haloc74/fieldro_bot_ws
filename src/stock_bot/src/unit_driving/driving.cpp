@@ -21,6 +21,9 @@ namespace frb
     _action = UnitAction::None;
     _state  = frb::UnitState::Created;
 
+    // thread pool 생성
+    _thread_pool = new ThreadPool(std::thread::hardware_concurrency());
+
     // unit action message 수신을 위한 subscriber 생성 및 link
     _subscribe_unit_action =
     _node_handle->subscribe(msg_space+"/unit_control", 100, &Driving::subscribe_unit_action, this);
@@ -75,24 +78,6 @@ namespace frb
       _actual_velocity[i].release();
     }
 
-    _test_wheel = Wheel::RearRight;
-    // _drive[_test_wheel] = new ZlbDrive(std::bind(&Driving::action_complete_notify, 
-    //                                 this, 
-    //                                 std::placeholders::_1,
-    //                                 std::placeholders::_2),
-    //                           std::bind(&Driving::receive_actual_velocity,
-    //                                 this,
-    //                                 std::placeholders::_1,
-    //                                 std::placeholders::_2),
-    //                           std::bind(&Unit::log_msg, 
-    //                                 this, 
-    //                                 std::placeholders::_1, 
-    //                                 std::placeholders::_2, 
-    //                                 std::placeholders::_3),
-    //                           config_file,
-    //                           _test_wheel);    
-
-
     // spinn 구동 (생성은 Unit Class 담당)
     _spinner->start();
 
@@ -104,10 +89,10 @@ namespace frb
   Driving::~Driving()
   {
     // 최우선적으로 모터 구동을 멈춘다
-    for(int i=0; i<Wheel::End; i++)
-    {
-      if(_drive[i] != nullptr) _drive[i]->stop(true);
-    }
+    stop();
+
+    // thread_pool 삭제
+    safe_delete(_thread_pool);
 
     // 모터 객체 삭제
     for(int i=0; i<Wheel::End; i++)
@@ -154,6 +139,22 @@ namespace frb
 
     return false;
   }
+
+  /**
+  * @brief      이전 값과 현재값의 차이가 gap보다 작은지 판단
+  * @param[in]  double prev_value : 이전 값
+  * @param[in]  double cur_value  : 현재 값
+  * @param[in]  double gap        : 업데이트 필터 값
+  * @return     bool              : 업데이트 여부
+  */
+ bool Driving::is_update_filter(double prev_value, double cur_value, double gap)
+ {
+   if(std::abs(prev_value - cur_value) > gap)  
+   {
+     return true;
+   }
+   return false;
+ }  
 
   void Driving::load_option(std::string config_file)
   {
@@ -278,4 +279,13 @@ namespace frb
 
     return;
   }
+
+  void Driving::get_motor_status()
+  {
+    for(int i=0; i<Wheel::End; i++)
+    {
+      if(_drive[i] != nullptr)  _drive[i]->get_motor_status(to_int(frb::SlaveId::Thrust));
+      if(_drive[i] != nullptr)  _drive[i]->get_motor_status(to_int(frb::SlaveId::Steer));
+    }
+  }  
 }

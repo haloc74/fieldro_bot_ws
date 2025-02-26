@@ -15,9 +15,15 @@
 . steer position mode 추가 하기
 . Zlb Drive 생성자에서 위치 모드로 설정하고 원점 위치로 Wheel 정렬 시키는 기능 추가.
 . Propulsion Motor Brake 풀리지 않는 문제 ....
-. 주행 동기화 문제 
 
 ID [  ] : 2025-02-26
+1. 주행 동기화 문제 해결
+  - ZlbDrive::thrust() 함수를 병렬로 호출 하는 방안
+  - thread poll 도입
+  - <fieldro_lib/helper/thread_poll.h> 추가
+  - 해결 안됨
+
+ID [ 2411611 ] : 2025-02-26
 1. Driving Class 함수명 및 변수명 변경
     move()                      -> transmit_thrust()
     steering()                  -> transmit_steer()

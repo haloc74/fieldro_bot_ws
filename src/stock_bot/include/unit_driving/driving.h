@@ -7,6 +7,7 @@
 #include <fieldro_msgs/ManualControl.h>
 #include <fieldro_lib/unit/unit.h>
 #include <fieldro_lib/driving_mode/ackermann_double.h>
+#include <fieldro_lib/helper/thread_pool.h>
 #include <sensor_msgs/Joy.h>
 #include <geometry_msgs/Twist.h>
 #include "zlb_drive.h"
@@ -25,6 +26,7 @@ namespace frb
     virtual void subscribe_unit_action(const fieldro_msgs::UnitControl& msg);  // unit action subscribe
 
     AckermannDouble* _driving_mode;                                         // 주행 모드 객체
+    ThreadPool*     _thread_pool;                                           // thread pool 객체
 
   protected:
     // vel_control subscriber
@@ -40,7 +42,6 @@ namespace frb
     void publish_act_velocity(geometry_msgs::Twist twist);
 
     ZlbDrive* _drive[Wheel::End];                             // drive 객체
-    int32_t   _test_wheel;                                    // 테스트 휠            
 
     double _last_steer_value;         // 이전 조향값
     double _last_thrust_value;        // 이전 추진값
