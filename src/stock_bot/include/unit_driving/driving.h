@@ -25,17 +25,17 @@ namespace frb
     virtual void load_option(std::string config_file);                      // option load
     virtual void subscribe_unit_action(const fieldro_msgs::UnitControl& msg);  // unit action subscribe
 
-    AckermannDouble* _driving_mode;                                         // 주행 모드 객체
-    ThreadPool*     _thread_pool;                                           // thread pool 객체
+    AckermannDouble*  _driving_mode;                                         // 주행 모드 객체
 
   protected:
-    // vel_control subscriber
+    void setup_ros_message(std::string msg_space);                           // ROS message setup
+    // tct를 이용한 자동 vel_control subscriber
     ros::Subscriber _subscribe_driving_control;
     void subscribe_driving_control(const geometry_msgs::Twist &twist_msg);
 
     // Manual Control Subscriber
-    ros::Subscriber _subscribe_manual_control;                        // 수동 제어를 받기 위한 subscriber
-    void subscribe_manual_control(const fieldro_msgs::ManualControl& msg);  // 수동 제어를 받기 위한 callback 함수
+    ros::Subscriber _subscribe_manual_control;                        
+    void subscribe_manual_control(const fieldro_msgs::ManualControl& msg);
 
     // act_vel publisher
     ros::Publisher _publish_act_velocity;
@@ -76,5 +76,7 @@ namespace frb
     void get_motor_status();
 
     bool is_update_filter(double prev_value, double cur_value, double gap);
+    void monitoring_alignment_complete();   // wheel 정렬 확인 함수 
+    void create_motor_objects(std::string config_file);            // motor 객체 생성 함수
   };
 }

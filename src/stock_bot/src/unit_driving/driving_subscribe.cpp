@@ -6,13 +6,21 @@
 namespace frb
 {
   /**
-  * @brief      속도 제어 subscriber callback
+  * @brief      TCT를 이용한 자동 주행 시 속도 제어 subscriber callback 
   * @param[in]  const geometry_msgs::Twist &twist_msg : 속도 제어 메세지
   * @return     void
   * @note       Motor의 속도는 RPM으로 제어가 되므로 속도 -> RMP으로 변환하는 과정이 필요하다.
-  * @attention  매우중요 : 멈추고 자동으로 속도계산을 위한 timer를 초기화 시킨다.
-  * 
+  * @todo       주행방식에 따라서 각 모터의 속도를 계산하여 전달해야 한다.
+  * @attention  매우중요 : 멈추고 자동으로 속도계산을 위한 timer를 초기화 시킨다. 
   */
+ void Driving::subscribe_driving_control(const geometry_msgs::Twist &twist_msg)
+ {
+   transmit_thrust(twist_msg.linear.x);
+
+   transmit_steer(twist_msg.angular.z);
+
+   return;
+ }  
   // void Driving::subscribe_driving_control(const geometry_msgs::Twist &twist_msg)
   // {
   //   std::lock_guard<std::mutex> lock(_lock_twist);
@@ -52,9 +60,6 @@ namespace frb
   // }
 
 
-
-
-
   /**
   * @brief      수동조작(Joystick) 시 수신되는 메세지 처리
   * @param[in]  const fieldro_msgs::ManualControl& msg : 수동조작 메세지
@@ -76,24 +81,12 @@ namespace frb
             std::to_string(msg.steering_value));
   }
 
-
-
   /**
-  * @brief      TCT를 이용한 자동 주행 시 속도 제어 subscriber callback 
-  * @param[in]  const geometry_msgs::Twist &twist_msg : 속도 제어 메세지
+  * @brief      main unitd으로 부터 publish 되는 지령 수신
+  * @param[in]  const fieldro_msgs::UnitControl& msg : unit action 메세지
   * @return     void
   * @note       
-  * @todo       주행방식에 따라서 각 모터의 속도를 계산하여 전달해야 한다.
   */
-  void Driving::subscribe_driving_control(const geometry_msgs::Twist &twist_msg)
-  {
-    transmit_thrust(twist_msg.linear.x);
-
-    transmit_steer(twist_msg.angular.z);
-
-    return;
-  }  
-
   void Driving::subscribe_unit_action(const fieldro_msgs::UnitControl& msg)
   {
     frb::UnitName unit = to_enum<frb::UnitName>(msg.target_object);

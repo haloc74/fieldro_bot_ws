@@ -40,6 +40,8 @@
 
 namespace frb
 { 
+  const int32_t MIN_SEQUENCE_NUM = 1000;
+
   class Droid : public Unit
   { 
   public:
@@ -74,7 +76,7 @@ namespace frb
     std::list<std::unique_ptr<fieldro_msgs::UnitControl>> _control_sequence;  // 동작 요청 list
     std::list<std::unique_ptr<fieldro_msgs::UnitControl>> _pending_sequence;  // 동작 요청된 list (완료시 까지 유지)
 
-    void add_sequence(int32_t unit, int32_t action, std::string command="");
+    void add_sequence(int32_t unit, int32_t action, int32_t sequence_num, std::string command="");
     void message_publish();
 
     void publish_all_destroy();
@@ -100,6 +102,9 @@ namespace frb
     
     bool    _prev_light;
     int32_t _prev_light_button;
+
+    int32_t _sequence_num;            // unit action 지령 sequence 번호
+    int32_t increase_sequence_num(); 
 
   };
 

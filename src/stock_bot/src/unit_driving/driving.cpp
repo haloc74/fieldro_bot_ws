@@ -10,20 +10,8 @@
  
 namespace frb 
 {
-  Driving::Driving(std::string msg_space, std::string config_file, std::string session) 
-          : Unit(msg_space, config_file, session)
+  void Driving::setup_ros_message(std::string msg_space)
   {
-    load_option(config_file);           // option load     
-
-    _name       = frb::to_string(UnitName::Driving);
-    _unit_index = frb::to_int(UnitName::Driving);
-
-    _action = UnitAction::None;
-    _state  = frb::UnitState::Created;
-
-    // thread pool 생성
-    _thread_pool = new ThreadPool(std::thread::hardware_concurrency());
-
     // unit action message 수신을 위한 subscriber 생성 및 link
     _subscribe_unit_action =
     _node_handle->subscribe(msg_space+"/unit_control", 100, &Driving::subscribe_unit_action, this);
@@ -40,19 +28,13 @@ namespace frb
     _subscribe_manual_control =
     _node_handle->subscribe(msg_space+"/manual_control", 20, &Driving::subscribe_manual_control, this);
 
-    // // 조이스틱 subscriber 생성 및 link
-    // _subscribe_joy_msg =
-    // _node_handle->subscribe(msg_space+"/joy", 100, &Driving::subscribe_joy_msg, this);
-
     // 속도제어 publisher 생성 및 link
     _publish_act_velocity =
     _node_handle->advertise<geometry_msgs::Twist>("twinny_robot/ActVel", 100);
+  }
 
-    _wait_actual_velocity     = false;
-    _prev_velocity_check_time = DBL_MAX;
-    _last_steer_value         = DBL_MAX;
-    _last_thrust_value        = DBL_MAX;
-
+  void Driving::create_motor_objects(std::string config_file)
+  {
     for(int i = 0; i < Wheel::End; i++)
     {
       _drive[i] = nullptr;
@@ -78,6 +60,26 @@ namespace frb
       _actual_velocity[i].release();
     }
 
+  }
+
+  Driving::Driving(std::string msg_space, std::string config_file, std::string session) 
+          : Unit(msg_space, config_file, session)
+  {
+    _name       = frb::to_string(UnitName::Driving);
+    _unit_index = frb::to_int(UnitName::Driving);
+
+    _action = UnitAction::None;
+    _state  = frb::UnitState::Created;
+
+    _wait_actual_velocity     = false;
+    _prev_velocity_check_time = DBL_MAX;
+    _last_steer_value         = DBL_MAX;
+    _last_thrust_value        = DBL_MAX;
+
+    load_option(config_file);           // option load     
+    setup_ros_message(msg_space);       // ROS message setup
+    create_motor_objects(config_file);  // motor object 생성
+
     // spinn 구동 (생성은 Unit Class 담당)
     _spinner->start();
 
@@ -90,9 +92,6 @@ namespace frb
   {
     // 최우선적으로 모터 구동을 멈춘다
     stop();
-
-    // thread_pool 삭제
-    safe_delete(_thread_pool);
 
     // 모터 객체 삭제
     for(int i=0; i<Wheel::End; i++)
@@ -108,33 +107,38 @@ namespace frb
     safe_delete(_update_thread);
   }
 
+  void Driving::monitoring_alignment_complete()
+  {
+    if(_action != frb::UnitAction::Init)  return;
+    
+    int complete_count = 0;
+    int active_wheel_count = 0;
+    for(int i=0; i<Wheel::End; i++)
+    {
+      if(_drive[i] == nullptr)  continue;
+
+      active_wheel_count++;
+      if(_drive[i]->is_alignment_complete())
+      {
+        complete_count++;
+      }
+    }
+
+    if(complete_count == active_wheel_count)
+    {
+      Unit::publish_unit_action_complete(to_int(_action), to_int(frb::Error::None));
+      _action = frb::UnitAction::None;
+    }
+    
+    return;
+  }
+
   void Driving::update()
   {
     while(_update_thread->_active)
     {
-      if(_action == frb::UnitAction::Init)
-      {
-        int complete_count = 0;
-        int active_wheel_count = 0;
-        for(int i=0; i<Wheel::End; i++)
-        {
-          if(_drive[i] == nullptr)  continue;
-
-          active_wheel_count++;
-          if(_drive[i]->is_alignment_complete())
-          {
-            complete_count++;
-          }
-        }
-
-        if(complete_count == active_wheel_count)
-        {
-          Unit::publish_unit_action_complete(to_int(_action), to_int(frb::Error::None));
-          _action = frb::UnitAction::None;
-        }
-      }
-      // // todo : 
-
+      monitoring_alignment_complete();        // wheel alignment 완료 확인
+      
       // if(_drive[0] != nullptr)
       // {
       //   int32_t count = _drive[0]->get_remain_packet_count();
@@ -179,7 +183,81 @@ namespace frb
      return true;
    }
    return false;
- }  
+ }
+ 
+  /**
+  * @brief      각 motor 객체로 추진 속도 전달하는 함수
+  * @param[in]  double  velocity : 추진 속도
+  * @return     void
+  * @note       
+  */
+ void Driving::transmit_thrust(double velocity)
+ {
+   if(velocity == std::numeric_limits<double>::max())  return;
+
+   for(int i=0; i<Wheel::End; i++)
+   {
+     if(_drive[i] != nullptr)  _drive[i]->thrust(velocity);
+   }
+ }
+ // void Driving::transmit_thrust(double velocity)
+// {
+//   if(velocity == std::numeric_limits<double>::max())  return;
+//   std::mutex              completionMutex;
+//   std::condition_variable completionCV;
+//   int                     remainingTasks = 0;
+//   // lock 설정
+//   std::unique_lock<std::mutex> lock(completionMutex);
+//   for(int i=0; i<Wheel::End; i++) 
+//   {
+//     if(_drive[i] != nullptr) 
+//     {
+//       remainingTasks++;
+//       threadPool.enqueue([this, i, velocity, &remainingTasks, &completionMutex, &completionCV] 
+//       {
+//         _drive[i]->steer_velocity(velocity);
+//         // 작업 완료 신호
+//         std::unique_lock<std::mutex> taskLock(completionMutex);
+//         remainingTasks--;
+//         if(remainingTasks == 0) 
+//         {
+//           completionCV.notify_one();
+//         }
+//       });
+//     }
+//   }
+//   // 모든 작업이 완료될 때까지 대기
+//   if(remainingTasks > 0) 
+//   {
+//     completionCV.wait(lock, [&remainingTasks] 
+//     { 
+//       return remainingTasks == 0; 
+//     });
+//   }
+//   return;
+// }
+
+
+ /**
+ * @brief      각 motor 객체로 조향 속도 전달하는 함수
+ * @param[in]  double  velocity : 조향 속도
+ * @return     void
+ * @note       
+ */
+ void Driving::transmit_steer(double velocity)
+ {
+   if(velocity == std::numeric_limits<double>::max())  return;
+
+   log_msg(LogInfo, 0, "Steer : " + std::to_string(velocity));
+
+   for(int i=0; i<Wheel::End; i++)
+   {
+     if(_drive[i] != nullptr)  
+     {
+       _drive[i]->steer_velocity(velocity);
+     }
+   }
+ } 
 
   void Driving::load_option(std::string config_file)
   {
@@ -305,6 +383,7 @@ namespace frb
     return;
   }
 
+  // todo : deadlock 위험이 있다... 수정해야 한다.
   void Driving::get_motor_status()
   {
     for(int i=0; i<Wheel::End; i++)

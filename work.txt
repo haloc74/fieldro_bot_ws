@@ -11,11 +11,13 @@
 . Joystick 전송 Delay 해결 방안 생각하기
 . JoyStick 객체의 관리를 어떻게 할 것인지 정해야 한다...
 . 주행 관련 LED 표현하기
-. ZlbDrive Refactoring
-
-
+. ZlbDrive Refactoring 2차
 
 ID [  ] : 2025-02-27
+1. ZlbDrive Refactoring 1차
+2. UnitControl.msg::uint32 sequence 추가
+
+ID [ 66b1eaf ] : 2025-02-27
 1. Thrust Motor Brake 풀리지 않는 문제 : 임시적으로 외부 전원을 이용한 Release로 적용
 2. Steering <-> Position Mode 변경 기능 추가
 3. Steering <-> Position Mode 변경 버그 수정

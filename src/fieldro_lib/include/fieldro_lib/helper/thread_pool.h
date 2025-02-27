@@ -14,6 +14,8 @@ namespace frb
   class ThreadPool 
   {
   public:
+    // example : thread pool 생성
+    // _thread_pool = new ThreadPool(std::thread::hardware_concurrency());
     ThreadPool(size_t numThreads) : stop(false) 
     {
       for (size_t i = 0; i < numThreads; ++i) 

@@ -35,11 +35,11 @@ namespace frb
   */
   void Droid::create_unit_initialize_sequence()      
   {  
-    add_sequence(to_int(frb::UnitName::Observer), to_int(frb::UnitAction::Init));   // step 1 : observer
-    add_sequence(to_int(frb::UnitName::Signal),   to_int(frb::UnitAction::Init));   // step 2 : signal
-    //add_sequence(to_int(frb::UnitName::JoyStick), to_int(frb::UnitAction::Init));   // step 3 : manual controller
-    add_sequence(to_int(frb::UnitName::Lift),     to_int(frb::UnitAction::Init));   // step 4 : lifter
-    add_sequence(to_int(frb::UnitName::Driving),  to_int(frb::UnitAction::Init));   // step 5 : driving
+    add_sequence(to_int(frb::UnitName::Observer), to_int(frb::UnitAction::Init), increase_sequence_num());   // step 1 : observer
+    add_sequence(to_int(frb::UnitName::Signal),   to_int(frb::UnitAction::Init), increase_sequence_num());   // step 2 : signal
+    //add_sequence(to_int(frb::UnitName::JoyStick), to_int(frb::UnitAction::Init), increase_sequence_num());   // step 3 : manual controller
+    add_sequence(to_int(frb::UnitName::Lift),     to_int(frb::UnitAction::Init), increase_sequence_num());   // step 4 : lifter
+    add_sequence(to_int(frb::UnitName::Driving),  to_int(frb::UnitAction::Init), increase_sequence_num());   // step 5 : driving
 
     log_msg(LogInfo, 0, "create_unit_initialize_sequence !!!");
     return;

@@ -25,8 +25,9 @@ namespace frb
     _unit_index = frb::to_int(frb::UnitName::System);
 
     // 객체의 상태 및 action 설정
-    _action = UnitAction::None;
-    _state  = UnitState::Created;
+    _action       = UnitAction::None;
+    _state        = UnitState::Created;
+    _sequence_num = MIN_SEQUENCE_NUM;
 
     // 테스트를 위한 Brake 
     _prev_brake               = true;
@@ -128,7 +129,7 @@ namespace frb
   * @attention  action이 finish일 경우 명령 list를 무시하고 최우선 전송 후 종료 
   * @note       
   */
-  void Droid::add_sequence(int32_t unit, int32_t action, std::string command)
+  void Droid::add_sequence(int32_t unit, int32_t action, int32_t sequence_num, std::string command)
   {
     auto start = std::chrono::steady_clock::now();
     std::lock_guard<std::mutex> lock(_lock);
@@ -151,10 +152,11 @@ namespace frb
       std::unique_ptr<fieldro_msgs::UnitControl> 
       unit_control_msg = std::make_unique<fieldro_msgs::UnitControl>();
 
-      unit_control_msg->time_stamp     = ros::Time(0);
-      unit_control_msg->target_object  = unit;
-      unit_control_msg->action         = action;
-      unit_control_msg->command        = command;
+      unit_control_msg->time_stamp    = ros::Time(0);
+      unit_control_msg->target_object = unit;
+      unit_control_msg->action        = action;
+      unit_control_msg->sequence      = sequence_num;
+      unit_control_msg->command       = command;
 
       _control_sequence.push_back(std::move(unit_control_msg));
     }
@@ -188,7 +190,7 @@ namespace frb
     else
     {
       // 요청 list에 등록
-      add_sequence(std::get<1>(cmd_data), std::get<2>(cmd_data), std::get<3>(cmd_data));
+      add_sequence(std::get<1>(cmd_data), std::get<2>(cmd_data), 0, std::get<3>(cmd_data));
     }
 
     return true;
@@ -225,6 +227,15 @@ namespace frb
     log_msg(LogInfo, 0, "Unit State Change : Active -> Ready");
 
     return;
+  }
+
+  int32_t Droid::increase_sequence_num()
+  {
+    if(++_sequence_num >= __UINT32_MAX__)   
+    {
+      _sequence_num = MIN_SEQUENCE_NUM;
+    }
+    return _sequence_num;
   }
 
 

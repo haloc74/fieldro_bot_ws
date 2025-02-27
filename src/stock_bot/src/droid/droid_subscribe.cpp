@@ -179,13 +179,13 @@ namespace frb
       _prev_brake ^= true;
       if(_prev_brake)
       {
-        add_sequence(to_int(frb::UnitName::Driving), to_int(frb::UnitAction::Break), "on");
-        add_sequence(to_int(frb::UnitName::Signal), to_int(frb::UnitAction::Break), "on");
+        add_sequence(to_int(frb::UnitName::Driving), to_int(frb::UnitAction::Break), 0, "on");
+        add_sequence(to_int(frb::UnitName::Signal), to_int(frb::UnitAction::Break), 0, "on");
       }
       else
       {
-        add_sequence(to_int(frb::UnitName::Driving), to_int(frb::UnitAction::Break), "off");
-        add_sequence(to_int(frb::UnitName::Signal), to_int(frb::UnitAction::Break), "off");
+        add_sequence(to_int(frb::UnitName::Driving), to_int(frb::UnitAction::Break), 0, "off");
+        add_sequence(to_int(frb::UnitName::Signal), to_int(frb::UnitAction::Break), 0, "off");
       }
       log_msg(LogInfo, 0, "Braking Changee : " + std::to_string(_prev_brake));
     }
@@ -195,7 +195,7 @@ namespace frb
     int32_t cur_brake_reset_button = joy_msg.buttons[to_int(JoyButton::Back)];
     if(_prev_brake_reset_button == 1 && cur_brake_reset_button == 0)
     {
-      add_sequence(to_int(frb::UnitName::Driving), to_int(frb::UnitAction::Reset));
+      add_sequence(to_int(frb::UnitName::Driving), to_int(frb::UnitAction::Reset), 0);
       log_msg(LogInfo, 0, "Brake Reset");
     }
     _prev_brake_reset_button = cur_brake_reset_button;
@@ -207,11 +207,11 @@ namespace frb
       _prev_light ^= true;
       if(_prev_light)
       {
-        add_sequence(to_int(frb::UnitName::Signal), to_int(frb::UnitAction::Light), "on");
+        add_sequence(to_int(frb::UnitName::Signal), to_int(frb::UnitAction::Light), 0, "on");
       }
       else
       {
-        add_sequence(to_int(frb::UnitName::Signal), to_int(frb::UnitAction::Light), "off");
+        add_sequence(to_int(frb::UnitName::Signal), to_int(frb::UnitAction::Light), 0, "off");
       }
       log_msg(LogInfo, 0, "Light Change : " + std::to_string(_prev_light));
     }
