@@ -15,10 +15,11 @@ namespace frb
   * @note       
   */
   void ZlbDrive::add_packet(int32_t slave_id, int32_t address, int32_t value, 
-                            MODBUS_FUNC_CODE code, int32_t action/*=-1*/)
+                            MODBUS_FUNC_CODE code, int32_t action/*=-1*/,
+                            std::function<void()> callback/*=nullptr*/)
   {
     std::lock_guard<std::mutex> lock(_lock_packets);
-    _packets.push_back(new ZlbPacket(slave_id, address, value, code, action));
+    _packets.push_back(new ZlbPacket(slave_id, address, value, code, action, callback));
   }
 
   /**
@@ -32,6 +33,28 @@ namespace frb
       safe_delete(packet);
     }
     _packets.clear();
+  }
+
+  void ZlbDrive::check_homing_complete()
+  {
+    int32_t status = get_motor_status(_slave_id[to_int(SlaveId::Steer)]);
+
+    if(status & ServoFD1X5::STATUSWORD_BITS::TARGET_ARRIVAL &&
+       !(status & ServoFD1X5::STATUSWORD_BITS::ORIGIN_STATE))
+    {
+      // 원점 도달 되었다.
+      _homing_complete = true;
+      notify_log_msg(frb::LogLevel::Info, 
+                      0, 
+                      "ZlbDrive::check_homing_complete :" +
+                      std::to_string(_wheel_index) +
+                      " target reached");
+    }
+    else
+    {
+      delay_call(2000, std::bind(&ZlbDrive::check_homing_complete, this));
+    }
+    return;
   }
 
   /**
@@ -51,6 +74,23 @@ namespace frb
 
     if(_packets.front()->_sended)
     {
+      std::deque<ZlbPacket*>::iterator it = _packets.begin();
+      if((*it)->_callback != nullptr)
+      {
+        try
+        {
+          (*it)->_callback();
+        }
+        catch(const std::exception& e)
+        {
+          notify_log_msg(frb::LogLevel::Error, 0, std::string("Callback exception: ") + e.what());
+        }
+        catch(...)
+        {
+          notify_log_msg(frb::LogLevel::Error, 0, "Callback exception");
+        }
+      }
+
       safe_delete(_packets.front());
       _packets.pop_front();
     }
@@ -101,11 +141,6 @@ namespace frb
       else if((*it)->_action != -1)
       {
         notify_action_result(_wheel_index, ret);
-      }
-
-      if((*it)->_callback != nullptr)
-      {
-        (*it)->_callback();
       }
     }
   }  

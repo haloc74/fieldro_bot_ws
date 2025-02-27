@@ -119,8 +119,12 @@ namespace frb
     case frb::UnitAction::Init:
       _state = frb::UnitState::Normal;
       _action = frb::UnitAction::Init;
-      Unit::publish_unit_action_complete(to_int(_action), to_int(frb::Error::None));
-      _action = frb::UnitAction::None;
+      for(int i=0; i<Wheel::End; i++)
+      {
+        if(_drive[i] != nullptr)  _drive[i]->wheel_alignment();
+      }
+      // Unit::publish_unit_action_complete(to_int(_action), to_int(frb::Error::None));
+      // _action = frb::UnitAction::None;
       break;
 
     case frb::UnitAction::Break:

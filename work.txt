@@ -17,8 +17,15 @@
 . Propulsion Motor Brake 풀리지 않는 문제 ....
 . ZlbDrive 통신 속도 올리기
 . Homing mode 적용하기
+. 주행 관련 LED 표현하기
+. Steering <-> Position Mode 변경 기능 추가
 
-ID [  ] : 2025-02-26
+ID [  ] : 2025-02-27
+1. Steering Position Control 부분 추가
+2. Steering Alignment 초기화 routine 추가
+
+
+ID [ 39322b5 ] : 2025-02-26
 1. 지난 refactoring으로 인하여 thrust, steer 안되던 버그 수정
 
 ID [ 6185c33 ] : 2025-02-26

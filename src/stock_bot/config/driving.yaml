@@ -28,9 +28,9 @@ FrontLeft:
   steer_direction : -1.0              ## steering motor speed coefficient
   steer_id   : 2                   ## steering motor id
 
-  home_position : 63000               # mechanical origin
-  left_limit    : 4048000             ## positive_sensor_limit - 12000(homing mode default offset value)
-  right_limit   : -419800             ## negative_sensor_limit + 12000(homing mode default offset value)
+  home_position : -181848             ## mechanical origin
+  left_limit    : 3983080             ## positive_sensor_limit - 12000(homing mode default offset value)
+  right_limit   : -4346775             ## negative_sensor_limit + 12000(homing mode default offset value)
 
 FrontRight:
   hz          : 100                   ## motor thread 동작 속도 
@@ -49,9 +49,9 @@ FrontRight:
   steer_direction : -1.0              ## steering motor speed coefficient
   steer_id : 2                     ## steering motor id
 
-  home_position : 63000               # mechanical origin
-  left_limit    : 4048000             ## positive_sensor_limit - 12000(homing mode default offset value)
-  right_limit   : -419800             ## negative_sensor_limit + 12000(homing mode default offset value)  
+  home_position : -77713               # mechanical origin
+  left_limit    : 4047518             ## positive_sensor_limit - 12000(homing mode default offset value)
+  right_limit   : -4202943             ## negative_sensor_limit + 12000(homing mode default offset value)  
 
 RearLeft:
   hz          : 100                    ## motor thread 동작 속도 
@@ -70,9 +70,9 @@ RearLeft:
   steer_direction : 1.0               ## steering motor speed coefficient
   steer_id : 2                     ## steering motor id
 
-  home_position : 63000               # mechanical origin
-  left_limit    : 4048000             ## positive_sensor_limit - 12000(homing mode default offset value)
-  right_limit   : -419800             ## negative_sensor_limit + 12000(homing mode default offset value)  
+  home_position : 33707               # mechanical origin
+  left_limit    : 4155281             ## positive_sensor_limit - 12000(homing mode default offset value)
+  right_limit   : -4087867             ## negative_sensor_limit + 12000(homing mode default offset value)  
 
 RearRight:
   hz          : 100                   ## motor thread 동작 속도 
@@ -91,9 +91,9 @@ RearRight:
   steer_direction : 1.0               ## steering motor speed coefficient
   steer_id : 2                     ## steering motor id
 
-  home_position : 63000               # mechanical origin
-  left_limit    : 4048000             ## positive_sensor_limit - 12000(homing mode default offset value)
-  right_limit   : -419800             ## negative_sensor_limit + 12000(homing mode default offset value)
+  home_position : 19314               # mechanical origin
+  left_limit    : 4152078             ## positive_sensor_limit - 12000(homing mode default offset value)
+  right_limit   : -4113450             ## negative_sensor_limit + 12000(homing mode default offset value)
 
 logger:
   debug               : 1             ## debug 옵션 (0: off, 그외 : on)

@@ -67,6 +67,8 @@ namespace frb
     void thrust(double velocity);
     void steer_degree(double degree);
     void steer_velocity(double velocity);
+    void wheel_alignment();
+    bool is_alignment_complete() { return _homing_complete; }
 
   protected:
     void update();
@@ -90,7 +92,9 @@ namespace frb
 
     // 전송 할 패킷 추가
     void add_packet(int32_t slave_id, int32_t address, int32_t value, 
-                    MODBUS_FUNC_CODE code, int32_t action=-1);
+                    MODBUS_FUNC_CODE code, 
+                    int32_t action=-1,
+                    std::function<void()> callback = nullptr);
     
   protected:                                          // _motor
     int32_t _slave_id[to_int(frb::SlaveId::End)];     // slave id
@@ -100,12 +104,19 @@ namespace frb
     
     void      confirm_motor_connection();             // motor 통신 연결 확인
     void      setup_motor_configurations();           // motor 초기값 설정
+    void      setup_thurst_configurations();          // thrust motor 초기값 설정
+    void      setup_steer_configurations();           // steer motor 초기값 설정
+    void      change_steer_control_mode(int32_t mode);// steer motor 제어 모드 변경
+    int32_t   _steer_control_mode;
     
     void      is_steering_complete();                 // steering motor 동작 완료 확인             
 
     int32_t   degree_to_position(const double degree);   // degree -> position 변환    
     uint32_t  convert_rpm_to_zlb_rpm(double rpm);        // rpm -> zlb rpm 변환
     double   convert_velocity_to_rpm(double velocity);   // velocity -> rpm 변환
+
+    void check_homing_complete();
+    bool _homing_complete;
 
     // void turn(double degree);                        // steering motor turn
     // void run(double velocity);                       // traction motor run

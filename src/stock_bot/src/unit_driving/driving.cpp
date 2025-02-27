@@ -57,7 +57,7 @@ namespace frb
     {
       _drive[i] = nullptr;
 
-      if(i >= 2) continue;
+      //if(i != 3) continue;
 
       _drive[i] = new ZlbDrive(std::bind(&Driving::action_complete_notify, 
                                           this, 
@@ -112,9 +112,34 @@ namespace frb
   {
     while(_update_thread->_active)
     {
+      if(_action == frb::UnitAction::Init)
+      {
+        int complete_count = 0;
+        int active_wheel_count = 0;
+        for(int i=0; i<Wheel::End; i++)
+        {
+          if(_drive[i] == nullptr)  continue;
+
+          active_wheel_count++;
+          if(_drive[i]->is_alignment_complete())
+          {
+            complete_count++;
+          }
+        }
+
+        if(complete_count == active_wheel_count)
+        {
+          Unit::publish_unit_action_complete(to_int(_action), to_int(frb::Error::None));
+          _action = frb::UnitAction::None;
+        }
+      }
       // // todo : 
-      int32_t count = _drive[0]->get_remain_packet_count();
-      log_msg(LogInfo, 0, "Remain Packets : " + std::to_string(count));
+
+      // if(_drive[0] != nullptr)
+      // {
+      //   int32_t count = _drive[0]->get_remain_packet_count();
+      //   log_msg(LogInfo, 0, "Remain Packets : " + std::to_string(count));
+      // }
 
       // thread Hz 싱크 및 독점 방지를 위한 sleep
       std::this_thread::sleep_for(std::chrono::milliseconds(_update_thread->_sleep));

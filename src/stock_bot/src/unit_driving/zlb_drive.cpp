@@ -22,6 +22,7 @@ namespace frb
     notify_actual_velocity  = actual_velocity_callback;
     notify_log_msg          = log_callback;
     _wheel_index            = wheel;
+    _homing_complete        = false;
 
     // encoder tracker 객체 생성
     _encoder_tracker = new DoubleEncoderTracker();
