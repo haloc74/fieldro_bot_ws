@@ -57,7 +57,7 @@ namespace frb
     {
       _drive[i] = nullptr;
 
-      //if(i != 3) continue;
+      //if(i != 0) continue;
 
       _drive[i] = new ZlbDrive(std::bind(&Driving::action_complete_notify, 
                                           this, 

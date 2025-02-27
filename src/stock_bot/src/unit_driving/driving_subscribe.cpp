@@ -123,8 +123,6 @@ namespace frb
       {
         if(_drive[i] != nullptr)  _drive[i]->wheel_alignment();
       }
-      // Unit::publish_unit_action_complete(to_int(_action), to_int(frb::Error::None));
-      // _action = frb::UnitAction::None;
       break;
 
     case frb::UnitAction::Break:

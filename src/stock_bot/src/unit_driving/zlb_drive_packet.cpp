@@ -35,6 +35,20 @@ namespace frb
     _packets.clear();
   }
 
+  void ZlbDrive::delay_call_check_homing_complete()
+  {
+    delay_call(2000, std::bind(&ZlbDrive::check_homing_complete, this));
+  }
+
+  /**
+  * @brief      steering motor status 확인
+  * @param[in]  void
+  * @return     void
+  * @note       callback으로 동작 
+  * @attention  steering motor가 동작을 시작하면 callback을 통해 1초마다 동작을 완료 했는지 확인하고
+  *             동작 완료 되지 않았다면 다시 callback 호출 해야 한다.
+  *             steering motor 동작중에만 사용
+  */
   void ZlbDrive::check_homing_complete()
   {
     int32_t status = get_motor_status(_slave_id[to_int(SlaveId::Steer)]);
@@ -44,6 +58,10 @@ namespace frb
     {
       // 원점 도달 되었다.
       _homing_complete = true;
+
+      // position mode -> velocity mode로 변경
+      change_steer_control_mode(ServoFD1X5::OPMODE_VALUES::VELOCITY);
+
       notify_log_msg(frb::LogLevel::Info, 
                       0, 
                       "ZlbDrive::check_homing_complete :" +
@@ -52,7 +70,7 @@ namespace frb
     }
     else
     {
-      delay_call(2000, std::bind(&ZlbDrive::check_homing_complete, this));
+      delay_call(1000, std::bind(&ZlbDrive::check_homing_complete, this));
     }
     return;
   }

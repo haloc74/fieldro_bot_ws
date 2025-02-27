@@ -130,7 +130,7 @@ namespace frb
                 1,
                 MODBUS_FUNC_CODE::READ_HOLDING_REGISTERS,
                 -1,
-                std::bind(&ZlbDrive::check_homing_complete, this));
+                std::bind(&ZlbDrive::delay_call_check_homing_complete, this));
 
     // 이동이 종료 되었다면 steering motor control mode를 속도 모드로 설정
     
@@ -164,6 +164,15 @@ namespace frb
     // 속도모드 일 경우 방향 설정
     if(_steer_control_mode == ServoFD1X5::OPMODE_VALUES::VELOCITY)
     {
+      add_packet(_slave_id[int32_t(SlaveId::Steer)], 
+                ServoFD1X5::DIN1_REGISTER, 
+                ServoFD1X5::LIMIT_MODE::POSITIVE, 
+                MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER);
+      add_packet(_slave_id[int32_t(SlaveId::Steer)], 
+                ServoFD1X5::DIN3_REGISTER, 
+                ServoFD1X5::LIMIT_MODE::NEGATIVE, 
+                MODBUS_FUNC_CODE::WRITE_SINGLE_REGISTER);
+
       add_packet(_slave_id[int32_t(SlaveId::Steer)], 
                   ServoFD1X5::VELOCITY_DIRECTION_REGISTER, 
                   0, 
@@ -231,33 +240,33 @@ namespace frb
     return _motor_status;
   }
 
-  /**
-  * @brief      steering motor status 확인
-  * @param[in]  void
-  * @return     void
-  * @note       callback으로 동작 
-  * @attention  steering motor가 동작을 시작하면 callback을 통해 1초마다 동작을 완료 했는지 확인하고
-  *             동작 완료 되지 않았다면 다시 callback 호출 해야 한다.
-  *             steering motor 동작중에만 사용
-  */
-  void ZlbDrive::is_steering_complete()
-  {
-      int32_t status = get_motor_status(_slave_id[to_int(SlaveId::Steer)]);
-      if(frb::is_on_signal(ZlbStatus::Target_reached, status))
-      {
-        _homing_complete = true;
-        notify_log_msg(frb::LogLevel::Info, 0, "ZlbDrive::check_steer_motor_status : target reached");
+  // /**
+  // * @brief      steering motor status 확인
+  // * @param[in]  void
+  // * @return     void
+  // * @note       callback으로 동작 
+  // * @attention  steering motor가 동작을 시작하면 callback을 통해 1초마다 동작을 완료 했는지 확인하고
+  // *             동작 완료 되지 않았다면 다시 callback 호출 해야 한다.
+  // *             steering motor 동작중에만 사용
+  // */
+  // void ZlbDrive::is_steering_complete()
+  // {
+  //     int32_t status = get_motor_status(_slave_id[to_int(SlaveId::Steer)]);
+  //     if(frb::is_on_signal(ZlbStatus::Target_reached, status))
+  //     {
+  //       _homing_complete = true;
+  //       notify_log_msg(frb::LogLevel::Info, 0, "ZlbDrive::check_steer_motor_status : target reached");
         
-        // 상위 Object에 동작 완료 통보
-        //notify_action_result(_wheel_index, frb::Error::None);  
-      }
-      else
-      {
-        // 아직 동작중이면 1초후에 다시 확인
-        delay_call(1000, std::bind(&ZlbDrive::is_steering_complete, this));
-      }
-      return;
-  }
+  //       // 상위 Object에 동작 완료 통보
+  //       //notify_action_result(_wheel_index, frb::Error::None);  
+  //     }
+  //     else
+  //     {
+  //       // 아직 동작중이면 1초후에 다시 확인
+  //       delay_call(1000, std::bind(&ZlbDrive::is_steering_complete, this));
+  //     }
+  //     return;
+  // }
 
   /**
   * @brief      degree 값을 position 값으로 변환

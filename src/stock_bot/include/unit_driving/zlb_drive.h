@@ -109,12 +109,13 @@ namespace frb
     void      change_steer_control_mode(int32_t mode);// steer motor 제어 모드 변경
     int32_t   _steer_control_mode;
     
-    void      is_steering_complete();                 // steering motor 동작 완료 확인             
+    //void      is_steering_complete();                 // steering motor 동작 완료 확인             
 
     int32_t   degree_to_position(const double degree);   // degree -> position 변환    
     uint32_t  convert_rpm_to_zlb_rpm(double rpm);        // rpm -> zlb rpm 변환
     double   convert_velocity_to_rpm(double velocity);   // velocity -> rpm 변환
 
+    void delay_call_check_homing_complete();            // steering motor 동작 완료 확인
     void check_homing_complete();
     bool _homing_complete;
 

@@ -1,4 +1,5 @@
 
+. Thrust Break Release 부분 정상적이 처리로 변경
 . Lift ManualControl 신호가 일정시간 이상 수신되지 않으면 멈추도록 Programming 필요
 . Lift ManualControl 시 rpm이 0으로 설정되었음에도 계속해서 움직임이 관측됨 : 원인 파악 필요
 . Lift subscribe_iosignal 부분 삭제 고려
@@ -6,24 +7,24 @@
 
 . Unit의 State, Action의 구분에 대해 생각해보자 
   현재 혼재 되어있는것이 아닌가 한다.
-  
 
 . Joystick 전송 Delay 해결 방안 생각하기
 . JoyStick 객체의 관리를 어떻게 할 것인지 정해야 한다...
-
-. ZlbDrive::void move(double velocity, double angular) 함수 수정
-. steer position mode 추가 하기
-. Zlb Drive 생성자에서 위치 모드로 설정하고 원점 위치로 Wheel 정렬 시키는 기능 추가.
-. Propulsion Motor Brake 풀리지 않는 문제 ....
-. ZlbDrive 통신 속도 올리기
-. Homing mode 적용하기
 . 주행 관련 LED 표현하기
-. Steering <-> Position Mode 변경 기능 추가
+. ZlbDrive Refactoring
+
+
 
 ID [  ] : 2025-02-27
+1. Thrust Motor Brake 풀리지 않는 문제 : 임시적으로 외부 전원을 이용한 Release로 적용
+2. Steering <-> Position Mode 변경 기능 추가
+3. Steering <-> Position Mode 변경 버그 수정
+4. motor packet 관련 deadlock 버그 수정
+
+
+ID [ af5f632 ] : 2025-02-27
 1. Steering Position Control 부분 추가
 2. Steering Alignment 초기화 routine 추가
-
 
 ID [ 39322b5 ] : 2025-02-26
 1. 지난 refactoring으로 인하여 thrust, steer 안되던 버그 수정
